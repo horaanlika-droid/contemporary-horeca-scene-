@@ -96,23 +96,23 @@ window.bootCourse = () => {
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
-        <button class="nav-link" type="button" data-author-open>THE CREATOR</button>
+        <button class="nav-link" type="button" data-author-open>ABOUT THE AUTHOR</button>
         <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
     const role = u?.role;
     const home = role === 'INSTRUCTOR' ? 'instructor' : role === 'ADMIN' ? 'admin' : 'dashboard';
-    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Projects', 'projects']]
-      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Course', 'course'], ['Projects', 'projects'], ['Cases', 'cases']]
-        : [['Home', 'dashboard'], ['Course', 'course'], ['Projects', 'projects'], ['Cases', 'cases'], ['Progress', 'progress']];
-    return `<header class="app-header">${brandBlock(`#/${home}`)}<nav class="app-nav" aria-label="Application navigation">${links.map(([t, p]) => `<a href="#/${p}">${t}</a>`).join('')}<button data-action="search">SEARCH ⌕</button></nav><div class="user-chip"><span>${esc(u?.name || 'Guest')}</span><span class="avatar">${initials(u?.name)}</span><button class="nav-link" data-action="profile">PROFILE</button>${role !== 'STUDENT' ? '<button class="nav-link" data-action="logout">SIGN OUT</button>' : ''}</div></header>`;
+    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Cases & figures', 'cases']]
+      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Course', 'course'], ['Cases & figures', 'cases']]
+        : [['Home', 'dashboard'], ['Course', 'course'], ['Cases & figures', 'cases'], ['Progress', 'progress']];
+    return `<header class="app-header">${brandBlock(`#/${home}`)}<nav class="app-nav" aria-label="Application navigation">${links.map(([t, p]) => `<a href="#/${p}">${t}</a>`).join('')}<button data-action="search">SEARCH ⌕</button></nav><div class="user-chip"><span>${esc(u?.name || 'Guest')}</span><span class="avatar">${initials(u?.name)}</span><button class="nav-link author-nav-link" type="button" data-author-open aria-label="About the author" title="About the author">ABOUT THE AUTHOR</button><button class="nav-link" data-action="profile">PROFILE</button>${role !== 'STUDENT' ? '<button class="nav-link" data-action="logout">SIGN OUT</button>' : ''}</div></header>`;
   };
 
   const bottomNav = () => {
     const role = user()?.role;
-    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Projects', 'projects', '✦'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Projects', 'projects', '✦'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Projects', 'projects', '✦'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕']];
+    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Cases', 'cases', '▧'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
+      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Cases', 'cases', '▧'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
+        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Cases', 'cases', '▧'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕']];
     return `<nav class="mobile-bottom" aria-label="Mobile navigation">${links.map(([t, p, i]) => p === 'search' ? `<button data-action="search"><span>${i}</span>${t}</button>` : `<a href="#/${p}"${route()[0] === p ? ' class="active"' : ''}><span>${i}</span>${t}</a>`).join('')}</nav>`;
   };
 
@@ -339,7 +339,7 @@ window.bootCourse = () => {
       </div>
       <section class="dash-section" style="margin-top:42px">
         <div class="simple-row"><span><span class="meta">WHAT'S NEW · SEPTEMBER 2026</span><br><strong>Module 09 — Budget Realisation &amp; Scenography: found objects, theatrical techniques and the final live found-object mockup.</strong></span><a class="button text" href="#/updates">VIEW UPDATES →</a></div>
-        <div class="simple-row"><span><span class="meta">PROJECTS OF THE AUTHOR · ${projectList().length} FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span><br><strong>Joi Espresso Bar, Passie Cakes Co., CooCoo, Chicken Connection, Pacific, TAM — photographed evidence for your own sourcing plan.</strong></span><a class="button text" href="#/projects">OPEN THE ARCHIVE →</a></div>
+        <div class="simple-row"><span><span class="meta">ABOUT THE AUTHOR · SELECTED PROJECTS</span><br><strong>Explore the author’s practice, hospitality experience and project photographs together in one place.</strong></span><button class="button text" type="button" data-author-open>ABOUT THE AUTHOR →</button></div>
       </section>
       <div class="dash-lower">
         <section class="dash-section">
@@ -464,9 +464,9 @@ window.bootCourse = () => {
         <div><span class="eyebrow">INDUSTRY NOTEBOOK · ${C.edition} EDITION</span><h1 class="page-title">Real industry.<br>Useful <em>questions</em>.</h1><p>Case files connect hospitality practice to the ideas in this elective. Read closely, then decide what is relevant to the concept you want to build.</p></div>
         <button class="button light" data-action="search">SEARCH THE ELECTIVE <span aria-hidden="true">⌕</span></button>
       </div>
-      <section class="section" style="padding:30px 0 10px"><span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span><div class="figure-grid">${(C.figures || []).map(f => `<article class="case-item"><span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span><h3>${esc(f.name)}</h3><p>${esc(f.role)} · ${esc(f.venues)}</p><p>${esc(f.summary)}</p><p><strong>Course takeaway:</strong> ${esc(f.takeaway)}</p></article>`).join('')}</div></section>
+      <section class="section" id="industry-figures" style="padding:30px 0 10px"><span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span><div class="figure-grid">${(C.figures || []).map(f => `<article class="case-item"><span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span><h3>${esc(f.name)}</h3><p>${esc(f.role)} · ${esc(f.venues)}</p><p>${esc(f.summary)}</p><p><strong>Course takeaway:</strong> ${esc(f.takeaway)}</p></article>`).join('')}</div></section>
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Bar Leone · Hong Kong</h3><p>“Cocktail Popolari” frames a neighbourhood archive through familiar classics and clear ingredient storytelling.</p></article><article class="case-item"><h3>Tuju · São Paulo</h3><p>Seasonal tasting menus become meteorological notebooks — Rain, Wind and Drought — connecting ingredient research to narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
-      <div style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
+      <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
         ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
         : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
     </main>`);

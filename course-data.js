@@ -891,7 +891,7 @@ window.COURSE = {
       tag: 'PROJECTS OF THE AUTHOR · PHOTO ARCHIVE',
       title: 'Forty-three new photographs: the author’s own venues, objects and studio work',
       date: 'September 2026',
-      text: 'The app now carries a photographic archive of the author’s own practice: Joi Espresso Bar (2025 · OGONEK TEAM), Passie Cakes Co., CooCoo Coffee, Chicken Connection (Moscow, filmed with Dmitry Konnikov), Pacific and the TAM / TYT object line — plus a collecting file of found details. Open “Projects of the Author” from the main navigation or from Module 09.'
+      text: 'The app carries a photographic archive of the author’s own practice: Joi Espresso Bar (2025 · OGONEK TEAM), Passie Cakes Co., CooCoo Coffee, Chicken Connection (Moscow, filmed with Dmitry Konnikov), Pacific and the TAM / TYT object line — plus a collecting file of found details. Open About the author to see selected projects and reach the full archive; Module 09 uses the same photographs as working evidence.'
     },
     {
       tag: 'INDUSTRY LEADERS & 50 BEST MENUS',
