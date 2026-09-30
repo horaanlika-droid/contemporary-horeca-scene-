@@ -96,7 +96,7 @@ window.bootCourse = () => {
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
-        <a class="nav-link" href="#/" data-scroll="author">THE CREATOR</a>
+        <button class="nav-link" type="button" data-author-open>THE CREATOR</button>
         <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
@@ -117,12 +117,12 @@ window.bootCourse = () => {
   };
 
   const layout = (content, publicPage = false) => `${publicPage ? header(true) : header()}${content}${publicPage
-    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span></footer>`
+    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span><button class="footer-link" type="button" data-author-open>About the author</button></footer>`
     : bottomNav()}`;
 
   /* ---------------------------------------------------------------- landing */
   function landing() {
-    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · ДЖОЙ · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Пасифик · барные решения', 'TAM · objects that teach the menu', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
+    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific · bar solutions', 'TAM · objects that teach the menu', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
         <span class="hero-index">${C.edition} EDITION · 01 / ${String(C.modules.length).padStart(2, '0')}</span>
@@ -240,26 +240,9 @@ window.bootCourse = () => {
         </div>
       </section>
 
-      <section class="section" id="author">
-        <div class="section-head">
-          <div><span class="eyebrow">06 — THE COURSE &amp; ITS CREATOR</span><h2>Egor<br><em>Tarasenko</em></h2></div>
-          <p>HIM alumnus · Master in Business Management<br><br>${esc(C.descriptor)}<br><br>These frames are the author's own practice — ${projectList().length} venue, product and design files, ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} photographs taken on site, read inside the course as primary sources for Module ${C.modules.find(m => m.id === 'budget')?.number || '09'}. Nothing here is second-hand theory: each principle was priced, sourced and built by hand first, then taught.</p>
-        </div>
-        <div class="creator-frames">
-          ${(C.projects?.items || []).filter(p => p.id !== 'details').slice(0, 3).map(pr => `<figure class="creator-frame">
-            <img src="${ASSET}${esc(pr.image)}" alt="${esc(pr.name)} — ${esc(pr.role)}" loading="lazy">
-            <figcaption><span class="meta">${esc(pr.index)} · ${esc(pr.role)} · ${esc(pr.year)}</span><strong>${esc(pr.name)}</strong><span>${esc(pr.tagline)}</span></figcaption>
-          </figure>`).join('')}
-        </div>
-        <div class="timeline">
-          <div class="timeline-aside">A PRACTICE-LED<br>POINT OF VIEW</div>
-          <div class="timeline-list">${[['EDUCATION', 'Hotel Institute Montreux', 'Master in Business Management'], ['HOSPITALITY', 'Crowne Plaza St. Petersburg', 'Foundations in hotel operations'], ['INTERNATIONAL', 'Jumeirah Beach Hotel Dubai', 'A global perspective on guest experience'], ['ENTREPRENEURSHIP', 'Hospitality entrepreneurship', 'From an idea to a working concept'], ['OWN VENUE', 'Joi Espresso Bar · ДЖОЙ (2025)', 'Espresso bar assembled from the street and flea markets — <a href="#/project/joi">open the project file ↗</a>'], ['SMALL VENUES', 'Passie Cakes Co. · CooCoo Coffee', 'Cake room and croffle bar where props, graphics and light carry the identity — <a href="#/project/passie">project file ↗</a>'], ['DESIGN & BUILD', 'Pacific / Пасифик · барные решения', 'Bar stations, consoles and equipment drawn for fabrication — <a href="#/project/pacific">project file ↗</a>'], ['OBJECTS & MEDIA', 'TAM · Chicken Connection', 'Merchandise designed to teach the menu, and a food-media pilot shot with Dmitry Konnikov — <a href="#/project/tam">project file ↗</a>'], ['CONCEPTS', 'Restaurant & bar concepts', 'Positioning, experience and operations'], ['TODAY', 'Current projects', 'Building the next generation of hospitality education — <a href="#/projects">the whole archive ↗</a>']].map(a => `<div class="timeline-row"><span class="meta">${a[0]}</span><span><strong>${a[1]}</strong><br><span>${a[2]}</span></span></div>`).join('')}</div>
-        </div>
-      </section>
-
       <section class="section">
         <div class="section-head">
-          <div><span class="eyebrow">07 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
+          <div><span class="eyebrow">06 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
           <p>Move from the signals shaping the industry to a final concept grounded in your own point of view — and a mockup you can hold.</p>
         </div>
         <div class="module-preview">${C.modules.map(m => `<a class="module-row" href="#/module/${m.id}"><span class="module-num">${m.number}</span><div><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div><span class="meta module-meta">${word(m.lessons.length)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>
@@ -356,7 +339,7 @@ window.bootCourse = () => {
       </div>
       <section class="dash-section" style="margin-top:42px">
         <div class="simple-row"><span><span class="meta">WHAT'S NEW · SEPTEMBER 2026</span><br><strong>Module 09 — Budget Realisation &amp; Scenography: found objects, theatrical techniques and the final live found-object mockup.</strong></span><a class="button text" href="#/updates">VIEW UPDATES →</a></div>
-        <div class="simple-row"><span><span class="meta">PROJECTS OF THE AUTHOR · ${projectList().length} FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span><br><strong>Joi Espresso Bar, Passie Cakes Co., CooCoo, Chicken Connection, Пасифик, TAM — photographed evidence for your own sourcing plan.</strong></span><a class="button text" href="#/projects">OPEN THE ARCHIVE →</a></div>
+        <div class="simple-row"><span><span class="meta">PROJECTS OF THE AUTHOR · ${projectList().length} FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span><br><strong>Joi Espresso Bar, Passie Cakes Co., CooCoo, Chicken Connection, Pacific, TAM — photographed evidence for your own sourcing plan.</strong></span><a class="button text" href="#/projects">OPEN THE ARCHIVE →</a></div>
       </section>
       <div class="dash-lower">
         <section class="dash-section">

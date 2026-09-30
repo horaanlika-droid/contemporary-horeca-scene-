@@ -91,7 +91,7 @@ window.COURSE = {
       id: 'egor-tarasenko',
       name: 'Egor Tarasenko (Егор Тарасенко)',
       role: 'Course Author · Practitioner & Founder',
-      venues: 'Joi Espresso Bar (ДЖОЙ · 2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific / Пасифик (барные решения) · TAM',
+      venues: 'Joi Espresso Bar (2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific · TAM',
       moduleId: 'budget',
       moduleNumber: '09 & 04',
       block: 'Budget Realisation & Scenography · Projects Built from Found Objects',
@@ -318,7 +318,7 @@ window.COURSE = {
           title: 'Concept objects: the menu, the merchandise, the furniture',
           duration: '17 min',
           intro: 'A concept becomes real when it leaves the wall and lands in the guest’s hands — as a menu, a coaster, a cube, a stool, or a bar station drawn for the workshop.',
-          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The objects around the drinks: the TAM project treats a bar as a product line — engraved stainless-steel flavour cubes reading smoky · dirty · fruits · sweet · shake · umami · agave · brandy turn a drinks list into a hand-held menu; a mirror-polished bar-top tool case, a flick-style bar blade and a folding stool extend the venue into guest shifts and souvenirs. (3) The furniture that carries the room: Pacific (Пасифик · барные решения) designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
+          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The objects around the drinks: the TAM project treats a bar as a product line — engraved stainless-steel flavour cubes reading smoky · dirty · fruits · sweet · shake · umami · agave · brandy turn a drinks list into a hand-held menu; a mirror-polished bar-top tool case, a flick-style bar blade and a folding stool extend the venue into guest shifts and souvenirs. (3) The furniture that carries the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
           ideas: [
             'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
             'TAM flavour cubes: merchandise can teach the drinks list instead of decorating the shelf.',
@@ -326,7 +326,7 @@ window.COURSE = {
             'CooCoo Coffee: a single alliterative product trio (coffee · croffles · cookies) makes naming, signage, packaging and menu structure fall into place.',
             'A concept object only counts when it can be produced, priced and replaced — prototypes are part of the business model.'
           ],
-          case: 'Concept Objects: TAM (flavour cubes, tool case, bar blade, stool) · CooCoo Coffee (coffee · croffles · cookies) · Pacific / Пасифик (bar stations & drawings)',
+          case: 'Concept Objects: TAM (flavour cubes, tool case, bar blade, stool) · CooCoo Coffee (coffee · croffles · cookies) · Pacific (bar stations & drawings)',
           practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
           challenge: 'Practical Assignment 04B (Concept Objects): Design three physical objects for your venue — one menu artefact the guest keeps, one item of merchandise that teaches the concept, and one piece of working furniture or equipment (sketch with dimensions and materials). Explain the production route and the unit cost of each. Attach sketches/photos for admin review.'
         }
@@ -488,16 +488,16 @@ window.COURSE = {
           title: 'Small venues, real budgets: the author’s project archive',
           duration: '18 min',
           intro: 'Four built venues, one cake room, one bar-furniture studio: what a small budget actually buys, photographed on the day the rooms were finished.',
-          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (ДЖОЙ, opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific (Пасифик · барные решения) moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
+          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
           ideas: [
-            'Joi Espresso Bar (ДЖОЙ · 2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
+            'Joi Espresso Bar (2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
             'Passie Cakes Co.: props do the branding — a chandelier, a pastel banquette, a hand-drawn logo and flowers, all replaceable at flea-market prices.',
             'CooCoo Coffee: one product trio and one palette make signage, menu and packaging self-evident.',
             'Pacific (Пасифик): design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
             'Chicken Connection: the finish pass, boxed delivery and open kitchen are the content of the room, not the back of house.',
             'Collect the details: chessboards, resin ashtrays, pasted posters, bric-a-brac glassware in red light — a research file is cheaper than a renovation.'
           ],
-          case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific / Пасифик · TAM',
+          case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific · TAM',
           practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
           challenge: 'Practical Assignment 09C (Archive Reading): Choose four photographs from the author’s project archive and write a sourcing analysis for each: what was bought new, what was found second-hand, what was made or repaired by hand, and what it would cost to repeat in your own city. Then add one detail you would copy and one you would refuse. Attach your notes for admin confirmation.'
         }
@@ -646,12 +646,12 @@ window.COURSE = {
       gallery: ['project-passie-wall.jpg', 'project-passie-cake.jpg', 'project-passie-cheesecake.jpg', 'project-passie-sakura.jpg', 'project-passie-room.jpg', 'project-passie-counter.jpg', 'project-passie-window.jpg', 'project-coocoo-pour.jpg', 'project-coocoo-room.jpg', 'project-coocoo-bulbs.jpg', 'project-coocoo-team.jpg', 'project-coocoo-menu.jpg']
     },
     {
-      title: 'Pacific / Пасифик & TAM · bar objects',
+      title: 'Pacific & TAM · bar objects',
       location: 'Design & fabrication projects',
       year: 'Product design for hospitality',
-      industry: 'Bar furniture, working equipment & merchandise · Пасифик (барные решения) · TAM / TYT',
+      industry: 'Bar furniture, working equipment & merchandise · Pacific (bar solutions) · TAM / TYT',
       image: 'project-pacific-station.jpg',
-      context: 'Two product-side projects of the author: Pacific (Пасифик · барные решения) designs and fabricates bar stations and consoles; TAM builds the objects that surround the drinks — flavour cubes, tool sets, bar blades, folding stools and textiles.',
+      context: 'Two product-side projects of the author: Pacific designs and fabricates bar stations and consoles; TAM builds the objects that surround the drinks — flavour cubes, tool sets, bar blades, folding stools and textiles.',
       what: 'Pacific draws the working parts of the bar — sintered-stone tops, recessed ice wells, speed rails, under-counter glass hangers, cantilevered consoles on castors — and delivers 3D visualisations plus technical drawings for the workshop. TAM engraves the vocabulary of a drinks list onto stainless-steel cubes (smoky · dirty · fruits · sweet · shake · umami · agave · brandy) and packages tools so they can be carried between venues.',
       why: 'Proves that the atmosphere of a venue is often decided upstream — by whoever drew the furniture and by whoever chose which objects leave the building with the guest.',
       takeaway: 'Design the ice well, the speed rail and the takeaway object with the same seriousness as the candlelit table.',
@@ -699,7 +699,7 @@ window.COURSE = {
         image: 'project-joi-arcade.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
-        ru: 'Собственный проект автора курса и главный кейс модуля 09. «ДЖОЙ» открылся в 2025 году: стеклянная дверь за постерным фасадом, гирлянды лампочек под арками, бумажные стаканы с логотипом, восстановленная латунная рычажная кофемашина и кофемолки с барахолки на стойке, под которой больше инвентаря, чем посадочных мест. Здесь ничего не куплено одним заказом из шоу-рума — комната держится потому, что сначала была придумана история, а потом её собирала одна пара глаз.',
+        ru: 'Собственный проект автора курса и главный кейс модуля 09. Joi открылся в 2025 году: стеклянная дверь за постерным фасадом, гирлянды лампочек под арками, бумажные стаканы с логотипом, восстановленная латунная рычажная кофемашина и кофемолки с барахолки на стойке, под которой больше инвентаря, чем посадочных мест. Здесь ничего не куплено одним заказом из шоу-рума — комната держится потому, что сначала была придумана история, а потом её собирала одна пара глаз.',
         facts: [
           ['ROLE', 'Author’s own project · the case behind Module 09'],
           ['OPENED', '2025 · by OGONEK TEAM'],
@@ -801,7 +801,7 @@ window.COURSE = {
       {
         id: 'pacific',
         index: '05',
-        name: 'Pacific (Пасифик · барные решения)',
+        name: 'Pacific',
         role: 'Bar furniture, stations & equipment design',
         year: 'Design & fabrication',
         team: '3D visualisation · technical drawings · production',
@@ -818,7 +818,7 @@ window.COURSE = {
           ['IN THE COURSE', 'Modules 05 & 04 · ergonomics as scenography, objects as concept']
         ],
         photos: [
-          { file: 'project-pacific-logo.png', caption: 'Пасифик — барные решения: a brand for a workshop rather than a venue.', captionRu: 'Пасифик — барные решения: бренд мастерской, а не заведения.' },
+          { file: 'project-pacific-logo.png', caption: 'Pacific — барные решения: a brand for a workshop rather than a venue.', captionRu: 'Pacific — барные решения: бренд мастерской, а не заведения.' },
           { file: 'project-pacific-station.jpg', caption: 'The station: stone top, ice well, speed rail, under-counter glass hanger, powder-coated steel body.', captionRu: 'Станция: каменная столешница, ледница, рейлы, подвес для бокалов под стойкой, корпус из стали с порошковой окраской.' },
           { file: 'project-pacific-console.jpg', caption: 'A cantilevered console on castors — the service bar becomes mobile furniture.', captionRu: 'Консоль-кронштейн на колёсах — сервизная стойка превращается в мобильную мебель.' },
           { file: 'project-pacific-render.jpg', caption: '“FUTURE OF BARTENDING”: the project the furniture was drawn for.', captionRu: '«FUTURE OF BARTENDING» — проект, под который рисовалась мебель.' },
@@ -891,7 +891,7 @@ window.COURSE = {
       tag: 'PROJECTS OF THE AUTHOR · PHOTO ARCHIVE',
       title: 'Forty-three new photographs: the author’s own venues, objects and studio work',
       date: 'September 2026',
-      text: 'The app now carries a photographic archive of the author’s own practice: Joi Espresso Bar (ДЖОЙ · 2025 · OGONEK TEAM), Passie Cakes Co., CooCoo Coffee, Chicken Connection (Moscow, filmed with Dmitry Konnikov), Pacific / Пасифик (барные решения) and the TAM / TYT object line — plus a collecting file of found details. Open “Projects of the Author” from the main navigation or from Module 09.'
+      text: 'The app now carries a photographic archive of the author’s own practice: Joi Espresso Bar (2025 · OGONEK TEAM), Passie Cakes Co., CooCoo Coffee, Chicken Connection (Moscow, filmed with Dmitry Konnikov), Pacific and the TAM / TYT object line — plus a collecting file of found details. Open “Projects of the Author” from the main navigation or from Module 09.'
     },
     {
       tag: 'INDUSTRY LEADERS & 50 BEST MENUS',

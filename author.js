@@ -1,0 +1,115 @@
+/* ============================================================================
+   AUTHOR POP-UP — Contemporary Horeca Scene
+   The information about the course author is not part of the page flow: it opens
+   in a dialog only when the visitor asks for it. Any element with
+   [data-author-open] (password gate, landing navigation, footers) triggers it.
+   ========================================================================== */
+(() => {
+  'use strict';
+
+  const ASSET = 'presentation/assets/';
+  const EMAIL = 'egor.tarasenko@him-mail.ch';
+
+  const path = [
+    ['2015', 'Сахалин', 'Первые шаги в хотелке: официант в грузинском ресторане «Тифлис» в Южно-Сахалинске и официант в ночном клубе Duke.'],
+    ['2019', 'Таиланд', 'Менеджер ресторана русской кухни Ronin.'],
+    ['2019', 'Швейцария', 'Hotel Institute Montreux — master degree.'],
+    ['2021', 'Дубай', 'Старший бартендер, Jumeirah Beach Hotel.'],
+    ['2022', 'Санкт-Петербург', 'Старший бартендер, Crowne Plaza.']
+  ];
+
+  const bars = [
+    'One and half room',
+    'Flowers Bar',
+    'Oy!',
+    'Ultramen <em>(работал там флортендером — барменом в зале, который работает с гостями прямо у столов)</em>',
+    'Ruc’s Heaven',
+    'проект Artender'
+  ];
+
+  const projects = [
+    ['author-passie-2022.jpg', 'Passie Cakes Co.', '2022'],
+    ['author-coocoo-2024.jpg', 'CooCoo', '2024'],
+    ['author-pacific-2024.jpg', 'Pacific', '2024'],
+    ['author-joi-2025.jpg', 'Joi', '2025'],
+    ['author-chc-2024.jpg', 'Chicken Connection', '2024']
+  ];
+
+  const markup = () => `
+    <div class="author-dialog" role="dialog" aria-modal="true" aria-labelledby="author-title" tabindex="-1">
+      <button class="author-close" type="button" data-author-close aria-label="Закрыть">✕</button>
+      <header class="author-head">
+        <span class="eyebrow">О СОЗДАТЕЛЕ · THE CREATOR</span>
+        <h2 id="author-title">Egor <em>Tarasenko</em></h2>
+        <p class="author-role">HIM alumnus · Master in Business Management · Hotel Institute Montreux</p>
+      </header>
+      <div class="author-body">
+        <section class="author-col">
+          <h3 class="author-label">Международный опыт</h3>
+          <ol class="author-path">
+            ${path.map(([year, place, text]) => `<li><b>${year}</b><span><strong>${place}</strong>${text}</span></li>`).join('')}
+          </ol>
+        </section>
+        <section class="author-col">
+          <h3 class="author-label">Бары Ивана Ляшука и Владимира Николаева</h3>
+          <ul class="author-bars">
+            ${bars.map(b => `<li>${b}</li>`).join('')}
+          </ul>
+        </section>
+      </div>
+      <section class="author-work">
+        <h3 class="author-label">Собственные проекты</h3>
+        <div class="author-frames">
+          ${projects.map(([file, name, year]) => `<figure><img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></figure>`).join('')}
+        </div>
+      </section>
+      <p class="author-mail">Вопросы по курсу, лицензированию и программе: <a href="mailto:${EMAIL}">${EMAIL}</a></p>
+    </div>`;
+
+  let overlay = null;
+  let lastFocus = null;
+
+  const close = () => {
+    if (!overlay) return;
+    overlay.classList.remove('show');
+    document.body.classList.remove('author-open');
+    const el = overlay;
+    overlay = null;
+    setTimeout(() => el.remove(), 220);
+    lastFocus?.focus?.({ preventScroll: true });
+  };
+
+  const open = () => {
+    if (overlay) return;
+    lastFocus = document.activeElement;
+    overlay = document.createElement('div');
+    overlay.className = 'author-overlay';
+    overlay.innerHTML = markup();
+    document.body.appendChild(overlay);
+    document.body.classList.add('author-open');
+    requestAnimationFrame(() => {
+      overlay?.classList.add('show');
+      overlay?.querySelector('.author-dialog')?.focus({ preventScroll: true });
+    });
+  };
+
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-author-open]')) { event.preventDefault(); open(); return; }
+    if (!overlay) return;
+    if (event.target.closest('[data-author-close]') || event.target === overlay) close();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!overlay) return;
+    if (event.key === 'Escape') { event.stopImmediatePropagation(); close(); return; }
+    if (event.key === 'Tab') {
+      const items = [...overlay.querySelectorAll('button, a[href]')];
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === overlay.querySelector('.author-dialog'))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  }, true);
+
+  window.openAuthorModal = open;
+})();

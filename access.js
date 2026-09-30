@@ -196,7 +196,8 @@
           <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
           <p>A living digital elective on the venues, 50 Best menu concepts, industry leaders, found-object mockups and budgets shaping the contemporary horeca scene.</p>
-          <button class="gate-more" type="button" data-scroll-info>О КУРСЕ И О СОЗДАТЕЛЕ ↓</button>
+          <button class="gate-more" type="button" data-scroll-info>О КУРСЕ ↓</button>
+          <button class="gate-more" type="button" data-author-open>ОБ АВТОРЕ ↗</button>
         </div>
       </div>
       <div class="gate-form-wrap">
@@ -261,23 +262,15 @@
               <li><b>05</b><span>Практические задания и защита концепции; после проверки — сертификат.</span></li>
               <li><b>06</b><span>Пароль открывает весь курс сразу: все модули и уроки доступны без поштучной выдачи.</span></li>
             </ul>
+          </article>
+
+          <article class="gate-card gate-card-side">
             <figure class="gate-frame gate-frame-wide">
               <img src="presentation/assets/horeca-concept-pitch.jpg" alt="A concept pitch table with materials, sketches and models" loading="lazy">
               <figcaption>Final exercise · стол, на котором venue собирается до того, как её построили</figcaption>
             </figure>
-          </article>
-
-          <article class="gate-card">
-            <span class="eyebrow">О СОЗДАТЕЛЕ · THE CREATOR</span>
-            <h3>Egor<br><em>Tarasenko</em></h3>
-            <p class="gate-role">HIM alumnus · Master in Business Management · Hotel Institute Montreux</p>
-            <p>Курс написал практик, который сам строит заведения, о которых учит. Операционная школа — <b>Crowne Plaza St. Petersburg</b> и <b>Jumeirah Beach Hotel Dubai</b>; дальше — собственная практика: эспрессо-бар <b>«ДЖОЙ» / Joi Espresso Bar</b> (2025, OGONEK TEAM), собранный почти целиком из улицы и барахолок, <b>Passie Cakes Co.</b> и <b>CooCoo Coffee</b>, где идентификацию держат пропсы и свет, барные решения <b>«Пасифик»</b> и линейка предметов <b>TAM</b>.</p>
-            <p>В курсе эти проекты — не портфолио, а рабочие источники: фотографии, сметы и детали разбираются в модуле 09 и в задании 09C, а внутри продукта к ним можно вернуться целиком.</p>
-            <div class="gate-frames">
-              <figure class="gate-frame"><img src="presentation/assets/project-joi-arcade.jpg" alt="The arcade outside Joi Espresso Bar: vaults, café bulbs and stone floors" loading="lazy"><figcaption>Joi Espresso Bar · аркада, 2025</figcaption></figure>
-              <figure class="gate-frame"><img src="presentation/assets/project-passie-wall.jpg" alt="Passie Cakes Co. logo painted by hand onto a plaster wall" loading="lazy"><figcaption>Passie Cakes Co. · стена, нарисованная руками</figcaption></figure>
-            </div>
-            <p class="gate-note-line">Вопросы по курсу, лицензированию и программе: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
+            <p class="gate-note-line">Курс написал <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>Об авторе →</button></p>
+            <p class="gate-note-line gate-note-mail">Вопросы по курсу, лицензированию и программе: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
           </article>
         </div>
       </section>
@@ -286,6 +279,7 @@
         <span>© 2026 Egor Tarasenko · Course content &amp; author IP</span>
         <span>Contemporary Horeca Scene · 2026 Edition</span>
         <span>Hotel Institute Montreux</span>
+        <button class="gate-author-link" type="button" data-author-open>Об авторе</button>
       </footer>
     </main>`;
     root.querySelector('[data-scroll-info]')?.addEventListener('click', () => document.getElementById('gate-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
