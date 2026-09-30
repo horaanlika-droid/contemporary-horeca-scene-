@@ -86,7 +86,7 @@ Design the marketing engine:
 - Scenography page: which theatrical techniques (painted flats, forced perspective, backdrop, scrim, trompe-l'œil, patina, gold leaf, haze, one tight beam) replace expensive materials — and why the trick never announces itself.
 
 ### W12 · Physical mockup — your venue as a set
-Build a physical mockup of your own project, like stage scenery: paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a small torch for light.
+Build a physical mockup of your own project, like stage scenery: antique tableware, candles, vintage glassware, found fabric/wood/textures and props, a physical menu concept, and practical light.
 - Scale 1:20 or 1:50 — a model you can hold, not a floor plan.
 - Decide and show: the entrance, the first sightline, where the light comes from, which surfaces are real and which are painted illusions.
 - The three details that carry the atmosphere (and one detail you deliberately removed because it would wake the guest from the fairy tale).

@@ -1,18 +1,20 @@
 /* ============================================================================
    ACCESS GATE — Contemporary Horeca Scene
-   The whole course (content seed + all views) sits behind a cohort password.
-   Verification is server-side first (POST /api/access sets an HttpOnly cookie
-   that also unlocks /course-data.js, /course/ and /presentation/); if no API is
-   reachable (static hosting) it falls back to a local digest check, so the
-   password itself is never shipped in the bundle.
+   Personal password via Tribute Digital Product API (1 password per 1 person)
+   or master/admin password. Unlocks course-data.js and automatically signs the
+   visitor in so all modules and lessons are immediately accessible.
    ========================================================================== */
 (() => {
   'use strict';
 
   const FLAG = 'chs-access-v1';
+  const TOKEN_KEY = 'chs-access-token';
+  const CLIENT_KEY = 'chs-client-id';
+  const USER_KEY = 'chs-user';
+  const USER_BACKUP_KEY = 'chs-user-backup';
   const CONTENT = 'course-data.js';
-  const COURSE = 'Contemporary Horeca Scene';
-  /* SHA-256 and a non-crypto fallback digest of the cohort password. */
+
+  /* SHA-256 and a non-crypto fallback digest of the master password for static hosting */
   const SHA256 = '2b7a5e29ea101c8eb3839d18ba52cdcc34f5660845662b5721c4f72bf5d52200';
   const LEGACY = 797496869;
 
@@ -26,7 +28,56 @@
     toastEl.textContent = text;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
+  };
+
+  const getClientId = () => {
+    try {
+      let id = localStorage.getItem(CLIENT_KEY);
+      if (!id) {
+        id = 'cli-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(CLIENT_KEY, id);
+      }
+      return id;
+    } catch {
+      return 'cli-session';
+    }
+  };
+
+  const getSavedToken = () => {
+    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch { return ''; }
+  };
+
+  const saveSession = (token, userProfile) => {
+    try {
+      localStorage.setItem(FLAG, '1');
+      if (token) localStorage.setItem(TOKEN_KEY, token);
+      if (userProfile) {
+        sessionStorage.setItem(USER_KEY, JSON.stringify(userProfile));
+        localStorage.setItem(USER_BACKUP_KEY, JSON.stringify(userProfile));
+      }
+    } catch { /* private mode */ }
+  };
+
+  const ensureDefaultUser = () => {
+    try {
+      const existing = sessionStorage.getItem(USER_KEY) || localStorage.getItem(USER_BACKUP_KEY);
+      if (existing) {
+        sessionStorage.setItem(USER_KEY, existing);
+        return;
+      }
+      const fallbackUser = {
+        id: 'student-local',
+        name: 'Student',
+        email: 'student@him.edu',
+        role: 'STUDENT',
+        isMaster: true,
+        institutionId: 'him-001',
+        passwordCode: 'COHORT',
+      };
+      sessionStorage.setItem(USER_KEY, JSON.stringify(fallbackUser));
+      localStorage.setItem(USER_BACKUP_KEY, JSON.stringify(fallbackUser));
+    } catch { /* ignore */ }
   };
 
   const legacyDigest = value => {
@@ -47,19 +98,27 @@
   };
 
   const verifyLocal = async value => {
-    const digest = await localDigest(value);
-    return digest === SHA256 || (digest === String(LEGACY) && legacyDigest(value) === LEGACY);
+    const clean = String(value || '').trim();
+    const digest = await localDigest(clean);
+    return digest === SHA256 || (digest === String(LEGACY) && legacyDigest(clean) === LEGACY);
   };
 
   /* --- server conversation ------------------------------------------------ */
   const apiStatus = async () => {
     try {
-      const response = await fetch('/api/access', { method: 'GET', headers: { Accept: 'application/json' } });
-      if (!response.ok) return 'unsupported';
+      const token = getSavedToken();
+      const headers = { Accept: 'application/json' };
+      if (token) headers['X-Access-Token'] = token;
+      const response = await fetch('/api/access', { method: 'GET', headers });
+      if (!response.ok) return { state: 'unsupported' };
       const payload = await response.json();
-      return payload && payload.unlocked ? 'granted' : 'locked';
+      if (payload && payload.unlocked) {
+        saveSession(payload.token || token, payload.user);
+        return { state: 'granted', payload };
+      }
+      return { state: 'locked', payload };
     } catch {
-      return 'unsupported';
+      return { state: 'unsupported' };
     }
   };
 
@@ -68,22 +127,34 @@
       const response = await fetch('/api/access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({
+          password,
+          clientId: getClientId(),
+          telegramId: window.Telegram?.WebApp?.initDataUnsafe?.user?.id ? String(window.Telegram.WebApp.initDataUnsafe.user.id) : null,
+        }),
       });
-      if (response.status === 404 || response.status === 405 || response.status === 501) return 'unsupported';
+      if (response.status === 404 || response.status === 405 || response.status === 501) {
+        return { state: 'unsupported' };
+      }
       const payload = await response.json().catch(() => ({}));
-      return response.ok && payload.unlocked ? 'granted' : 'denied';
+      if (response.ok && payload.unlocked) {
+        saveSession(payload.token, payload.user);
+        return { state: 'granted', payload };
+      }
+      return { state: 'denied', error: payload.error || '' };
     } catch {
-      return 'unsupported';
+      return { state: 'unsupported' };
     }
   };
 
   const loadScript = src => new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[data-content="${src}"]`);
-    if (existing) { resolve(); return; }
+    const existing = document.querySelector('script[data-content="course-data"]');
+    if (existing && window.COURSE) { resolve(); return; }
+    if (existing) existing.remove();
+    const token = getSavedToken();
     const script = document.createElement('script');
-    script.src = src;
-    script.dataset.content = src;
+    script.src = token ? `${src}?token=${encodeURIComponent(token)}` : src;
+    script.dataset.content = 'course-data';
     script.onload = () => resolve();
     script.onerror = () => reject(new Error(`Unable to load ${src}`));
     document.body.appendChild(script);
@@ -93,15 +164,13 @@
   async function unlock(silent) {
     if (booted) return;
     booted = true;
-    try {
-      localStorage.setItem(FLAG, '1');
-    } catch { /* private mode */ }
+    ensureDefaultUser();
     try {
       await loadScript(CONTENT);
     } catch {
       booted = false;
-      try { localStorage.removeItem(FLAG); } catch { /* ignore */ }
-      renderGate('CONTENT LOCKED · ASK THE AUTHOR FOR A CURRENT PASSWORD');
+      try { localStorage.removeItem(FLAG); localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
+      renderGate('CONTENT LOCKED · ENTER YOUR PERSONAL PASSWORD FROM TRIBUTE');
       return;
     }
     if (!window.COURSE) {
@@ -109,7 +178,8 @@
       renderGate('COURSE CONTENT COULD NOT BE READ');
       return;
     }
-    if (!silent) toast('ACCESS GRANTED · WELCOME TO THE ELECTIVE');
+    if (!silent) toast('ДОСТУП ОТКРЫТ · ВСЕ МОДУЛИ И УРОКИ ДОСТУПНЫ');
+    if (!location.hash || location.hash === '#/' || location.hash === '#') location.hash = '/dashboard';
     if (typeof window.bootCourse === 'function') window.bootCourse();
   }
 
@@ -122,29 +192,49 @@
       <div class="gate-visual">
         <img src="presentation/assets/horeca-atmosphere-candle.jpg" alt="A candle-lit contemporary bar interior">
         <div class="gate-visual-copy">
-          <span class="eyebrow">PRIVATE COURSE · 2026 EDITION</span>
+          <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
-          <p>A living digital elective on the venues, ideas, techniques and budgets shaping the contemporary horeca scene.</p>
+          <p>A living digital elective on the venues, 50 Best menu concepts, industry leaders, found-object mockups and budgets shaping the contemporary horeca scene.</p>
         </div>
       </div>
       <div class="gate-form-wrap">
-        <form class="gate-form" id="gate-form" novalidate>
-          <div class="gate-lock"><i aria-hidden="true">✳</i><span>Course access is protected<br>by a cohort password</span></div>
-          <span class="eyebrow">ENTER THE COURSE</span>
-          <h2>Password <em>required.</em></h2>
-          <p>Enter the access password you received for this edition to open the full course: modules, lessons, case files, assignments and the final mockup brief.</p>
-          <div class="field">
-            <label for="course-password">Course password</label>
-            <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
-                   inputmode="text" spellcheck="false" required placeholder="••••••••" aria-describedby="gate-error">
+        <div class="gate-form">
+          <form id="gate-form" novalidate>
+            <div class="gate-lock"><i aria-hidden="true">✳</i><span>Personal access via Tribute<br>1 password = 1 person</span></div>
+            <span class="eyebrow">ENTER THE COURSE</span>
+            <h2>Password <em>required.</em></h2>
+            <p>Введите ваш персональный пароль (выдаётся автоматически на 1 человека после оплаты цифрового товара через <b>Tribute</b>) — все модули, уроки, разборы 50 Best меню и задания откроются сразу.</p>
+            <div class="field">
+              <label for="course-password">Personal or Admin password</label>
+              <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
+                     inputmode="text" spellcheck="false" required placeholder="CHS-XXXX-XXXX или пароль админа" aria-describedby="gate-error">
+            </div>
+            <p id="gate-error" class="form-help" role="alert">${message}</p>
+            <button class="button" type="submit" style="width:100%">OPEN THE COURSE / ВОЙТИ В КУРС <span aria-hidden="true">↗</span></button>
+          </form>
+
+          <div class="gate-note" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
+            <span class="eyebrow" style="margin-bottom:10px">TRIBUTE DIGITAL PRODUCT · ЦИФРОВОЙ ТОВАР</span>
+            <b>Нет пароля? Получите индивидуальный пароль через Tribute</b>
+            <p style="margin:6px 0 14px">Пароль генерируется автоматически после внутренней оплаты цифрового товара через <b>Tribute API</b>. Один пароль привязывается к одному человеку.</p>
+            <button class="button light small" type="button" id="toggle-tribute-box" style="width:100%">КУПИТЬ ДОСТУП / ПОЛУЧИТЬ ПАРОЛЬ ЧЕРЕЗ TRIBUTE <span aria-hidden="true">↗</span></button>
+
+            <form id="tribute-checkout-form" style="display:none;margin-top:16px;padding:18px;background:var(--paper-warm);border:1px solid var(--line-strong)" novalidate>
+              <span class="meta" style="color:var(--red);display:block;margin-bottom:8px">ЗАГЛУШКА TRIBUTE API · ВНУТРЕННЯЯ ОПЛАТА ЦИФРОВОГО ТОВАРА</span>
+              <p style="margin:0 0 12px;font-size:12.5px;color:var(--ink)">Товар: <strong>Contemporary Horeca Scene · 2026 Edition</strong><br>Демонстрационная заглушка: реальное списание не производится. В подключённой Tribute-версии после оплаты генерируется уникальный пароль (1 пароль = 1 человек).</p>
+              <div class="field" style="margin-bottom:12px">
+                <label for="tribute-name">Ваше имя</label>
+                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Иван Петров">
+              </div>
+              <div class="field" style="margin-bottom:12px">
+                <label for="tribute-email">Email или Telegram (@username)</label>
+                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com или @username">
+              </div>
+              <button class="button small" type="submit" id="tribute-pay-btn" style="width:100%">ОПЛАТИТЬ ЧЕРЕЗ TRIBUTE И СГЕНЕРИРОВАТЬ ПАРОЛЬ <span aria-hidden="true">↗</span></button>
+              <div id="tribute-result" style="display:none;margin-top:14px;padding:14px;background:#fff;border-left:3px solid var(--red)"></div>
+            </form>
           </div>
-          <p id="gate-error" class="form-help" role="alert">${message}</p>
-          <button class="button" type="submit" style="width:100%">OPEN THE COURSE <span aria-hidden="true">↗</span></button>
-          <div class="gate-note">
-            <b>Need access?</b>
-            The password is issued per cohort by the course author. Access is remembered on this device for 30 days.
-          </div>
-        </form>
+        </div>
       </div>
     </main>`;
     const field = document.getElementById('course-password');
@@ -152,7 +242,85 @@
   }
 
   /* --- events ------------------------------------------------------------- */
+  document.addEventListener('click', event => {
+    const toggleBtn = event.target.closest('#toggle-tribute-box');
+    if (toggleBtn) {
+      const form = document.getElementById('tribute-checkout-form');
+      if (form) {
+        const show = form.style.display === 'none';
+        form.style.display = show ? 'block' : 'none';
+        if (show) document.getElementById('tribute-name')?.focus();
+      }
+      return;
+    }
+    const autoUseBtn = event.target.closest('[data-use-password]');
+    if (autoUseBtn) {
+      const code = autoUseBtn.dataset.usePassword;
+      const input = document.getElementById('course-password');
+      const gateForm = document.getElementById('gate-form');
+      if (input && gateForm) {
+        input.type = 'text';
+        input.value = code;
+        gateForm.requestSubmit();
+      }
+    }
+  });
+
   document.addEventListener('submit', async event => {
+    if (event.target.id === 'tribute-checkout-form') {
+      event.preventDefault();
+      const form = event.target;
+      const btn = document.getElementById('tribute-pay-btn');
+      const resBox = document.getElementById('tribute-result');
+      const fd = new FormData(form);
+      const name = String(fd.get('name') || '').trim() || 'Student';
+      const rawContact = String(fd.get('email') || '').trim();
+      const email = rawContact.includes('@') && !rawContact.startsWith('@')
+        ? rawContact
+        : `${rawContact.replace(/^@/, '') || 'student'}@tribute.user`;
+      const telegram = rawContact.startsWith('@') ? rawContact : '';
+
+      if (btn) { btn.disabled = true; btn.textContent = 'ОБРАБОТКА ОПЛАТЫ TRIBUTE…'; }
+      try {
+        const resp = await fetch('/api/tribute/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            telegram,
+            clientId: getClientId(),
+            telegramId: window.Telegram?.WebApp?.initDataUnsafe?.user?.id ? String(window.Telegram.WebApp.initDataUnsafe.user.id) : null,
+          }),
+        });
+        const data = await resp.json();
+        if (resp.ok && data.password) {
+          if (resBox) {
+            resBox.style.display = 'block';
+            resBox.innerHTML = `
+              <span class="meta" style="color:var(--red)">ОПЛАТА ПРОШЛА · ВАШ ЛИЧНЫЙ ПАРОЛЬ (1 ЧЕЛОВЕК)</span>
+              <div style="font:600 20px var(--mono);margin:8px 0;letter-spacing:.08em">${data.password}</div>
+              <p style="margin:0 0 10px;font-size:12px;color:var(--muted)">Пароль привязан к вашему профилю (${name}). Сохраните его.</p>
+              <button type="button" class="button small" data-use-password="${data.password}" style="width:100%">ВОЙТИ В КУРС С ЭТИМ ПАРОЛЕМ ↗</button>
+            `;
+          }
+          const passInput = document.getElementById('course-password');
+          if (passInput) { passInput.type = 'text'; passInput.value = data.password; }
+          toast(`ПАРОЛЬ СГЕНЕРИРОВАН: ${data.password}`);
+        } else {
+          throw new Error(data.error || 'Tribute stub error');
+        }
+      } catch (error) {
+        if (resBox) {
+          resBox.style.display = 'block';
+          resBox.textContent = error.message || 'Сервис Tribute временно недоступен. Напишите egor.tarasenko@him-mail.ch.';
+        }
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = 'ОПЛАТИТЬ ЧЕРЕЗ TRIBUTE И СГЕНЕРИРОВАТЬ ПАРОЛЬ <span aria-hidden="true">↗</span>'; }
+      }
+      return;
+    }
+
     if (event.target.id !== 'gate-form') return;
     event.preventDefault();
     const form = event.target;
@@ -160,21 +328,25 @@
     const error = document.getElementById('gate-error');
     const password = String(new FormData(form).get('password') || '').trim();
     if (!password) {
-      error.textContent = 'Enter the course password.';
+      error.textContent = 'Введите ваш персональный пароль из Tribute или пароль администратора.';
       form.classList.remove('shake');
       void form.offsetWidth;
       form.classList.add('shake');
       return;
     }
-    if (button) { button.disabled = true; button.textContent = 'CHECKING…'; }
+    if (button) { button.disabled = true; button.textContent = 'ПРОВЕРКА ДОСТУПА…'; }
     error.textContent = '';
     const result = await apiUnlock(password);
-    if (result === 'granted') { await unlock(); return; }
-    if (result === 'unsupported' && await verifyLocal(password)) { await unlock(); return; }
-    if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE <span aria-hidden="true">↗</span>'; }
-    error.textContent = result === 'denied' || result === 'unsupported'
-      ? 'That password does not open this edition. Check the characters and try again.'
-      : 'Access could not be verified. Please try again.';
+    if (result.state === 'granted') { await unlock(); return; }
+    if (result.state === 'unsupported' && await verifyLocal(password)) {
+      ensureDefaultUser();
+      await unlock();
+      return;
+    }
+    if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE / ВОЙТИ В КУРС <span aria-hidden="true">↗</span>'; }
+    error.textContent = result.error || (result.state === 'denied' || result.state === 'unsupported'
+      ? 'Неверный пароль. Проверьте символы или получите личный пароль через Tribute ниже.'
+      : 'Не удалось проверить доступ. Попробуйте ещё раз.');
     form.classList.remove('shake');
     void form.offsetWidth;
     form.classList.add('shake');
@@ -183,7 +355,7 @@
   /* --- boot --------------------------------------------------------------- */
   (async () => {
     const tgApp = window.Telegram?.WebApp;
-    if (tgApp) {
+    if (tgApp && tgApp.initData) {
       try {
         tgApp.ready(); tgApp.expand();
         document.documentElement.classList.add('telegram-webapp');
@@ -191,8 +363,8 @@
       } catch { /* SDK not available */ }
     }
     const status = await apiStatus();
-    if (status === 'granted') { await unlock(true); return; }
-    if (status === 'unsupported') {
+    if (status.state === 'granted') { await unlock(true); return; }
+    if (status.state === 'unsupported') {
       let remembered = false;
       try { remembered = localStorage.getItem(FLAG) === '1'; } catch { remembered = false; }
       if (remembered) { await unlock(true); return; }
