@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Contemporary HoReCa Scene — HIM-inspired slide rendering library (ReportLab, 16:9).
+Contemporary HoReCa Scene — slide rendering library (ReportLab, 16:9).
 
 Visual direction: bright editorial pages, Swiss-blue structure, a restrained red
-accent, generous white space, and real people / Montreux photography.
+accent, generous white space, and thematic HoReCa photography (fine dining,
+craft bars, architecture & atmosphere, neurogastronomy, hospitality technology).
 """
 import os
 from reportlab.lib.colors import HexColor
@@ -18,14 +19,29 @@ from reportlab.lib.enums import TA_LEFT
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSET_DIR = os.path.normpath(os.path.join(HERE, "..", "assets"))
 LOGO_PATH = os.path.join(ASSET_DIR, "him-logo-white.png")
-CAMPUS_PHOTO = os.path.join(ASSET_DIR, "him-campus.jpg")
-STUDENTS_PHOTO = os.path.join(ASSET_DIR, "him-students-lake.png")
-OPEN_DAY_PHOTO = os.path.join(ASSET_DIR, "him-student-open-day.jpg")
-CLASSROOM_PHOTO = os.path.join(ASSET_DIR, "him-classroom.jpg")
+
+# ---------- Thematic HoReCa photography ----------
+PHOTO_CHEFS_COUNTER = os.path.join(ASSET_DIR, "horeca-chefs-counter.jpg")
+PHOTO_CRAFT_BAR = os.path.join(ASSET_DIR, "horeca-craft-bar.jpg")
+PHOTO_COCKTAIL_SHAKER = os.path.join(ASSET_DIR, "horeca-cocktail-shaker.jpg")
+PHOTO_SUSTAINABLE_TERROIR = os.path.join(ASSET_DIR, "horeca-sustainable-terroir.jpg")
+PHOTO_INTERIOR_DESIGN = os.path.join(ASSET_DIR, "horeca-interior-design.jpg")
+PHOTO_INTERIOR_SCONCES = os.path.join(ASSET_DIR, "horeca-interior-sconces.jpg")
+PHOTO_CERAMIC_SERVE = os.path.join(ASSET_DIR, "horeca-ceramic-serve.jpg")
+PHOTO_KITCHEN_PLATING = os.path.join(ASSET_DIR, "horeca-kitchen-plating.jpg")
+PHOTO_ATMOSPHERE_CANDLE = os.path.join(ASSET_DIR, "horeca-atmosphere-candle.jpg")
+PHOTO_SENSORY_LAB = os.path.join(ASSET_DIR, "horeca-sensory-tasting-lab.jpg")
+PHOTO_NEURO_SERVE = os.path.join(ASSET_DIR, "horeca-neurogastronomy-serve.jpg")
+PHOTO_TECH_OPS = os.path.join(ASSET_DIR, "horeca-tech-operations.jpg")
+PHOTO_AI_MIXOLOGY = os.path.join(ASSET_DIR, "horeca-ai-mixology-lab.jpg")
+PHOTO_OPEN_FIRE = os.path.join(ASSET_DIR, "horeca-open-fire.jpg")
+PHOTO_HOTEL_BAR = os.path.join(ASSET_DIR, "horeca-hotel-bar-trolley.jpg")
+PHOTO_WINE_SERVICE = os.path.join(ASSET_DIR, "horeca-wine-service.jpg")
+PHOTO_BACKBAR = os.path.join(ASSET_DIR, "horeca-backbar-bottles.jpg")
+PHOTO_CONCEPT_PITCH = os.path.join(ASSET_DIR, "horeca-concept-pitch.jpg")
 
 # Inter is used when available; the DejaVu fallback is bundled with Debian/Ubuntu
-# and supports both Latin and Cyrillic. Keep the familiar internal font names so
-# the existing content files can be built unchanged.
+# and supports both Latin and Cyrillic.
 FONT_DIRS = [
     os.environ.get("HIM_FONT_DIR", ""),
     os.path.normpath(os.path.join(HERE, "..", "..", "..", ".pdftools", "fonts")),
@@ -37,7 +53,6 @@ FONT_FILES = {
     "Inter-Medium": ("Inter-Medium.ttf", "DejaVuSans.ttf"),
     "Inter-Bold": ("Inter-Bold.ttf", "DejaVuSans-Bold.ttf"),
     "Inter-XB": ("Inter-ExtraBold.ttf", "DejaVuSans-Bold.ttf"),
-    # The serif fallback gives quotations the editorial contrast used on HIM's site.
     "Inter-Italic": ("Inter-Italic.ttf", "DejaVuSerif.ttf"),
 }
 
@@ -61,7 +76,7 @@ pdfmetrics.registerFontFamily(
     "Inter", normal="Inter", bold="Inter-Bold", italic="Inter-Italic", boldItalic="Inter-Bold"
 )
 
-# ---------- HIM-inspired palette ----------
+# ---------- Palette ----------
 BG = HexColor("#FFFFFF")
 PANEL = HexColor("#F1F6F9")
 PANEL2 = HexColor("#E5F0F6")
@@ -74,7 +89,6 @@ MUTED = HexColor("#5E788A")
 LINE = HexColor("#D6E2E9")
 WHITE = HexColor("#FFFFFF")
 
-# Legacy names retained for the slide-content modules; both now map to HIM blues.
 GOLD = BLUE
 GOLD_SOFT = BLUE_MID
 
@@ -115,9 +129,9 @@ def textw(c, text, font, size):
     return pdfmetrics.stringWidth(text, font, size)
 
 
-def draw_photo(c, path, x, y, w, h, focus_x=0.5, focus_y=0.5):
-    """Place a photo cropped to a rectangle without distorting it."""
-    if not os.path.isfile(path):
+def draw_photo(c, path, x, y, w, h, focus_x=0.5, focus_y=0.5, radius=0):
+    """Place a photo cropped to a rectangle (or rounded rect) without distorting it."""
+    if not path or not os.path.isfile(path):
         return False
     image = ImageReader(path)
     iw, ih = image.getSize()
@@ -126,12 +140,34 @@ def draw_photo(c, path, x, y, w, h, focus_x=0.5, focus_y=0.5):
     dx = x + (w - dw) * min(max(focus_x, 0.0), 1.0)
     dy = y + (h - dh) * min(max(focus_y, 0.0), 1.0)
     clip = c.beginPath()
-    clip.rect(x, y, w, h)
+    if radius > 0:
+        clip.roundRect(x, y, w, h, radius)
+    else:
+        clip.rect(x, y, w, h)
     c.saveState()
     c.clipPath(clip, stroke=0, fill=0)
     c.drawImage(image, dx, dy, width=dw, height=dh, mask="auto")
     c.restoreState()
     return True
+
+
+def draw_photo_card(c, path, x, y, w, h, label="", caption="", accent=BLUE, focus_x=0.5, focus_y=0.5):
+    """Draw a photo with a clean caption strip at the bottom of the box (top-anchored at y)."""
+    cap_h = 46 if (label or caption) else 0
+    photo_h = h - cap_h
+    c.setFillColor(NAVY)
+    c.roundRect(x, y - h, w, h, 6, stroke=0, fill=1)
+    draw_photo(c, path, x, y - photo_h, w, photo_h, focus_x=focus_x, focus_y=focus_y, radius=0)
+    if cap_h > 0:
+        c.setFillColor(NAVY)
+        c.rect(x, y - h, w, cap_h, stroke=0, fill=1)
+        c.vrect(x, y - photo_h, w, 3, accent)
+        if label:
+            c.setFont("Inter-Bold", 7.2)
+            c.setFillColor(HexColor("#91CAE1"))
+            c.drawString(x + 12, y - photo_h - 14, label.upper())
+        if caption:
+            para(c, caption, x + 12, y - photo_h - 18, w - 24, 7.8, WHITE, "Inter", leading=10.2)
 
 
 def draw_logo(c, x, y, w, h):
@@ -189,10 +225,10 @@ class DeckCanvas(canvas_module.Canvas):
         self.swiss_cross(M, PAGE_H - 33, 11)
         self.setFillColor(NAVY)
         self.setFont("Inter-Bold", 7.5)
-        self.drawString(M + 18, PAGE_H - 29, "HIM BUSINESS SCHOOL")
+        self.drawString(M + 18, PAGE_H - 29, "CONTEMPORARY HORECA SCENE")
         self.setFillColor(MUTED)
         self.setFont("Inter", 6.6)
-        self.drawString(M + 18, PAGE_H - 38, "HOTEL INSTITUTE MONTREUX")
+        self.drawString(M + 18, PAGE_H - 38, kicker if kicker else "HOTEL INSTITUTE MONTREUX · COURSE & LECTURES")
         self.setFont("Inter", 7.5)
         self.setFillColor(MUTED)
         self.drawRightString(PAGE_W - M, PAGE_H - 31, self._footer_label)
@@ -202,7 +238,7 @@ class DeckCanvas(canvas_module.Canvas):
         self.hline(M, 34, PAGE_W - 2 * M, LINE, 0.65)
         self.setFont("Inter-Bold", 6.8)
         self.setFillColor(BLUE)
-        self.drawString(M, 22, "BE WORLD READY  ·  COURSE PROPOSAL 2026–27")
+        self.drawString(M, 22, "CONTEMPORARY HORECA SCENE  ·  2026–27")
         self.setFont("Inter", 6.8)
         self.setFillColor(MUTED)
         self.drawRightString(PAGE_W - M - 30, 22, "EGOR TARASENKO  ·  HIM ALUMNUS")
@@ -210,10 +246,10 @@ class DeckCanvas(canvas_module.Canvas):
         self.setFillColor(RED)
         self.drawRightString(PAGE_W - M, 22, f"{self._pageno + 1:02d}")
 
-    def start_slide(self, with_header=True, with_footer=True):
+    def start_slide(self, kicker="", with_header=True, with_footer=True):
         self.bg()
         if with_header:
-            self.header("")
+            self.header(kicker)
         if with_footer:
             self.footer()
         return CONTENT_TOP
@@ -226,19 +262,19 @@ CONTENT_TOP = PAGE_H - 66.0
 def slide_title_block(c, title, subtitle=None, accent=GOLD, y=None):
     y = y or CONTENT_TOP
     c.vrect(M, y - 30, 4, 34, accent)
-    c.setFont("Inter-XB", 23)
+    c.setFont("Inter-XB", 21.5)
     c.setFillColor(NAVY)
-    c.drawString(M + 16, y - 22, title)
-    yy = y - 22
+    c.drawString(M + 16, y - 21, title)
+    yy = y - 21
     if subtitle:
-        c.setFont("Inter", 10.5)
+        c.setFont("Inter", 10.0)
         c.setFillColor(MUTED)
-        c.drawString(M + 16, yy - 20, subtitle)
-        yy -= 20
-    return yy - 16
+        c.drawString(M + 16, yy - 19, subtitle)
+        yy -= 19
+    return yy - 14
 
 
-def bullets_block(c, items, x, y, w, size=10.5, gap=9, color=TEXT, bullet_color=GOLD, leading=1.35):
+def bullets_block(c, items, x, y, w, size=10.2, gap=8, color=TEXT, bullet_color=GOLD, leading=1.32):
     yy = y
     for it in items:
         if isinstance(it, tuple):
@@ -246,19 +282,33 @@ def bullets_block(c, items, x, y, w, size=10.5, gap=9, color=TEXT, bullet_color=
             c.setFillColor(bullet_color)
             c.setFont("Inter-Bold", size)
             c.drawString(x, yy - size, "—")
-            c.setFillColor(color)
-            c.setFont("Inter-Bold", size)
-            c.drawString(x + 16, yy - size, head)
-            yy -= size * 1.5
+            th = para(c, head, x + 16, yy, w - 16, size, color, "Inter-Bold", leading=leading * size)
+            yy -= th + 2
             if body:
-                h = para(c, body, x + 16, yy, w - 16, size - 1.2, MUTED, leading=leading * (size - 1.2))
-                yy -= h + gap - 4
+                h = para(c, body, x + 16, yy, w - 16, size - 1.1, MUTED, leading=leading * (size - 1.1))
+                yy -= h + gap - 3
         else:
             c.setFillColor(bullet_color)
             c.setFont("Inter-Bold", size)
             c.drawString(x, yy - size, "—")
             h = para(c, it, x + 16, yy, w - 16, size, color, leading=leading * size)
             yy -= h + gap
+    return yy
+
+
+def prose_paragraphs(c, paragraphs, x, y, w, size=9.6, gap=9, color=TEXT, leading=13.4):
+    """Render a list of narrative prose paragraphs cleanly; returns bottom y."""
+    yy = y
+    for p_text in paragraphs:
+        if isinstance(p_text, tuple):
+            subhead, body = p_text
+            sh = para(c, subhead, x, yy, w, size + 0.4, NAVY, "Inter-Bold", leading=(size + 0.4) * 1.28)
+            yy -= sh + 3
+            bh = para(c, body, x, yy, w, size, color, "Inter", leading=leading)
+            yy -= bh + gap
+        else:
+            bh = para(c, p_text, x, yy, w, size, color, "Inter", leading=leading)
+            yy -= bh + gap
     return yy
 
 
@@ -326,11 +376,11 @@ def cards_grid(c, cards, x, y, w, card_w=None, card_h=92, cols=3, gap=14):
 
 
 def course_cover(c, deck_label, descriptor, positioning, author_label, author_name,
-                 credential, location_label, format_label):
-    """HIM-inspired split cover with Montreux student photography."""
+                 credential, location_label, format_label, cover_photo=PHOTO_CHEFS_COUNTER):
+    """Split cover with thematic contemporary HoReCa photography."""
     c.bg()
-    photo_x = 552
-    draw_photo(c, STUDENTS_PHOTO, photo_x, 0, PAGE_W - photo_x, PAGE_H, focus_x=0.52, focus_y=0.78)
+    photo_x = 540
+    draw_photo(c, cover_photo, photo_x, 0, PAGE_W - photo_x, PAGE_H, focus_x=0.5, focus_y=0.5)
     c.setFillColor(NAVY)
     c.rect(0, 0, photo_x, PAGE_H, stroke=0, fill=1)
     c.vrect(photo_x - 6, 0, 6, PAGE_H, RED)
@@ -351,10 +401,10 @@ def course_cover(c, deck_label, descriptor, positioning, author_label, author_na
     c.drawString(M + 6, PAGE_H - 212, "CONTEMPORARY")
     c.drawString(M + 6, PAGE_H - 256, "HORECA SCENE")
     c.vrect(M + 6, PAGE_H - 275, 54, 3, RED)
-    para(c, descriptor, M + 6, PAGE_H - 291, 440, 10.2, HexColor("#D6E7F0"), "Inter-Medium", leading=14)
-    para(c, positioning, M + 6, PAGE_H - 338, 442, 9.1, HexColor("#B9D2E2"), "Inter", leading=13)
+    para(c, descriptor, M + 6, PAGE_H - 291, 430, 10.2, HexColor("#D6E7F0"), "Inter-Medium", leading=14)
+    para(c, positioning, M + 6, PAGE_H - 338, 432, 9.1, HexColor("#B9D2E2"), "Inter", leading=13)
 
-    c.hline(M + 6, 112, 438, HexColor("#46647A"), 0.65)
+    c.hline(M + 6, 112, 428, HexColor("#46647A"), 0.65)
     c.setFont("Inter-Bold", 7.2)
     c.setFillColor(HexColor("#91CAE1"))
     c.drawString(M + 6, 92, author_label.upper())
@@ -369,17 +419,18 @@ def course_cover(c, deck_label, descriptor, positioning, author_label, author_na
     c.showPage()
 
 
-def closing_page(c, headline, author_name, credential, source_line, location_label):
-    """Photo-led closing page echoing HIM's Montreux campus storytelling."""
+def closing_page(c, headline, author_name, credential, source_line, location_label,
+                 closing_photo=PHOTO_HOTEL_BAR):
+    """Photo-led closing page with thematic hospitality photography."""
     c.setFillColor(NAVY)
     c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
-    draw_photo(c, CAMPUS_PHOTO, 0, 235, PAGE_W, PAGE_H - 235, focus_x=0.5, focus_y=0.54)
+    draw_photo(c, closing_photo, 0, 235, PAGE_W, PAGE_H - 235, focus_x=0.5, focus_y=0.45)
     c.vrect(0, 229, PAGE_W, 6, RED)
     c.setFillColor(NAVY)
     c.rect(0, 0, PAGE_W, 230, stroke=0, fill=1)
     c.setFont("Inter-Bold", 7.8)
     c.setFillColor(HexColor("#91CAE1"))
-    c.drawString(M, 205, spaced("BE WORLD READY", "  "))
+    c.drawString(M, 205, spaced("CONTEMPORARY HORECA SCENE", "  "))
     para(c, headline, M, 191, PAGE_W - 2 * M, 25, WHITE, "Inter-XB", leading=31)
     c.setFont("Inter-XB", 12.5)
     c.setFillColor(WHITE)
@@ -394,4 +445,256 @@ def closing_page(c, headline, author_name, credential, source_line, location_lab
     c.setFillColor(HexColor("#B9D2E2"))
     c.drawString(M, 35, source_line)
     draw_logo(c, PAGE_W - M - 63, 42, 56, 56)
+    c.showPage()
+
+
+# ---------- Lesson Presentation Slide Builders ----------
+def render_lesson_cover(c, lesson_num, week_label, module_label, title, subtitle,
+                        intro_prose, session_rhythm, reading_prep, photo, photo_caption,
+                        module_num=1, lang="ru"):
+    """Slide 1 of a lesson: Hero cover + narrative introduction prose + thematic photo."""
+    accent = MODULE_COLORS.get(module_num, BLUE)
+    c.bg()
+    # Left dark editorial column (536 pt), right full-bleed photo (424 pt)
+    split_x = 546
+    draw_photo(c, photo, split_x, 0, PAGE_W - split_x, PAGE_H, focus_x=0.5, focus_y=0.5)
+    # Caption overlay at bottom of photo
+    c.setFillColor(NAVY)
+    c.rect(split_x, 0, PAGE_W - split_x, 54, stroke=0, fill=1)
+    c.vrect(split_x, 54, PAGE_W - split_x, 3, accent)
+    para(c, photo_caption, split_x + 18, 42, PAGE_W - split_x - 32, 7.8, HexColor("#D6E7F0"), "Inter", leading=10.5)
+
+    c.setFillColor(NAVY)
+    c.rect(0, 0, split_x, PAGE_H, stroke=0, fill=1)
+    c.vrect(split_x - 5, 0, 5, PAGE_H, accent)
+
+    # Top badges
+    c.swiss_cross(M, PAGE_H - 42, 11)
+    c.setFont("Inter-Bold", 7.5)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M + 18, PAGE_H - 38, f"{week_label.upper()}  ·  {module_label.upper()}")
+
+    # Title & subtitle
+    para(c, title, M, PAGE_H - 64, split_x - M - 28, 22, WHITE, "Inter-XB", leading=27)
+    para(c, subtitle, M, PAGE_H - 130, split_x - M - 28, 10.2, HexColor("#91CAE1"), "Inter-Medium", leading=13.8)
+    c.vrect(M, PAGE_H - 168, 48, 3, RED)
+
+    # Narrative prose introduction
+    yy = PAGE_H - 180
+    for p_text in intro_prose:
+        ph = para(c, p_text, M, yy, split_x - M - 28, 9.2, HexColor("#E5F0F6"), "Inter", leading=13.2)
+        yy -= ph + 9
+
+    # Bottom info bar (rhythm + prep)
+    c.hline(M, 104, split_x - M - 28, HexColor("#355670"), 0.65)
+    rhythm_lbl = "РИТМ ЗАНЯТИЯ (3 ЧАСА)" if lang == "ru" else "SESSION RHYTHM (3 HOURS)"
+    prep_lbl = "ПОДГОТОВКА И ИСТОЧНИКИ" if lang == "ru" else "PREPARATION & SOURCES"
+    c.setFont("Inter-Bold", 7.0)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M, 90, rhythm_lbl)
+    para(c, session_rhythm, M, 80, split_x - M - 28, 8.0, WHITE, "Inter", leading=10.5)
+    c.setFont("Inter-Bold", 7.0)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M, 52, prep_lbl)
+    para(c, reading_prep, M, 42, split_x - M - 28, 7.8, HexColor("#B9D2E2"), "Inter", leading=10.2)
+    c.showPage()
+
+
+def render_lesson_prose_slide(c, kicker, title, subtitle, prose_blocks, takeaway_title,
+                              takeaway_text, photo, photo_label, photo_caption,
+                              side_points_title, side_points, module_num=1):
+    """Slide 2 & 3 of a lesson: Two-column layout with rich narrative lecture prose + thematic photo & analytical points."""
+    accent = MODULE_COLORS.get(module_num, BLUE)
+    top = c.start_slide(kicker=kicker)
+    y = slide_title_block(c, title, subtitle, accent=accent, y=top)
+
+    left_w = 486
+    right_x = M + left_w + 24
+    right_w = PAGE_W - M - right_x  # 338 pt
+
+    # Left column: Narrative prose blocks
+    yy = prose_paragraphs(c, prose_blocks, M, y - 2, left_w, size=9.2, gap=8, color=TEXT, leading=12.8)
+
+    # Bottom-left takeaway box (anchored cleanly above footer)
+    box_top = min(yy - 2, 118)
+    box_bottom = 46
+    box_h = max(box_top - box_bottom, 54)
+    c.setFillColor(PANEL2)
+    c.roundRect(M, box_bottom, left_w, box_h, 6, stroke=0, fill=1)
+    c.vrect(M, box_bottom, 3.5, box_h, accent)
+    c.setFont("Inter-Bold", 7.8)
+    c.setFillColor(accent)
+    c.drawString(M + 14, box_bottom + box_h - 14, takeaway_title.upper())
+    para(c, takeaway_text, M + 14, box_bottom + box_h - 18, left_w - 26, 8.5, TEXT, "Inter-Italic", leading=11.5)
+
+    # Right column: Thematic photo card on top + structured analytical points card below
+    photo_card_h = 192
+    draw_photo_card(c, photo, right_x, y - 2, right_w, photo_card_h,
+                    label=photo_label, caption=photo_caption, accent=accent)
+
+    card_top = y - 2 - photo_card_h - 10
+    card_bottom = 46
+    card_h = card_top - card_bottom
+    c.setFillColor(PANEL)
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.55)
+    c.roundRect(right_x, card_bottom, right_w, card_h, 6, stroke=1, fill=1)
+    c.vrect(right_x, card_bottom, 3, card_h, accent)
+    c.setFont("Inter-Bold", 8.0)
+    c.setFillColor(accent)
+    c.drawString(right_x + 14, card_top - 16, side_points_title.upper())
+    bullets_block(c, side_points, right_x + 14, card_top - 24, right_w - 26,
+                  size=8.3, gap=5, color=TEXT, bullet_color=accent, leading=1.24)
+    c.showPage()
+
+
+def render_lesson_cases_slide(c, kicker, title, subtitle, cases_prose, photo,
+                              photo_label, photo_caption, metrics_cards, module_num=1):
+    """Slide 4 of a lesson: Deep dive into 2-3 flagship cases in narrative prose + thematic photo + key metrics."""
+    accent = MODULE_COLORS.get(module_num, BLUE)
+    top = c.start_slide(kicker=kicker)
+    y = slide_title_block(c, title, subtitle, accent=accent, y=top)
+
+    left_w = 496
+    right_x = M + left_w + 22
+    right_w = PAGE_W - M - right_x  # 330 pt
+
+    # Left column: 2-3 case narrative cards
+    yy = y - 2
+    for case_title, case_meta, case_body in cases_prose:
+        # Estimate height
+        st_b = _style(8.7, TEXT, "Inter", 11.8)
+        pb = Paragraph(case_body.replace("\n", "<br/>"), st_b)
+        _, bh = pb.wrap(left_w - 28, 1000)
+        card_h = bh + 36
+        c.setFillColor(PANEL)
+        c.setStrokeColor(LINE)
+        c.setLineWidth(0.5)
+        c.roundRect(M, yy - card_h, left_w, card_h, 6, stroke=1, fill=1)
+        c.vrect(M, yy - card_h, 3.5, card_h, accent)
+        c.setFont("Inter-Bold", 9.5)
+        c.setFillColor(NAVY)
+        c.drawString(M + 14, yy - 16, case_title)
+        c.setFont("Inter-Bold", 7.3)
+        c.setFillColor(accent)
+        c.drawRightString(M + left_w - 12, yy - 15, case_meta.upper())
+        pb.drawOn(c, M + 14, yy - 24 - bh)
+        yy -= card_h + 8
+
+    # Right column: Thematic photo card + 2 metric highlight boxes
+    photo_h = 210
+    draw_photo_card(c, photo, right_x, y - 2, right_w, photo_h,
+                    label=photo_label, caption=photo_caption, accent=accent)
+
+    my = y - 2 - photo_h - 10
+    for val, lbl, desc in metrics_cards:
+        mh = 68
+        c.setFillColor(PANEL2)
+        c.roundRect(right_x, my - mh, right_w, mh, 6, stroke=0, fill=1)
+        c.vrect(right_x, my - mh, 3, mh, RED if module_num == 5 else BLUE)
+        c.setFont("Inter-XB", 16)
+        c.setFillColor(NAVY)
+        c.drawString(right_x + 12, my - 24, val)
+        c.setFont("Inter-Bold", 8.3)
+        c.setFillColor(accent)
+        c.drawString(right_x + 12, my - 37, lbl.upper())
+        para(c, desc, right_x + 12, my - 41, right_w - 24, 7.8, MUTED, "Inter", leading=10.0)
+        my -= mh + 8
+
+    c.showPage()
+
+
+def render_lesson_seminar_slide(c, kicker, title, subtitle, question_title,
+                                question_prose, rhythm_note, lab_title, lab_prose,
+                                lab_steps, photo, photo_label, photo_caption, module_num=1):
+    """Slide 5 of a lesson: Audience reflection question (5-min silent think) + Lab/Seminar exercise in prose + photo."""
+    accent = MODULE_COLORS.get(module_num, BLUE)
+    top = c.start_slide(kicker=kicker)
+    y = slide_title_block(c, title, subtitle, accent=accent, y=top)
+
+    left_w = 490
+    right_x = M + left_w + 24
+    right_w = PAGE_W - M - right_x
+
+    # Top-left: Audience Reflection Question Box
+    q_h = 136
+    c.setFillColor(NAVY)
+    c.roundRect(M, y - q_h, left_w, q_h, 7, stroke=0, fill=1)
+    c.vrect(M, y - q_h, 4, q_h, RED)
+    c.setFont("Inter-Bold", 7.8)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M + 16, y - 18, question_title.upper())
+    qh = para(c, question_prose, M + 16, y - 24, left_w - 30, 9.2, WHITE, "Inter-Italic", leading=12.8)
+    para(c, rhythm_note, M + 16, y - 30 - qh, left_w - 30, 7.9, HexColor("#B9D2E2"), "Inter", leading=10.6)
+
+    # Bottom-left: Lab / Seminar Protocol in Prose
+    lab_top = y - q_h - 12
+    lab_bottom = 46
+    lab_h = lab_top - lab_bottom
+    c.setFillColor(PANEL)
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.55)
+    c.roundRect(M, lab_bottom, left_w, lab_h, 7, stroke=1, fill=1)
+    c.vrect(M, lab_bottom, 3.5, lab_h, accent)
+    c.setFont("Inter-Bold", 8.5)
+    c.setFillColor(accent)
+    c.drawString(M + 16, lab_top - 18, lab_title.upper())
+    lph = para(c, lab_prose, M + 16, lab_top - 24, left_w - 30, 8.8, TEXT, "Inter", leading=12.0)
+    bullets_block(c, lab_steps, M + 16, lab_top - 30 - lph, left_w - 30,
+                  size=8.4, gap=4.5, color=TEXT, bullet_color=accent, leading=1.22)
+
+    # Right column: Large thematic photo card
+    draw_photo_card(c, photo, right_x, y, right_w, y - 46,
+                    label=photo_label, caption=photo_caption, accent=accent)
+    c.showPage()
+
+
+def render_lesson_practice_slide(c, kicker, title, subtitle, milestone_badge,
+                                 milestone_prose, deliverables, peer_review_prose,
+                                 field_notes_prose, photo, photo_label, photo_caption,
+                                 module_num=1, lang="ru"):
+    """Slide 6 of a lesson: Practical assignment «My Venue» (milestone prose + deliverables) + Field Notes + photo."""
+    accent = MODULE_COLORS.get(module_num, BLUE)
+    top = c.start_slide(kicker=kicker)
+    y = slide_title_block(c, title, subtitle, accent=accent, y=top)
+
+    left_w = 496
+    right_x = M + left_w + 22
+    right_w = PAGE_W - M - right_x
+
+    # Left top: Milestone narrative prose + checklist
+    c.setFillColor(PANEL)
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.55)
+    main_h = 236
+    c.roundRect(M, y - main_h, left_w, main_h, 7, stroke=1, fill=1)
+    c.vrect(M, y - main_h, 4, main_h, accent)
+    c.setFont("Inter-Bold", 8.2)
+    c.setFillColor(accent)
+    c.drawString(M + 16, y - 18, milestone_badge.upper())
+    mph = para(c, milestone_prose, M + 16, y - 24, left_w - 30, 8.9, TEXT, "Inter", leading=12.2)
+    deliv_lbl = "ЧТО ДОЛЖНО БЫТЬ НА СТРАНИЦЕ КОНЦЕПТА:" if lang == "ru" else "WHAT THE CONCEPT PAGE MUST INCLUDE:"
+    c.setFont("Inter-Bold", 7.8)
+    c.setFillColor(NAVY)
+    c.drawString(M + 16, y - 34 - mph, deliv_lbl)
+    bullets_block(c, deliverables, M + 16, y - 40 - mph, left_w - 30,
+                  size=8.4, gap=4.5, color=TEXT, bullet_color=accent, leading=1.22)
+
+    # Left bottom: Peer review + Field Notes box
+    bot_top = y - main_h - 10
+    bot_bottom = 46
+    bot_h = bot_top - bot_bottom
+    c.setFillColor(PANEL2)
+    c.roundRect(M, bot_bottom, left_w, bot_h, 7, stroke=0, fill=1)
+    c.vrect(M, bot_bottom, 3.5, bot_h, RED)
+    pr_lbl = "ВЗАИМНАЯ РЕЦЕНЗИЯ И FIELD NOTES НЕДЕЛИ" if lang == "ru" else "PEER REVIEW & WEEKLY FIELD NOTES"
+    c.setFont("Inter-Bold", 7.8)
+    c.setFillColor(NAVY)
+    c.drawString(M + 16, bot_top - 15, pr_lbl)
+    prh = para(c, peer_review_prose, M + 16, bot_top - 20, left_w - 30, 8.3, TEXT, "Inter", leading=11.2)
+    para(c, field_notes_prose, M + 16, bot_top - 24 - prh, left_w - 30, 8.1, MUTED, "Inter-Italic", leading=11.0)
+
+    # Right column: Thematic photo card
+    draw_photo_card(c, photo, right_x, y, right_w, y - 46,
+                    label=photo_label, caption=photo_caption, accent=accent)
     c.showPage()

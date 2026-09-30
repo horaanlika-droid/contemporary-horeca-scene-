@@ -2,8 +2,8 @@
 """EN slide deck: Contemporary HoReCa Scene — course proposal for Hotel Institute Montreux."""
 from deck_lib import *
 
-def std(c):
-    c.bg(); c.header(""); c.footer()
+def std(c, kicker="COURSE PROPOSAL · HOTEL INSTITUTE MONTREUX"):
+    c.bg(); c.header(kicker); c.footer()
     return CONTENT_TOP
 
 def build(c):
@@ -18,6 +18,7 @@ def build(c):
         "Master in Business Management — Hotel Institute Montreux Alumnus",
         "Montreux · 2026",
         "12 weeks · 36 contact hours · English",
+        cover_photo=PHOTO_CHEFS_COUNTER,
     )
 
     # ================= 2. WHY NOW =================
@@ -40,10 +41,10 @@ def build(c):
 
     # ================= 3. ABOUT THE AUTHOR =================
     top = std(c)
-    y = slide_title_block(c, "About the author", "An alumnus proposal — giving back to the institute")
+    y = slide_title_block(c, "About the author & course architecture", "A practical lens on strategy, concept design and venue economics")
     c.setFillColor(NAVY)
     c.roundRect(M, y - 292, 300, 292, 8, stroke=0, fill=1)
-    draw_photo(c, CAMPUS_PHOTO, M, y - 156, 300, 156, focus_x=0.52, focus_y=0.55)
+    draw_photo(c, PHOTO_CONCEPT_PITCH, M, y - 156, 300, 156, focus_x=0.5, focus_y=0.5)
     c.setFillColor(NAVY)
     c.roundRect(M, y - 292, 300, 136, 8, stroke=0, fill=1)
     c.vrect(M, y - 156, 300, 5, RED)
@@ -60,7 +61,7 @@ def build(c):
     X = M + 340
     bullets_block(c, [
         ("Graduate of the Master in Business Management programme at Hotel Institute Montreux.",
-         "The course is designed as an alumnus contribution: a bridge between HIM's Swiss hospitality tradition and today's global scene."),
+         "The course is designed as an alumnus contribution: a bridge between Swiss hospitality management and today's global restaurant and bar scene."),
         ("Focus: strategy, brand and economics of contemporary restaurants and bars.",
          "From concept and atmosphere engineering to unit economics and ranking strategy."),
         ("Built on primary industry sources, refreshed annually.",
@@ -92,7 +93,7 @@ def build(c):
         ("Navigate the global ranking ecosystem", "Michelin, The 50 Best, GreatList, World Class — how they work and how to use them in marketing and strategy."),
         ("Analyse HoReCa trends", "Turn macro-trends — experience economy, anti-luxury, mindfulness — into concrete business decisions."),
         ("Design venue concepts", "Interior, light, sound, scent and guest journey (CJM) — atmosphere as a managed product."),
-        ("Apply neurogastronomy", "Multisensory design of menus, serves and service: from plate weight to sound pairing."),
+        ("Apply culinary science & neurogastronomy", "Physics & chemistry of flavour, multisensory design of menus, serves and service: from plate weight to sound pairing."),
         ("Evaluate technology & AI", "Reservations, revenue management, kitchen automation, data personalisation — with an ethics filter."),
         ("Pitch at world level", "Develop and defend a venue concept benchmarked against the world's best bars and restaurants."),
     ]
@@ -103,16 +104,15 @@ def build(c):
         if col == 0 and i > 0:
             yy -= 104
         x = M + col * (colw + 24)
-        ypos = yy if col == 0 else yy
         c.setFillColor(PANEL)
-        c.roundRect(x, ypos - 92, colw, 92, 6, stroke=0, fill=1)
+        c.roundRect(x, yy - 92, colw, 92, 6, stroke=0, fill=1)
         c.setFillColor(GOLD)
         c.setFont("Inter-XB", 26)
-        c.drawString(x + 14, ypos - 40, f"0{i+1}")
+        c.drawString(x + 14, yy - 40, f"0{i+1}")
         c.setFillColor(TEXT)
-        c.setFont("Inter-Bold", 11)
-        c.drawString(x + 62, ypos - 30, h)
-        para(c, b, x + 62, ypos - 42, colw - 80, 9.3, MUTED, leading=12.5)
+        c.setFont("Inter-Bold", 10.5)
+        c.drawString(x + 62, yy - 30, h)
+        para(c, b, x + 62, yy - 42, colw - 80, 9.2, MUTED, leading=12.4)
     c.showPage()
 
     # ================= 6. COURSE MAP =================
@@ -124,7 +124,7 @@ def build(c):
         ["2", "Venue Design & Atmosphere", "4–5", "What makes a space unforgettable?", "GreatList criteria; Himkok; Hanu Dubai"],
         ["3", "Neurogastronomy & Guest Experience", "6–7", "How do senses shape taste?", "Spence's gastrophysics; World Class multisensory"],
         ["4", "Technology & Automation", "8–9", "What should be human, what — smart?", "AI-inspired serve (Don Julio 1942); Sesto Senso Academy"],
-        ["5", "World's Leading Restaurants & Bars", "10–12", "Who sets the global standard?", "Maido; Bar Leone; Myojaku; Felice Capasso"],
+        ["5", "World's Leading Restaurants & Bars", "10–12", "Who sets the global standard?", "Noma; Maido; Bar Leone; Myojaku; Felice Capasso"],
         ["+", "Final Pitch Day", "12", "Can your venue win the world stage?", "Student concepts judged by an expert panel"],
     ]
     make_table(c, rows, M, y - 4, [34, 258, 62, 216, 278], row_h=44, header_h=26, font_size=9.3)
@@ -159,15 +159,13 @@ def build(c):
         c.setFillColor(accent)
         c.setFont("Inter-Bold", 9)
         c.drawString(X2 + 18, y - 84, "CASES & FIELD MATERIAL")
-        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.3, gap=9,
+        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.2, gap=8,
                       color=TEXT, bullet_color=accent)
-        # A real HIM/Montreux image grounds each module in the institute's
-        # people-first, experiential-learning environment.
-        draw_photo(c, photo, X2 + 18, y - 302, 136, 74, focus_x=0.5, focus_y=0.55)
-        c.setFont("Inter-Bold", 7.1)
+        draw_photo(c, photo, X2 + 18, y - 304, 142, 78, focus_x=0.5, focus_y=0.5, radius=4)
+        c.setFont("Inter-Bold", 7.2)
         c.setFillColor(RED if num == 5 else BLUE)
-        c.drawString(X2 + 166, y - 257, field_label.upper())
-        para(c, field_note, X2 + 166, y - 267, W2 - 184, 8.1, MUTED, leading=10.5)
+        c.drawString(X2 + 170, y - 252, field_label.upper())
+        para(c, field_note, X2 + 170, y - 262, W2 - 186, 8.1, MUTED, leading=10.5)
         c.setFillColor(PANEL2)
         c.roundRect(X2, y - 396, W2, 66, 8, stroke=0, fill=1)
         c.setFillColor(GOLD)
@@ -194,7 +192,7 @@ def build(c):
             "Gerbou (Dubai) — Prix Versailles 2025 for architecture; Emirati cuisine as fine dining.",
         ],
         "If a venue opens today, which trends will still matter in 2030?",
-        photo=STUDENTS_PHOTO, field_label="A global classroom", field_note="Global stories, read from a close-knit campus community.")
+        photo=PHOTO_CHEFS_COUNTER, field_label="Open-kitchen theatre", field_note="Chef's counters and tasting-menu dramaturgy as a managed business product.")
 
     # ================= 8. MODULE 2 =================
     module_slide(2, "4–5", "Venue Design & Atmosphere",
@@ -214,19 +212,19 @@ def build(c):
             "Hanu (Dubai) — Seoul aesthetics: charcoal grills, dark wood, bronze doors.",
         ],
         "Can atmosphere be measured — and can it be managed like a P&L line?",
-        photo=CAMPUS_PHOTO, field_label="Montreux field lab", field_note="The town itself becomes a living case study.")
+        photo=PHOTO_INTERIOR_DESIGN, field_label="Architecture & lighting", field_note="Lighting scenarios, tactile materials, and guest journey ergonomics.")
 
     # ================= 9. MODULE 3 =================
     module_slide(3, "6–7", "Neurogastronomy & Guest Experience",
-        "How the brain eats: multisensory science for menus, serves and service",
+        "Culinary science & gastrophysics: how the brain constructs flavour from all senses",
         [
+            "Cooking as applied science: Maillard reactions, emulsions, fermentation & controlled testing.",
             "Gastrophysics basics: crossmodal correspondences (Spence, Oxford).",
             "Sound & taste: sonic seasoning; music changes perceived flavour.",
             "Colour, shape and weight of tableware; plating geometry.",
             "Menu psychology: naming, layout, price anchors, choice architecture.",
-            "Memory & emotion: hospitality that creates «Proust moments».",
-            "Peak-end rule: designing the guest journey's strongest moments.",
-            "Sensory lab: a guided tasting with controlled variables.",
+            "Memory, emotion & peak–end rule: designing «Proust moments».",
+            "Sensory lab: a guided blind tasting with controlled variables.",
         ],
         [
             "World Class 2025: The Singleton multisensory challenge — cocktail «Between Us» with a custom record sleeve for «That's Amore».",
@@ -234,7 +232,7 @@ def build(c):
             "Bar Leone: simplicity as a sensory strategy — «cocktails for the people».",
         ],
         "What does your venue taste like — before the first bite is served?",
-        photo=OPEN_DAY_PHOTO, field_label="Sensory learning", field_note="Observation turns experience into a learnable skill.")
+        photo=PHOTO_NEURO_SERVE, field_label="Multisensory serve", field_note="Sound, aromatic smoke, and ceramic weight alter perceived flavour.")
 
     # ================= 10. MODULE 4 =================
     module_slide(4, "8–9", "Technology & Automation",
@@ -254,17 +252,17 @@ def build(c):
             "50 Best «war room»: how rankings themselves use data, voting and media technology.",
         ],
         "Where does technology amplify hospitality — and where does it kill it?",
-        photo=CLASSROOM_PHOTO, field_label="People-first tech", field_note="Digital tools support the guest-first service mindset.")
+        photo=PHOTO_TECH_OPS, field_label="Smart F&B operations", field_note="Reservation algorithms and KDS free up staff for human hospitality.")
 
     # ================= 11. MODULE 5 =================
     module_slide(5, "10–12", "World's Leading Restaurants & Bars",
-        "Deep dives into the institutions and venues setting the global standard",
+        "Deep dives into chef philosophies, institutions and venues setting the global standard",
         [
+            "Chefs as authors & researchers: René Redzepi (Noma), Bottura, Humm, Martínez, Royer.",
             "MICHELIN anatomy: stars, Bib Gourmand, special awards, inspector method.",
             "The 50 Best Academy: who votes, how lists change markets.",
             "Bar scene: World's 50 Best Bars, hotel bars, speakeasies.",
             "World Class: 16 seasons, 450,000+ bartenders, «drink better, not more».",
-            "Regional scenes: Europe · Asia · Americas · Middle East.",
             "GreatList geography: Moscow — Dubai — Doha — Bangkok — Shanghai.",
             "Final pitch: student concepts vs world benchmarks.",
         ],
@@ -274,7 +272,7 @@ def build(c):
             "Myojaku (Tokyo) — promoted to Three MICHELIN Stars in the 2026 guide.",
         ],
         "What do all №1 venues share — and can it be taught?",
-        photo=STUDENTS_PHOTO, field_label="Be world ready", field_note="From Montreux, students benchmark the global scene.")
+        photo=PHOTO_HOTEL_BAR, field_label="World service benchmarks", field_note="The martini trolley ritual and the renaissance of iconic hotel bars.")
 
     # ================= 12. RANKING ECOSYSTEM =================
     top = std(c)
@@ -310,24 +308,36 @@ def build(c):
         "Voters receive no formal criteria — they name their eight best experiences of the year.",
         "2026 Art of Hospitality Award: Tuju (São Paulo) — service as radical personalisation.",
         "Class use: students predict the 2026 list before the Lima ceremony, then score themselves.",
-    ], M, y - 186, PAGE_W - 2 * M, size=10, gap=9)
+    ], M, y - 184, 540, size=9.8, gap=8)
+    draw_photo_card(c, PHOTO_OPEN_FIRE, M + 564, y - 172, 284, 170,
+                    label="ASADOR ETXEBARRI · DON JULIO",
+                    caption="Open fire and radical product minimalism at the top of the world list.",
+                    accent=RED)
     c.showPage()
 
     # ================= 14. CASE: MICHELIN =================
     top = std(c)
     y = slide_title_block(c, "Case: The MICHELIN Guide", "From tyre-maker's guide to the industry's most cited rating")
-    X = M; W = 440
+    X = M; W = 470
     bullets_block(c, [
         ("The star anatomy.", "★ — very good cuisine; ★★ — worth a detour; ★★★ — worth a special journey; plus Bib Gourmand and special awards (Service, Sommelier, Young Chef)."),
         ("Tokyo 2026.", "Myojaku promoted to Three Stars; 18 new stars; Service and Sommelier awards — the world's deepest starred scene."),
         ("California 2026.", "Californios becomes the first Mexican restaurant in the world with Three Stars."),
-    ], X, y - 4, W, size=10, gap=11)
-    X2 = M + 480; W2 = PAGE_W - M - X2
-    bullets_block(c, [
-        ("Toronto 2026.", "Restaurant Pearl Morissette retains two stars — Canada's benchmark."),
-        ("Sustainability in motion.", "Green Star transitions into the «Mindful Voices» initiative — pioneers of new gastronomy."),
-        ("The Moscow page.", "Debut 2021: first stars in Russia & CIS history; guide suspended in 2022 — a case study in rankings and geopolitics."),
-    ], X2, y - 4, W2, size=10, gap=11)
+        ("Sustainability & geopolitics.", "Green Star transitions into «Mindful Voices». The Moscow chapter (debut 2021, suspended 2022) — a case study in rankings and geopolitics."),
+    ], X, y - 4, W, size=9.6, gap=9)
+    X2 = M + 498; W2 = PAGE_W - M - X2
+    draw_photo_card(c, PHOTO_CERAMIC_SERVE, X2, y - 4, W2, 224,
+                    label="MICHELIN 2026 · CALIFORNIOS & MYOJAKU",
+                    caption="Bespoke ceramic tableware, technical mastery, and regional identity at ★★★ level.",
+                    accent=BLUE)
+    c.setFillColor(PANEL2)
+    c.roundRect(X2, y - 344, W2, 108, 6, stroke=0, fill=1)
+    c.vrect(X2, y - 344, 3.5, 108, RED)
+    c.setFont("Inter-Bold", 8.2)
+    c.setFillColor(NAVY)
+    c.drawString(X2 + 14, y - 254, "FIVE CRITERIA OF MICHELIN INSPECTORS")
+    para(c, "1. Quality of ingredients · 2. Mastery of cooking technique · 3. Harmony and clarity of flavours · 4. Personality of the chef in the dish · 5. Consistency across visits.",
+         X2 + 14, y - 264, W2 - 28, 8.6, TEXT, "Inter", leading=12.0)
     c.showPage()
 
     # ================= 15. CASE: 50 BEST BARS =================
@@ -346,34 +356,39 @@ def build(c):
         "Bar Leone: №1 only two years after opening — «cocktail popolari», classics without pretension.",
         "Best Bar Design: Himkok (Oslo) — sustainable reimagining of a 200-year-old space.",
         "Sustainable Bar: The Cambridge Public House (Paris); first-ever Best Bar in Africa (Hero Bar, Nairobi) and Middle East (Mimi Kakushi, Dubai).",
-    ], M, y - 186, PAGE_W - 2 * M, size=10, gap=9)
+    ], M, y - 184, 540, size=9.8, gap=9)
+    draw_photo_card(c, PHOTO_CRAFT_BAR, M + 564, y - 172, 284, 170,
+                    label="BAR LEONE · COCKTAIL POPOLARI",
+                    caption="A return to warm neighbourhood hospitality and unpretentious classic cocktails.",
+                    accent=BLUE)
     c.showPage()
 
     # ================= 16. CASES: WORLD CLASS + GREATLIST =================
     top = std(c)
     y = slide_title_block(c, "Cases: Diageo World Class & GreatList", "People and expertise behind the headlines")
     X = M; W = (PAGE_W - 2 * M - 26) / 2
-    c.setFillColor(PANEL); c.roundRect(X, y - 268, W, 268, 8, stroke=0, fill=1)
-    c.vrect(X, y - 268, 3, 268, GOLD)
+    c.setFillColor(PANEL); c.roundRect(X, y - 350, W, 350, 8, stroke=0, fill=1)
+    c.vrect(X, y - 350, 3, 350, GOLD)
     c.setFillColor(GOLD); c.setFont("Inter-Bold", 9)
-    c.drawString(X + 16, y - 24, "DIAGEO WORLD CLASS 2025 · TORONTO")
+    c.drawString(X + 16, y - 22, "DIAGEO WORLD CLASS 2025 · TORONTO")
     bullets_block(c, [
         "Winner: Felice Capasso (Norway) — Nedre Løkka Cocktailbar, Oslo; founder of Sesto Senso Academy.",
         "Challenges: reimagined classics with Johnnie Walker Black Label; Don Julio 1942 serve inspired by AI artwork; multisensory Singleton serve.",
         "Jury: Eric Van Beek (Handshake Speakeasy), Monica Berg (Tayēr + Elementary), Ago Perrone (Connaught Bar).",
-        "Mission: «drink better, not more» — 450,000+ bartenders trained.",
-    ], X + 16, y - 44, W - 34, size=9.2, gap=8)
+    ], X + 16, y - 38, W - 34, size=8.9, gap=6)
+    draw_photo(c, PHOTO_AI_MIXOLOGY, X + 16, y - 336, W - 32, 118, focus_x=0.5, focus_y=0.5, radius=5)
+
     X2 = M + W + 26
-    c.setFillColor(PANEL); c.roundRect(X2, y - 268, W, 268, 8, stroke=0, fill=1)
-    c.vrect(X2, y - 268, 3, 268, GOLD)
+    c.setFillColor(PANEL); c.roundRect(X2, y - 350, W, 350, 8, stroke=0, fill=1)
+    c.vrect(X2, y - 350, 3, 350, GOLD)
     c.setFillColor(GOLD); c.setFont("Inter-Bold", 9)
-    c.drawString(X2 + 16, y - 24, "GREATLIST · INTERNATIONAL RESTAURANT GUIDE")
+    c.drawString(X2 + 16, y - 22, "GREATLIST · INTERNATIONAL RESTAURANT GUIDE")
     bullets_block(c, [
         "Founded 2022; 100+ experts; anonymous visits, self-paid bills, repeat visits at different hours.",
         "Criteria: food & chef imagination; service across the full CJM; design & ergonomics; atmosphere — from scent to music.",
-        "Geography: Moscow, St. Petersburg, Yekaterinburg, Kazan, Nizhny Novgorod, Russian Far East, Dubai, Doha, Bangkok, Hong Kong, Shanghai (+ Singapore & Seoul soon).",
-        "GreatList Sessions 2025: guest dinners by world chefs — a format for field study.",
-    ], X2 + 16, y - 44, W - 34, size=9.2, gap=8)
+        "Geography: Russia, Dubai, Doha, Bangkok, Hong Kong, Shanghai (+ Singapore & Seoul soon); GreatList Sessions guest dinners.",
+    ], X2 + 16, y - 38, W - 34, size=8.9, gap=6)
+    draw_photo(c, PHOTO_ATMOSPHERE_CANDLE, X2 + 16, y - 336, W - 32, 118, focus_x=0.5, focus_y=0.5, radius=5)
     c.showPage()
 
     # ================= 17. METHODOLOGY =================
@@ -385,7 +400,7 @@ def build(c):
         ("Atmosphere audits", "Field teams evaluate Montreux & Riviera venues against GreatList-style criteria and present findings."),
         ("Guest speakers", "Chefs, bartenders, restaurateurs and ranking experts — live or online, from the course's industry network."),
         ("Rankings war room", "Real-time analysis of new lists — including the Lima ceremony of 4 November 2026."),
-        ("Peer review culture", "Week-1 «favourite venue» talk sets the bar; every «My Venue» page is reviewed by a partner before it reaches the lecturer."),
+        ("5-minute reflection & peer review", "5 minutes of silent individual notes before plenary debate; every «My Venue» page is peer-reviewed in pairs."),
     ]
     colw = (PAGE_W - 2 * M - 24) / 2
     yy = y
@@ -503,23 +518,23 @@ def build(c):
 
     # ================= 21. WEEK-BY-WEEK =================
     top = std(c)
-    y = slide_title_block(c, "Week-by-week plan", "12 sessions · Thursdays 13:15–16:30 format (adjustable to HIM timetable)")
+    y = slide_title_block(c, "Week-by-week plan", "12 sessions · each lesson has its own full prose & photo presentation deck")
     rows = [
         ["Wk", "Session"],
-        ["1", "Introduction. Anatomy of contemporary HoReCa. Rankings as industry infrastructure."],
-        ["2", "Macro-trends I: experience economy, anti-luxury, casualization of fine dining."],
-        ["3", "Macro-trends II: mindfulness, regional cuisines go global, gastro-tourism & city branding."],
-        ["4", "Venue design: concept, architecture, interior, ergonomics (Prix Versailles; GreatList criteria)."],
-        ["5", "Engineering atmosphere: light, sound, scent, tableware, service choreography. Field audit briefing."],
-        ["6", "Neurogastronomy I: multisensory perception, gastrophysics. Sensory lab."],
-        ["7", "Neurogastronomy II: menu psychology, pricing, peak-end design. World Class multisensory case."],
-        ["8", "Technology I: reservations, revenue management, kitchen & floor automation, CRM."],
-        ["9", "Technology II: AI in creativity and operations; ethics and the future of hospitality work."],
-        ["10", "World restaurants: MICHELIN & 50 Best deep dive; Europe · Asia · Americas · Middle East scenes."],
-        ["11", "World bars: 50 Best Bars, World Class, hotel bars; Moscow–Dubai–Doha via GreatList."],
-        ["12", "Final Pitch Day: «Your Venue on the World Stage». Course wrap-up."],
+        ["1", "Lesson 1. Introduction. Anatomy of contemporary HoReCa. Rankings as industry infrastructure."],
+        ["2", "Lesson 2. Macro-trends I: experience economy 2.0, anti-luxury, casualization of fine dining."],
+        ["3", "Lesson 3. Macro-trends II: mindfulness, regional cuisines go global, gastro-tourism & hotel F&B."],
+        ["4", "Lesson 4. Venue design: concept as narrative, architecture, interior, ergonomics (Prix Versailles; GreatList)."],
+        ["5", "Lesson 5. Engineering atmosphere: light, sound, scent, tableware, service choreography. Field audit."],
+        ["6", "Lesson 6. Culinary science & neurogastronomy I: flavour chemistry, gastrophysics, sensory lab."],
+        ["7", "Lesson 7. Neurogastronomy II: menu psychology, pricing, peak–end design, World Class multisensory case."],
+        ["8", "Lesson 8. Technology I: reservations, revenue management, kitchen & floor automation, CRM."],
+        ["9", "Lesson 9. Technology II: AI in creativity and operations, Sesto Senso Academy, ethics & future of work."],
+        ["10", "Lesson 10. World restaurants: chef philosophies (Noma et al.), MICHELIN & 50 Best deep dive."],
+        ["11", "Lesson 11. World bars: 50 Best Bars, World Class, hotel bars; Moscow–Dubai–Doha via GreatList."],
+        ["12", "Lesson 12. Final Pitch Day «Open & Operate»: defending student concepts before an expert panel."],
     ]
-    make_table(c, rows, M, y - 2, [46, 802], row_h=25, header_h=22, font_size=9.2)
+    make_table(c, rows, M, y - 2, [46, 802], row_h=25, header_h=22, font_size=9.1)
     c.showPage()
 
     # ================= 22. CLOSING =================
@@ -530,4 +545,5 @@ def build(c):
         "Master in Business Management · Hotel Institute Montreux Alumnus",
         "Sources: MICHELIN Guide · The 50 Best · GreatList · Diageo World Class",
         "Montreux · 2026",
+        closing_photo=PHOTO_INTERIOR_SCONCES,
     )
