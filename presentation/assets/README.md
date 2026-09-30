@@ -29,11 +29,11 @@ The `project-*.jpg|png` files document the author's own venues, identities and d
 
 | Prefix | Project | Photographs |
 | --- | --- | --- |
-| `project-joi-*` | Joi Espresso Bar (ДЖОЙ · opened 2025 by OGONEK TEAM) — espresso bar assembled from the street | 9 |
+| `project-joi-*` | Joi Espresso Bar (opened 2025 by OGONEK TEAM) — espresso bar assembled from the street | 9 |
 | `project-passie-*` | Passie Cakes Co. — cake room where props and graphics carry the identity | 7 |
 | `project-coocoo-*` | CooCoo Coffee (coffee · croffles · cookies) — street concept on one product trio | 5 |
 | `project-chicken-connection-*` | Chicken Connection, Moscow — pilot episode filmed with Dmitry Konnikov | 2 |
-| `project-pacific-*` | Pacific / Пасифик (барные решения) — bar stations, consoles and equipment drawings | 5 |
+| `project-pacific-*` | Pacific (bar solutions) — bar stations, consoles and equipment drawings | 5 |
 | `project-tam-*` | TAM / TYT — flavour cubes, tool set, bar blade, folding stool and textiles | 7 |
 | `project-detail-*` | Found objects and small details collected across the venues | 8 |
 

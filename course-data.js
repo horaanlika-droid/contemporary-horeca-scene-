@@ -11,7 +11,7 @@ window.COURSE = {
   figures: [
     {
       id: 'jiro-ono',
-      name: 'Jiro Ono (Дзиро Оно)',
+      name: 'Jiro Ono',
       role: 'Shokunin Master · Chef-Owner',
       venues: 'Sukiyabashi Jiro · Ginza, Tokyo (3★ MICHELIN)',
       moduleId: 'future',
@@ -24,7 +24,7 @@ window.COURSE = {
     },
     {
       id: 'rene-redzepi',
-      name: 'René Redzepi (Рене Редзепи)',
+      name: 'René Redzepi',
       role: 'Chef & Co-Founder · New Nordic Cuisine',
       venues: 'Noma · Noma Projects · Copenhagen / global residencies',
       moduleId: 'fnb',
@@ -37,7 +37,7 @@ window.COURSE = {
     },
     {
       id: 'erik-lorincz',
-      name: 'Erik Lorincz (Эрик Лоринц)',
+      name: 'Erik Lorincz',
       role: 'World Class Global Winner · Master Bartender & Restaurateur',
       venues: 'American Bar at The Savoy (№1 World’s 50 Best Bars) · Kwānt · Mayfair, London',
       moduleId: 'experience',
@@ -50,7 +50,7 @@ window.COURSE = {
     },
     {
       id: 'alex-kratena',
-      name: 'Alex Kratena (Алекс Кратена)',
+      name: 'Alex Kratena',
       role: 'Award-Winning Bartender & Entrepreneur · Bar Concept Designer',
       venues: 'Artesian at The Langham · Tayēr + Elementary · Muyu · P(OUR)',
       moduleId: 'concepts',
@@ -63,7 +63,7 @@ window.COURSE = {
     },
     {
       id: 'artem-talalay',
-      name: 'Artem Talalay (Артём Талалай)',
+      name: 'Artem Talalay',
       role: 'World Class Russia Winner · Bartender of the Year Hall of Fame',
       venues: 'London Bar (Sochi) · Diageo Reserve World Class · Palm Branch Hall of Fame',
       moduleId: 'neuro',
@@ -76,7 +76,7 @@ window.COURSE = {
     },
     {
       id: 'dave-arnold',
-      name: 'Dave Arnold (Дэйв Арнольд)',
+      name: 'Dave Arnold',
       role: 'Beverage Science Author · Innovator & Educator',
       venues: 'Liquid Intelligence · Booker & Dax (former) · Museum of Food and Drink',
       moduleId: 'neuro',
@@ -89,7 +89,7 @@ window.COURSE = {
     },
     {
       id: 'egor-tarasenko',
-      name: 'Egor Tarasenko (Егор Тарасенко)',
+      name: 'Egor Tarasenko',
       role: 'Course Author · Practitioner & Founder',
       venues: 'Joi Espresso Bar (2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific · TAM',
       moduleId: 'budget',
@@ -102,7 +102,7 @@ window.COURSE = {
     },
     {
       id: 'remy-savage',
-      name: 'Rémy Savage (Реми Саваж)',
+      name: 'Rémy Savage',
       role: 'Concept Architect · Pioneer of 50 Best Conceptual Menus',
       venues: 'A Bar with Shapes for a Name (London) · Bar Nouveau (Paris) · Abstract (Lyon) · Little Red Door · Artesian',
       moduleId: 'concepts',
@@ -115,20 +115,20 @@ window.COURSE = {
     },
     {
       id: 'bek-narzi',
-      name: 'Bek Narzi (Бек Нарзи)',
+      name: 'Bek Narzi',
       role: 'Hospitality Entrepreneur · Pioneer of Bar Management & Educator',
-      venues: 'City Space Bar (Moscow, World’s 50 Best) · Pachamama (London) · Author of «Кодекс хореканца» & «7 часов до взлёта»',
+      venues: 'City Space Bar (Moscow, World’s 50 Best) · Pachamama (London) · Author of The Horeca Code & Seven Hours Before Take-off',
       moduleId: 'technology',
       moduleNumber: '05 & 08',
       block: 'Operations, Systems & Entrepreneurship · The Horeca Code',
       image: 'horeca-tech-operations.jpg',
-      summary: 'British-Russian entrepreneur who put Moscow’s City Space Bar onto the world cocktail map, built London hospitality projects (Pachamama), mentored a generation of bar leaders, and codified operational discipline in "The Horeca Code" («Кодекс хореканца»).',
+      summary: 'British-Russian entrepreneur who put Moscow’s City Space Bar onto the world cocktail map, built London hospitality projects (Pachamama), mentored a generation of bar leaders, and codified operational discipline in "The Horeca Code".',
       lessonAngle: 'Insists that hospitality romance collapses without iron operational standards, cost control, station ergonomics, sales psychology and team discipline. His City Space school trained future founders (including Igor Zernov) and invented bar staples such as dehydrated fruit-chip garnishes alongside hotel pastry chefs.',
       takeaway: 'Creative charisma opens a venue once; standards, unit economics and a disciplined school of people keep it open for years.'
     },
     {
       id: 'hiroyasu-kayama',
-      name: 'Hiroyasu Kayama (Хироясу Каяма)',
+      name: 'Hiroyasu Kayama',
       role: 'Farm-to-Glass Pioneer · Master Apothecary Bartender',
       venues: 'Bar Benfiddich · Shinjuku, Tokyo (№18 World’s 50 Best Bars / №9 Asia’s 50 Best Bars)',
       moduleId: 'fnb',
@@ -141,7 +141,7 @@ window.COURSE = {
     },
     {
       id: 'igor-zernov',
-      name: 'Igor Zernov (Игорь Зернов)',
+      name: 'Igor Zernov',
       role: 'Co-Founder of #FollowTheRabbits · Community & Concept Builder',
       venues: 'El Copitas Bar (№8 World’s 50 Best Bars) · Paloma Cantina · Tagliatella Caffe · Sangre Fresca · Bartenders FAQtory · SPb Cocktail Week',
       moduleId: 'entrepreneurship',
@@ -154,7 +154,7 @@ window.COURSE = {
     },
     {
       id: 'boris-zarkov',
-      name: 'Boris Zarkov (Борис Зарьков)',
+      name: 'Boris Zarkov',
       role: 'Restaurateur & Entrepreneur · Founder of White Rabbit Family',
       venues: 'White Rabbit Family · White Rabbit · Selfie · IKRA gastronomic platform',
       moduleId: 'entrepreneurship',
@@ -167,33 +167,42 @@ window.COURSE = {
     },
     {
       id: 'ivan-lyashuk',
-      name: 'Ivan Lyashuk (Иван Ляшук)',
-      role: 'Bartender & Hospitality Educator · Perfect Bars Team / Artender',
-      venues: 'Perfect Bars Team · Artender · Poltory Komnaty · Tsvetochki · Ultramen! · Oy!',
+      name: 'Ivan Lyashuk',
+      role: 'Co-Founder & Bar Entrepreneur · Perfect Bars Team',
+      venues: 'One and Half Room · Flowers Bar · Oy! · Ultramen! · Ruc’s Heaven · Artender Project (media & community)',
       moduleId: 'entrepreneurship',
       moduleNumber: '03 & 08',
-      block: 'Entrepreneurship & Education · Creative Practice for Bartenders',
+      block: 'Entrepreneurship & Education · Bar Concepts and Creative Community',
       image: 'horeca-craft-bar.jpg',
-      summary: 'With Vladimir Nikolaev, builds the St Petersburg hospitality collective Perfect Bars Team and Artender, a creative-practice and education project for bartenders. Its challenge-based format trains research, observation, critique and idea generation alongside the group’s bars.',
-      lessonAngle: 'Treat bartender creativity as a practice: use short prompts and constructive discussion to strengthen research and original thinking, not just recipe fluency.',
-      takeaway: 'Creative thinking can be trained through repeatable exercises in research, observation and constructive critique.'
+      summary: 'Co-founder of Perfect Bars Team with Vladimir Nikolaev. Their St Petersburg portfolio brings together five distinct venues, from the Perfect Serve approach of One and Half Room to the Catalan cocktail bistro Ruc’s Heaven. The team also created Artender, a media and community project for bartenders with creative challenges, videos, collaborations and online intensives — not another bar.',
+      lessonAngle: 'Study how a group gives each venue a distinct promise, then uses Artender’s challenges and shared creative practice to build a community beyond its own bar teams.',
+      takeaway: 'Build a recognisable hospitality group through distinct concepts, guest connection and an active creative community.',
+      sources: [
+        { title: 'Perfect Bars Team', url: 'https://perfectbarsteam.ru/' },
+        { title: 'Artender Project', url: 'https://perfectbarsteam.ru/artender' }
+      ]
     },
     {
       id: 'vladimir-nikolaev',
-      name: 'Vladimir Nikolaev (Владимир Николаев)',
-      role: 'Bartender & Hospitality Educator · Perfect Bars Team / Artender',
-      venues: 'Perfect Bars Team · Artender · Poltory Komnaty · Tsvetochki · Ultramen! · Oy!',
+      name: 'Vladimir Nikolaev',
+      role: 'Co-Founder & Bartender · Perfect Bars Team',
+      venues: 'One and Half Room · Flowers Bar · Oy! · Ultramen! · Ruc’s Heaven · Artender Project (media & community)',
       moduleId: 'entrepreneurship',
       moduleNumber: '03 & 08',
-      block: 'Entrepreneurship & Education · Sensory Mixology and Team Learning',
+      block: 'Entrepreneurship & Education · Perfect Serve and Sensory Mixology',
       image: 'horeca-neurogastronomy-serve.jpg',
-      summary: 'Together with Ivan Lyashuk, develops Perfect Bars Team and Artender, pairing cocktail R&D and sensory service experiments with creative challenges and educational content for the wider bartender community. The group’s venues include Poltory Komnaty, Tsvetochki, Ultramen! and Oy!.',
-      lessonAngle: 'Connect a venue’s cocktail idea to a deliberate sensory pairing, then make the experiment teachable and repeatable across the team.',
-      takeaway: 'Turn experimentation into a guest-facing ritual and a shared learning tool for the whole bar team.'
+      summary: 'Co-founder of Perfect Bars Team with Ivan Lyashuk. At One and Half Room, the team develops Perfect Serve: an individual presentation for each drink, with food pairing, neurogastronomy and multisensory experiments extending the guest’s experience. The wider portfolio includes Flowers Bar, Oy!, Ultramen! and Ruc’s Heaven; Artender shares the team’s creative practice through media, challenges and community learning.',
+      lessonAngle: 'Connect a drink to its vessel, presentation, sensory context and pairing, then turn the experiment into a repeatable service ritual the whole team can deliver.',
+      takeaway: 'Design the complete serve, not just the recipe; make sensory experimentation repeatable in service and useful to the wider community.',
+      sources: [
+        { title: 'Perfect Bars Team', url: 'https://perfectbarsteam.ru/' },
+        { title: 'One and Half Room', url: 'https://perfectbarsteam.ru/oneandhalfroombar' },
+        { title: 'Artender Project', url: 'https://perfectbarsteam.ru/artender' }
+      ]
     },
     {
       id: 'denis-bobkov',
-      name: 'Denis Bobkov (Денис Бобков)',
+      name: 'Denis Bobkov',
       role: 'Co-Founder of Pub Life Group · Master of Salvage & Antique Scenography',
       venues: 'Black Swan Pub & Shop · Bambule · Abbey Players · The Bix · Tap & Barrel · Drunken Duck',
       moduleId: 'budget',
@@ -228,7 +237,7 @@ window.COURSE = {
             'Strong concepts make deliberate choices about what they will not be.'
           ],
           case: 'Sukiyabashi Jiro (Jiro Ono, Tokyo) · Bar Leone (Hong Kong) · El Copitas (Igor Zernov)',
-          practitioners: ['Jiro Ono (Дзиро Оно)', 'Igor Zernov (Игорь Зернов)'],
+          practitioners: ['Jiro Ono', 'Igor Zernov'],
           challenge: 'Practical Assignment 01: Choose one real shift in guest behaviour and analyse one benchmark venue through the course’s four lenses (trend, atmosphere, sensory memory, ranking potential). Compare how Jiro Ono’s precision model or Igor Zernov’s community model applies to your future venue concept. Attach your file/notes inside the app (or send to egor.tarasenko@him-mail.ch).'
         }
       ]
@@ -255,7 +264,7 @@ window.COURSE = {
             'Back-of-house must never leak into the story; continuity across sight, sound, scent and touch is the craft.'
           ],
           case: 'Kwānt & The Savoy (Erik Lorincz, London) · Black Swan & Bambule (Denis Bobkov) · Himkok (Oslo)',
-          practitioners: ['Erik Lorincz (Эрик Лоринц)', 'Alex Kratena (Алекс Кратена)', 'Denis Bobkov (Денис Бобков)'],
+          practitioners: ['Erik Lorincz', 'Alex Kratena', 'Denis Bobkov'],
           challenge: 'Practical Assignment 02: Map three scenes for your venue concept (arrival, peak moment, farewell). Specify lighting (candles/warm lamps), sound (BPM), scent, antique/custom tableware and service choreography inspired by Erik Lorincz, Alex Kratena or Denis Bobkov — and list three “fairy-tale breakers” you will eliminate. Submit your file/text inside the app for admin feedback.'
         }
       ]
@@ -282,7 +291,7 @@ window.COURSE = {
             'Jiro Ono (Sukiyabashi Jiro): temperature precision (37°C rice) and the peak–end rule turn 20 bites into a lasting memory.'
           ],
           case: 'Artem Talalay’s World Class Signature Serves · Bar Benfiddich (Hiroyasu Kayama) · Sukiyabashi Jiro',
-          practitioners: ['Artem Talalay (Артём Талалай)', 'Dave Arnold (Дэйв Арнольд)', 'Hiroyasu Kayama (Хироясу Каяма)', 'Jiro Ono (Дзиро Оно)'],
+          practitioners: ['Artem Talalay', 'Dave Arnold', 'Hiroyasu Kayama', 'Jiro Ono'],
           challenge: 'Practical Assignment 03: Design three signature serves or dishes for your concept using Artem Talalay’s four coordinates (taste, aroma, texture, colour), specify the exact vessel/tableware (antique, ceramic, crystal) for each, and describe one pre-sip sensory ritual inspired by Hiroyasu Kayama or Jiro Ono. Attach your assignment file for admin confirmation.'
         }
       ]
@@ -310,7 +319,7 @@ window.COURSE = {
             'Boris Zarkov (White Rabbit Family / IKRA): grow a portfolio of distinct concepts around a recognisable entrepreneurial vision.'
           ],
           case: '50 Best Menu Breakdown: Little Red Door & Shapes (Rémy Savage) · El Copitas (Igor Zernov) · Bar Leone · Tuju',
-          practitioners: ['Rémy Savage (Реми Саваж)', 'Alex Kratena (Алекс Кратена)', 'Boris Zarkov (Борис Зарьков)', 'Igor Zernov (Игорь Зернов)'],
+          practitioners: ['Rémy Savage', 'Alex Kratena', 'Boris Zarkov', 'Igor Zernov'],
           challenge: 'Practical Assignment 04 (Concept & 50 Best Menu Breakdown): Analyse two menu concepts from The World’s 50 Best Bars/Restaurants (e.g. Rémy Savage, El Copitas, Bar Leone, Paradiso, Tuju) and design the physical Menu Concept for your own venue (structure, tactile material, naming rules, pricing presentation, 6–10 items). Attach your menu concept draft/photos for admin review.'
         },
         {
@@ -322,12 +331,12 @@ window.COURSE = {
           ideas: [
             'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
             'TAM flavour cubes: merchandise can teach the drinks list instead of decorating the shelf.',
-            'Pacific (Пасифик): the bar itself is a designed object — draw the ice well, the speed rail and the glass hanger, not just the countertop.',
+            'Pacific: the bar itself is a designed object — draw the ice well, the speed rail and the glass hanger, not just the countertop.',
             'CooCoo Coffee: a single alliterative product trio (coffee · croffles · cookies) makes naming, signage, packaging and menu structure fall into place.',
             'A concept object only counts when it can be produced, priced and replaced — prototypes are part of the business model.'
           ],
           case: 'Concept Objects: TAM (flavour cubes, tool case, bar blade, stool) · CooCoo Coffee (coffee · croffles · cookies) · Pacific (bar stations & drawings)',
-          practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
+          practitioners: ['Egor Tarasenko'],
           challenge: 'Practical Assignment 04B (Concept Objects): Design three physical objects for your venue — one menu artefact the guest keeps, one item of merchandise that teaches the concept, and one piece of working furniture or equipment (sketch with dimensions and materials). Explain the production route and the unit cost of each. Attach sketches/photos for admin review.'
         }
       ]
@@ -338,22 +347,22 @@ window.COURSE = {
       title: 'Technology & Automation',
       description: 'Consider where technology, station ergonomics and operational standards improve speed and margins — with Bek Narzi and Artem Talalay.',
       image: 'horeca-tech-operations.jpg',
-      practitioners: ['Bek Narzi (City Space Bar · «Кодекс хореканца»)', 'Artem Talalay (World Class Speed & Ergonomics)'],
+      practitioners: ['Bek Narzi (City Space Bar · The Horeca Code)', 'Artem Talalay (World Class Speed & Ergonomics)'],
       lessons: [
         {
           id: 'automation',
           title: 'Automation, ergonomics & the Horeca Code',
           duration: '15 min',
           intro: 'Technology and ergonomics should not simply make hospitality faster. They should free the team to be more human with the guest.',
-          body: 'The right systems remove friction behind the scenes while keeping the machinery invisible in the candlelit dining room. Bek Narzi — founder of Moscow’s legendary City Space Bar (World’s 50 Best Bars), London’s Pachamama, and author of «Кодекс хореканца» ("The Horeca Code") — proved that world-class bar theatre collapses without hard operational engineering: station ergonomics, prep tech (from rotary evaporators and clarification to dehydrated fruit garnishes co-created with Swissôtel pastry chefs), inventory control and check-average discipline. Artem Talalay demonstrated the physical side of this in World Class’s "Cocktail Against the Clock" challenge: when prep, batching and speed-rail geometry are engineered to the centimetre, a bartender can deliver ten complex, balanced serves in minutes without breaking eye contact or hospitality warmth.',
+          body: 'The right systems remove friction behind the scenes while keeping the machinery invisible in the candlelit dining room. Bek Narzi — founder of Moscow’s legendary City Space Bar (World’s 50 Best Bars), London’s Pachamama, and author of The Horeca Code ("The Horeca Code") — proved that world-class bar theatre collapses without hard operational engineering: station ergonomics, prep tech (from rotary evaporators and clarification to dehydrated fruit garnishes co-created with Swissôtel pastry chefs), inventory control and check-average discipline. Artem Talalay demonstrated the physical side of this in World Class’s "Cocktail Against the Clock" challenge: when prep, batching and speed-rail geometry are engineered to the centimetre, a bartender can deliver ten complex, balanced serves in minutes without breaking eye contact or hospitality warmth.',
           ideas: [
             'Automate repetition and prep; protect moments where human attention creates emotional value.',
-            'Bek Narzi («Кодекс хореканца» / City Space): iron operational standards, cost control and station ergonomics are the backbone of hospitality.',
+            'Bek Narzi (The Horeca Code / City Space): iron operational standards, cost control and station ergonomics are the backbone of hospitality.',
             'Artem Talalay ("Against the Clock"): speed-rail ergonomics and smart pre-batching allow high craft at peak Friday volume.',
             'Hide the machinery: technology that guests can see working is stage scenery that broke.'
           ],
-          case: 'City Space Bar & «Кодекс хореканца» (Bek Narzi) · Speed-Rail & Prep R&D (Artem Talalay)',
-          practitioners: ['Bek Narzi (Бек Нарзи)', 'Artem Talalay (Артём Талалай)'],
+          case: 'City Space Bar & The Horeca Code (Bek Narzi) · Speed-Rail & Prep R&D (Artem Talalay)',
+          practitioners: ['Bek Narzi', 'Artem Talalay'],
           challenge: 'Practical Assignment 05: Build a "Human / Machine Matrix" for 10 touchpoints of your venue’s evening, plus a station ergonomics & prep plan inspired by Bek Narzi’s Horeca Code and Artem Talalay’s speed principles. Upload your file/notes for admin confirmation.'
         }
       ]
@@ -379,7 +388,7 @@ window.COURSE = {
             'Commit to clear ethical boundaries around guest data, team scheduling and creative authorship.'
           ],
           case: 'World Class AI Beverage Brief · Conceptual Laboratories of Rémy Savage & Erik Lorincz',
-          practitioners: ['Rémy Savage (Реми Саваж)', 'Erik Lorincz (Эрик Лоринц)'],
+          practitioners: ['Rémy Savage', 'Erik Lorincz'],
           challenge: 'Practical Assignment 06: Define your venue’s AI & Ethics Charter: 3 workflows where AI saves time/money (forecasting, R&D flavour matrix, menu testing), 2 areas where AI is strictly banned to protect human hospitality, and 1 AI-assisted creative brief edited through Rémy Savage’s or Erik Lorincz’s lens. Submit for admin review.'
         }
       ]
@@ -408,7 +417,7 @@ window.COURSE = {
             'Ivan Lyashuk and Vladimir Nikolaev / Artender: build bartender creativity through accessible challenges, education and peer exchange.'
           ],
           case: 'Bar Benfiddich (Hiroyasu Kayama, Tokyo) · Tuju (São Paulo)',
-          practitioners: ['Hiroyasu Kayama (Хироясу Каяма)', 'René Redzepi (Рене Редзепи)', 'Dave Arnold (Дэйв Арнольд)', 'Ivan Lyashuk (Иван Ляшук)', 'Vladimir Nikolaev (Владимир Николаев)'],
+          practitioners: ['Hiroyasu Kayama', 'René Redzepi', 'Dave Arnold', 'Ivan Lyashuk', 'Vladimir Nikolaev'],
           challenge: 'Practical Assignment 07: Design the F&B & Menu core of your concept (5 key dishes/serves + pricing logic). Include at least two "house-grown / house-made" signature preparations inspired by Hiroyasu Kayama’s Bar Benfiddich that no competitor can buy ready-made. Submit your file/notes for admin confirmation.'
         }
       ]
@@ -419,14 +428,14 @@ window.COURSE = {
       title: 'Entrepreneurship',
       description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov, Boris Zarkov and the Artender team.',
       image: 'horeca-concept-pitch.jpg',
-      practitioners: ['Bek Narzi (City Space · Pachamama · «Кодекс хореканца»)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Ivan Lyashuk (Perfect Bars Team / Artender)', 'Vladimir Nikolaev (Perfect Bars Team / Artender)'],
+      practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Ivan Lyashuk (Perfect Bars Team / Artender)', 'Vladimir Nikolaev (Perfect Bars Team / Artender)'],
       lessons: [
         {
           id: 'from-idea',
           title: 'From idea to operating model & talent ecosystem',
           duration: '18 min',
           intro: 'A hospitality business is a promise delivered repeatedly by a team within real financial constraints. Great founders build not just a room, but a school of people.',
-          body: 'Look at one of the most instructive lineages in contemporary bar entrepreneurship: Bek Narzi and his former protégé Igor Zernov. At Moscow’s City Space Bar and later in London (Pachamama) and his books «Кодекс хореканца» and «7 часов до взлёта», Bek Narzi established the entrepreneurial fundamentals: P&L literacy, guest psychology, PR audacity, and treating the bar team as a first-league sports squad where discipline creates stars. Igor Zernov absorbed that school and, together with Artyom Peruk and Nikolay Kiselyov, launched El Copitas on a shoestring budget — turning a hidden Thursday-to-Saturday speakeasy into #FollowTheRabbits: a group encompassing El Copitas (№8 World’s 50 Best Bars), Paloma Cantina, Tagliatella Caffe, Sangre Fresca, the Bartenders FAQtory academy and Saint-Petersburg Cocktail Week. At restaurant-group scale, Boris Zarkov (White Rabbit Family, co-founder of IKRA) offers a model of building a portfolio of distinct concepts and talent. Ivan Lyashuk and Vladimir Nikolaev connect Perfect Bars Team’s bar concepts with Artender’s continuing creative challenges and education for bartenders. Across these models, test assumptions cheaply, build a strong team culture, and make education part of the growth engine.',
+          body: 'Look at one of the most instructive lineages in contemporary bar entrepreneurship: Bek Narzi and his former protégé Igor Zernov. At Moscow’s City Space Bar and later in London (Pachamama) and his books The Horeca Code and Seven Hours Before Take-off, Bek Narzi established the entrepreneurial fundamentals: P&L literacy, guest psychology, PR audacity, and treating the bar team as a first-league sports squad where discipline creates stars. Igor Zernov absorbed that school and, together with Artyom Peruk and Nikolay Kiselyov, launched El Copitas on a shoestring budget — turning a hidden Thursday-to-Saturday speakeasy into #FollowTheRabbits: a group encompassing El Copitas (№8 World’s 50 Best Bars), Paloma Cantina, Tagliatella Caffe, Sangre Fresca, the Bartenders FAQtory academy and Saint-Petersburg Cocktail Week. At restaurant-group scale, Boris Zarkov (White Rabbit Family, co-founder of IKRA) offers a model of building a portfolio of distinct concepts and talent. Ivan Lyashuk and Vladimir Nikolaev connect Perfect Bars Team’s bar concepts with Artender’s continuing creative challenges and education for bartenders. Across these models, test assumptions cheaply, build a strong team culture, and make education part of the growth engine.',
           ideas: [
             'Bek Narzi’s entrepreneurial rule: creative storytelling must sit on top of unit economics, sales training and iron discipline.',
             'Igor Zernov (#FollowTheRabbits): validate demand in a low-capex format first, then reinvest community trust into a multi-concept ecosystem.',
@@ -435,8 +444,8 @@ window.COURSE = {
             'Ivan Lyashuk and Vladimir Nikolaev (Perfect Bars Team / Artender): turn education, creative prompts and peer feedback into an ongoing talent ecosystem.',
             'Map your unit economics early: average check, seat turns, rent-to-revenue ratio, labour percentage and payback horizon.'
           ],
-          case: 'Bek Narzi (City Space & «Кодекс хореканца») · Igor Zernov (#FollowTheRabbits & El Copitas)',
-          practitioners: ['Bek Narzi (Бек Нарзи)', 'Igor Zernov (Игорь Зернов)', 'Boris Zarkov (Борис Зарьков)', 'Ivan Lyashuk (Иван Ляшук)', 'Vladimir Nikolaev (Владимир Николаев)'],
+          case: 'Bek Narzi (City Space & The Horeca Code) · Igor Zernov (#FollowTheRabbits & El Copitas)',
+          practitioners: ['Bek Narzi', 'Igor Zernov', 'Boris Zarkov', 'Ivan Lyashuk', 'Vladimir Nikolaev'],
           challenge: 'Practical Assignment 08: Present the Operating Model & Unit Economics for your venue (capacity, covers/day, average check, rent logic, staffing structure, 90-day launch & guest-shift plan) applying Bek Narzi’s Horeca Code and Igor Zernov’s ecosystem model. Upload your assignment for admin review.'
         }
       ]
@@ -463,7 +472,7 @@ window.COURSE = {
             'Money buys speed and finish. Intention buys soul.'
           ],
           case: 'Joi Espresso Bar (Egor Tarasenko) · Black Swan & Bambule (Denis Bobkov, Pub Life Group)',
-          practitioners: ['Denis Bobkov (Денис Бобков)', 'Egor Tarasenko (Егор Тарасенко)'],
+          practitioners: ['Denis Bobkov', 'Egor Tarasenko'],
           challenge: 'Practical Assignment 09A: List 10 key physical elements of your venue (tableware, glasses, candle/light sources, bar counter, seating, doors, menu artefact, etc.). For each, specify a second-hand, antique flea-market, salvage or self-built sourcing plan inspired by Joi Espresso Bar and Denis Bobkov’s Black Swan, comparing your budget against catalogue prices. Submit for admin confirmation.'
         },
         {
@@ -471,7 +480,7 @@ window.COURSE = {
           title: 'Theatrical techniques & the live mockup from found objects',
           duration: '19 min',
           intro: 'Do not build a sterile architectural paper box. Stage your venue directly from real found objects — antique tableware, candles, vintage glass, fabric, wood, bottles and your physical menu concept.',
-          body: 'Here is the core secret of scenography: you do not test a hospitality concept on a flat blueprint or out of white office paper. You test it by assembling its real tactile world out of whatever you can hunt down and improvise with your hands! Borrow the decorative techniques of the theatre (as Denis Bobkov does at Abbey Players and Black Swan, and Egor Tarasenko did at Joi Espresso Bar): patina, glazing, trompe-l’œil, distressing, drapery, wax candles and a single tight beam of warm light. Then build your physical mockup NOT from paper, but from real improvised and found things ("из подручных вещей, что найдёте"): an antique plate or coupe glass from a flea market, melted candles in vintage holders, a scrap of velvet or aged wood, a hand-aged bottle, a mortar with herbs (like Hiroyasu Kayama’s counter), and a physical prototype of your 50 Best-style Menu Concept. Stage a real corner, table vignette or bar fragment of your venue in actual light. Photograph it at guest eye height. If a guest looking at that photograph immediately believes the "sweet fairy tale" and wants to sit at that table tonight, your concept works.',
+          body: 'Here is the core secret of scenography: you do not test a hospitality concept on a flat blueprint or out of white office paper. You test it by assembling its real tactile world out of whatever you can hunt down and improvise with your hands! Borrow the decorative techniques of the theatre (as Denis Bobkov does at Abbey Players and Black Swan, and Egor Tarasenko did at Joi Espresso Bar): patina, glazing, trompe-l’œil, distressing, drapery, wax candles and a single tight beam of warm light. Then build your physical mockup NOT from paper, but from real improvised and found things: an antique plate or coupe glass from a flea market, melted candles in vintage holders, a scrap of velvet or aged wood, a hand-aged bottle, a mortar with herbs (like Hiroyasu Kayama’s counter), and a physical prototype of your 50 Best-style Menu Concept. Stage a real corner, table vignette or bar fragment of your venue in actual light. Photograph it at guest eye height. If a guest looking at that photograph immediately believes the "sweet fairy tale" and wants to sit at that table tonight, your concept works.',
           ideas: [
             'The mockup is NOT made of paper: assemble it from real found and improvised objects — antique tableware, candles, vintage glassware, fabrics, wood, stone and herbs.',
             'Include a physical prototype of your Menu Concept (inspired by 50 Best menus: Rémy Savage, Bar Leone, El Copitas, Tuju) right inside the setup.',
@@ -480,7 +489,7 @@ window.COURSE = {
             'Stage and photograph your found-object mockup in real evening/candle light at guest eye level — that is the image you pitch with.'
           ],
           case: 'Live Found-Object Mockup · Antique Tableware, Candles & 50 Best Menu Artefacts (Denis Bobkov · Joi Espresso Bar · Rémy Savage)',
-          practitioners: ['Denis Bobkov (Денис Бобков)', 'Rémy Savage (Реми Саваж)', 'Hiroyasu Kayama (Хироясу Каяма)'],
+          practitioners: ['Denis Bobkov', 'Rémy Savage', 'Hiroyasu Kayama'],
           challenge: 'Practical Assignment 09B (Found-Object Live Mockup & Menu Concept): Assemble a real physical mockup of your venue from improvised and found objects — antique tableware/glassware, candles, textures, props and a physical prototype of your 50 Best-inspired Menu Concept. Light it with real candles/focused light and photograph 3 views at guest eye level. Attach your photographs and description for admin confirmation.'
         },
         {
@@ -493,12 +502,12 @@ window.COURSE = {
             'Joi Espresso Bar (2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
             'Passie Cakes Co.: props do the branding — a chandelier, a pastel banquette, a hand-drawn logo and flowers, all replaceable at flea-market prices.',
             'CooCoo Coffee: one product trio and one palette make signage, menu and packaging self-evident.',
-            'Pacific (Пасифик): design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
+            'Pacific: design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
             'Chicken Connection: the finish pass, boxed delivery and open kitchen are the content of the room, not the back of house.',
             'Collect the details: chessboards, resin ashtrays, pasted posters, bric-a-brac glassware in red light — a research file is cheaper than a renovation.'
           ],
           case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific · TAM',
-          practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
+          practitioners: ['Egor Tarasenko'],
           challenge: 'Practical Assignment 09C (Archive Reading): Choose four photographs from the author’s project archive and write a sourcing analysis for each: what was bought new, what was found second-hand, what was made or repaired by hand, and what it would cost to repeat in your own city. Then add one detail you would copy and one you would refuse. Attach your notes for admin confirmation.'
         }
       ]
@@ -537,7 +546,7 @@ window.COURSE = {
       title: 'Bar Benfiddich · Hiroyasu Kayama',
       location: 'Tokyo, Japan',
       year: '№18 World’s 50 Best Bars',
-      industry: 'Farm-to-glass apothecary · Hiroyasu Kayama (Хироясу Каяма)',
+      industry: 'Farm-to-glass apothecary · Hiroyasu Kayama',
       image: 'horeca-sustainable-terroir.jpg',
       context: 'A 16-seat apothecary cocktail bar in Shinjuku where owner-bartender Hiroyasu Kayama serves botanicals grown on his family farm in Chichibu (Saitama).',
       what: 'No printed menu: Kayama talks with each guest across a candlelit counter of antique jars, crushes fresh wormwood, fennel, juniper and yuzu in a mortar, and pours homemade absinthe, amari and infusions.',
@@ -548,7 +557,7 @@ window.COURSE = {
       title: 'Black Swan & Bambule · Denis Bobkov',
       location: 'Moscow · Pub Life Group',
       year: 'Salvage, Antique Tableware & Scenography',
-      industry: 'Theatrical pubs & bars · Denis Bobkov (Денис Бобков)',
+      industry: 'Theatrical pubs & bars · Denis Bobkov',
       image: 'horeca-atmosphere-candle.jpg',
       context: 'Co-founder of Pub Life Group Denis Bobkov rose from dishwasher and bartender to building Europe’s most atmospheric theatrical pubs and bars (Black Swan, Bambule, Abbey Players, The Bix).',
       what: 'Labyrinthine multi-room spaces assembled from European salvage yards, antique porcelain and silverware, dripping wax candles, 19th-century church doors, Victorian confessionals and stage lighting.',
@@ -559,7 +568,7 @@ window.COURSE = {
       title: 'Shapes, Bar Nouveau & Little Red Door · Rémy Savage',
       location: 'London & Paris',
       year: '50 Best Menu Concepts & Manifestos',
-      industry: 'Concept architecture & 50 Best menus · Rémy Savage (Реми Саваж)',
+      industry: 'Concept architecture & 50 Best menus · Rémy Savage',
       image: 'horeca-ai-mixology-lab.jpg',
       context: 'World Class Bartender of the Year Rémy Savage builds bars and 50 Best menus as complete philosophical movements — wordless illustrated comic menus at Little Red Door, Bauhaus minimalism at Shapes (London) and Art Nouveau at Bar Nouveau (Paris).',
       what: 'The menu is designed as a collectible art object where guests choose by visual form, mood or movement rather than a dry recipe list.',
@@ -570,7 +579,7 @@ window.COURSE = {
       title: 'The Savoy & Kwānt · Erik Lorincz',
       location: 'Mayfair, London',
       year: '№1 World’s 50 Best Bars legacy',
-      industry: 'Five-star service choreography · Erik Lorincz (Эрик Лоринц)',
+      industry: 'Five-star service choreography · Erik Lorincz',
       image: 'horeca-interior-design.jpg',
       context: 'World Class Global Champion (2010) Erik Lorincz led The Savoy’s American Bar to №1 in the world before opening his own Mayfair flagship, Kwānt.',
       what: 'Combines classic hotel elegance, rare vintage spirits, antique crystal, tropical mid-century scenography and laboratory precision.',
@@ -581,7 +590,7 @@ window.COURSE = {
       title: 'El Copitas & #FollowTheRabbits · Igor Zernov',
       location: 'St. Petersburg',
       year: '№8 World’s 50 Best Bars',
-      industry: 'Community speakeasy, living menu & ecosystem · Igor Zernov (Игорь Зернов)',
+      industry: 'Community speakeasy, living menu & ecosystem · Igor Zernov',
       image: 'horeca-craft-bar.jpg',
       context: 'Co-founded by Igor Zernov (an alumnus of Bek Narzi’s City Space school), El Copitas began as a tiny hidden bar around one candlelit communal table.',
       what: 'Personal phone greeting, welcome taco and copita of mezcal in handmade clay/ceramic vessels, weekly hand-drawn chalkboard menu — scaling into #FollowTheRabbits (Paloma Cantina, Tagliatella Caffe, Sangre Fresca, Bartenders FAQtory, SPb Cocktail Week).',
@@ -592,9 +601,9 @@ window.COURSE = {
       title: 'City Space & The Horeca Code · Bek Narzi',
       location: 'Moscow & London',
       year: 'Management & Standards',
-      industry: 'Bar entrepreneurship & education · Bek Narzi (Бек Нарзи)',
+      industry: 'Bar entrepreneurship & education · Bek Narzi',
       image: 'horeca-tech-operations.jpg',
-      context: 'British-Russian hospitality entrepreneur Bek Narzi put City Space Bar into the World’s 50 Best Bars, launched London’s Pachamama, and authored «Кодекс хореканца» and «7 часов до взлёта».',
+      context: 'British-Russian hospitality entrepreneur Bek Narzi put City Space Bar into the World’s 50 Best Bars, launched London’s Pachamama, and authored The Horeca Code and Seven Hours Before Take-off.',
       what: 'Built a rigorous school of bar management combining five-star standards, station ergonomics, R&D garnishes (such as fruit chips) and unit economics.',
       why: 'Demonstrates that showmanship only survives when backed by iron operational standards and mentorship.',
       takeaway: 'Build a school of people and strict operational standards; the awards and revenue follow.'
@@ -603,7 +612,7 @@ window.COURSE = {
       title: 'Sensory Mixology & Speed · Artem Talalay',
       location: 'Sochi & Moscow',
       year: 'World Class Winner',
-      industry: 'Neurogastronomy & competition R&D · Artem Talalay (Артём Талалай)',
+      industry: 'Neurogastronomy & competition R&D · Artem Talalay',
       image: 'horeca-neurogastronomy-serve.jpg',
       context: 'Diageo Reserve World Class Russia Winner (2020–2021, winning both Signature Drink and Cocktail Against the Clock) and Palm Branch "Bartender of the Year" Hall of Fame member.',
       what: 'Constructs drinks across four coordinates — taste, aroma, enveloping texture and conceptual colouristics — executed at high-speed competition ergonomics.',
@@ -614,7 +623,7 @@ window.COURSE = {
       title: 'Sukiyabashi Jiro · Jiro Ono',
       location: 'Ginza, Tokyo',
       year: '3★ MICHELIN legend',
-      industry: 'Shokunin mastery & omakase architecture · Jiro Ono (Дзиро Оно)',
+      industry: 'Shokunin mastery & omakase architecture · Jiro Ono',
       image: 'horeca-chefs-counter.jpg',
       context: 'A 10-seat counter in a Tokyo subway basement led by nonagenarian master Jiro Ono, holding three MICHELIN stars for decades.',
       what: 'A 20-piece nigiri omakase with zero menu distractions, rice kept at 37°C body temperature, and piece proportions subtly adjusted to each guest’s posture and pace.',
@@ -690,7 +699,7 @@ window.COURSE = {
       {
         id: 'joi',
         index: '01',
-        name: 'Joi Espresso Bar (ДЖОЙ)',
+        name: 'Joi Espresso Bar',
         role: 'Espresso bar · Found objects & scenography',
         year: '2025',
         team: 'By OGONEK TEAM',
@@ -699,7 +708,6 @@ window.COURSE = {
         image: 'project-joi-arcade.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
-        ru: 'Собственный проект автора курса и главный кейс модуля 09. Joi открылся в 2025 году: стеклянная дверь за постерным фасадом, гирлянды лампочек под арками, бумажные стаканы с логотипом, восстановленная латунная рычажная кофемашина и кофемолки с барахолки на стойке, под которой больше инвентаря, чем посадочных мест. Здесь ничего не куплено одним заказом из шоу-рума — комната держится потому, что сначала была придумана история, а потом её собирала одна пара глаз.',
         facts: [
           ['ROLE', 'Author’s own project · the case behind Module 09'],
           ['OPENED', '2025 · by OGONEK TEAM'],
@@ -707,15 +715,15 @@ window.COURSE = {
           ['IN THE COURSE', 'Module 09 · “Soul before budget” and the live found-object mockup']
         ],
         photos: [
-          { file: 'project-joi-arcade.jpg', caption: 'The arcade: vaults, café bulbs and stone floors — the kind of address a small bar can still afford, and the first thing the guest sees.', captionRu: 'Галерея: своды, лампочки и каменный пол — адрес, который маленький бар ещё может себе позволить, и первое, что видит гость.' },
-          { file: 'project-joi-facade.jpg', caption: 'The facade as a menu: photographs in the windows, a painted “открыто” sign, and the opening date — ДЖОЙ · 2025 BY OGONEK TEAM.', captionRu: 'Фасад как меню: фотографии в витрине, нарисованное «открыто» и дата открытия — ДЖОЙ · 2025 BY OGONEK TEAM.' },
-          { file: 'project-joi-brand.jpg', caption: 'The brand mark is a date and three letters, set by hand. No agency, no system — but the same logo on every cup.', captionRu: 'Логотип — это дата и три буквы, набранные вручную. Без агентства и брендбука, но один и тот же знак на каждом стакане.' },
-          { file: 'project-joi-cups.jpg', caption: 'Stacks of paper cups behind the bar: the cheapest brand touchpoint in hospitality, used as inventory.', captionRu: 'Стопки бумажных стаканов за стойкой: самая дешёвая точка контакта с брендом, работающая как склад.' },
-          { file: 'project-joi-machine.jpg', caption: 'A brass lever machine on a small counter — the one object worth spending money on, because the guest hears it work.', captionRu: 'Латунная рычажная кофемашина на небольшой стойке — тот единственный объект, на который стоит потратиться: гость слышит, как она работает.' },
-          { file: 'project-joi-grinder.jpg', caption: 'Second-hand grinders, still carrying the roaster’s sticker: Brazil, Colibri. Equipment wears its own history.', captionRu: 'Кофемолки с барахолки — со стикером обжарщика: Бразилия, Колибри. Техника носит свою историю как есть.' },
-          { file: 'project-joi-bar.jpg', caption: 'The bar, photographed as the crew works — a red-lit counter, paper, cups and no styling.', captionRu: 'Стойка, снятая в работе: красный свет, бумага, стаканы — без ретуши и постановки.' },
-          { file: 'project-joi-arcade-lights.jpg', caption: 'Café bulbs under the vaults: theatrical light borrowed from the building, not commissioned from a designer.', captionRu: 'Лампочки под сводами: театральный свет, взятый у самого здания, а не заказанный у дизайнера.' },
-          { file: 'project-joi-arcade-arches.jpg', caption: 'The approach at service time — the sightline that decides whether a passer-by becomes a guest.', captionRu: 'Подход к бару в час работы: линия взгляда, которая решает, станет ли прохожий гостем.' }
+          { file: 'project-joi-arcade.jpg', caption: 'The arcade: vaults, café bulbs and stone floors — the kind of address a small bar can still afford, and the first thing the guest sees.' },
+          { file: 'project-joi-facade.jpg', caption: 'The facade as a menu: photographs in the windows, a painted “open” sign, and the opening date — Joi · 2025 BY OGONEK TEAM.' },
+          { file: 'project-joi-brand.jpg', caption: 'The brand mark is a date and three letters, set by hand. No agency, no system — but the same logo on every cup.' },
+          { file: 'project-joi-cups.jpg', caption: 'Stacks of paper cups behind the bar: the cheapest brand touchpoint in hospitality, used as inventory.' },
+          { file: 'project-joi-machine.jpg', caption: 'A brass lever machine on a small counter — the one object worth spending money on, because the guest hears it work.' },
+          { file: 'project-joi-grinder.jpg', caption: 'Second-hand grinders, still carrying the roaster’s sticker: Brazil, Colibri. Equipment wears its own history.' },
+          { file: 'project-joi-bar.jpg', caption: 'The bar, photographed as the crew works — a red-lit counter, paper, cups and no styling.' },
+          { file: 'project-joi-arcade-lights.jpg', caption: 'Café bulbs under the vaults: theatrical light borrowed from the building, not commissioned from a designer.' },
+          { file: 'project-joi-arcade-arches.jpg', caption: 'The approach at service time — the sightline that decides whether a passer-by becomes a guest.' }
         ]
       },
       {
@@ -730,7 +738,6 @@ window.COURSE = {
         image: 'project-passie-wall.jpg',
         tagline: 'A one-room cake shop where the props do the branding: pastel banquettes, a crystal chandelier, flowers and a bear with a birthday cake.',
         summary: 'A tiny venue built on a single promise — cake, made and decorated the same day. The concept lives in the cheapest possible cast: pastel pink booth seating, a second-hand crystal chandelier, lilac cups and old lace-edged china plates, a water jug used as a vase, hand-written gift cards, and one hand-drawn logo of a bear holding a cake, painted straight onto the wall. Guests photograph the wall, the fridge and the table before they photograph the plate.',
-        ru: 'Маленькое заведение с одним обещанием — торт, приготовленный и украшенный в тот же день. Концепция живёт на самых дешёвых «актёрах»: пастельно-розовые диваны, хрустальная люстра с барахолки, сиреневые чашки и старые тарелки с кружевным краем, кувшин вместо вазы, подписанные от руки открытки — и нарисованный прямо на стене медвежонок с тортом. Гости фотографируют стену, витрину и стол раньше, чем тарелку.',
         facts: [
           ['ROLE', 'Small-venue scenography · identity through props'],
           ['CONCEPT', 'One product, one colour story, one photographable room'],
@@ -738,13 +745,13 @@ window.COURSE = {
           ['IN THE COURSE', 'Module 02 · the “sweet fairy tale” maintained on a small budget']
         ],
         photos: [
-          { file: 'project-passie-wall.jpg', caption: 'PASSIE CAKES CO. painted straight onto the plaster — the cheapest signage there is, and the most photographed surface in the room.', captionRu: 'PASSIE CAKES CO. прямо на стене — самая дешёвая вывеска в мире и самая фотографируемая поверхность в зале.' },
-          { file: 'project-passie-cake.jpg', caption: 'A birthday cake with duck decorations in the display fridge: the product is the window display.', captionRu: 'Торт с утятами в витрине-холодильнике: сам продукт и есть витрина.' },
-          { file: 'project-passie-cheesecake.jpg', caption: 'A slice on an old china plate with a lace edge, a daisy napkin, and a vase that is really a water jug.', captionRu: 'Кусок на старой фарфоровой тарелке с кружевным краем, ромашковая салфетка и «ваза», которая на самом деле кувшин.' },
-          { file: 'project-passie-sakura.jpg', caption: 'The same idea at 30 centimetres: a green tray, a lilac cup, a cake card and a glass of water — a table vignette, exactly like the mockup brief.', captionRu: 'Та же идея на 30 сантиметрах: зелёный поднос, сиреневая чашка, карточка пирожного и стакан воды — тот же приём, что в задании с макетом.' },
-          { file: 'project-passie-room.jpg', caption: 'The room: mirrored tiles, fairy lights, drinks fridge and a counter that doubles as a shop window.', captionRu: 'Зал: зеркальная плитка, гирлянды, холодильник с напитками и стойка, которая работает витриной.' },
-          { file: 'project-passie-counter.jpg', caption: 'A chandelier over a paper menu with a cartoon duck: the same room operates at two registers at once.', captionRu: 'Люстра над бумажным меню с утёнком: одна комната одновременно работает в двух регистрах.' },
-          { file: 'project-passie-window.jpg', caption: 'Seen from the street: tables, chairs and a chandelier — the interior is legible from the pavement.', captionRu: 'Вид с улицы: столы, стулья и люстра — интерьер читается прямо с тротуара.' }
+          { file: 'project-passie-wall.jpg', caption: 'PASSIE CAKES CO. painted straight onto the plaster — the cheapest signage there is, and the most photographed surface in the room.' },
+          { file: 'project-passie-cake.jpg', caption: 'A birthday cake with duck decorations in the display fridge: the product is the window display.' },
+          { file: 'project-passie-cheesecake.jpg', caption: 'A slice on an old china plate with a lace edge, a daisy napkin, and a vase that is really a water jug.' },
+          { file: 'project-passie-sakura.jpg', caption: 'The same idea at 30 centimetres: a green tray, a lilac cup, a cake card and a glass of water — a table vignette, exactly like the mockup brief.' },
+          { file: 'project-passie-room.jpg', caption: 'The room: mirrored tiles, fairy lights, drinks fridge and a counter that doubles as a shop window.' },
+          { file: 'project-passie-counter.jpg', caption: 'A chandelier over a paper menu with a cartoon duck: the same room operates at two registers at once.' },
+          { file: 'project-passie-window.jpg', caption: 'Seen from the street: tables, chairs and a chandelier — the interior is legible from the pavement.' }
         ]
       },
       {
@@ -759,7 +766,6 @@ window.COURSE = {
         image: 'project-coocoo-pour.jpg',
         tagline: 'Coffee, croffles, cookies — one alliterative promise, a turquoise facade and a pair of googly eyes on the window.',
         summary: 'A street concept that solves naming, signage, menu and packaging with a single sentence. The turquoise frontage carries a cartoon cup with eyes and the line “WE ARE COOCOO”; inside there is checkered tile, café bulbs strung over the counter, a paper menu taped to the wall and a croffle served on a pink table. Nothing in the room is expensive. Everything in the room says the same three words.',
-        ru: 'Уличный концепт, который решает нейминг, вывеску, меню и упаковку одной фразой. Бирюзовый фасад несёт нарисованный стакан с глазами и надпись «WE ARE COOCOO»; внутри — плитка в шашечку, лампочки над стойкой, бумажное меню на скотче и кроффл на розовом столе. В зале нет ничего дорогого — но всё говорит одни и те же три слова.',
         facts: [
           ['ROLE', 'Street coffee & dessert concept · graphics-first'],
           ['CONCEPT', 'One alliterative product trio: coffee · croffles · cookies'],
@@ -767,11 +773,11 @@ window.COURSE = {
           ['IN THE COURSE', 'Module 04 · the menu and the cup as takeaway objects']
         ],
         photos: [
-          { file: 'project-coocoo-pour.jpg', caption: '“WE ARE COOCOO · COFFEE | CROFFLES | COOKIES”: the whole brand on one paper cup and one pane of glass.', captionRu: '«WE ARE COOCOO · COFFEE | CROFFLES | COOKIES»: весь бренд на одном стакане и одном стекле.' },
-          { file: 'project-coocoo-room.jpg', caption: 'The room: checkered tiles, fairy lights, a soft-serve machine and a croffle on a pink table.', captionRu: 'Зал: плитка в шашечку, гирлянды, аппарат мягкого мороженого и кроффл на розовом столе.' },
-          { file: 'project-coocoo-bulbs.jpg', caption: 'Café bulbs and a paper menu above the bar — theatrical light on a street-food budget.', captionRu: 'Лампочки и бумажное меню над стойкой — театральный свет на бюджет стритфуда.' },
-          { file: 'project-coocoo-team.jpg', caption: 'The frame the brand needs: aprons, flowers and cartoons behind the counter.', captionRu: 'Кадр, который нужен бренду: фартуки, цветы и мультяшки за стойкой.' },
-          { file: 'project-coocoo-menu.jpg', caption: 'A printed board taped to the tiles: transparent pricing, made in an afternoon and replaced in ten minutes.', captionRu: 'Печатное меню на скотче: прозрачные цены, сделано за вечер, меняется за десять минут.' }
+          { file: 'project-coocoo-pour.jpg', caption: '“WE ARE COOCOO · COFFEE | CROFFLES | COOKIES”: the whole brand on one paper cup and one pane of glass.' },
+          { file: 'project-coocoo-room.jpg', caption: 'The room: checkered tiles, fairy lights, a soft-serve machine and a croffle on a pink table.' },
+          { file: 'project-coocoo-bulbs.jpg', caption: 'Café bulbs and a paper menu above the bar — theatrical light on a street-food budget.' },
+          { file: 'project-coocoo-team.jpg', caption: 'The frame the brand needs: aprons, flowers and cartoons behind the counter.' },
+          { file: 'project-coocoo-menu.jpg', caption: 'A printed board taped to the tiles: transparent pricing, made in an afternoon and replaced in ten minutes.' }
         ]
       },
       {
@@ -786,16 +792,15 @@ window.COURSE = {
         image: 'project-chicken-connection-kitchen.jpg',
         tagline: 'A chicken concept seen from inside the pass — and filmed for the pilot episode of a food series.',
         summary: 'A pilot episode shot inside a Moscow chicken venue with Dmitry Konnikov: the open finish pass, the rotisserie, branded delivery boxes and a rooster mascot waiting on the shelf. The camera stands where the kitchen hands stand, so the film shows heat, boxes and the comedy of a full pass at service speed. For a modern food venue the kitchen is not the back of house — it is the content, the queue entertainment and the proof of freshness at once.',
-        ru: 'Пилотный выпуск, снятый в московском курином заведении вместе с Дмитрием Конниковым: открытая раздача, гриль, брендированные коробки доставки и маска петуха на полке. Камера стоит там, где стоят руки повара, поэтому в кадр попадают жар, коробки и комедия полной раздачи в час пик. Для современного заведения кухня — не «задний двор», а контент, развлечение для очереди и доказательство свежести одновременно.',
         facts: [
           ['ROLE', 'Food-media pilot · venue visit'],
           ['VENUE', 'Chicken concept · Moscow'],
-          ['HOST', 'Dmitry Konnikov (Дмитрий Конников)'],
+          ['HOST', 'Dmitry Konnikov'],
           ['IN THE COURSE', 'Module 05 · operations on camera, brand theatre at the pass']
         ],
         photos: [
-          { file: 'project-chicken-connection-kitchen.jpg', caption: 'The pass as a stage: branded boxes, rotisserie heat and a rooster mascot waiting on the shelf.', captionRu: 'Раздача как сцена: брендированные коробки, жар гриля и маска петуха на полке.' },
-          { file: 'project-chicken-connection-pass.jpg', caption: 'Shot from behind the counter: the pilot episode of CHICKEN CONNECTION with Dmitry Konnikov, filmed where the food is finished.', captionRu: 'Снято из-за стойки: пилотный выпуск CHICKEN CONNECTION с Дмитрием Конниковым — там, где еда доводится до готовности.' }
+          { file: 'project-chicken-connection-kitchen.jpg', caption: 'The pass as a stage: branded boxes, rotisserie heat and a rooster mascot waiting on the shelf.' },
+          { file: 'project-chicken-connection-pass.jpg', caption: 'Shot from behind the counter: the pilot episode of CHICKEN CONNECTION with Dmitry Konnikov, filmed where the food is finished.' }
         ]
       },
       {
@@ -810,7 +815,6 @@ window.COURSE = {
         image: 'project-pacific-station.jpg',
         tagline: 'Bar solutions drawn to be fabricated: blackened steel, sintered stone and glass, specified to the last millimetre.',
         summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
-        ru: 'Проект не заведения, а оснащения: модульные барные станции и консоли, разработанные как единый набор — рабочая станция с каменной столешницей, врезной ледницей, рейлами и подвесом для бокалов; консоль-кронштейн на колёсах; навесной сервер и компактный барный инструментальный шкаф. Всё отдаётся как 3D-визуализации и рабочие чертежи, потому что эргономика, придуманная за стойкой, — это та атмосфера, которую гость не замечает, пока её нет.',
         facts: [
           ['ROLE', 'Bar furniture & equipment design'],
           ['OUTPUT', '3D visualisations · technical drawings · fabrication'],
@@ -818,11 +822,11 @@ window.COURSE = {
           ['IN THE COURSE', 'Modules 05 & 04 · ergonomics as scenography, objects as concept']
         ],
         photos: [
-          { file: 'project-pacific-logo.png', caption: 'Pacific — барные решения: a brand for a workshop rather than a venue.', captionRu: 'Pacific — барные решения: бренд мастерской, а не заведения.' },
-          { file: 'project-pacific-station.jpg', caption: 'The station: stone top, ice well, speed rail, under-counter glass hanger, powder-coated steel body.', captionRu: 'Станция: каменная столешница, ледница, рейлы, подвес для бокалов под стойкой, корпус из стали с порошковой окраской.' },
-          { file: 'project-pacific-console.jpg', caption: 'A cantilevered console on castors — the service bar becomes mobile furniture.', captionRu: 'Консоль-кронштейн на колёсах — сервизная стойка превращается в мобильную мебель.' },
-          { file: 'project-pacific-render.jpg', caption: '“FUTURE OF BARTENDING”: the project the furniture was drawn for.', captionRu: '«FUTURE OF BARTENDING» — проект, под который рисовалась мебель.' },
-          { file: 'project-pacific-drawing.jpg', caption: 'Technical drawing — a concept only exists once the cabinetmaker can read it.', captionRu: 'Рабочий чертёж — концепция существует ровно с того момента, как её может прочитать мастер.' }
+          { file: 'project-pacific-logo.png', caption: 'Pacific — bar solutions: a brand for a workshop rather than a venue.' },
+          { file: 'project-pacific-station.jpg', caption: 'The station: stone top, ice well, speed rail, under-counter glass hanger, powder-coated steel body.' },
+          { file: 'project-pacific-console.jpg', caption: 'A cantilevered console on castors — the service bar becomes mobile furniture.' },
+          { file: 'project-pacific-render.jpg', caption: '“FUTURE OF BARTENDING”: the project the furniture was drawn for.' },
+          { file: 'project-pacific-drawing.jpg', caption: 'Technical drawing — a concept only exists once the cabinetmaker can read it.' }
         ]
       },
       {
@@ -837,7 +841,6 @@ window.COURSE = {
         image: 'project-tam-cubes.jpg',
         tagline: 'A bar that leaves the building: cubes, tools, stools and socks designed as souvenirs of a cocktail menu.',
         summary: 'A product line built around a bar concept. Engraved stainless-steel cubes carry the vocabulary of the drinks list — smoky, dirty, fruits, sweet, shake, umami, agave, brandy — so the menu becomes something a guest can hold, stack and take home. Around them: a bar-top tool set with mirror-polished cladding, a flick-style bar blade, a folding stool that packs flat for guest shifts, bar mats and knitted TAM / TYT socks. Merchandise that teaches the menu is worth more than merchandise that decorates a shelf.',
-        ru: 'Линейка продуктов вокруг барного концепта. Гравированные стальные кубики несут словарь карты напитков — smoky, dirty, fruits, sweet, shake, umami, agave, brandy — и меню становится предметом, который гость может подержать, сложить и унести домой. Рядом: барный набор инструментов с зеркальной панелью, барный нож-бабочка, складной стул для гостевых смен, коврики и трикотажные носки с марками TAM и TYT. Мерч, который учит меню, стоит больше, чем мерч, который украшает полку.',
         facts: [
           ['ROLE', 'Bar brand & object design'],
           ['OBJECTS', 'Flavour cubes · tool set · bar blade · folding stool · textiles'],
@@ -845,19 +848,19 @@ window.COURSE = {
           ['IN THE COURSE', 'Module 04 · the takeaway object as part of the concept']
         ],
         photos: [
-          { file: 'project-tam-cubes.jpg', caption: 'Flavour cubes: smoky · dirty · fruits · sweet · shake · umami · agave · brandy.', captionRu: 'Кубики вкуса: smoky · dirty · fruits · sweet · shake · umami · agave · brandy.' },
-          { file: 'project-tam-mirror.jpg', caption: 'A stainless-steel bar-top tool set with a mirror-polished panel and a black bar blade.', captionRu: 'Стальной барный набор с зеркальной панелью и чёрным барным ножом.' },
-          { file: 'project-tam-flatlay.jpg', caption: 'The same objects in a case: designed to be packed, carried between venues and photographed.', captionRu: 'Те же предметы в кейсе: их можно собрать, перевезти на другую площадку и снять.' },
-          { file: 'project-tam-tool.jpg', caption: 'A flick-style bar blade — the tool bartenders actually keep in a pocket, so it must look like the brand.', captionRu: 'Барный нож-бабочка — инструмент, который бармен действительно носит в кармане, поэтому он должен выглядеть как бренд.' },
-          { file: 'project-tam-opener.jpg', caption: '“BITTER IS BETTER”: a powder-coated portrait of a bent cocktail spoon, cast into a solid handle.', captionRu: '«BITTER IS BETTER»: порошковая печать по портрету согнутой барной ложки — и литая ручка рядом.' },
-          { file: 'project-tam-stool.jpg', caption: 'A folding stool with a matte frame: guest-shift furniture that fits in a bag.', captionRu: 'Складной стул с матовой рамой: мебель для гостевых смен, которая помещается в сумку.' },
-          { file: 'project-tam-socks.jpg', caption: 'TAM / TYT socks — the cheapest brand touchpoint in hospitality, done properly.', captionRu: 'Носки TAM / TYT — самая дешёвая точка контакта с брендом в хореке, сделанная как следует.' }
+          { file: 'project-tam-cubes.jpg', caption: 'Flavour cubes: smoky · dirty · fruits · sweet · shake · umami · agave · brandy.' },
+          { file: 'project-tam-mirror.jpg', caption: 'A stainless-steel bar-top tool set with a mirror-polished panel and a black bar blade.' },
+          { file: 'project-tam-flatlay.jpg', caption: 'The same objects in a case: designed to be packed, carried between venues and photographed.' },
+          { file: 'project-tam-tool.jpg', caption: 'A flick-style bar blade — the tool bartenders actually keep in a pocket, so it must look like the brand.' },
+          { file: 'project-tam-opener.jpg', caption: '“BITTER IS BETTER”: a powder-coated portrait of a bent cocktail spoon, cast into a solid handle.' },
+          { file: 'project-tam-stool.jpg', caption: 'A folding stool with a matte frame: guest-shift furniture that fits in a bag.' },
+          { file: 'project-tam-socks.jpg', caption: 'TAM / TYT socks — the cheapest brand touchpoint in hospitality, done properly.' }
         ]
       },
       {
         id: 'details',
         index: '07',
-        name: 'Found objects & small details (Детали и находки)',
+        name: 'Found objects & small details',
         role: 'Research file for the mockup brief',
         year: 'Collected across the venues',
         team: 'Flea markets · salvage · the street',
@@ -866,7 +869,6 @@ window.COURSE = {
         image: 'project-detail-nine-lives.jpg',
         tagline: 'The atmosphere lives in the small things: a matchbox, a chessboard, a pasted poster, a glass of parsley, a lemon press on the pavement.',
         summary: 'A collecting file of details observed across the venues in this archive: flea-market chess sets and resin ashtrays, glassware standing in red light, a chalkboard drinks list, a vintage television reused as a planter, a black cat poster reading NINE LIVES, NONE LEFT, an ice press working on the pavement outside, and a menu covered in hand-written stickers. These are the objects students are asked to hunt for before they are asked to design anything: cheap, specific, already full of someone else’s history.',
-        ru: 'Файл деталей, собранных в заведениях этого архива: шахматы и смоляные пепельницы с барахолки, стекло в красном свете, меловая карта напитков, старый телевизор в роли кашпо, постер с чёрным котом и надписью NINE LIVES, NONE LEFT, пресс для цитрусовых, работающий прямо на тротуаре, и меню, заклеенное рукописными стикерами. Именно такие предметы студенты ищут до того, как начинают что-то проектировать: дешёвые, конкретные, уже наполненные чужой историей.',
         facts: [
           ['ROLE', 'Research file · sources for the found-object mockup'],
           ['SOURCES', 'Flea markets · demolition salvage · city pavements'],
@@ -874,14 +876,14 @@ window.COURSE = {
           ['RULE', 'Buy the story, not the finish']
         ],
         photos: [
-          { file: 'project-detail-nine-lives.jpg', caption: 'NINE LIVES, NONE LEFT: a pasted poster, a toy CCTV camera and a vintage television parked on the counter.', captionRu: 'NINE LIVES, NONE LEFT: наклеенный постер, игрушечная камера слежения и старый телевизор на стойке.' },
-          { file: 'project-detail-nine-lives-bar.jpg', caption: 'The same room from behind the bar: red brick, an enamel lampshade and a wall that advertises itself.', captionRu: 'Та же комната из-за стойки: красный кирпич, эмалированный абажур и стена, которая сама себя рекламирует.' },
-          { file: 'project-detail-chess.jpg', caption: 'A flea-market chessboard, a resin ashtray, a green smoothie: the table is the concept.', captionRu: 'Шахматы с барахолки, смоляная пепельница, зелёный смузи: стол и есть концепция.' },
-          { file: 'project-detail-chess-morning.jpg', caption: 'The same table in morning light — two drinks, two guests, no styling.', captionRu: 'Тот же стол в утреннем свете — два напитка, два гостя, без постановки.' },
-          { file: 'project-detail-342.jpg', caption: 'A wooden counter, bunting lights and a menu covered in hand-written stickers.', captionRu: 'Деревянная стойка, гирлянда и меню, заклеенное рукописными стикерами.' },
-          { file: 'project-detail-street-press.jpg', caption: 'A citrus press working on the pavement: production moves outside and becomes the show.', captionRu: 'Пресс для цитрусовых прямо на тротуаре: производство выходит на улицу и становится шоу.' },
-          { file: 'project-detail-street-press-2.jpg', caption: 'Second-hand press, second-hand board, one pair of hands — the cheapest theatre there is.', captionRu: 'Пресс с барахолки, доска с барахолки, одна пара рук — самый дешёвый театр из возможных.' },
-          { file: 'project-detail-backbar.jpg', caption: 'A backbar shelf: bottles, trade magazines, a metal teapot and a cap left by a guest.', captionRu: 'Полка бэкбара: бутылки, журналы, металлический чайник и кепка, забытая гостем.' }
+          { file: 'project-detail-nine-lives.jpg', caption: 'NINE LIVES, NONE LEFT: a pasted poster, a toy CCTV camera and a vintage television parked on the counter.' },
+          { file: 'project-detail-nine-lives-bar.jpg', caption: 'The same room from behind the bar: red brick, an enamel lampshade and a wall that advertises itself.' },
+          { file: 'project-detail-chess.jpg', caption: 'A flea-market chessboard, a resin ashtray, a green smoothie: the table is the concept.' },
+          { file: 'project-detail-chess-morning.jpg', caption: 'The same table in morning light — two drinks, two guests, no styling.' },
+          { file: 'project-detail-342.jpg', caption: 'A wooden counter, bunting lights and a menu covered in hand-written stickers.' },
+          { file: 'project-detail-street-press.jpg', caption: 'A citrus press working on the pavement: production moves outside and becomes the show.' },
+          { file: 'project-detail-street-press-2.jpg', caption: 'Second-hand press, second-hand board, one pair of hands — the cheapest theatre there is.' },
+          { file: 'project-detail-backbar.jpg', caption: 'A backbar shelf: bottles, trade magazines, a metal teapot and a cap left by a guest.' }
         ]
       }
     ]

@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Build both EN and RU course pitch decks as PDF."""
-import os, sys
+"""Build the English-only course pitch deck as a PDF."""
+import os
+import sys
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from deck_lib import DeckCanvas
-import content_en, content_ru
+import content_en
 
 DIST = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dist"))
 os.makedirs(DIST, exist_ok=True)
 
-targets = [
-    ("Contemporary-Horeca-Scene-Course-Pitch-EN.pdf", content_en, "Hotel Institute Montreux · Course Proposal"),
-    ("Contemporary-Horeca-Scene-Course-Pitch-RU.pdf", content_ru, "Hotel Institute Montreux · Предложение курса"),
-]
-
-for fname, mod, label in targets:
-    path = os.path.join(DIST, fname)
-    c = DeckCanvas(path, footer_label=label)
-    c.setTitle("Contemporary Horeca Scene — Course Proposal")
-    c.setAuthor("Egor Tarasenko, HIM Alumnus (Master in Business Management)")
-    mod.build(c)
-    c.save()
-    print("built:", path)
+path = os.path.join(DIST, "Contemporary-Horeca-Scene-Course-Pitch-EN.pdf")
+c = DeckCanvas(path, footer_label="Hotel Institute Montreux · Course Proposal")
+c.setTitle("Contemporary Horeca Scene — Course Proposal")
+c.setAuthor("Egor Tarasenko, HIM Alumnus (Master in Business Management)")
+content_en.build(c)
+c.save()
+print("built:", path)

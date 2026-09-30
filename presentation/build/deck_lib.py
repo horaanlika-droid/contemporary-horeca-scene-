@@ -42,7 +42,7 @@ PHOTO_BACKBAR = os.path.join(ASSET_DIR, "horeca-backbar-bottles.jpg")
 PHOTO_CONCEPT_PITCH = os.path.join(ASSET_DIR, "horeca-concept-pitch.jpg")
 
 # Inter is used when available; the DejaVu fallback is bundled with Debian/Ubuntu
-# and supports both Latin and Cyrillic.
+# and supports the accented Latin characters used in the English deck.
 FONT_DIRS = [
     os.environ.get("HIM_FONT_DIR", ""),
     os.path.normpath(os.path.join(HERE, "..", "..", "..", ".pdftools", "fonts")),
@@ -456,7 +456,7 @@ def closing_page(c, headline, author_name, credential, source_line, location_lab
 # ---------- Lesson Presentation Slide Builders ----------
 def render_lesson_cover(c, lesson_num, week_label, module_label, title, subtitle,
                         intro_prose, session_rhythm, reading_prep, photo, photo_caption,
-                        module_num=1, lang="ru"):
+                        module_num=1, lang="en"):
     """Slide 1 of a lesson: Hero cover + narrative introduction prose + thematic photo."""
     accent = MODULE_COLORS.get(module_num, BLUE)
     c.bg()
@@ -492,8 +492,8 @@ def render_lesson_cover(c, lesson_num, week_label, module_label, title, subtitle
 
     # Bottom info bar (rhythm + prep)
     c.hline(M, 104, split_x - M - 28, HexColor("#355670"), 0.65)
-    rhythm_lbl = "РИТМ ЗАНЯТИЯ (3 ЧАСА)" if lang == "ru" else "SESSION RHYTHM (3 HOURS)"
-    prep_lbl = "ПОДГОТОВКА И ИСТОЧНИКИ" if lang == "ru" else "PREPARATION & SOURCES"
+    rhythm_lbl = "SESSION RHYTHM (3 HOURS)"
+    prep_lbl = "PREPARATION & SOURCES"
     c.setFont("Inter-Bold", 7.0)
     c.setFillColor(HexColor("#91CAE1"))
     c.drawString(M, 90, rhythm_lbl)
@@ -657,7 +657,7 @@ def render_lesson_seminar_slide(c, kicker, title, subtitle, question_title,
 def render_lesson_practice_slide(c, kicker, title, subtitle, milestone_badge,
                                  milestone_prose, deliverables, peer_review_prose,
                                  field_notes_prose, photo, photo_label, photo_caption,
-                                 module_num=1, lang="ru"):
+                                 module_num=1, lang="en"):
     """Slide 6 of a lesson: Practical assignment «My Venue» (milestone prose + deliverables) + Field Notes + photo."""
     accent = MODULE_COLORS.get(module_num, BLUE)
     top = c.start_slide(kicker=kicker)
@@ -678,7 +678,7 @@ def render_lesson_practice_slide(c, kicker, title, subtitle, milestone_badge,
     c.setFillColor(accent)
     c.drawString(M + 16, y - 18, milestone_badge.upper())
     mph = para(c, milestone_prose, M + 16, y - 24, left_w - 30, 8.9, TEXT, "Inter", leading=12.2)
-    deliv_lbl = "ЧТО ДОЛЖНО БЫТЬ НА СТРАНИЦЕ КОНЦЕПТА:" if lang == "ru" else "WHAT THE CONCEPT PAGE MUST INCLUDE:"
+    deliv_lbl = "WHAT THE CONCEPT PAGE MUST INCLUDE:"
     c.setFont("Inter-Bold", 7.8)
     c.setFillColor(NAVY)
     c.drawString(M + 16, y - 34 - mph, deliv_lbl)
@@ -692,7 +692,7 @@ def render_lesson_practice_slide(c, kicker, title, subtitle, milestone_badge,
     c.setFillColor(PANEL2)
     c.roundRect(M, bot_bottom, left_w, bot_h, 7, stroke=0, fill=1)
     c.vrect(M, bot_bottom, 3.5, bot_h, RED)
-    pr_lbl = "ВЗАИМНАЯ РЕЦЕНЗИЯ И FIELD NOTES НЕДЕЛИ" if lang == "ru" else "PEER REVIEW & WEEKLY FIELD NOTES"
+    pr_lbl = "PEER REVIEW & WEEKLY FIELD NOTES"
     c.setFont("Inter-Bold", 7.8)
     c.setFillColor(NAVY)
     c.drawString(M + 16, bot_top - 15, pr_lbl)
