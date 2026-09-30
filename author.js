@@ -28,18 +28,18 @@
   ];
 
   const projects = [
-    ['author-passie-2022.jpg', 'Passie Cakes Co.', '2022'],
-    ['author-coocoo-2024.jpg', 'CooCoo', '2024'],
-    ['author-pacific-2024.jpg', 'Pacific', '2024'],
-    ['author-joi-2025.jpg', 'Joi', '2025'],
-    ['author-chc-2024.jpg', 'Chicken Connection', '2024']
+    ['author-passie-2022.jpg', 'Passie Cakes Co.', '2022', 'passie'],
+    ['author-coocoo-2024.jpg', 'CooCoo', '2024', 'coocoo'],
+    ['author-pacific-2024.jpg', 'Pacific', '2024', 'pacific'],
+    ['author-joi-2025.jpg', 'Joi', '2025', 'joi'],
+    ['author-chc-2024.jpg', 'Chicken Connection', '2024', 'chicken']
   ];
 
   const markup = () => `
     <div class="author-dialog" role="dialog" aria-modal="true" aria-labelledby="author-title" tabindex="-1">
       <button class="author-close" type="button" data-author-close aria-label="Закрыть">✕</button>
       <header class="author-head">
-        <span class="eyebrow">О СОЗДАТЕЛЕ · THE CREATOR</span>
+        <span class="eyebrow">ABOUT THE AUTHOR · ОБ АВТОРЕ</span>
         <h2 id="author-title">Egor <em>Tarasenko</em></h2>
         <p class="author-role">HIM alumnus · Master in Business Management · Hotel Institute Montreux</p>
       </header>
@@ -60,8 +60,11 @@
       <section class="author-work">
         <h3 class="author-label">Собственные проекты</h3>
         <div class="author-frames">
-          ${projects.map(([file, name, year]) => `<figure><img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></figure>`).join('')}
+          ${projects.map(([file, name, year, id]) => `<figure>${window.COURSE
+            ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
+            : `<img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
         </div>
+        ${window.COURSE ? '<a class="author-archive-link" href="#/projects" data-author-route>OPEN THE FULL PROJECT ARCHIVE <span aria-hidden="true">→</span></a>' : ''}
       </section>
       <p class="author-mail">Вопросы по курсу, лицензированию и программе: <a href="mailto:${EMAIL}">${EMAIL}</a></p>
     </div>`;
@@ -96,6 +99,7 @@
   document.addEventListener('click', event => {
     if (event.target.closest('[data-author-open]')) { event.preventDefault(); open(); return; }
     if (!overlay) return;
+    if (event.target.closest('[data-author-route]')) { close(); return; }
     if (event.target.closest('[data-author-close]') || event.target === overlay) close();
   });
 
