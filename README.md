@@ -16,6 +16,7 @@
 presentation/
   dist/   Contemporary-HoReCa-Scene-Course-Pitch-EN.pdf  ← презентация курса (EN)
           Contemporary-HoReCa-Scene-Course-Pitch-RU.pdf  ← презентация курса (RU)
+  assets/ фотографии кампуса и студентов HIM + официальный логотип
   build/  исходники генератора слайдов (Python + reportlab):
           deck_lib.py, content_en.py, content_ru.py, build_deck.py
 course/
@@ -32,13 +33,19 @@ course/
 - **Практика:** на первом занятии каждый рассказывает о любимом баре/ресторане; весь семестр каждый студент строит собственное заведение («Моё заведение») до состояния «открывайся и работай»: УТП, дизайн, меню, операции, маркетинг (гостевые смены, партнёрства с алкобрендами), дорожная карта к рейтингам. Финал — питч перед экспертной панелью.
 - **Оценка:** Задание 0 и участие 10% · Field Notes 15% · майлстоуны «Моё заведение» 35% · финальный питч 40%.
 
+## Визуальная система презентации
+
+Для курса изучен актуальный сайт [HIM Business School](https://www.him-business-school.com/en/): светлая редакционная подача, уверенная типографика, фотографии людей и кампуса в Монтрё, сочетание делового синего и светло-голубого с небольшим швейцарским красным акцентом. Этот визуальный перевод использует официальный знак и фотографии HIM; это адаптация для предложения курса, а не официальный шаблон или одобрение института.
+
 ## Пересборка презентации
 
 ```bash
-cd presentation/build && python build_deck.py   # требуется venv с reportlab (см. /tmp/venv в песочнице)
+python3 -m venv .venv
+.venv/bin/pip install -r presentation/build/requirements.txt
+.venv/bin/python presentation/build/build_deck.py
 ```
 
-Шрифты Inter (Latin + Cyrillic) собраны из пакетов @fontsource и лежат вне репозитория; PDF — артефакты в `presentation/dist`.
+Генератор предпочитает Inter, если он доступен через `HIM_FONT_DIR`, и использует DejaVu Sans как Latin/Cyrillic fallback. PDF-артефакты записываются в `presentation/dist`.
 
 ## Ключевые факты, заложенные в курс (2025–2026)
 

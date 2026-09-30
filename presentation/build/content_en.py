@@ -8,38 +8,17 @@ def std(c):
 
 def build(c):
     # ================= 1. COVER =================
-    c.bg()
-    # frame
-    c.setStrokeColor(GOLD); c.setLineWidth(1.1)
-    c.rect(18, 18, PAGE_W - 36, PAGE_H - 36, stroke=1, fill=0)
-    c.setStrokeColor(LINE); c.setLineWidth(0.6)
-    c.rect(24, 24, PAGE_W - 48, PAGE_H - 48, stroke=1, fill=0)
-    c.setFont("Inter-Bold", 8.5)
-    c.setFillColor(GOLD)
-    c.drawString(M + 6, PAGE_H - 78, spaced("Course Proposal · Hotel Institute Montreux · Academic Year 2026–27"))
-    c.setFont("Inter-XB", 46)
-    c.setFillColor(TEXT)
-    c.drawString(M + 6, PAGE_H - 172, "CONTEMPORARY")
-    c.drawString(M + 6, PAGE_H - 224, "HORECA SCENE")
-    c.vrect(M + 8, PAGE_H - 258, 92, 4, GOLD)
-    para(c, "Trends  ·  Design & Atmosphere  ·  Neurogastronomy  ·  Technology  ·  World's Best Restaurants & Bars",
-         M + 6, PAGE_H - 272, PAGE_W - 2 * M, 13.5, GOLD_SOFT, "Inter-Medium", leading=19)
-    para(c, "A 12-week elective module that reads the global hospitality industry through its rankings, venues,\npeople and technologies — built for the next generation of hospitality leaders.",
-         M + 6, PAGE_H - 302, 640, 10.5, MUTED, leading=15)
-    c.hline(M + 6, 128, PAGE_W - 2 * M - 12)
-    c.setFont("Inter-Bold", 9)
-    c.setFillColor(TEXT)
-    c.drawString(M + 6, 104, "AUTHOR & COURSE LEADER")
-    c.setFont("Inter-XB", 15)
-    c.drawString(M + 6, 84, "Egor Tarasenko")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(MUTED)
-    c.drawString(M + 6, 68, "Master in Business Management — Hotel Institute Montreux Alumnus")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(MUTED)
-    c.drawRightString(PAGE_W - M - 6, 84, "Montreux · 2026")
-    c.drawRightString(PAGE_W - M - 6, 68, "12 weeks · 36 contact hours · English")
-    c.showPage()
+    course_cover(
+        c,
+        "Course Proposal · 2026–27",
+        "Trends · Design & Atmosphere · Neurogastronomy · Technology · World's Best Restaurants & Bars",
+        "A 12-week elective that turns the global hospitality scene into a practical business lens — for the next generation of world-ready leaders.",
+        "AUTHOR & COURSE LEADER",
+        "Egor Tarasenko",
+        "Master in Business Management — Hotel Institute Montreux Alumnus",
+        "Montreux · 2026",
+        "12 weeks · 36 contact hours · English",
+    )
 
     # ================= 2. WHY NOW =================
     top = std(c)
@@ -62,25 +41,22 @@ def build(c):
     # ================= 3. ABOUT THE AUTHOR =================
     top = std(c)
     y = slide_title_block(c, "About the author", "An alumnus proposal — giving back to the institute")
-    c.setFillColor(PANEL)
+    c.setFillColor(NAVY)
     c.roundRect(M, y - 292, 300, 292, 8, stroke=0, fill=1)
-    c.setStrokeColor(GOLD); c.setLineWidth(1.2)
-    c.roundRect(M, y - 292, 300, 292, 8, stroke=1, fill=0)
-    c.setFillColor(PANEL2)
-    c.roundRect(M + 78, y - 56 - 132, 144, 132, 70, stroke=0, fill=1)
-    c.setFillColor(GOLD)
-    c.setFont("Inter-XB", 34)
-    c.drawCentredString(M + 150, y - 148, "ET")
-    c.setFillColor(TEXT)
+    draw_photo(c, CAMPUS_PHOTO, M, y - 156, 300, 156, focus_x=0.52, focus_y=0.55)
+    c.setFillColor(NAVY)
+    c.roundRect(M, y - 292, 300, 136, 8, stroke=0, fill=1)
+    c.vrect(M, y - 156, 300, 5, RED)
+    c.setFont("Inter-Bold", 7.5)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M + 16, y - 179, "HIM ALUMNUS  ·  COURSE LEADER")
     c.setFont("Inter-XB", 17)
-    c.drawCentredString(M + 150, y - 212, "Egor Tarasenko")
-    c.setFillColor(GOLD)
-    c.setFont("Inter-Bold", 8.5)
-    c.drawCentredString(M + 150, y - 230, spaced("Author & Course Leader"))
-    c.setFillColor(MUTED)
-    c.setFont("Inter", 9)
-    c.drawCentredString(M + 150, y - 250, "Master in Business Management")
-    c.drawCentredString(M + 150, y - 264, "Hotel Institute Montreux · Alumnus")
+    c.setFillColor(WHITE)
+    c.drawString(M + 16, y - 211, "Egor Tarasenko")
+    c.setFont("Inter", 8.5)
+    c.setFillColor(HexColor("#B9D2E2"))
+    c.drawString(M + 16, y - 233, "Master in Business Management")
+    c.drawString(M + 16, y - 249, "Hotel Institute Montreux")
     X = M + 340
     bullets_block(c, [
         ("Graduate of the Master in Business Management programme at Hotel Institute Montreux.",
@@ -155,7 +131,8 @@ def build(c):
     c.showPage()
 
     # ================= MODULE SLIDES helper =================
-    def module_slide(num, weeks, title, sub, topics, cases, question):
+    def module_slide(num, weeks, title, sub, topics, cases, question, photo,
+                     field_label, field_note):
         top = std(c)
         accent = MODULE_COLORS[num]
         y = CONTENT_TOP
@@ -163,7 +140,7 @@ def build(c):
         c.setFillColor(accent)
         c.setFont("Inter-XB", 11)
         c.drawString(M + 16, y - 8, spaced(f"Module {num} · Weeks {weeks}"))
-        c.setFillColor(TEXT)
+        c.setFillColor(NAVY)
         c.setFont("Inter-XB", 23)
         c.drawString(M + 16, y - 32, title)
         c.setFont("Inter", 10)
@@ -175,12 +152,22 @@ def build(c):
         bullets_block(c, topics, M, y - 104, 480, size=10, gap=8)
         X2 = M + 520; W2 = PAGE_W - M - X2
         c.setFillColor(PANEL)
-        c.roundRect(X2, y - 318, W2, 254, 8, stroke=0, fill=1)
+        c.setStrokeColor(LINE)
+        c.setLineWidth(0.55)
+        c.roundRect(X2, y - 318, W2, 254, 8, stroke=1, fill=1)
         c.vrect(X2, y - 318, 3, 254, accent)
         c.setFillColor(accent)
         c.setFont("Inter-Bold", 9)
         c.drawString(X2 + 18, y - 84, "CASES & FIELD MATERIAL")
-        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.3, gap=9, color=TEXT, bullet_color=accent)
+        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.3, gap=9,
+                      color=TEXT, bullet_color=accent)
+        # A real HIM/Montreux image grounds each module in the institute's
+        # people-first, experiential-learning environment.
+        draw_photo(c, photo, X2 + 18, y - 302, 136, 74, focus_x=0.5, focus_y=0.55)
+        c.setFont("Inter-Bold", 7.1)
+        c.setFillColor(RED if num == 5 else BLUE)
+        c.drawString(X2 + 166, y - 257, field_label.upper())
+        para(c, field_note, X2 + 166, y - 267, W2 - 184, 8.1, MUTED, leading=10.5)
         c.setFillColor(PANEL2)
         c.roundRect(X2, y - 396, W2, 66, 8, stroke=0, fill=1)
         c.setFillColor(GOLD)
@@ -206,7 +193,8 @@ def build(c):
             "Tuju (São Paulo) — Art of Hospitality 2026: fewer guests, menus themed around climate.",
             "Gerbou (Dubai) — Prix Versailles 2025 for architecture; Emirati cuisine as fine dining.",
         ],
-        "If a venue opens today, which trends will still matter in 2030?")
+        "If a venue opens today, which trends will still matter in 2030?",
+        photo=STUDENTS_PHOTO, field_label="A global classroom", field_note="Global stories, read from a close-knit campus community.")
 
     # ================= 8. MODULE 2 =================
     module_slide(2, "4–5", "Venue Design & Atmosphere",
@@ -225,7 +213,8 @@ def build(c):
             "Himkok (Oslo) — Best Bar Design: a sustainable reimagining of a 200-year-old space.",
             "Hanu (Dubai) — Seoul aesthetics: charcoal grills, dark wood, bronze doors.",
         ],
-        "Can atmosphere be measured — and can it be managed like a P&L line?")
+        "Can atmosphere be measured — and can it be managed like a P&L line?",
+        photo=CAMPUS_PHOTO, field_label="Montreux field lab", field_note="The town itself becomes a living case study.")
 
     # ================= 9. MODULE 3 =================
     module_slide(3, "6–7", "Neurogastronomy & Guest Experience",
@@ -244,7 +233,8 @@ def build(c):
             "Tuju: radical personalisation — reading glasses, children's drawing kit, menus of rain and wind.",
             "Bar Leone: simplicity as a sensory strategy — «cocktails for the people».",
         ],
-        "What does your venue taste like — before the first bite is served?")
+        "What does your venue taste like — before the first bite is served?",
+        photo=OPEN_DAY_PHOTO, field_label="Sensory learning", field_note="Observation turns experience into a learnable skill.")
 
     # ================= 10. MODULE 4 =================
     module_slide(4, "8–9", "Technology & Automation",
@@ -263,7 +253,8 @@ def build(c):
             "Felice Capasso: Sesto Senso Academy — bartender education as a business model.",
             "50 Best «war room»: how rankings themselves use data, voting and media technology.",
         ],
-        "Where does technology amplify hospitality — and where does it kill it?")
+        "Where does technology amplify hospitality — and where does it kill it?",
+        photo=CLASSROOM_PHOTO, field_label="People-first tech", field_note="Digital tools support the guest-first service mindset.")
 
     # ================= 11. MODULE 5 =================
     module_slide(5, "10–12", "World's Leading Restaurants & Bars",
@@ -282,7 +273,8 @@ def build(c):
             "Bar Leone (Hong Kong) — World's Best Bar 2025, first Asian №1, two years after opening.",
             "Myojaku (Tokyo) — promoted to Three MICHELIN Stars in the 2026 guide.",
         ],
-        "What do all №1 venues share — and can it be taught?")
+        "What do all №1 venues share — and can it be taught?",
+        photo=STUDENTS_PHOTO, field_label="Be world ready", field_note="From Montreux, students benchmark the global scene.")
 
     # ================= 12. RANKING ECOSYSTEM =================
     top = std(c)
@@ -531,24 +523,11 @@ def build(c):
     c.showPage()
 
     # ================= 22. CLOSING =================
-    c.bg()
-    c.setStrokeColor(GOLD); c.setLineWidth(1.1)
-    c.rect(18, 18, PAGE_W - 36, PAGE_H - 36, stroke=1, fill=0)
-    c.setFont("Inter-Bold", 8.5)
-    c.setFillColor(GOLD)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 120, spaced("Contemporary HoReCa Scene · Course Proposal"))
-    para(c, "Let's bring the world's best\nhospitality to Montreux.", PAGE_W / 2 - 330, PAGE_H - 150, 660, 33, TEXT, "Inter-XB", leading=42, align=TA_CENTER)
-    c.vrect(PAGE_W / 2 - 46, PAGE_H - 300, 92, 4, GOLD)
-    c.setFont("Inter-XB", 16)
-    c.setFillColor(TEXT)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 340, "Egor Tarasenko")
-    c.setFont("Inter", 10)
-    c.setFillColor(MUTED)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 360, "Author & Course Leader · Master in Business Management, Hotel Institute Montreux Alumnus")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(GOLD_SOFT)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 388, "email · LinkedIn — to be added          Montreux, 2026")
-    c.setFont("Inter", 8.5)
-    c.setFillColor(MUTED)
-    c.drawCentredString(PAGE_W / 2, 60, "Sources: MICHELIN Guide · The 50 Best (the50.com) · GreatList (greatlist.ru) · Diageo World Class (diageo.com)")
-    c.showPage()
+    closing_page(
+        c,
+        "Bring the world's best hospitality\ninto the classroom.",
+        "Egor Tarasenko",
+        "Master in Business Management · Hotel Institute Montreux Alumnus",
+        "Sources: MICHELIN Guide · The 50 Best · GreatList · Diageo World Class",
+        "Montreux · 2026",
+    )
