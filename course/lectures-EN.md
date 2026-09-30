@@ -89,6 +89,8 @@ Front of house: reservations/waitlist platforms, dynamic pricing and revenue man
 
 ## MODULE 5 — World's Leading Restaurants & Bars (Week 10)
 
+- **Chef authorship & responsible leadership:** René Redzepi and Noma brought Nordic ingredients, foraging, hyper-seasonality and fermentation into the global conversation. In 2026, after former employees made public allegations of workplace abuse, Redzepi acknowledged harmful past leadership, apologised and stepped away from Noma. Pair the creative legacy with a discussion of worker dignity, safe conditions and accountability.
+
 ### 5.1 MICHELIN deep dive
 - Star semantics and economics; 2026 reveals: Tokyo (Myojaku promoted to three stars; 18 new stars; Service and Sommelier awards), California (Californios — first Mexican three-star), Toronto (Restaurant Pearl Morissette, two stars). The Moscow chapter (2021 debut — first stars in Russia & CIS; suspended 2022) as a governance case.
 
@@ -142,8 +144,8 @@ Choose one question per class. Allow 5 minutes of silent individual notes (claim
 
 - **Block 01 — signals, craft and benchmarks:** Jiro Ono (Sukiyabashi Jiro) demonstrates radical focus, repetition and precision; Hiroyasu Kayama (Bar Benfiddich) shows farm-to-glass provenance and a zero-menu, guest-led apothecary format.
 - **Block 02 — experience and theatre:** Erik Lorincz (American Bar at The Savoy, Kwānt) connects service choreography, vintage glassware and a room’s visual story; Denis Bobkov (Pub Life Group) uses salvage objects and theatrical storytelling to make distinctive pub worlds.
-- **Block 03 — sensory design and drink R&D:** Artem Talalay brings flavour, aroma, texture and visual concept into one signature serve; Kayama and Ono are reference points for botanical materiality, timing and precision.
-- **Block 04 — concepts and menus:** Rémy Savage (Little Red Door, A Bar with Shapes for a Name, Bar Nouveau) turns the menu into an art manifesto; Igor Zernov (#FollowTheRabbits / El Copitas) develops ritual-led venues and a living chalkboard menu.
+- **Block 03 — sensory design and drink R&D:** Artem Talalay brings flavour, aroma, texture and visual concept into one signature serve; Dave Arnold (*Liquid Intelligence*) applies controlled experiments to cocktail technique; Kayama and Ono are reference points for botanical materiality, timing and precision.
+- **Block 04 — concepts and menus:** Rémy Savage (Little Red Door, A Bar with Shapes for a Name, Bar Nouveau) turns the menu into an art manifesto; Alex Kratena (Tayēr + Elementary) pairs accessible service with produce-led R&D; Igor Zernov (#FollowTheRabbits / El Copitas) develops ritual-led venues and a living chalkboard menu; Boris Zarkov (White Rabbit Family / IKRA) offers a multi-concept portfolio model. Ivan Lyashuk and Vladimir Nikolaev connect bar practice to creative training through Artender.
 - **Block 05 — operations and leadership:** Bek Narzi (City Space Bar; “The Horeca Code”) foregrounds standards, station ergonomics, cost discipline and career development; Talalay demonstrates service speed without sacrificing guest connection.
 - **Block 06 — sourcing, scenography and entrepreneurship:** Denis Bobkov’s salvage-built concepts and Egor Tarasenko’s Joi Espresso Bar show how found objects can become a coherent atmosphere; build a live mockup from antique tableware, candles, vintage glass, found textures and a physical menu artefact.
 
