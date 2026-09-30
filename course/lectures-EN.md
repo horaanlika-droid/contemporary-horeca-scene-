@@ -123,7 +123,7 @@ Teams present "Your Venue on the World Stage": positioning; design & atmosphere 
 - Budget test: for each expensive material in your concept, name the theatrical substitute and its real cost.
 
 ### 6.3 The physical mockup (final exercise)
-- Every student builds a physical mockup of their own project — paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a small torch for light. Not a floor plan: a set, like stage scenery.
+- Every student builds a physical mockup of their own project — antique tableware, candles, vintage glassware, found fabric/wood/textures and props, a physical menu concept, and practical light. Not a floor plan: a set, like stage scenery.
 - Scale 1:20 or 1:50. Decide the entrance, the first sightline, the light source, which materials are real and which are painted illusions, and the three details that carry the atmosphere.
 - Photograph it at guest height — that is the image you pitch with. The mockup is the fastest way to discover that an elegant document does not stand up in three dimensions, and the most persuasive object in front of an investor, a landlord or a future team.
 
@@ -136,3 +136,19 @@ Teams present "Your Venue on the World Stage": positioning; design & atmosphere 
 
 ### Audience questions: five-minute think, then discuss
 Choose one question per class. Allow 5 minutes of silent individual notes (claim + reason + example), 8–12 minutes of pair/small-group exchange, then 10 minutes plenary. For Modules 3 and 5, use: “What makes cooking a science without reducing it to a lab formula?” and “Which parts of René Redzepi’s or another chef’s model can transfer to a business, and which depend on a specific person and team?”
+
+
+## Leading practitioners mapped to the course blocks
+
+- **Block 01 — signals, craft and benchmarks:** Jiro Ono (Sukiyabashi Jiro) demonstrates radical focus, repetition and precision; Hiroyasu Kayama (Bar Benfiddich) shows farm-to-glass provenance and a zero-menu, guest-led apothecary format.
+- **Block 02 — experience and theatre:** Erik Lorincz (American Bar at The Savoy, Kwānt) connects service choreography, vintage glassware and a room’s visual story; Denis Bobkov (Pub Life Group) uses salvage objects and theatrical storytelling to make distinctive pub worlds.
+- **Block 03 — sensory design and drink R&D:** Artem Talalay brings flavour, aroma, texture and visual concept into one signature serve; Kayama and Ono are reference points for botanical materiality, timing and precision.
+- **Block 04 — concepts and menus:** Rémy Savage (Little Red Door, A Bar with Shapes for a Name, Bar Nouveau) turns the menu into an art manifesto; Igor Zernov (#FollowTheRabbits / El Copitas) develops ritual-led venues and a living chalkboard menu.
+- **Block 05 — operations and leadership:** Bek Narzi (City Space Bar; “The Horeca Code”) foregrounds standards, station ergonomics, cost discipline and career development; Talalay demonstrates service speed without sacrificing guest connection.
+- **Block 06 — sourcing, scenography and entrepreneurship:** Denis Bobkov’s salvage-built concepts and Egor Tarasenko’s Joi Espresso Bar show how found objects can become a coherent atmosphere; build a live mockup from antique tableware, candles, vintage glass, found textures and a physical menu artefact.
+
+## World’s 50 Best menu concepts: a practical deconstruction
+
+Compare not just dishes and drinks but the object, information hierarchy, ordering ritual and link to the room. Rémy Savage: wordless/illustrated storytelling at Little Red Door, geometric Bauhaus language at Shapes, crafted Art Nouveau references at Bar Nouveau. El Copitas (Igor Zernov): a hand-written, evolving chalkboard tied to fresh batches and a communal ritual. Bar Leone: “Cocktail Popolari” frames classics as a neighbourhood archive with direct ingredient storytelling. Tuju: seasonal tasting menus such as Rain, Wind and Drought work as research notebooks. Bar Benfiddich (Hiroyasu Kayama): no printed list; the apothecary, botanicals and conversation are the menu. Transfer one clear rule into your own physical menu concept (format, tactile material, naming, 6–10 offers, pricing, and how it sits beside candles and glassware).
+
+All lessons are immediately open after course access is granted. Submit assignments in-app for optional/admin feedback; review does not unlock or block lessons.

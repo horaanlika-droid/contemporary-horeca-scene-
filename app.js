@@ -1,6 +1,6 @@
 /* ============================================================================
    CONTEMPORARY HORECA SCENE — views & interaction layer
-   Booted by access.js once the cohort password has unlocked course-data.js.
+   Booted by access.js after course access; all lessons are immediately available.
    Content lives in course-data.js; this file only renders it.
    ========================================================================== */
 window.bootCourse = () => {
@@ -17,6 +17,8 @@ window.bootCourse = () => {
     enrollments: [], progress: {}, submissions: [], quizzes: {}, licenseActive: true,
   });
   const getState = () => { try { return { ...seedState(), ...(JSON.parse(localStorage.getItem(stateKey)) || {}) }; } catch { return seedState(); } };
+  const tokenHeaders = () => { const t = localStorage.getItem('chs-access-token'); return t ? { 'X-Access-Token': t } : {}; };
+  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.adminBot = data.adminBot || {}; saveState(state); } catch { /* local/offline preview */ } };
   const saveState = s => localStorage.setItem(stateKey, JSON.stringify(s));
   const ensureEnrollment = profile => { if (profile.role !== 'STUDENT') return; const s = getState(); if (!s.enrollments.some(x => x.studentEmail === profile.email && x.courseId === C.id && x.edition === C.edition)) { s.enrollments.push({ id: `enrol-${Date.now()}`, studentEmail: profile.email, institutionId: profile.institutionId || 'him-001', courseId: C.id, edition: C.edition, status: 'ACTIVE', startedAt: new Date().toISOString() }); saveState(s); } };
 
@@ -89,7 +91,7 @@ window.bootCourse = () => {
     const role = u?.role;
     const home = role === 'INSTRUCTOR' ? 'instructor' : role === 'ADMIN' ? 'admin' : 'dashboard';
     const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Analytics', 'instructor']]
-      : role === 'ADMIN' ? [['Overview', 'admin'], ['Institutions', 'admin'], ['Analytics', 'admin']]
+      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Cases', 'cases'], ['Course', 'course']]
         : [['Home', 'dashboard'], ['Course', 'course'], ['Cases', 'cases'], ['Progress', 'progress']];
     return `<header class="app-header">${brandBlock(`#/${home}`)}<nav class="app-nav" aria-label="Application navigation">${links.map(([t, p]) => `<a href="#/${p}">${t}</a>`).join('')}<button data-action="search">SEARCH ⌕</button></nav><div class="user-chip"><span>${esc(u?.name || 'Guest')}</span><span class="avatar">${initials(u?.name)}</span><button class="nav-link" data-action="profile">PROFILE</button>${role !== 'STUDENT' ? '<button class="nav-link" data-action="logout">SIGN OUT</button>' : ''}</div></header>`;
   };
@@ -97,7 +99,7 @@ window.bootCourse = () => {
   const bottomNav = () => {
     const role = user()?.role;
     const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-      : role === 'ADMIN' ? [['Overview', 'admin', '⌂'], ['Institutions', 'admin', '▤'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
+      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
         : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']];
     return `<nav class="mobile-bottom" aria-label="Mobile navigation">${links.map(([t, p, i]) => p === 'search' ? `<button data-action="search"><span>${i}</span>${t}</button>` : `<a href="#/${p}"${route()[0] === p ? ' class="active"' : ''}><span>${i}</span>${t}</a>`).join('')}</nav>`;
   };
@@ -108,7 +110,7 @@ window.bootCourse = () => {
 
   /* ---------------------------------------------------------------- landing */
   function landing() {
-    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · built from the street', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Paper mockups · 1:20'];
+    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · built from the street', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
         <div class="hero-media">${image('horeca-interior-design.jpg', 'An atmospheric contemporary hotel bar with warm lighting and considered materials')}</div>
@@ -164,7 +166,7 @@ window.bootCourse = () => {
           <div><span class="eyebrow">03 — HOW IT WORKS</span><h2>From insight<br>to <em>intention</em>.</h2></div>
           <p>A considered learning journey: absorb an idea, test it against the industry, apply it to a concept of your own — then build that concept with your hands.</p>
         </div>
-        <div class="steps">${[['01', 'Learn', 'Ideas, principles and new perspectives.'], ['02', 'Explore', 'Real industry cases and references.'], ['03', 'Apply', 'Connect thinking to your own concept.'], ['04', 'Source', 'Find it second-hand, reuse it, build it yourself.'], ['05', 'Build', 'Make a paper mockup of your venue, like stage scenery.'], ['06', 'Pitch', 'Defend the concept, the budget and the set.']].map(a => `<div class="step"><span class="number">${a[0]}</span><h3>${a[1]}</h3><p>${a[2]}</p></div>`).join('')}</div>
+        <div class="steps">${[['01', 'Learn', 'Ideas, principles and new perspectives.'], ['02', 'Explore', 'Real industry cases and references.'], ['03', 'Apply', 'Connect thinking to your own concept.'], ['04', 'Source', 'Find it second-hand, reuse it, build it yourself.'], ['05', 'Build', 'Stage a live found-object mockup with tableware, candles, glassware and a menu artefact.'], ['06', 'Pitch', 'Defend the concept, the budget and the set.']].map(a => `<div class="step"><span class="number">${a[0]}</span><h3>${a[1]}</h3><p>${a[2]}</p></div>`).join('')}</div>
       </section>
 
       <section class="section" id="cases">
@@ -186,7 +188,7 @@ window.bootCourse = () => {
       <section class="section" id="budget">
         <div class="section-head">
           <div><span class="eyebrow">05 — BUDGET REALISATION &amp; SCENOGRAPHY</span><h2>You do not need<br>a fortune to open<br>something with <em>soul</em>.</h2></div>
-          <p>Module ${C.modules.find(m => m.id === 'budget')?.number || '09'} of the edition: found objects, theatrical decorative techniques borrowed from the stage — and a physical mockup of every student's own project, made from paper and cardboard.</p>
+          <p>Module ${C.modules.find(m => m.id === 'budget')?.number || '09'} of the edition: found objects, theatrical decorative techniques borrowed from the stage — and a live physical mockup assembled from real objects.</p>
         </div>
         <div class="budget-split">
           <div class="budget-copy">
@@ -203,10 +205,10 @@ window.bootCourse = () => {
           </div>
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
-            <span class="eyebrow">THE PAPER MOCKUP</span>
+            <span class="eyebrow">THE LIVE FOUND-OBJECT MOCKUP</span>
             <div class="shot">${image('horeca-concept-pitch.jpg', 'A concept pitch table with materials, sketches and models')}</div>
             <h4>Build your venue as a set, not a plan.</h4>
-            <p>Paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs and a small torch for light. Work at 1:20 or 1:50: decide where the guest enters, what they see first, where the light comes from — and which three details carry the atmosphere. Photograph it at guest height. That is the image you pitch with.</p>
+            <p>Assemble it directly from what you find: antique tableware, candles, vintage glassware, fabric, wood, bottles, found textures and props, plus a physical menu concept. Work at 1:20 or 1:50; arrange the objects to show the entrance, first sightline, light and three details that carry the atmosphere. Photograph it at guest height.</p>
             <span class="meta">EVERY STUDENT · MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} → FINAL CHALLENGE</span>
           </div>
         </div>
@@ -233,9 +235,9 @@ window.bootCourse = () => {
 
       <section class="section flush">
         <div class="final-banner">
-          <div><span class="eyebrow">THE FINAL PROJECT</span><h2 class="page-title">Design the hospitality concept of <em>tomorrow</em> — then build it in paper.</h2></div>
+          <div><span class="eyebrow">THE FINAL PROJECT</span><h2 class="page-title">Design the hospitality concept of <em>tomorrow</em> — then stage it with found objects.</h2></div>
           <div>
-            <p>Imagine you are opening a venue for 2030. Define its audience, experience, space, food &amp; beverage, technology, sourcing plan, business model and visual direction — then present the physical mockup you built: entrance, first sightline, light and the three details that carry the atmosphere.</p>
+            <p>Imagine you are opening a venue for 2030. Define its audience, experience, space, food &amp; beverage, technology, sourcing plan, business model and visual direction — then present a live found-object mockup using antique tableware, candles, vintage glassware, found textures and a physical menu concept.</p>
             <a class="button" href="#/course">VIEW THE ELECTIVE <span aria-hidden="true">↗</span></a>
           </div>
         </div>
@@ -250,7 +252,7 @@ window.bootCourse = () => {
 
   /* ------------------------------------------------------------------ login */
   function login() {
-    if (tg) return `<main class="app-main"><div class="page-head"><div><span class="eyebrow">TELEGRAM MINI APP · SIGN-IN</span><h1 class="page-title">Access could<br>not be <em>verified</em>.</h1><p>Close this page and reopen the elective from the Telegram bot. If the issue continues, ask the administrator to check the BotHost configuration.</p></div><a class="button" href="#/">RETURN TO HOME <span aria-hidden="true">↗</span></a></div></main>`;
+    if (user()) { go('dashboard'); return ''; }
     return `<main class="login-page">
       <div class="login-visual">${image('horeca-chefs-counter.jpg', 'A chef at work in an open kitchen')}
         <div class="login-visual-copy">
@@ -321,12 +323,12 @@ window.bootCourse = () => {
         </section>
       </div>
       <section class="dash-section" style="margin-top:42px">
-        <div class="simple-row"><span><span class="meta">WHAT'S NEW · SEPTEMBER 2026</span><br><strong>Module 09 — Budget Realisation &amp; Scenography: found objects, theatrical techniques and the final paper mockup.</strong></span><a class="button text" href="#/updates">VIEW UPDATES →</a></div>
+        <div class="simple-row"><span><span class="meta">WHAT'S NEW · SEPTEMBER 2026</span><br><strong>Module 09 — Budget Realisation &amp; Scenography: found objects, theatrical techniques and the final live found-object mockup.</strong></span><a class="button text" href="#/updates">VIEW UPDATES →</a></div>
       </section>
       <div class="dash-lower">
         <section class="dash-section">
           <h2>FINAL PROJECT</h2>
-          <div class="empty"><span class="eyebrow">${pct() === 100 ? 'READY TO SHARE' : 'YOUR FINAL CHALLENGE'}</span><p>Design the hospitality concept of tomorrow — and present the physical mockup you built from paper, cardboard and light.</p><a class="button text" href="#/assignment">OPEN THE BRIEF →</a></div>
+          <div class="empty"><span class="eyebrow">${pct() === 100 ? 'READY TO SHARE' : 'YOUR FINAL CHALLENGE'}</span><p>Design the hospitality concept of tomorrow — and present the physical mockup you built from antique tableware, candles, vintage glassware, found textures and light.</p><a class="button text" href="#/assignment">OPEN THE BRIEF →</a></div>
         </section>
         <section class="dash-section">
           <h2>COURSE STATUS</h2>
@@ -427,7 +429,7 @@ window.bootCourse = () => {
       </div>
       <section class="challenge-panel">
         <div><span class="eyebrow">YOUR CHALLENGE</span><p>${esc(l.challenge)}</p></div>
-        <a href="#/assignment" class="button light">OPEN THE BRIEF <span aria-hidden="true">↗</span></a>
+        <a href="#/assignment/${m.id}/${l.id}" class="button light">OPEN THE BRIEF <span aria-hidden="true">↗</span></a>
       </section>
       <div class="lesson-footer">
         <a class="button text" href="#/module/${m.id}">← MODULE ${m.number}</a>
@@ -446,6 +448,8 @@ window.bootCourse = () => {
         <div><span class="eyebrow">INDUSTRY NOTEBOOK · ${C.edition} EDITION</span><h1 class="page-title">Real industry.<br>Useful <em>questions</em>.</h1><p>Case files connect hospitality practice to the ideas in this elective. Read closely, then decide what is relevant to the concept you want to build.</p></div>
         <button class="button light" data-action="search">SEARCH THE ELECTIVE <span aria-hidden="true">⌕</span></button>
       </div>
+      <section class="section" style="padding:30px 0 10px"><span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span><div class="figure-grid">${(C.figures || []).map(f => `<article class="case-item"><span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span><h3>${esc(f.name)}</h3><p>${esc(f.role)} · ${esc(f.venues)}</p><p>${esc(f.summary)}</p><p><strong>Course takeaway:</strong> ${esc(f.takeaway)}</p></article>`).join('')}</div></section>
+      <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Bar Leone · Hong Kong</h3><p>“Cocktail Popolari” frames a neighbourhood archive through familiar classics and clear ingredient storytelling.</p></article><article class="case-item"><h3>Tuju · São Paulo</h3><p>Seasonal tasting menus become meteorological notebooks — Rain, Wind and Drought — connecting ingredient research to narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
         ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
         : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>`).join('')}</div>
@@ -453,13 +457,16 @@ window.bootCourse = () => {
   }
 
   /* -------------------------------------------------------------- assignment */
-  function assignmentPage() {
+  function assignmentPage(mid, lid) {
     const u = user();
-    const mine = state.submissions.filter(s => s.student === u.email && s.courseId === C.id && s.edition === C.edition).at(-1);
+    const current = allLessons.find(x => x.id === lid) || allLessons.at(-1);
+    const assignmentId = current.id;
+    const assignmentTitle = current.title + ' · Practical Assignment';
+    const mine = state.submissions.filter(s => s.student === u.email && s.courseId === C.id && s.edition === C.edition && s.lessonId === assignmentId).at(-1);
     const revising = sessionStorage.getItem('chs-revising') === '1';
     return layout(`<main class="app-main">
       <div class="page-head">
-        <div><span class="eyebrow">APPLY YOUR THINKING · FINAL CHALLENGE</span><h1 class="page-title">Design the<br>hospitality concept<br>of <em>tomorrow</em>.</h1><p>Imagine you are building a hospitality concept for 2030. Bring the whole course into a clear, considered proposition — and present the mockup you built with your hands.</p></div>
+        <div><span class="eyebrow">PRACTICAL ASSIGNMENT · ${esc(current.title)}</span><h1 class="page-title">Apply the<br>lesson to your<br><em>own concept</em>.</h1><p>${esc(current.challenge)}</p></div>
         <span class="edition-tag meta">SUBMISSION · ${mine && revising ? 'REVISION IN PROGRESS' : mine ? esc(mine.status) : 'OPEN'}</span>
       </div>
       <div class="assignment-layout" style="margin-top:38px">
@@ -479,7 +486,7 @@ window.bootCourse = () => {
             <li>Business model and operating logic</li>
           </ul>
           <span class="meta">THE PHYSICAL MOCKUP</span>
-          <p>Build your venue as a set from paper, cardboard and found materials (1:20 or 1:50). Decide the entrance, the first sightline, the light source and the three details that carry the atmosphere. Photograph it at guest height and attach the images.</p>
+          <p>For the physical concept, build a live found-object set (1:20 or 1:50), not a paper model: use antique tableware, candles, vintage glassware, found textures/props and a physical menu concept. Decide the entrance, sightline, light source and three atmosphere-carrying details. Photograph it at guest height and attach the images.</p>
           <span class="meta">SUBMISSION FORMAT</span>
           <p>Write your concept here and attach a PDF, images of your mockup or a presentation. You may also include a link to your work.</p>
           <span class="meta">REVIEW</span>
@@ -490,15 +497,15 @@ window.bootCourse = () => {
           ${mine && !revising ? `<div class="simple-list">
               <div class="simple-row"><span class="meta">STATUS</span><span class="status-pill">${esc(mine.status)}</span></div>
               <div class="simple-row"><span class="meta">SUBMITTED</span><strong>${new Date(mine.date).toLocaleDateString()}</strong></div>
-              <div class="simple-row"><span class="meta">ATTACHMENTS</span><strong>${esc((mine.files || []).join(', ') || 'No files')}</strong></div>
+              <div class="simple-row"><span class="meta">ATTACHMENTS</span><strong>${esc((mine.files || []).map(f => typeof f === 'string' ? f : f.name).join(', ') || 'No files')}</strong></div>
             </div>
             <div class="review-work" style="margin:20px 0">${esc(mine.answer)}</div>
             ${mine.feedback ? `<div class="case-inline"><span class="meta">INSTRUCTOR FEEDBACK · SCORE ${esc(mine.feedback.score ?? '—')}</span><p>${esc(mine.feedback.text)}</p></div>` : ''}
             ${mine.status === 'REVISION REQUESTED' ? '<button class="button light" data-action="revise" style="margin-top:18px">RESUBMIT REVISION <span aria-hidden="true">↗</span></button>' : ''}`
-          : `<form id="assignment-form">
-              <div class="field"><label for="answer">Concept note</label><textarea class="form-control" id="answer" name="answer" rows="10" required placeholder="What are you building, for whom, and why does it matter? Include your sourcing and budget plan, and describe your mockup: entrance, first sightline, light and the three details that carry the atmosphere.">${esc(revising ? mine?.answer || '' : '')}</textarea></div>
+          : `<form id="assignment-form" data-lesson="${esc(assignmentId)}" data-module="${esc(current.module.id)}">
+              <div class="field"><label for="answer">Concept note</label><textarea class="form-control" id="answer" name="answer" rows="10" required placeholder="What are you building, for whom, and why does it matter? Include sourcing, budget, menu concept and your found-object mockup: entrance, first sightline, light and the three details that carry the atmosphere.">${esc(revising ? mine?.answer || '' : '')}</textarea></div>
               <div class="field"><label for="link">Link to your presentation (optional)</label><input class="form-control" id="link" name="link" type="url" value="${esc(revising ? mine?.link || '' : '')}" placeholder="https://"></div>
-              <div class="field"><label>Attach supporting files &amp; mockup photographs</label><div class="file-drop"><label class="meta" for="files">PDF · IMAGE · PRESENTATION · UP TO 15 MB EACH</label><br><input type="file" name="files" id="files" accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx,.key" multiple><p class="form-help">Files are stored in this browser for the demo experience.</p></div></div>
+              <div class="field"><label>Attach supporting files &amp; mockup photographs</label><div class="file-drop"><label class="meta" for="files">PDF · IMAGE · PRESENTATION · UP TO 15 MB EACH</label><br><input type="file" name="files" id="files" accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx,.key" multiple><p class="form-help">Files are uploaded securely to the course app (maximum 15 MB per file). Feedback and help: egor.tarasenko@him-mail.ch</p></div></div>
               <button class="button" type="submit">SUBMIT ASSIGNMENT <span aria-hidden="true">↗</span></button>
             </form>`}
         </section>
@@ -529,6 +536,15 @@ window.bootCourse = () => {
         ${list.length ? `<div class="submission-row" style="border-bottom:1px solid var(--ink)"><span class="meta">STUDENT</span><span class="meta">ASSIGNMENT</span><span class="meta">SUBMITTED</span><span class="meta">STATUS</span></div>${list.map(s => `<a class="submission-row" href="#/review/${s._index}"><strong>${esc(s.name)}</strong><span>${esc(s.assignment)}</span><span class="meta">${new Date(s.date).toLocaleDateString()}</span><span class="status-pill">${esc(s.status)}</span></a>`).join('')}`
           : `<div class="empty"><span class="eyebrow">NO SUBMISSIONS YET</span><p>Student work will appear here when it is submitted for review.</p><p>To test the complete flow, sign in as the demo student, submit the final challenge, then return here as the instructor.</p></div>`}
       </section>
+      <section class="section" style="padding:42px 0 18px" id="admin-review">
+        <span class="eyebrow">ADMIN PANEL · ASSIGNMENT REVIEW</span><h2 class="page-title" style="font-size:clamp(30px,4vw,48px)">Student work &amp; <em>feedback</em>.</h2>
+        <p>Accept or return each assignment. Written feedback is required; students keep immediate access to every lesson regardless of review.</p>
+        <div class="admin-submissions">${state.submissions.length ? state.submissions.slice().reverse().map(s => `<article class="institution-panel" style="margin:18px 0"><div class="simple-row"><span><span class="meta">${esc(s.assignment)} · ${esc(s.lessonId || '')}</span><br><strong>${esc(s.name)} · ${esc(s.student)}</strong></span><span class="status-pill">${esc(s.status)}</span></div><p class="review-work">${esc(s.answer || '')}${s.link ? `<br><a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.link)}</a>` : ''}</p><div>${(s.files || []).map((f, i) => `<a class="button text" href="${esc(f.url || '#')}" data-action="download-file" data-url="${esc(f.url || '')}" data-name="${esc(f.name || f)}">${esc(f.name || f)} ↓</a>`).join(' ')}</div><form id="review-form" data-id="${esc(s.id)}" class="review-actions" style="margin-top:18px"><div class="field"><label>Required feedback to student</label><textarea class="form-control" name="feedback" rows="3" required placeholder="Specific, useful feedback from Egor Tarasenko">${esc(s.feedback?.text || '')}</textarea></div><div class="field"><label>Score (optional)</label><input class="form-control" type="number" name="score" min="0" max="100" value="${esc(s.feedback?.score ?? '')}"></div><button class="button" name="decision" value="APPROVED">APPROVE &amp; SEND FEEDBACK ✓</button> <button class="button light" name="decision" value="REVISION REQUESTED">REQUEST REVISION ↗</button></form></article>`).join('') : '<div class="empty">No student assignments submitted yet.</div>'}</div>
+      </section>
+      <section class="dash-lower" style="margin:32px 0">
+        <div class="institution-panel"><span class="eyebrow">PERSONAL PASSWORDS · ONE PER PERSON</span><h2>Generate a course password</h2><form id="student-password-form"><div class="field"><label>Name</label><input class="form-control" name="name" required></div><div class="field"><label>Email (optional)</label><input class="form-control" name="email" type="email"></div><button class="button">GENERATE PASSWORD ↗</button></form><div id="generated-password"></div><div class="simple-list" style="margin-top:16px">${(state.serverStudents || []).slice(0,12).map(st => `<div class="simple-row"><span>${esc(st.name)} · ${esc(st.email)}</span><code>${esc(st.password)}</code></div>`).join('')}</div></div>
+        <div class="institution-panel"><span class="eyebrow">TELEGRAM ADMIN BOT CONSOLE</span><h2>Run a bot command</h2><p>Commands: <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>, <code>/genpass Name email</code>, <code>/students</code></p><form id="admin-bot-form"><div class="field"><label>Command</label><input class="form-control" name="command" required placeholder="/pending"></div><button class="button">RUN COMMAND ↗</button></form><pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0,5).map(x => x.text).join('\n'))}</pre></div>
+      </section>
       <div class="dash-lower" id="analytics">
         <section><h2 class="serif" style="font-size:26px">Module performance</h2><p class="form-help">Illustrative overview for this demo edition.</p><div class="chart-bars">${[76, 62, 54, 68, 45, 36, 51, 29, 44, 8].map((n, i) => `<div style="height:${n}%"><span>${String(i + 1).padStart(2, '0')}</span></div>`).join('')}</div></section>
         <section><h2 class="serif" style="font-size:26px">Recent activity</h2><div class="empty">${list.length ? `${list.length} submission${list.length > 1 ? 's' : ''} in this edition.` : 'Course activity will appear as learners progress through the edition.'}</div></section>
@@ -549,7 +565,7 @@ window.bootCourse = () => {
         <section>
           <span class="eyebrow">STUDENT WORK</span>
           <div class="review-work">${esc(s.answer)}${s.link ? `\n\nLINK: ${esc(s.link)}` : ''}</div>
-          <div class="simple-list">${(s.files || []).map((f, i) => `<div class="simple-row"><strong>${esc(f)}</strong><a class="button text" href="#" data-action="download-file" data-submission="${s.id}" data-index="${i}">DOWNLOAD →</a></div>`).join('') || '<div class="empty">No files attached.</div>'}</div>
+          <div class="simple-list">${(s.files || []).map((f, i) => `<div class="simple-row"><strong>${esc(typeof f === 'string' ? f : f.name)}</strong><a class="button text" href="${typeof f === 'object' && f.url ? f.url : '#'}" data-action="download-file" data-submission="${s.id}" data-index="${i}">DOWNLOAD →</a></div>`).join('') || '<div class="empty">No files attached.</div>'}</div>
         </section>
         <form id="review-form" data-id="${s.id}" class="review-actions">
           <span class="eyebrow">EDITORIAL FEEDBACK</span>
@@ -581,7 +597,7 @@ window.bootCourse = () => {
           <div class="simple-row"><span class="meta">LICENSE PERIOD</span><strong>01.09.2026 — 31.08.2027</strong></div>
           <div class="simple-row"><span class="meta">STUDENT LIMIT</span><strong>24 / 100</strong></div>
           <div class="simple-row"><span class="meta">STATUS</span><span class="status-pill">${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}</span></div>
-          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Password-protected · cohort list</strong></div>
+          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Personal password · all lessons available immediately</strong></div>
           <div class="simple-row"><span class="meta">CONTENT OWNERSHIP</span><strong>Author-owned · institution access by license</strong></div>
         </div>
         <button class="button light" data-action="toggle-license" style="margin-top:22px">${state.licenseActive ? 'SUSPEND DEMO LICENSE' : 'REACTIVATE DEMO LICENSE'} <span aria-hidden="true">↻</span></button>
@@ -723,17 +739,13 @@ window.bootCourse = () => {
     const u = user();
     if (r[0] === 'login') { app.innerHTML = login(); return; }
     if (!r[0]) { app.innerHTML = landing(); return; }
-    if (!u) { location.hash = '/login'; return; }
-    if (!state.licenseActive && u.role === 'STUDENT' && !['expired', 'logout'].includes(r[0])) {
-      app.innerHTML = layout(`<main class="app-main"><div class="page-head"><div><span class="eyebrow">ACCESS · LICENSE STATUS</span><h1 class="page-title">This edition<br>is <em>unavailable</em>.</h1><p>Your institution's course license is not active. Contact your course administrator for support.</p></div></div></main>`);
-      return;
-    }
+    if (!u) { location.hash = '/'; return; }
     if (r[0] === 'dashboard' && u.role === 'STUDENT') app.innerHTML = dashboard();
     else if (r[0] === 'course') app.innerHTML = coursePage();
     else if (r[0] === 'module') app.innerHTML = modulePage(r[1]);
     else if (r[0] === 'lesson') app.innerHTML = lessonPage(r[1], r[2]);
     else if (r[0] === 'cases') app.innerHTML = casesPage();
-    else if (r[0] === 'assignment') app.innerHTML = assignmentPage();
+    else if (r[0] === 'assignment') app.innerHTML = assignmentPage(r[1], r[2]);
     else if (r[0] === 'instructor' && u.role === 'INSTRUCTOR') app.innerHTML = instructorPage();
     else if (r[0] === 'review' && u.role === 'INSTRUCTOR') app.innerHTML = reviewPage(r[1]);
     else if (r[0] === 'progress') app.innerHTML = progressPage();
@@ -786,7 +798,7 @@ window.bootCourse = () => {
   async function lockDevice() {
     if (!confirm('Lock Contemporary Horeca Scene on this device? You will need the course password to reopen it.')) return;
     try { await fetch('/api/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'revoke' }) }); } catch { /* static hosting */ }
-    try { localStorage.removeItem('chs-access-v1'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
+    try { localStorage.removeItem('chs-access-v1'); localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
     location.hash = '';
     location.reload();
   }
@@ -809,12 +821,21 @@ window.bootCourse = () => {
     if (action === 'download-file') {
       e.preventDefault();
       try {
-        const file = await idbFile(actionEl.dataset.submission, Number(actionEl.dataset.index));
-        if (!file) { toast('FILE IS NOT AVAILABLE IN THIS BROWSER'); return; }
-        const url = URL.createObjectURL(file.blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = file.name; a.click();
-        URL.revokeObjectURL(url);
+        const remoteUrl = actionEl.dataset.url;
+        if (remoteUrl) {
+          const response = await fetch(remoteUrl, { headers: tokenHeaders() });
+          if (!response.ok) throw new Error('File download unavailable');
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = actionEl.dataset.name || 'assignment-file'; a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } else {
+          const file = await idbFile(actionEl.dataset.submission, Number(actionEl.dataset.index));
+          if (!file) { toast('FILE IS NOT AVAILABLE IN THIS BROWSER'); return; }
+          const url = URL.createObjectURL(file.blob);
+          const a = document.createElement('a'); a.href = url; a.download = file.name; a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
       } catch { toast('FILE STORAGE IS NOT AVAILABLE'); }
       return;
     }
@@ -831,15 +852,7 @@ window.bootCourse = () => {
     if (e.target.id === 'login-form') {
       const d = new FormData(e.target), email = String(d.get('email')).trim().toLowerCase(), pass = String(d.get('password'));
       if (!email || pass.length < 1) { document.getElementById('login-error').textContent = 'Enter your email and password.'; return; }
-      let role = 'STUDENT', name = email.split('@')[0].split(/[._-]/).map(x => x[0]?.toUpperCase() + x.slice(1)).join(' ');
-      if (email === 'instructor@him.edu') { role = 'INSTRUCTOR'; name = 'Egor Tarasenko'; }
-      if (email === 'admin@him.edu') { role = 'ADMIN'; name = 'HIM Administrator'; }
-      if (email === 'student@him.edu') { role = 'STUDENT'; name = 'Alex Morgan'; }
-      const profile = { email, name, role, institutionId: 'him-001' };
-      sessionStorage.setItem('chs-user', JSON.stringify(profile));
-      ensureEnrollment(profile);
-      go(role === 'STUDENT' ? 'dashboard' : role === 'INSTRUCTOR' ? 'instructor' : 'admin');
-      return;
+      document.getElementById('login-error').textContent = 'Use your course password on the access screen; all lessons open immediately after access is granted.'; return;
     }
     if (e.target.id === 'assignment-form') {
       const u = user(), fd = new FormData(e.target), files = [...document.getElementById('files').files];
@@ -847,27 +860,38 @@ window.bootCourse = () => {
       const sub = {
         id: `sub-${Date.now()}`, student: u.email, name: u.name, institutionId: u.institutionId || 'him-001',
         courseId: C.id, edition: C.edition,
-        assignment: 'Final Challenge · Concept of tomorrow + physical mockup',
+        assignment: `${allLessons.find(l => l.id === e.target.dataset.lesson)?.title || 'Final Challenge'} · Practical Assignment`,
+        moduleId: e.target.dataset.module || 'final', lessonId: e.target.dataset.lesson || 'final-brief',
+        studentId: u.id, passwordCode: u.passwordCode, telegramId: u.telegramId || null,
         answer: String(fd.get('answer') || ''), link: String(fd.get('link') || ''),
         files: files.map(f => f.name), date: new Date().toISOString(), status: 'WAITING FOR REVIEW', feedback: null,
       };
       try {
-        if (files.length) {
-          await new Promise((resolve, reject) => {
-            const req = indexedDB.open('chs-submission-files', 1);
-            req.onupgradeneeded = () => req.result.createObjectStore('files');
-            req.onsuccess = () => {
-              const db = req.result, tx = db.transaction('files', 'readwrite');
-              files.forEach((f, i) => tx.objectStore('files').put({ name: f.name, blob: f }, `${sub.id}:${i}`));
-              tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
-            };
-            req.onerror = () => reject(req.error);
-          });
+        const encodedFiles = await Promise.all(files.map(file => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, dataBase64: String(reader.result).split(',')[1] });
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        })));
+        const response = await fetch('/api/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...tokenHeaders() },
+          body: JSON.stringify({ ...sub, files: encodedFiles }),
+        });
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || 'Submission upload failed');
         }
-      } catch { toast('FILE STORAGE FAILED — PLEASE TRY AGAIN'); return; }
+        const result = await response.json();
+        Object.assign(sub, result.submission || {});
+      } catch (error) {
+        if (!String(error.message).includes('Failed to fetch')) { toast(error.message || 'SUBMISSION FAILED'); return; }
+        toast('SERVER NOT AVAILABLE — SUBMISSION SAVED LOCALLY');
+      }
       state = getState();
-      state.submissions = state.submissions.filter(s => s.student !== u.email);
+      state.submissions = state.submissions.filter(s => !(s.student === u.email && s.lessonId === sub.lessonId));
       state.submissions.push(sub);
+      saveState(state);
       sessionStorage.removeItem('chs-revising');
       saveState(state);
       toast('SUBMISSION RECEIVED · CONCEPT + MOCKUP');
@@ -876,14 +900,48 @@ window.bootCourse = () => {
     }
     if (e.target.id === 'review-form') {
       const form = e.target, id = form.dataset.id, decision = e.submitter?.value || 'APPROVED';
-      state = getState();
-      const sub = state.submissions.find(s => s.id === id);
-      if (!sub) return;
-      sub.status = decision;
-      sub.feedback = { text: document.getElementById('feedback').value, score: document.getElementById('score').value || null, status: decision, updatedAt: new Date().toISOString() };
-      saveState(state);
+      const feedback = form.elements.feedback.value.trim();
+      if (!feedback) { toast('FEEDBACK IS REQUIRED'); return; }
+      try {
+        const response = await fetch('/api/admin/review', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() },
+          body: JSON.stringify({ submissionId: id, decision, feedback, score: form.elements.score?.value || null }),
+        });
+        if (!response.ok) throw new Error((await response.json()).error || 'Review failed');
+        await syncServerState();
+      } catch (error) {
+        state = getState();
+        const sub = state.submissions.find(s => s.id === id);
+        if (!sub) { toast(error.message); return; }
+        sub.status = decision;
+        sub.feedback = { text: feedback, score: form.elements.score?.value || null, status: decision, updatedAt: new Date().toISOString() };
+        saveState(state);
+      }
       toast(decision === 'APPROVED' ? 'FEEDBACK SAVED · WORK APPROVED' : 'FEEDBACK SAVED · REVISION REQUESTED');
-      go('instructor');
+      go('admin');
+      return;
+    }
+    if (e.target.id === 'admin-bot-form') {
+      const command = String(new FormData(e.target).get('command') || '');
+      try {
+        const response = await fetch('/api/admin/bot-command', { method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() }, body: JSON.stringify({ command }) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Bot command failed');
+        await syncServerState(); render();
+        const replyBox = document.getElementById('bot-response');
+        if (replyBox) replyBox.textContent = data.reply || '';
+      } catch (error) { toast(error.message); }
+      return;
+    }
+    if (e.target.id === 'student-password-form') {
+      const fd = new FormData(e.target);
+      try {
+        const response = await fetch('/api/admin/students', { method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() }, body: JSON.stringify({ action: 'generate', name: fd.get('name'), email: fd.get('email') }) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Password generation failed');
+        document.getElementById('generated-password').innerHTML = `<div class="simple-row"><span>New personal password (1 person)</span><code>${esc(data.student.password)}</code></div>`;
+        await syncServerState(); render();
+      } catch (error) { toast(error.message); }
       return;
     }
     if (e.target.id === 'quiz-form') {
@@ -898,24 +956,22 @@ window.bootCourse = () => {
   });
 
   async function authenticateTelegram() {
-    if (!tg?.initData) return;
+    if (!tg?.initData || !user()) return;
     try {
       const response = await fetch('/api/telegram-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: tg.initData }) });
       const result = await response.json();
-      if (!response.ok || !result.user) throw new Error(result.error || 'Telegram sign-in failed');
-      const profile = { ...result.user, email: `telegram-${result.user.id}`, telegramId: result.user.id };
+      if (!response.ok || !result.user) throw new Error(result.error || 'Telegram verification unavailable');
+      const current = user();
+      const profile = { ...current, telegramId: result.user.id, telegramUsername: result.user.username || null };
       sessionStorage.setItem('chs-user', JSON.stringify(profile));
-      ensureEnrollment(profile);
-      go(profile.role === 'ADMIN' ? 'admin' : 'dashboard');
+      localStorage.setItem('chs-user-backup', JSON.stringify(profile));
     } catch (error) {
-      console.error('Telegram authentication failed:', error);
-      sessionStorage.removeItem('chs-user');
-      go('login');
+      console.warn('Telegram profile could not be refreshed:', error.message);
     }
   }
 
   window.addEventListener('hashchange', render);
-  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', render);
-  else render();
+  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); });
+  else { syncServerState().finally(render); }
   if (tg?.initData) authenticateTelegram();
 };

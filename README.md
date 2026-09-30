@@ -2,19 +2,13 @@
 
 **Contemporary Horeca Scene** — a living digital elective for Hotel Institute Montreux, created by **Egor Tarasenko**, HIM alumnus and Master in Business Management.
 
-> A password-protected digital elective that reads the contemporary horeca scene through rankings, design, neurogastronomy, technology and entrepreneurship — and ends with every student building a physical mockup of their own venue from paper, like stage scenery.
+> A digital elective that reads the contemporary horeca scene through rankings, design, neurogastronomy, technology and entrepreneurship — and ends with a live found-object mockup assembled from antique tableware, candles, vintage glassware, found props and a physical menu concept.
 
 ## Access
 
-The course is protected by a cohort password. Enter it on the first screen; access is then remembered on that device for 30 days.
+Students use an individual password issued through the Tribute digital-product flow (one password per person). A valid password immediately opens every module and lesson; assignment review is not an access check and does not lock lessons. The app remembers access on the device for 30 days.
 
-| | |
-|---|---|
-| **Course password** | `Mzgnxtj8` |
-| Override in production | `COURSE_PASSWORD` (or a comma-separated `COURSE_PASSWORDS` list) |
-| Signing key for the access cookie | `ACCESS_SECRET` (derived from the password when unset) |
-
-The password is verified by the Node server (`POST /api/access`), which sets a signed, `HttpOnly` cookie. That cookie also unlocks the course content on the server: `/course-data.js`, `/course/`, `/presentation/dist/` and `/presentation/build/` return `403` until access is granted. The password itself is never shipped to the browser — `access.js` only holds a SHA-256 digest, used as a fallback when the app is hosted without the Node server. Repeated wrong entries are throttled (`429` after 12 attempts per 10 minutes), and a signed-in user can re-lock the device from **Profile → Lock the course on this device**.
+The Node service verifies the student password and issues a signed session (`POST /api/access`). `/course-data.js`, `/course/`, `/presentation/dist/` and `/presentation/build/` are protected until access is granted. Repeated wrong entries are throttled (`429` after 20 attempts per 10 minutes). Administrators use the master password configured with `COURSE_PASSWORD` (the repository default is for local development only); set a strong private value before deployment. `ACCESS_SECRET` controls signed session tokens and should also be set to a stable secret in production.
 
 ## Brand & design system
 
@@ -47,7 +41,7 @@ npm run check      # syntax check: server.js, app.js, access.js, course-data.js
 
 The server binds to `0.0.0.0`, serves the site, exposes `/healthz`, verifies Telegram `initData` and enforces the course password. Opening `index.html` as a `file://` URL is not supported; use the server so cookies, storage and assets work correctly.
 
-On BotHost, provide: `COURSE_PASSWORD` (defaults to the cohort password above), and for Telegram launch `BOT_TOKEN` plus `ADMIN_IDS` (comma- or space-separated Telegram numeric user IDs). BotHost supplies `PORT`. The bot token and the password stay server-side; never put them in front-end code.
+On BotHost, provide a private `COURSE_PASSWORD` for the administrator, a stable `ACCESS_SECRET`, and for Telegram launch `BOT_TOKEN` plus `ADMIN_IDS` (comma- or space-separated Telegram numeric user IDs). BotHost supplies `PORT`. The bot token and passwords stay server-side; never put them in front-end code.
 
 ## Telegram launch
 
@@ -79,7 +73,7 @@ Ten modules / eleven learning units:
 | 06 | AI in Hospitality | AI workflows, limits and responsibility |
 | 07 | Food & Beverage Futures | New formats, ingredients, beverage culture |
 | 08 | Entrepreneurship | From idea to operating model |
-| **09** | **Budget Realisation & Scenography** | **Found objects and flea markets, theatrical decorative techniques, the paper mockup** |
+| **09** | **Budget Realisation & Scenography** | **Found objects and flea markets, theatrical decorative techniques, the live found-object mockup** |
 | 10 | Final Challenge | Concept of tomorrow, defended together with the mockup |
 
 ### Module 09 — Budget Realisation & Scenography
@@ -87,9 +81,9 @@ Ten modules / eleven learning units:
 Two learning units:
 
 1. **Soul before budget** — a venue does not need a large budget to feel alive; it needs a point of view and the patience to hunt for objects that carry one. Sourcing discipline (flea markets, auctions, demolition yards, liquidations, the street), repair / reuse / re-upholstery, and the case of **Joi Espresso Bar** — the author's own project, assembled almost entirely from the street and flea markets. *Money buys speed and finish; intention buys soul.*
-2. **Theatrical techniques & the paper mockup** — scenography borrowed from the stage: painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and one tight beam of light. A theatrical trick must support the story and never announce itself.
+2. **Theatrical techniques & the live found-object mockup** — scenography borrowed from the stage: painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and one tight beam of light. A theatrical trick must support the story and never announce itself.
 
-**Final exercise:** every student builds a physical mockup of their own project — paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a small torch for light — at 1:20 or 1:50, as a *set* rather than a plan: entrance, first sightline, light source, and the three details that carry the atmosphere. Photographed at guest height, it becomes part of the final pitch.
+**Final exercise:** every student stages a live physical mockup directly from found objects — antique tableware, candles, vintage glassware, found textures and props, and a physical menu concept — at 1:20 or 1:50. It is a set rather than a plan: entrance, first sightline, light source, and the details that carry the atmosphere. Photograph it at guest height for the final pitch.
 
 **Operating principle of the course:** a bar or a restaurant is a sweet fairy tale — for two hours the guest agrees to believe in a world the team built, and any small detail (a harsh light, a plastic tray, a visible printer, a dirty door handle) can instantly wake them from that dream.
 
@@ -132,3 +126,12 @@ python3 -m venv .venv
 ```
 
 The deck generator prefers Inter when available through `HIM_FONT_DIR`, with DejaVu Sans as a fallback.
+
+
+## Access, lessons, submissions and administration
+
+A valid personal Tribute password (one per person) or the administrator password opens the course immediately. All 11 lessons and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Help/reference email: `egor.tarasenko@him-mail.ch`.
+
+The self-hosted Node service persists records in `data/store.json` and uploaded files in `data/uploads/` (excluded from Git). Tribute integration is a clearly labelled digital-product stub until real credentials/configuration are supplied. Admin tools include assignment review with required written feedback, password generation, and a bot-command console. Optional Telegram Bot API integration uses `BOT_TOKEN` and configured admin chat IDs.
+
+Configuration: `COURSE_PASSWORD` (or comma-separated `COURSE_PASSWORDS`) for administrator access; `ACCESS_SECRET` for stable signed sessions; `TRIBUTE_PRODUCT_ID`, `TRIBUTE_PRODUCT_URL`, `TRIBUTE_PRICE`, `TRIBUTE_API_KEY`, `BOT_TOKEN`, and `ADMIN_IDS` as needed. Run with `npm start`; run syntax checks with `npm run check`.

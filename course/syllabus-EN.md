@@ -43,7 +43,7 @@ After the course, students will be able to:
 | 9 | Technology II: AI in creativity & operations; ethics and the future of hospitality work. | World Class 2025 challenges |
 | 10 | World restaurants & bars: MICHELIN and 50 Best deep dive; World Class; hotel bars; Europe · Asia · Americas · Middle East. | 50 Best 2025 lists; MICHELIN 2026 reveals; Diageo press release |
 | 11 | Budget realisation & scenography: opening something with soul without a large budget; found objects and flea markets; theatrical decorative techniques. Mockup workshop briefing. | Joi Espresso Bar case; scenography & props primer |
-| 12 | Mockup build + Final Pitch Day: "Your Venue on the World Stage" — concept deck defended together with a physical mockup of the venue, built from paper and found materials like stage scenery. Wrap-up. | Team concept decks + mockups |
+| 12 | Mockup build + Final Pitch Day: "Your Venue on the World Stage" — concept deck defended together with a physical mockup of the venue, staged directly from found objects like stage scenery. Wrap-up. | Team concept decks + mockups |
 
 ## 4. Module detail
 
@@ -68,13 +68,13 @@ Topics: MICHELIN anatomy (stars, Bib Gourmand, special awards, inspector method)
 Signature cases: 50 Best 2025 top-10; MICHELIN Tokyo/California/Toronto 2026; World's 50 Best Bars 2025; Felice Capasso (World Class 2025).
 
 ### Module 6 — Budget Realisation & Scenography (weeks 11–12)
-Topics: soul before budget — why a small budget is a creative brief, not a limitation; sourcing discipline (flea markets, auctions, demolition yards, liquidations, the street); repair, reuse, re-upholstery and patina; theatrical decorative techniques applied to venues — scenography, painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and a single tight beam of light; the fairy-tale test — which details can wake the guest up; the physical mockup as the final exercise (paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a torch; 1:20 or 1:50; entrance, first sightline, light source, three atmosphere details; photographed at guest height).
+Topics: soul before budget — why a small budget is a creative brief, not a limitation; sourcing discipline (flea markets, auctions, demolition yards, liquidations, the street); repair, reuse, re-upholstery and patina; theatrical decorative techniques applied to venues — scenography, painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and a single tight beam of light; the fairy-tale test — which details can wake the guest up; the live found-object mockup as the final exercise (antique tableware, candles, vintage glassware, found textures/props and a physical menu concept; 1:20 or 1:50; entrance, first sightline, light source, three atmosphere details; photographed at guest height).
 Signature cases: **Joi Espresso Bar** — the course author's own project, assembled almost entirely from the street and flea markets; Himkok (Oslo) — a 200-year-old space reimagined instead of rebuilt; Handshake Speakeasy — hidden-door dramaturgy as stagecraft.
 
 ## 5. Teaching methodology
 
 - Every session: 45' lecture + 75' case discussion + 60' lab/practice.
-- Case method on live venues; sensory labs; field atmosphere audits; guest speakers (chefs, bartenders, restaurateurs, ranking experts); "rankings war room" — live analysis of new lists (incl. Lima, 4 Nov 2026); a hands-on mockup workshop — every student builds a physical model of their own venue from paper and found materials.
+- Case method on live venues; sensory labs; field atmosphere audits; guest speakers (chefs, bartenders, restaurateurs, ranking experts); "rankings war room" — live analysis of new lists (incl. Lima, 4 Nov 2026); a hands-on mockup workshop — every student builds a physical model of their own venue from found objects.
 - Peer-review culture: concepts defended as in front of investors and inspectors.
 
 ## 6. Practical layer — "My Venue" (full brief: `practical-assignments-EN.md`)
@@ -89,7 +89,7 @@ Signature cases: **Joi Espresso Bar** — the course author's own project, assem
 | Assignment 0 & participation | 10% | Week-1 "favourite venue" talk; case discussions, war-room sessions |
 | Field Notes (weekly) | 15% | One-page weekly review: venue visit, ranking change, industry article |
 | "My Venue" weekly milestones | 35% | Eleven weekly pages of the student's own concept; peer-reviewed |
-| Final pitch "Open & Operate" | 40% | Full concept deck **plus a physical mockup of the venue** (paper, cardboard, light — like stage scenery, photographed at guest height), defended before an expert panel |
+| Final pitch "Open & Operate" | 40% | Full concept deck **plus a physical mockup of the venue** (found objects (antique tableware, candles, vintage glassware, textures and a physical menu concept), staged like scenery and photographed at guest height), defended before an expert panel |
 
 ## 8. Reading & resources
 
@@ -101,3 +101,6 @@ Signature cases: **Joi Espresso Bar** — the course author's own project, assem
 ## 9. Fit with HIM
 
 The course extends HIM's philosophy — Swiss hospitality tradition plus contemporary global practice — into the living industry: students learn what world-class venues look like from inside, what rankings reward, and what technology changes. It prepares them for internships and careers in top restaurants, bars and hotel F&B.
+
+
+**Access and assessment:** a valid course password gives immediate access to every lesson. Assignment submission and instructor feedback are available in-app and are not lesson prerequisites. Physical mockup: live found-object staging using antique tableware, candles, vintage glassware, found textures/props and a physical menu concept — not paper or cardboard.
