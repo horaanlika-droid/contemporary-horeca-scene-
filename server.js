@@ -390,15 +390,15 @@ async function sendTelegramMessage(chatId, text, replyMarkup = undefined) {
 }
 
 async function notifyAdminsOnSubmission(submission) {
-  const fileNames = (submission.files || []).map(f => f.name).join(', ') || 'Без файлов';
-  const summary = `📩 <b>Новое задание: ${submission.assignment}</b>\nУченик: ${submission.name} (${submission.student})\nПароль: ${submission.passwordCode || '—'}\nФайлы: ${fileNames}\nID: <code>${submission.id}</code>\n\nОтвет:\n${submission.answer.slice(0, 600)}`;
-  addBotLog('submission', `Новое задание ${submission.id} от ${submission.name} (${submission.assignment}) · Файлы: ${fileNames}`);
+  const fileNames = (submission.files || []).map(f => f.name).join(', ') || 'No files';
+  const summary = `📩 <b>New submission: ${submission.assignment}</b>\nStudent: ${submission.name} (${submission.student})\nPassword: ${submission.passwordCode || '—'}\nFiles: ${fileNames}\nID: <code>${submission.id}</code>\n\nAnswer:\n${submission.answer.slice(0, 600)}`;
+  addBotLog('submission', `New submission ${submission.id} from ${submission.name} (${submission.assignment}) · Files: ${fileNames}`);
   for (const chatId of store.adminBot.adminChatIds) {
     await sendTelegramMessage(chatId, summary, {
       inline_keyboard: [
         [
-          { text: '✅ Подтвердить', callback_data: `approve:${submission.id}` },
-          { text: '✏️ На доработку', callback_data: `revise:${submission.id}` },
+          { text: '✅ Approve', callback_data: `approve:${submission.id}` },
+          { text: '✏️ Request revision', callback_data: `revise:${submission.id}` },
         ],
       ],
     });
@@ -411,7 +411,7 @@ function applyAdminReview({ submissionId, decision, feedbackText, score = null, 
   const status = decision === 'REVISION REQUESTED' ? 'REVISION REQUESTED' : 'APPROVED';
   sub.status = status;
   sub.feedback = {
-    text: String(feedbackText || '').trim() || (status === 'APPROVED' ? 'Задание проверено и принято.' : 'Пожалуйста, доработайте задание по комментариям.'),
+    text: String(feedbackText || '').trim() || (status === 'APPROVED' ? 'Your assignment has been reviewed and approved.' : 'Please revise your assignment using the feedback.'),
     score: score !== '' && score !== null && score !== undefined ? Number(score) : null,
     status,
     reviewer: 'Egor Tarasenko',
@@ -433,11 +433,11 @@ function applyAdminReview({ submissionId, decision, feedbackText, score = null, 
     }
   }
   saveStore();
-  addBotLog('review', `[${via}] ${status} для ${sub.name} (${sub.assignment}): "${sub.feedback.text}"`);
+  addBotLog('review', `[${via}] ${status} for ${sub.name} (${sub.assignment}): "${sub.feedback.text}"`);
   if (sub.telegramId) {
     sendTelegramMessage(
       sub.telegramId,
-      `💬 <b>Фидбэк от Егора Тарасенко</b>\nЗадание: <b>${sub.assignment}</b>\nСтатус: <b>${status === 'APPROVED' ? 'ПРИНЯТО ✓' : 'НА ДОРАБОТКУ ↺'}</b>\n${sub.feedback.score !== null ? `Оценка: ${sub.feedback.score}/100\n` : ''}\n${sub.feedback.text}`
+      `💬 <b>Feedback from Egor Tarasenko</b>\nAssignment: <b>${sub.assignment}</b>\nStatus: <b>${status === 'APPROVED' ? 'APPROVED ✓' : 'REVISION REQUESTED ↺'}</b>\n${sub.feedback.score !== null ? `Score: ${sub.feedback.score}/100\n` : ''}\n${sub.feedback.text}`
     );
   }
   return { ok: true, submission: sub };
@@ -445,33 +445,33 @@ function applyAdminReview({ submissionId, decision, feedbackText, score = null, 
 
 function executeBotCommand(rawCommand) {
   const cmdLine = String(rawCommand || '').trim();
-  if (!cmdLine) return { ok: false, reply: 'Введите команду, например: /pending, /genpass, /approve <id> <фидбэк>, /revise <id> <фидбэк>, /students' };
+  if (!cmdLine) return { ok: false, reply: 'Enter a command, for example: /pending, /genpass, /approve <id> <feedback>, /revise <id> <feedback>, /students' };
   const [cmd, ...args] = cmdLine.split(/\s+/);
   const command = cmd.toLowerCase();
 
   if (command === '/start' || command === '/help') {
     const reply = [
-      '🤖 <b>Админ-бот Contemporary Horeca Scene</b>',
-      'Доступные команды:',
-      '• <code>/pending</code> — список работ, ожидающих проверки',
-      '• <code>/approve &lt;id&gt; &lt;фидбэк&gt;</code> — подтвердить задание и отправить фидбэк ученику',
-      '• <code>/revise &lt;id&gt; &lt;фидбэк&gt;</code> — вернуть задание на доработку с фидбэком',
-      '• <code>/genpass [Имя] [email]</code> — сгенерировать персональный пароль (1 пароль = 1 человек)',
-      '• <code>/students</code> — список выданных паролей и учеников',
+      '🤖 <b>Contemporary Horeca Scene Admin Bot</b>',
+      'Available commands:',
+      '• <code>/pending</code> — list submissions awaiting review',
+      '• <code>/approve &lt;id&gt; &lt;feedback&gt;</code> — approve an assignment and send feedback to the student',
+      '• <code>/revise &lt;id&gt; &lt;feedback&gt;</code> — request a revision with feedback',
+      '• <code>/genpass [Name] [email]</code> — generate a personal password (one password per person)',
+      '• <code>/students</code> — list issued passwords and students',
     ].join('\n');
-    addBotLog('command', `${cmdLine} → справка показана`);
+    addBotLog('command', `${cmdLine} → help displayed`);
     return { ok: true, reply };
   }
 
   if (command === '/pending') {
     const waiting = store.submissions.filter(s => s.status === 'WAITING FOR REVIEW');
     if (!waiting.length) {
-      const reply = 'Нет заданий, ожидающих проверки.';
-      addBotLog('command', '/pending → 0 работ');
+      const reply = 'No submissions are awaiting review.';
+      addBotLog('command', '/pending → 0 submissions');
       return { ok: true, reply };
     }
-    const reply = waiting.map(s => `• <code>${s.id}</code> | ${s.name} (${s.student}) — ${s.assignment} [Файлы: ${(s.files || []).map(f => f.name).join(', ') || 'нет'}]`).join('\n');
-    addBotLog('command', `/pending → найдено ${waiting.length} работ`);
+    const reply = waiting.map(s => `• <code>${s.id}</code> | ${s.name} (${s.student}) — ${s.assignment} [Files: ${(s.files || []).map(f => f.name).join(', ') || 'none'}]`).join('\n');
+    addBotLog('command', `/pending → ${waiting.length} submissions found`);
     return { ok: true, reply };
   }
 
@@ -479,19 +479,19 @@ function executeBotCommand(rawCommand) {
     const emailArg = args.find(a => a.includes('@')) || '';
     const nameArg = args.filter(a => !a.includes('@')).join(' ') || 'Tribute Buyer';
     const existing = emailArg ? store.students.find(s => s.email.toLowerCase() === emailArg.toLowerCase()) : null;
-    if (existing) return { ok: false, reply: `Для ${emailArg} уже выдан персональный пароль. Используйте существующую учётную запись.` };
+    if (existing) return { ok: false, reply: `A personal password has already been issued for ${emailArg}. Use the existing account.` };
     const student = createStudentPassword({ name: nameArg, email: emailArg, source: 'admin-bot' });
-    const reply = `🔑 Сгенерирован персональный пароль (1 человек): ${student.password}\nУченик: ${student.name} (${student.email})`;
-    addBotLog('command', `/genpass → создан пароль ${student.password} для ${student.name}`);
+    const reply = `🔑 Personal password generated (one person): ${student.password}\nStudent: ${student.name} (${student.email})`;
+    addBotLog('command', `/genpass → password ${student.password} created for ${student.name}`);
     return { ok: true, reply, student };
   }
 
   if (command === '/students') {
     if (!store.students.length) {
-      return { ok: true, reply: 'Персональные пароли ещё не создавались. Используйте /genpass или Tribute checkout.' };
+      return { ok: true, reply: 'No personal passwords have been created yet. Use /genpass or Tribute checkout.' };
     }
-    const reply = store.students.slice(0, 20).map(s => `• ${s.password} — ${s.name} (${s.email}) · ${s.boundClientId ? 'Привязан (активирован)' : 'Свободен'} · источник: ${s.source}`).join('\n');
-    addBotLog('command', `/students → ${store.students.length} записей`);
+    const reply = store.students.slice(0, 20).map(s => `• ${s.password} — ${s.name} (${s.email}) · ${s.boundClientId ? 'Assigned (activated)' : 'Not yet activated'} · source: ${s.source}`).join('\n');
+    addBotLog('command', `/students → ${store.students.length} records`);
     return { ok: true, reply };
   }
 
@@ -499,19 +499,19 @@ function executeBotCommand(rawCommand) {
     const subId = args[0];
     const feedbackText = args.slice(1).join(' ').trim();
     if (!subId || !feedbackText) {
-      return { ok: false, reply: `Формат: ${command} <id_задания> <текст фидбэка>` };
+      return { ok: false, reply: `Usage: ${command} <submission_id> <feedback text>` };
     }
     const decision = command === '/approve' ? 'APPROVED' : 'REVISION REQUESTED';
     const res = applyAdminReview({ submissionId: subId, decision, feedbackText, via: 'admin-bot' });
-    if (res.error) return { ok: false, reply: `Ошибка: задание ${subId} не найдено.` };
+    if (res.error) return { ok: false, reply: `Error: submission ${subId} was not found.` };
     return {
       ok: true,
-      reply: `✅ Статус ${decision} сохранён для задания ${subId} (${res.submission.name}). Фидбэк отправлен ученику.`,
+      reply: `✅ Status ${decision} saved for submission ${subId} (${res.submission.name}). Feedback sent to the student.`,
       submission: res.submission,
     };
   }
 
-  return { ok: false, reply: `Неизвестная команда: ${command}. Введите /help для списка команд.` };
+  return { ok: false, reply: `Unknown command: ${command}. Enter /help for the command list.` };
 }
 
 /* Optional Telegram long-polling when BOT_TOKEN is configured */
@@ -534,7 +534,7 @@ if (process.env.BOT_TOKEN) {
                   store.adminBot.adminChatIds.push(chatId);
                   saveStore();
                 }
-                await sendTelegramMessage(chatId, '✅ Вы авторизованы как администратор курса Contemporary Horeca Scene. Введите /help для списка команд.');
+                await sendTelegramMessage(chatId, '✅ You are authorised as an administrator for Contemporary Horeca Scene. Enter /help for the command list.');
               }
               continue;
             }
@@ -552,12 +552,12 @@ if (process.env.BOT_TOKEN) {
                 const r = applyAdminReview({
                   submissionId: subId,
                   decision: 'APPROVED',
-                  feedbackText: 'Отличная работа! Задание подтверждено через админ-бота.',
+                  feedbackText: 'Great work! Your assignment has been approved through the Admin Bot.',
                   via: 'admin-bot',
                 });
-                if (!r.error) await sendTelegramMessage(chatId, `✅ Задание ${subId} подтверждено! Для развёрнутого фидбэка: <code>/approve ${subId} ваш текст</code>`);
+                if (!r.error) await sendTelegramMessage(chatId, `✅ Submission ${subId} approved! To add detailed feedback: <code>/approve ${subId} your feedback</code>`);
               } else if (act === 'revise') {
-                await sendTelegramMessage(chatId, `✏️ Отправьте команду с вашим комментарием:\n<code>/revise ${subId} что нужно доработать</code>`);
+                await sendTelegramMessage(chatId, `✏️ Send a command with your feedback:\n<code>/revise ${subId} what needs to change</code>`);
               }
             }
           }
@@ -648,13 +648,13 @@ const server = http.createServer(async (req, res) => {
       if (personal.telegramId && requestTelegramId !== String(personal.telegramId)) {
         return json(res, 403, {
           unlocked: false,
-          error: 'Этот пароль привязан к вашему Telegram-профилю. Откройте курс из Telegram-аккаунта, указанного при покупке.',
+          error: 'This password is assigned to your Telegram profile. Open the course from the Telegram account used for your purchase.',
         });
       }
       if (personal.boundClientId && personal.boundClientId !== clientId) {
         return json(res, 403, {
           unlocked: false,
-          error: 'Этот персональный пароль уже активирован другим человеком (1 пароль = 1 человек). Для получения личного пароля оформите доступ через Tribute.',
+          error: 'This personal password has already been activated by another person (one password per person). Get your own access through Tribute.',
         });
       }
       if (!personal.boundClientId) {
@@ -692,7 +692,7 @@ const server = http.createServer(async (req, res) => {
 
     return json(res, 401, {
       unlocked: false,
-      error: 'Неверный пароль. Введите ваш персональный пароль из Tribute (или пароль администратора).',
+      error: 'Incorrect password. Enter your personal Tribute password or the administrator password.',
     });
   }
 
@@ -758,7 +758,7 @@ const server = http.createServer(async (req, res) => {
     };
     store.tribute.orders.unshift(order);
     saveStore();
-    addBotLog('tribute', `Tribute Digital Product оплачен (stub): ${student.name} (${student.email}) → выдан персональный пароль ${student.password}`);
+    addBotLog('tribute', `Tribute digital-product demo checkout completed: ${student.name} (${student.email}) → personal password ${student.password} issued`);
 
     return json(res, 200, {
       ok: true,
@@ -771,7 +771,7 @@ const server = http.createServer(async (req, res) => {
         email: student.email,
         passwordCode: student.password,
       },
-      message: 'Оплата через Tribute (заглушка цифрового товара) прошла успешно. Сгенерирован индивидуальный пароль на 1 человека.',
+      message: 'Tribute demo checkout completed. No real charge was made. A personal password for one person has been generated.',
     });
   }
 
@@ -819,8 +819,8 @@ const server = http.createServer(async (req, res) => {
         createdAt: new Date().toISOString(),
       });
       saveStore();
-      addBotLog('tribute', `Tribute Webhook (${orderId}): повторная покупка существующего ученика ${priorBuyer.name}; второй пароль не создан.`);
-      if (telegramId) await sendTelegramMessage(telegramId, `Ваш персональный доступ уже существует. Используйте ранее выданный пароль или обратитесь к egor.tarasenko@him-mail.ch.`);
+      addBotLog('tribute', `Tribute webhook (${orderId}): repeat purchase by existing student ${priorBuyer.name}; no second password created.`);
+      if (telegramId) await sendTelegramMessage(telegramId, `Your personal access already exists. Use your previously issued password or contact egor.tarasenko@him-mail.ch.`);
       return json(res, 200, { ok: true, duplicateBuyer: true, studentId: priorBuyer.id });
     }
 
@@ -847,12 +847,12 @@ const server = http.createServer(async (req, res) => {
       createdAt: new Date().toISOString(),
     });
     saveStore();
-    addBotLog('tribute', `Tribute Webhook (${orderId}): выдан пароль ${student.password} для ${student.name}`);
+    addBotLog('tribute', `Tribute webhook (${orderId}): password ${student.password} issued for ${student.name}`);
 
     if (telegramId) {
       await sendTelegramMessage(
         telegramId,
-        `🎉 <b>Спасибо за покупку курса Contemporary Horeca Scene!</b>\n\nВаш персональный пароль (действует для 1 человека):\n<code>${student.password}</code>\n\nВведите его на стартовом экране приложения, чтобы открыть все уроки.`
+        `🎉 <b>Thank you for purchasing Contemporary Horeca Scene!</b>\n\nYour personal password (valid for one person):\n<code>${student.password}</code>\n\nEnter it on the app’s start screen to open every lesson.`
       );
     }
     return json(res, 200, { ok: true, password: student.password, studentId: student.id });
@@ -914,7 +914,7 @@ const server = http.createServer(async (req, res) => {
     try {
       payload = JSON.parse(await readBody(req, 25 * 1024 * 1024) || '{}');
     } catch (err) {
-      if (err.status === 413) return json(res, 413, { error: 'Файл слишком большой (макс. 15 МБ)' });
+      if (err.status === 413) return json(res, 413, { error: 'File too large (maximum 15 MB)' });
       return json(res, 400, { error: 'Invalid JSON body' });
     }
 
@@ -1058,7 +1058,7 @@ const server = http.createServer(async (req, res) => {
         telegramUsername: payload.telegram || '',
         source: 'admin-panel',
       });
-      addBotLog('admin', `Сгенерирован персональный пароль ${student.password} для ${student.name}`);
+      addBotLog('admin', `Personal password ${student.password} generated for ${student.name}`);
       return json(res, 200, { ok: true, student, students: store.students });
     }
     if (payload.action === 'reset-binding') {
@@ -1067,7 +1067,7 @@ const server = http.createServer(async (req, res) => {
         stu.boundClientId = null;
         stu.boundAt = null;
         saveStore();
-        addBotLog('admin', `Сброшена привязка устройства для пароля ${stu.password}`);
+        addBotLog('admin', `Device assignment reset for password ${stu.password}`);
       }
       return json(res, 200, { ok: true, students: store.students });
     }
@@ -1076,7 +1076,7 @@ const server = http.createServer(async (req, res) => {
       if (stu) {
         stu.active = false;
         saveStore();
-        addBotLog('admin', `Отозван пароль ${stu.password} (${stu.name})`);
+        addBotLog('admin', `Password revoked: ${stu.password} (${stu.name})`);
       }
       return json(res, 200, { ok: true, students: store.students });
     }

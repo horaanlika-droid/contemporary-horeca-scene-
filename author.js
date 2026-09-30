@@ -11,20 +11,11 @@
   const EMAIL = 'egor.tarasenko@him-mail.ch';
 
   const path = [
-    ['2015', 'Сахалин', 'Первые шаги в хотелке: официант в грузинском ресторане «Тифлис» в Южно-Сахалинске и официант в ночном клубе Duke.'],
-    ['2019', 'Таиланд', 'Менеджер ресторана русской кухни Ronin.'],
-    ['2019', 'Швейцария', 'Hotel Institute Montreux — master degree.'],
-    ['2021', 'Дубай', 'Старший бартендер, Jumeirah Beach Hotel.'],
-    ['2022', 'Санкт-Петербург', 'Старший бартендер, Crowne Plaza.']
-  ];
-
-  const bars = [
-    'One and half room',
-    'Flowers Bar',
-    'Oy!',
-    'Ultramen <em>(работал там флортендером — барменом в зале, который работает с гостями прямо у столов)</em>',
-    'Ruc’s Heaven',
-    'проект Artender'
+    ['2015', 'Sakhalin', 'First steps in HoReCa: waiter at Tiflis, a Georgian restaurant in Yuzhno-Sakhalinsk, and at Duke nightclub.'],
+    ['2019', 'Thailand', 'Restaurant manager at Ronin, a Russian-cuisine restaurant.'],
+    ['2019', 'Switzerland', 'Master’s degree at Hotel Institute Montreux.'],
+    ['2021', 'Dubai', 'Senior bartender at Jumeirah Beach Hotel.'],
+    ['2022', 'St Petersburg', 'Senior bartender at Crowne Plaza.']
   ];
 
   const projects = [
@@ -37,28 +28,22 @@
 
   const markup = () => `
     <div class="author-dialog" role="dialog" aria-modal="true" aria-labelledby="author-title" tabindex="-1">
-      <button class="author-close" type="button" data-author-close aria-label="Закрыть">✕</button>
+      <button class="author-close" type="button" data-author-close aria-label="Close author information">✕</button>
       <header class="author-head">
-        <span class="eyebrow">ABOUT THE AUTHOR · ОБ АВТОРЕ</span>
+        <span class="eyebrow">ABOUT THE AUTHOR</span>
         <h2 id="author-title">Egor <em>Tarasenko</em></h2>
         <p class="author-role">HIM alumnus · Master in Business Management · Hotel Institute Montreux</p>
       </header>
       <div class="author-body">
         <section class="author-col">
-          <h3 class="author-label">Международный опыт</h3>
+          <h3 class="author-label">International experience</h3>
           <ol class="author-path">
             ${path.map(([year, place, text]) => `<li><b>${year}</b><span><strong>${place}</strong>${text}</span></li>`).join('')}
           </ol>
         </section>
-        <section class="author-col">
-          <h3 class="author-label">Бары Ивана Ляшука и Владимира Николаева</h3>
-          <ul class="author-bars">
-            ${bars.map(b => `<li>${b}</li>`).join('')}
-          </ul>
-        </section>
       </div>
       <section class="author-work">
-        <h3 class="author-label">Собственные проекты</h3>
+        <h3 class="author-label">Own projects</h3>
         <div class="author-frames">
           ${projects.map(([file, name, year, id]) => `<figure>${window.COURSE
             ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
@@ -66,7 +51,7 @@
         </div>
         ${window.COURSE ? '<a class="author-archive-link" href="#/projects" data-author-route>OPEN THE FULL PROJECT ARCHIVE <span aria-hidden="true">→</span></a>' : ''}
       </section>
-      <p class="author-mail">Вопросы по курсу, лицензированию и программе: <a href="mailto:${EMAIL}">${EMAIL}</a></p>
+      <p class="author-mail">Course, licensing and programme enquiries: <a href="mailto:${EMAIL}">${EMAIL}</a></p>
     </div>`;
 
   let overlay = null;

@@ -178,7 +178,7 @@
       renderGate('COURSE CONTENT COULD NOT BE READ');
       return;
     }
-    if (!silent) toast('ДОСТУП ОТКРЫТ · ВСЕ МОДУЛИ И УРОКИ ДОСТУПНЫ');
+    if (!silent) toast('ACCESS GRANTED · ALL MODULES AND LESSONS ARE AVAILABLE');
     if (!location.hash || location.hash === '#/' || location.hash === '#') location.hash = '/dashboard';
     if (typeof window.bootCourse === 'function') window.bootCourse();
   }
@@ -196,8 +196,8 @@
           <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
           <p>A living digital elective on the venues, 50 Best menu concepts, industry leaders, found-object mockups and budgets shaping the contemporary horeca scene.</p>
-          <button class="gate-more" type="button" data-scroll-info>О КУРСЕ ↓</button>
-          <button class="gate-more" type="button" data-author-open>ОБ АВТОРЕ ↗</button>
+          <button class="gate-more" type="button" data-scroll-info>ABOUT THE COURSE ↓</button>
+          <button class="gate-more" type="button" data-author-open>ABOUT THE AUTHOR ↗</button>
         </div>
       </div>
       <div class="gate-form-wrap">
@@ -206,34 +206,34 @@
             <div class="gate-lock"><i aria-hidden="true">✳</i><span>Personal access via Tribute<br>1 password = 1 person</span></div>
             <span class="eyebrow">ENTER THE COURSE</span>
             <h2>Password <em>required.</em></h2>
-            <p>Введите ваш персональный пароль (выдаётся автоматически на 1 человека после оплаты цифрового товара через <b>Tribute</b>) — все модули, уроки, разборы 50 Best меню и задания откроются сразу.</p>
+            <p>Enter your personal password, issued automatically to one person after purchasing the digital product through <b>Tribute</b>. All modules, lessons, 50 Best menu studies and assignments open immediately.</p>
             <div class="field">
               <label for="course-password">Personal or Admin password</label>
               <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
-                     inputmode="text" spellcheck="false" required placeholder="CHS-XXXX-XXXX или пароль админа" aria-describedby="gate-error">
+                     inputmode="text" spellcheck="false" required placeholder="CHS-XXXX-XXXX or admin password" aria-describedby="gate-error">
             </div>
             <p id="gate-error" class="form-help" role="alert">${message}</p>
-            <button class="button" type="submit" style="width:100%">OPEN THE COURSE / ВОЙТИ В КУРС <span aria-hidden="true">↗</span></button>
+            <button class="button" type="submit" style="width:100%">OPEN THE COURSE <span aria-hidden="true">↗</span></button>
           </form>
 
           <div class="gate-note" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
-            <span class="eyebrow" style="margin-bottom:10px">TRIBUTE DIGITAL PRODUCT · ЦИФРОВОЙ ТОВАР</span>
-            <b>Нет пароля? Получите индивидуальный пароль через Tribute</b>
-            <p style="margin:6px 0 14px">Пароль генерируется автоматически после внутренней оплаты цифрового товара через <b>Tribute API</b>. Один пароль привязывается к одному человеку.</p>
-            <button class="button light small" type="button" id="toggle-tribute-box" style="width:100%">КУПИТЬ ДОСТУП / ПОЛУЧИТЬ ПАРОЛЬ ЧЕРЕЗ TRIBUTE <span aria-hidden="true">↗</span></button>
+            <span class="eyebrow" style="margin-bottom:10px">TRIBUTE DIGITAL PRODUCT</span>
+            <b>No password? Get personal access through Tribute</b>
+            <p style="margin:6px 0 14px">Your password is generated automatically after digital-product checkout through the <b>Tribute API</b>. Each password is assigned to one person.</p>
+            <button class="button light small" type="button" id="toggle-tribute-box" style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
 
             <form id="tribute-checkout-form" style="display:none;margin-top:16px;padding:18px;background:var(--paper-warm);border:1px solid var(--line-strong)" novalidate>
-              <span class="meta" style="color:var(--red);display:block;margin-bottom:8px">ЗАГЛУШКА TRIBUTE API · ВНУТРЕННЯЯ ОПЛАТА ЦИФРОВОГО ТОВАРА</span>
-              <p style="margin:0 0 12px;font-size:12.5px;color:var(--ink)">Товар: <strong>Contemporary Horeca Scene · 2026 Edition</strong><br>Демонстрационная заглушка: реальное списание не производится. В подключённой Tribute-версии после оплаты генерируется уникальный пароль (1 пароль = 1 человек).</p>
+              <span class="meta" style="color:var(--red);display:block;margin-bottom:8px">TRIBUTE API DEMO · DIGITAL-PRODUCT CHECKOUT</span>
+              <p style="margin:0 0 12px;font-size:12.5px;color:var(--ink)">Product: <strong>Contemporary Horeca Scene · 2026 Edition</strong><br>This is a demo checkout: no real charge is made. In a connected Tribute integration, payment generates a unique password for one person.</p>
               <div class="field" style="margin-bottom:12px">
-                <label for="tribute-name">Ваше имя</label>
-                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Иван Петров">
+                <label for="tribute-name">Your name</label>
+                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Alex Morgan">
               </div>
               <div class="field" style="margin-bottom:12px">
-                <label for="tribute-email">Email или Telegram (@username)</label>
-                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com или @username">
+                <label for="tribute-email">Email or Telegram (@username)</label>
+                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com or @username">
               </div>
-              <button class="button small" type="submit" id="tribute-pay-btn" style="width:100%">ОПЛАТИТЬ ЧЕРЕЗ TRIBUTE И СГЕНЕРИРОВАТЬ ПАРОЛЬ <span aria-hidden="true">↗</span></button>
+              <button class="button small" type="submit" id="tribute-pay-btn" style="width:100%">DEMO CHECKOUT · GENERATE PASSWORD <span aria-hidden="true">↗</span></button>
               <div id="tribute-result" style="display:none;margin-top:14px;padding:14px;background:#fff;border-left:3px solid var(--red)"></div>
             </form>
           </div>
@@ -244,10 +244,10 @@
       <section class="gate-info" id="gate-info">
         <div class="gate-info-inner">
           <article class="gate-card">
-            <span class="eyebrow">О КУРСЕ · ABOUT THE ELECTIVE</span>
-            <h3>Десять модулей о том,<br>из чего <em>состоит</em> сцена.</h3>
-            <p><b>Contemporary Horeca Scene</b> — живой цифровой электив Hotel Institute Montreux (2026 edition). Мы читаем индустрию как сцену: рейтинги и <b>World's 50 Best</b>, меню как редакционный артефакт, опыт гостя и нейрогастрономия, бокал и свет, технологии и ИИ, будущее F&amp;B, предпринимательство — и реальная реализация всего этого на небольшой бюджет.</p>
-            <p>Финал — не эссе. Своя venue собирается руками: макет <b>1:20 / 1:50</b> из найденных предметов, винтажной посуды, свечей, текстиля и бумажного меню, защищённый вместе со сметой и сетом.</p>
+            <span class="eyebrow">ABOUT THE ELECTIVE</span>
+            <h3>Ten modules on what<br><em>shapes</em> the scene.</h3>
+            <p><b>Contemporary Horeca Scene</b> is a living digital elective for Hotel Institute Montreux (2026 edition). We read the industry as a scene: rankings and <b>World’s 50 Best</b>, menus as editorial artefacts, guest experience and neurogastronomy, glassware and light, technology and AI, F&amp;B futures and entrepreneurship — then bring those ideas to life on a small budget.</p>
+            <p>The final project is not an essay. Build your own venue by hand: a <b>1:20 / 1:50</b> mockup made from found objects, vintage tableware, candles, textiles and a paper menu, presented alongside a cost estimate and a guest-experience set.</p>
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
               <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
@@ -255,22 +255,22 @@
               <div class="gate-fact"><strong>01</strong><span>Physical mockup per student</span></div>
             </div>
             <ul class="gate-points">
-              <li><b>01</b><span>Разборы заведений и людей, которые двигают сцену: 50 Best, MICHELIN, World Class, локальные проекты.</span></li>
-              <li><b>02</b><span>Атмосфера как инструмент: свет, стекло, тактильность, хореография сервиса, «сказка», из которой гостя не будит мелочь.</span></li>
-              <li><b>03</b><span>Бюджет и сценография: барахолки, salvage, реставрация, trompe-l'œil, золочение, бэкдроп и один узкий луч.</span></li>
-              <li><b>04</b><span>Технологии, ИИ и операции: что автоматизировать, что обязательно оставить человеку.</span></li>
-              <li><b>05</b><span>Практические задания и защита концепции; после проверки — сертификат.</span></li>
-              <li><b>06</b><span>Пароль открывает весь курс сразу: все модули и уроки доступны без поштучной выдачи.</span></li>
+              <li><b>01</b><span>Study the venues and people moving the scene: 50 Best, MICHELIN, World Class and independent local projects.</span></li>
+              <li><b>02</b><span>Use atmosphere as a tool: light, glassware, touch and service choreography keep the guest inside the story, without small details breaking the spell.</span></li>
+              <li><b>03</b><span>Budget and scenography: flea markets, salvage, restoration, trompe-l'œil, gilding, a backdrop and one tight beam of light.</span></li>
+              <li><b>04</b><span>Technology, AI and operations: what to automate and what must remain human.</span></li>
+              <li><b>05</b><span>Practical assignments and a concept presentation, followed by a certificate after review.</span></li>
+              <li><b>06</b><span>One password opens the entire course: every module and lesson is available immediately.</span></li>
             </ul>
           </article>
 
           <article class="gate-card gate-card-side">
             <figure class="gate-frame gate-frame-wide">
               <img src="presentation/assets/horeca-concept-pitch.jpg" alt="A concept pitch table with materials, sketches and models" loading="lazy">
-              <figcaption>Final exercise · стол, на котором venue собирается до того, как её построили</figcaption>
+              <figcaption>Final exercise · a table where your venue takes shape before it is built</figcaption>
             </figure>
-            <p class="gate-note-line">Курс написал <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>Об авторе →</button></p>
-            <p class="gate-note-line gate-note-mail">Вопросы по курсу, лицензированию и программе: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
+            <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
+            <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
           </article>
         </div>
       </section>
@@ -279,7 +279,7 @@
         <span>© 2026 Egor Tarasenko · Course content &amp; author IP</span>
         <span>Contemporary Horeca Scene · 2026 Edition</span>
         <span>Hotel Institute Montreux</span>
-        <button class="gate-author-link" type="button" data-author-open>Об авторе</button>
+        <button class="gate-author-link" type="button" data-author-open>About the author</button>
       </footer>
     </main>`;
     root.querySelector('[data-scroll-info]')?.addEventListener('click', () => document.getElementById('gate-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
@@ -326,7 +326,7 @@
         : `${rawContact.replace(/^@/, '') || 'student'}@tribute.user`;
       const telegram = rawContact.startsWith('@') ? rawContact : '';
 
-      if (btn) { btn.disabled = true; btn.textContent = 'ОБРАБОТКА ОПЛАТЫ TRIBUTE…'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'PROCESSING TRIBUTE CHECKOUT…'; }
       try {
         const resp = await fetch('/api/tribute/checkout', {
           method: 'POST',
@@ -344,25 +344,25 @@
           if (resBox) {
             resBox.style.display = 'block';
             resBox.innerHTML = `
-              <span class="meta" style="color:var(--red)">ОПЛАТА ПРОШЛА · ВАШ ЛИЧНЫЙ ПАРОЛЬ (1 ЧЕЛОВЕК)</span>
+              <span class="meta" style="color:var(--red)">DEMO CHECKOUT COMPLETE · YOUR PERSONAL PASSWORD (ONE PERSON)</span>
               <div style="font:600 20px var(--mono);margin:8px 0;letter-spacing:.08em">${data.password}</div>
-              <p style="margin:0 0 10px;font-size:12px;color:var(--muted)">Пароль привязан к вашему профилю (${name}). Сохраните его.</p>
-              <button type="button" class="button small" data-use-password="${data.password}" style="width:100%">ВОЙТИ В КУРС С ЭТИМ ПАРОЛЕМ ↗</button>
+              <p style="margin:0 0 10px;font-size:12px;color:var(--muted)">This password is assigned to your profile (${name}). Keep it safe.</p>
+              <button type="button" class="button small" data-use-password="${data.password}" style="width:100%">OPEN THE COURSE WITH THIS PASSWORD ↗</button>
             `;
           }
           const passInput = document.getElementById('course-password');
           if (passInput) { passInput.type = 'text'; passInput.value = data.password; }
-          toast(`ПАРОЛЬ СГЕНЕРИРОВАН: ${data.password}`);
+          toast(`PASSWORD GENERATED: ${data.password}`);
         } else {
           throw new Error(data.error || 'Tribute stub error');
         }
       } catch (error) {
         if (resBox) {
           resBox.style.display = 'block';
-          resBox.textContent = error.message || 'Сервис Tribute временно недоступен. Напишите egor.tarasenko@him-mail.ch.';
+          resBox.textContent = error.message || 'Tribute is temporarily unavailable. Contact egor.tarasenko@him-mail.ch.';
         }
       } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = 'ОПЛАТИТЬ ЧЕРЕЗ TRIBUTE И СГЕНЕРИРОВАТЬ ПАРОЛЬ <span aria-hidden="true">↗</span>'; }
+        if (btn) { btn.disabled = false; btn.innerHTML = 'DEMO CHECKOUT · GENERATE PASSWORD <span aria-hidden="true">↗</span>'; }
       }
       return;
     }
@@ -374,13 +374,13 @@
     const error = document.getElementById('gate-error');
     const password = String(new FormData(form).get('password') || '').trim();
     if (!password) {
-      error.textContent = 'Введите ваш персональный пароль из Tribute или пароль администратора.';
+      error.textContent = 'Enter your personal Tribute password or the administrator password.';
       form.classList.remove('shake');
       void form.offsetWidth;
       form.classList.add('shake');
       return;
     }
-    if (button) { button.disabled = true; button.textContent = 'ПРОВЕРКА ДОСТУПА…'; }
+    if (button) { button.disabled = true; button.textContent = 'CHECKING ACCESS…'; }
     error.textContent = '';
     const result = await apiUnlock(password);
     if (result.state === 'granted') { await unlock(); return; }
@@ -389,10 +389,10 @@
       await unlock();
       return;
     }
-    if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE / ВОЙТИ В КУРС <span aria-hidden="true">↗</span>'; }
+    if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE <span aria-hidden="true">↗</span>'; }
     error.textContent = result.error || (result.state === 'denied' || result.state === 'unsupported'
-      ? 'Неверный пароль. Проверьте символы или получите личный пароль через Tribute ниже.'
-      : 'Не удалось проверить доступ. Попробуйте ещё раз.');
+      ? 'Incorrect password. Check the characters or get a personal password through Tribute below.'
+      : 'Access could not be verified. Please try again.');
     form.classList.remove('shake');
     void form.offsetWidth;
     form.classList.add('shake');

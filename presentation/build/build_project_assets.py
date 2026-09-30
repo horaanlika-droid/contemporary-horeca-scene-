@@ -54,7 +54,7 @@ PLAN: list[tuple[str, str, tuple[int, int, int, int] | None]] = [
     # frame only, drop the YouTube interface below it.
     ("IMG_1337.jpeg", "project-chicken-connection-pass.jpg", (0, 0, 1488, 834)),
     ("IMG_1338.jpeg", "project-chicken-connection-kitchen.jpg", (0, 0, 1488, 834)),
-    # --- Pacific / Пасифик · барные решения --------------------------------------
+    # --- Pacific · bar solutions --------------------------------------
     ("IMG_6691.jpeg", "project-pacific-station.jpg", None),
     ("IMG_6689.jpeg", "project-pacific-console.jpg", None),
     ("IMG_6690.jpeg", "project-pacific-render.jpg", None),

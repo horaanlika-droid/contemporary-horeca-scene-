@@ -66,7 +66,7 @@ window.bootCourse = () => {
   const projectPhotos = p => p?.photos || [];
   const captionFor = file => {
     const photo = projectList().flatMap(p => projectPhotos(p)).find(ph => ph.file === file);
-    return photo ? `${photo.caption}${photo.captionRu ? ` · ${photo.captionRu}` : ''}` : '';
+    return photo?.caption || '';
   };
   const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${ASSET}${esc(file)}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
         <img src="${ASSET}${esc(file)}" alt="${esc(alt)}" loading="lazy">
@@ -464,7 +464,19 @@ window.bootCourse = () => {
         <div><span class="eyebrow">INDUSTRY NOTEBOOK · ${C.edition} EDITION</span><h1 class="page-title">Real industry.<br>Useful <em>questions</em>.</h1><p>Case files connect hospitality practice to the ideas in this elective. Read closely, then decide what is relevant to the concept you want to build.</p></div>
         <button class="button light" data-action="search">SEARCH THE ELECTIVE <span aria-hidden="true">⌕</span></button>
       </div>
-      <section class="section" id="industry-figures" style="padding:30px 0 10px"><span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span><div class="figure-grid">${(C.figures || []).map(f => `<article class="case-item"><span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span><h3>${esc(f.name)}</h3><p>${esc(f.role)} · ${esc(f.venues)}</p><p>${esc(f.summary)}</p><p><strong>Course takeaway:</strong> ${esc(f.takeaway)}</p></article>`).join('')}</div></section>
+      <section class="section" id="industry-figures" style="padding:30px 0 10px">
+        <span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span>
+        <div class="figure-grid">${(C.figures || []).map(f => `
+          <article class="case-item">
+            <span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span>
+            <h3>${esc(f.name)}</h3>
+            <p>${esc(f.role)} · ${esc(f.venues)}</p>
+            <p>${esc(f.summary)}</p>
+            <p><strong>Course takeaway:</strong> ${esc(f.takeaway)}</p>
+            ${f.sources?.length ? `<p class="figure-sources"><span class="meta">PRIMARY SOURCES</span> ${f.sources.map(source => `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.title)}</a>`).join(' · ')}</p>` : ''}
+          </article>`).join('')}
+        </div>
+      </section>
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Bar Leone · Hong Kong</h3><p>“Cocktail Popolari” frames a neighbourhood archive through familiar classics and clear ingredient storytelling.</p></article><article class="case-item"><h3>Tuju · São Paulo</h3><p>Seasonal tasting menus become meteorological notebooks — Rain, Wind and Drought — connecting ingredient research to narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
         ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
@@ -535,12 +547,11 @@ window.bootCourse = () => {
       </div>
       <div class="project-body">
         <p>${esc(pr.summary)}</p>
-        ${pr.ru ? `<p class="project-ru"><span class="meta">ПО-РУССКИ</span>${esc(pr.ru)}</p>` : ''}
       </div>
       <section style="margin-top:clamp(30px,4vw,52px)">
         <span class="eyebrow tight">THE FILE · ${photos.length} PHOTOGRAPHS ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
         <div class="project-gallery">
-          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — photograph ${i + 2}`, `${ph.caption}${ph.captionRu ? `\n\n${ph.captionRu}` : ''}`)).join('')}
+          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — photograph ${i + 2}`, ph.caption)).join('')}
         </div>
       </section>
       <div class="project-next">

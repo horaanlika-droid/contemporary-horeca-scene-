@@ -28,7 +28,7 @@ The visual language is taken from **Swiss Education Group** (swisseducation.com)
 
 Signature moves used across the site: a split hero stage (giant light-weight uppercase type on ink, the photograph hung whole beside it) with an italic serif accent word; a pretitle eyebrow with a red dash and a hairline rule; a marquee ticker of the venues “on the scene”; a maroon quote band with a red bottom border; rectangular buttons that fill red from below on hover; underline-animated text links; hairline module tables with hover shift; SEG-style key-figure counters.
 
-The **course author is credited inside the product** (footer, profile, certificate small print, instructor identity) but his **name is not shown on the title visuals** — hero, login visual, deck cover. The **author bio and selected projects live in a pop-up, not a standalone landing-page block**: `author.js` opens a dialog from the clickable “About the author” controls on the password gate, landing page, dashboard and app header. It lists international experience (Sakhalin 2015 → Thailand 2019 → Switzerland 2019 → Dubai 2021 → St Petersburg 2022), the bars of Ivan Lyashuk and Vladimir Nikolaev, and five own projects as photographs with only a name and year (Passie Cakes Co. 2022 / CooCoo 2024 / Pacific 2024 / Joi 2025 / Chicken Connection 2024). Project names are written in Latin only, without Russian transcription. The public start page (`.gate-page` → `.gate-stage` + `.gate-info`) states what the course is. The full author-project archive remains available from the About the author pop-up after course access; cases and leading industry figures remain in the Cases section/page.
+The **course author is credited inside the product** (footer, profile, certificate small print, instructor identity) but his **name is not shown on the title visuals** — hero, login visual, deck cover. The **author bio and selected projects live in a pop-up, not a standalone landing-page block**: `author.js` opens a dialog from the clickable “About the author” controls on the password gate, landing page, dashboard and app header. It lists only the author’s international experience (Sakhalin 2015 → Thailand 2019 → Switzerland 2019 → Dubai 2021 → St Petersburg 2022), beginning with his first steps in HoReCa as a waiter, and five own projects as photographs with only a name and year (Passie Cakes Co. 2022 / CooCoo 2024 / Pacific 2024 / Joi 2025 / Chicken Connection 2024). All copy is in English and project names use Latin script. The bars of Ivan Lyashuk and Vladimir Nikolaev — One and Half Room, Flowers Bar, Oy!, Ultramen! and Ruc’s Heaven — and their Artender media/community project are documented in their Cases & figures profiles, not attributed to the course author. The public start page (`.gate-page` → `.gate-stage` + `.gate-info`) states what the course is. The full author-project archive remains available from the About the author pop-up after course access; cases and leading industry figures remain in the Cases section/page.
 
 ## Run locally / deploy on BotHost
 
@@ -37,6 +37,7 @@ A **Node.js-served web app** (not Python). No npm packages are required; Node 18
 ```bash
 npm start          # http://0.0.0.0:$PORT (default 3000)
 npm run check      # syntax check: server.js, app.js, access.js, author.js, course-data.js
+npm test           # English-only copy, author/figure separation and API regression checks
 ```
 
 The server binds to `0.0.0.0`, serves the site, exposes `/healthz`, verifies Telegram `initData` and enforces the course password. Opening `index.html` as a `file://` URL is not supported; use the server so cookies, storage and assets work correctly.
@@ -61,7 +62,7 @@ Demo state is saved in the browser (`localStorage`); attached submission files a
 
 ## Course structure (2026 edition)
 
-Ten modules / eleven learning units:
+Ten modules / thirteen learning units:
 
 | # | Module | Focus |
 |---|---|---|
@@ -93,13 +94,21 @@ Module 04 also gained a learning unit, **Concept objects: the menu, the merchand
 ## Product experience
 
 - **Public start page** (SEG-styled split screen: gate visual + password form) followed by a course-information band and a clickable About the author pop-up. Once access is granted, the editorial landing page covers the elective's positioning, subject areas, learning sequence, case files, the fairy-tale principle, the budget & scenography block, ten-module structure and final challenge. Cases and leading industry figures remain available together on the Cases page.
-- **Projects of the author** (`#/projects`, `#/project/<id>`) — 43 photographs across seven project files: Joi Espresso Bar, Passie Cakes Co., CooCoo Coffee, Chicken Connection, Pacific, TAM / TYT and a found-object research file. Each file carries facts, a bilingual explanation (EN + RU) and a captioned gallery with a keyboard-accessible lightbox. The full archive is reached via the About the author pop-up rather than a separate main-navigation item; its photographs also remain course evidence in the relevant cases and modules.
+- **Projects of the author** (`#/projects`, `#/project/<id>`) — 43 photographs across seven project files: Joi Espresso Bar, Passie Cakes Co., CooCoo Coffee, Chicken Connection, Pacific, TAM / TYT and a found-object research file. Each file carries facts, an English explanation and a captioned gallery with a keyboard-accessible lightbox. The full archive is reached via the About the author pop-up rather than a separate main-navigation item; its photographs also remain course evidence in the relevant cases and modules.
 - **Student space** with course progress, next lesson, modules, editorial lesson pages, case studies, assignment submissions (concept + mockup photographs), quiz, feedback, updates and a printable certificate.
 - **Instructor space** for reviewing work, assigning a score, providing feedback and approving or returning submissions for revision.
 - **Admin view** for the generic institution/license model, edition overview, password-access status and license demonstration.
 - Responsive desktop and mobile navigation, search across course content, accessible form labels, keyboard-operable controls, reduced-motion and print styles.
 - **Photography is shown whole.** Source frames are mostly 3:4 / 4:5 phone photographs, so content images (case cards, project cards, galleries, creator and budget frames, the hero plate) render at their natural proportions instead of being cropped to a fixed-height strip. Only surfaces that are treated as background fields — hero on mobile, the gate/login visual, the case feature band, module and lesson banners — are cropped, and their `object-position` is set deliberately.
 - Existing course materials and photography remain available; the new UI uses the existing hospitality imagery and does not present the HIM or SEG logos as a claim of institutional endorsement.
+
+## Language and editorial boundaries
+
+The gate, checkout, author dialog, lessons, captions, project archive, administration, Telegram bot and downloadable materials are English-only. Cyrillic name duplicates and translated project/caption fields are not shipped. The deck builder produces the English PDF only; there are no alternate-language course handouts or decks.
+
+The author dialog contains the author’s own career and projects. Perfect Bars Team’s venues belong in Ivan Lyashuk’s and Vladimir Nikolaev’s industry profiles; Artender is identified as a media and creative-community project, not a sixth bar. These profiles link to the team’s primary sources. Original documentary photographs are preserved unchanged, including any signage visible within them.
+
+`npm test` guards the language and attribution rules, alongside isolated checks of server-provided access, checkout and bot messages.
 
 ## Content, architecture and boundaries
 
@@ -109,7 +118,7 @@ Module 04 also gained a learning unit, **Concept objects: the menu, the merchand
 - The initial generic domain is: **Institution → User / Enrollment → Course → Edition → Module → Lesson**; learning and operations entities include **Video, CaseStudy, ReadingMaterial, Assignment, Submission, Feedback, Quiz, Question, Answer, Progress, Certificate, License, CourseUpdate, Notification**.
 - Progress and quiz records are scoped to user and edition. Submissions record the student and edition context; an institution-scoped instructor review view is the intended authorization boundary.
 - Course content and author IP remain separate from the institution's licensed access. A new edition can evolve independently, without overwriting existing edition records.
-- `course/` is the source library for the full bilingual syllabus, lectures, assignments and case material (both languages include Module 6 — Budget Realisation & Scenography, the Joi Espresso Bar case and the mockup brief). `presentation/` is the reproducible proposal-deck project.
+- `course/` is the English-only source library for the full syllabus, lectures, assignments and case material, including Module 6 — Budget Realisation & Scenography, the Joi Espresso Bar case and the mockup brief. `presentation/` is the reproducible proposal-deck project.
 
 ### Important production boundary
 
@@ -123,7 +132,7 @@ The course brings together hospitality futures, experience design, neurogastrono
 
 ## Proposal deck
 
-`presentation/dist/Contemporary-Horeca-Scene-Course-Pitch-EN.pdf` and `...-RU.pdf` are retained proposal artefacts. The deck **sources** have been updated (SEG palette, author removed from the cover, Module 6 and the mockup added to the course map, week plan, assessment and final project slides); the committed PDFs predate that change and should be rebuilt:
+`presentation/dist/Contemporary-Horeca-Scene-Course-Pitch-EN.pdf` is the English-only proposal deck. Its sources use the SEG palette, keep the author off the cover, and include Module 6 and the mockup in the course map, week plan, assessment and final project slides. Rebuild the deck after changing its sources:
 
 ```bash
 python3 -m venv .venv
@@ -136,7 +145,7 @@ The deck generator prefers Inter when available through `HIM_FONT_DIR`, with Dej
 
 ## Access, lessons, submissions and administration
 
-A valid personal Tribute password (one per person) or the administrator password opens the course immediately. All 11 lessons and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Help/reference email: `egor.tarasenko@him-mail.ch`.
+A valid personal Tribute password (one per person) or the administrator password opens the course immediately. All 13 lessons and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Help/reference email: `egor.tarasenko@him-mail.ch`.
 
 The self-hosted Node service persists records in `data/store.json` and uploaded files in `data/uploads/` (excluded from Git). Tribute integration is a clearly labelled digital-product stub until real credentials/configuration are supplied. Admin tools include assignment review with required written feedback, password generation, and a bot-command console. Optional Telegram Bot API integration uses `BOT_TOKEN` and configured admin chat IDs.
 
