@@ -96,8 +96,7 @@ window.bootCourse = () => {
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
-        <a class="nav-link" href="#/" data-scroll="projects">PROJECTS</a>
-        <a class="nav-link" href="#/" data-scroll="author">THE AUTHOR</a>
+        <a class="nav-link" href="#/" data-scroll="author">THE CREATOR</a>
         <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
@@ -126,7 +125,6 @@ window.bootCourse = () => {
     const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · ДЖОЙ · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Пасифик · барные решения', 'TAM · objects that teach the menu', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
-        <div class="hero-media">${image('horeca-interior-design.jpg', 'An atmospheric contemporary hotel bar with warm lighting and considered materials')}</div>
         <span class="hero-index">${C.edition} EDITION · 01 / ${String(C.modules.length).padStart(2, '0')}</span>
         <div class="hero-copy">
           <span class="eyebrow">A LIVING DIGITAL ELECTIVE · ${C.edition} EDITION</span>
@@ -136,7 +134,12 @@ window.bootCourse = () => {
             <a class="button" href="#/course">EXPLORE THE COURSE <span aria-hidden="true">↗</span></a>
             <a class="button text" href="#/login">STUDENT LOGIN <span aria-hidden="true">→</span></a>
           </div>
+          <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
+        <figure class="hero-media">
+          <img src="${ASSET}horeca-interior-design.jpg" alt="A bar seen through a brick archway: lit shelves, hanging glassware and a green banquette in warm low light">
+          <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
+        </figure>
       </section>
 
       <div class="key-figures">
@@ -214,6 +217,16 @@ window.bootCourse = () => {
               <li><b>03</b><span>Trompe-l'œil, glazing, patina, stencil, gold leaf and re-upholstery imitate expensive materials for almost nothing.</span></li>
               <li><b>04</b><span>A theatrical trick must support the story and never announce itself — otherwise the fairy tale ends.</span></li>
             </ul>
+            <div class="budget-frames">
+              <figure class="budget-frame">
+                <img src="${ASSET}project-joi-machine.jpg" alt="A reconditioned brass lever espresso machine on a small counter" loading="lazy">
+                <figcaption><span class="meta">Joi · 2025</span>The one object worth paying for: a reconditioned brass lever machine, bought second-hand.</figcaption>
+              </figure>
+              <figure class="budget-frame">
+                <img src="${ASSET}project-detail-street-press.jpg" alt="A lemon press left on the pavement among street finds" loading="lazy">
+                <figcaption><span class="meta">Street find</span>A lemon press picked up on the pavement — cheap detail, real patina.</figcaption>
+              </figure>
+            </div>
             <a class="button text" href="#/course" style="margin-top:24px">OPEN MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} <span aria-hidden="true">→</span></a>
           </div>
           <div class="mockup-card">
@@ -227,32 +240,16 @@ window.bootCourse = () => {
         </div>
       </section>
 
-      <section class="section" id="projects">
-        <div class="section-head">
-          <div><span class="eyebrow">06 — PROJECTS OF THE AUTHOR</span><h2>Built, repaired,<br><em>drawn</em>.</h2></div>
-          <p>${esc(C.projects?.lead || 'The venues, identities and objects behind this course, documented as working evidence.')}</p>
-        </div>
-        <div class="project-strip">
-          ${projectList().slice(0, 6).map(pr => `<a class="project-tile" href="#/project/${esc(pr.id)}">
-            ${image(pr.image, `${pr.name} — ${pr.role}`)}
-            <span class="project-index">${esc(pr.index)}</span>
-            <span class="project-tile-copy">
-              <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
-              <strong>${esc(pr.name)}</strong>
-              <span class="form-help">${esc(pr.tagline)}</span>
-            </span>
-          </a>`).join('')}
-        </div>
-        <div class="project-strip-actions">
-          ${button('OPEN THE PROJECT ARCHIVE', 'projects')}
-          <span class="meta">${projectList().length} PROJECT FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span>
-        </div>
-      </section>
-
       <section class="section" id="author">
         <div class="section-head">
-          <div><span class="eyebrow">07 — THE AUTHOR</span><h2>Egor<br><em>Tarasenko</em></h2></div>
-          <p>HIM alumnus · Master in Business Management<br><br>Created by a hospitality practitioner and HIM graduate, this elective brings lived industry experience — including venues built by hand on a small budget — into an academic framework.</p>
+          <div><span class="eyebrow">06 — THE COURSE &amp; ITS CREATOR</span><h2>Egor<br><em>Tarasenko</em></h2></div>
+          <p>HIM alumnus · Master in Business Management<br><br>${esc(C.descriptor)}<br><br>These frames are the author's own practice — ${projectList().length} venue, product and design files, ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} photographs taken on site, read inside the course as primary sources for Module ${C.modules.find(m => m.id === 'budget')?.number || '09'}. Nothing here is second-hand theory: each principle was priced, sourced and built by hand first, then taught.</p>
+        </div>
+        <div class="creator-frames">
+          ${(C.projects?.items || []).filter(p => p.id !== 'details').slice(0, 3).map(pr => `<figure class="creator-frame">
+            <img src="${ASSET}${esc(pr.image)}" alt="${esc(pr.name)} — ${esc(pr.role)}" loading="lazy">
+            <figcaption><span class="meta">${esc(pr.index)} · ${esc(pr.role)} · ${esc(pr.year)}</span><strong>${esc(pr.name)}</strong><span>${esc(pr.tagline)}</span></figcaption>
+          </figure>`).join('')}
         </div>
         <div class="timeline">
           <div class="timeline-aside">A PRACTICE-LED<br>POINT OF VIEW</div>
@@ -262,7 +259,7 @@ window.bootCourse = () => {
 
       <section class="section">
         <div class="section-head">
-          <div><span class="eyebrow">08 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
+          <div><span class="eyebrow">07 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
           <p>Move from the signals shaping the industry to a final concept grounded in your own point of view — and a mockup you can hold.</p>
         </div>
         <div class="module-preview">${C.modules.map(m => `<a class="module-row" href="#/module/${m.id}"><span class="module-num">${m.number}</span><div><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div><span class="meta module-meta">${word(m.lessons.length)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>
