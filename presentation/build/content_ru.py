@@ -8,37 +8,17 @@ def std(c):
 
 def build(c):
     # ================= 1. ОБЛОЖКА =================
-    c.bg()
-    c.setStrokeColor(GOLD); c.setLineWidth(1.1)
-    c.rect(18, 18, PAGE_W - 36, PAGE_H - 36, stroke=1, fill=0)
-    c.setStrokeColor(LINE); c.setLineWidth(0.6)
-    c.rect(24, 24, PAGE_W - 48, PAGE_H - 48, stroke=1, fill=0)
-    c.setFont("Inter-Bold", 8.5)
-    c.setFillColor(GOLD)
-    c.drawString(M + 6, PAGE_H - 78, spaced("Предложение курса · Hotel Institute Montreux · 2026–27 учебный год"))
-    c.setFont("Inter-XB", 46)
-    c.setFillColor(TEXT)
-    c.drawString(M + 6, PAGE_H - 172, "CONTEMPORARY")
-    c.drawString(M + 6, PAGE_H - 224, "HORECA SCENE")
-    c.vrect(M + 8, PAGE_H - 258, 92, 4, GOLD)
-    para(c, "Тренды  ·  Дизайн и атмосфера  ·  Нейрогастрономия  ·  Технологии  ·  Лучшие рестораны и бары мира",
-         M + 6, PAGE_H - 272, PAGE_W - 2 * M, 13.5, GOLD_SOFT, "Inter-Medium", leading=19)
-    para(c, "12-недельный элективный модуль: читаем мировую ресторанную индустрию через её рейтинги, заведения,\nлюдей и технологии — курс для следующего поколения лидеров гостеприимства.",
-         M + 6, PAGE_H - 302, 660, 10.5, MUTED, leading=15)
-    c.hline(M + 6, 128, PAGE_W - 2 * M - 12)
-    c.setFont("Inter-Bold", 9)
-    c.setFillColor(TEXT)
-    c.drawString(M + 6, 104, "АВТОР И РУКОВОДИТЕЛЬ КУРСА")
-    c.setFont("Inter-XB", 15)
-    c.drawString(M + 6, 84, "Егор Тарасенко")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(MUTED)
-    c.drawString(M + 6, 68, "Master in Business Management — выпускник Hotel Institute Montreux")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(MUTED)
-    c.drawRightString(PAGE_W - M - 6, 84, "Монтрё · 2026")
-    c.drawRightString(PAGE_W - M - 6, 68, "12 недель · 36 академических часов · английский")
-    c.showPage()
+    course_cover(
+        c,
+        "Предложение курса · 2026–27",
+        "Тренды · Дизайн и атмосфера · Нейрогастрономия · Технологии · Лучшие рестораны и бары мира",
+        "12-недельный электив о мировой индустрии гостеприимства — практический бизнес-взгляд для следующего поколения международных лидеров.",
+        "АВТОР И РУКОВОДИТЕЛЬ КУРСА",
+        "Егор Тарасенко",
+        "Master in Business Management — выпускник Hotel Institute Montreux",
+        "Монтрё · 2026",
+        "12 недель · 36 контактных часов · английский",
+    )
 
     # ================= 2. ПОЧЕМУ СЕЙЧАС =================
     top = std(c)
@@ -61,32 +41,29 @@ def build(c):
     # ================= 3. ОБ АВТОРЕ =================
     top = std(c)
     y = slide_title_block(c, "Об авторе", "Предложение выпускника — вклад в родной институт")
-    c.setFillColor(PANEL)
+    c.setFillColor(NAVY)
     c.roundRect(M, y - 292, 300, 292, 8, stroke=0, fill=1)
-    c.setStrokeColor(GOLD); c.setLineWidth(1.2)
-    c.roundRect(M, y - 292, 300, 292, 8, stroke=1, fill=0)
-    c.setFillColor(PANEL2)
-    c.roundRect(M + 78, y - 56 - 132, 144, 132, 70, stroke=0, fill=1)
-    c.setFillColor(GOLD)
-    c.setFont("Inter-XB", 34)
-    c.drawCentredString(M + 150, y - 148, "ЕТ")
-    c.setFillColor(TEXT)
+    draw_photo(c, CAMPUS_PHOTO, M, y - 156, 300, 156, focus_x=0.52, focus_y=0.55)
+    c.setFillColor(NAVY)
+    c.roundRect(M, y - 292, 300, 136, 8, stroke=0, fill=1)
+    c.vrect(M, y - 156, 300, 5, RED)
+    c.setFont("Inter-Bold", 7.5)
+    c.setFillColor(HexColor("#91CAE1"))
+    c.drawString(M + 16, y - 179, "ВЫПУСКНИК HIM  ·  РУКОВОДИТЕЛЬ КУРСА")
     c.setFont("Inter-XB", 17)
-    c.drawCentredString(M + 150, y - 212, "Егор Тарасенко")
-    c.setFillColor(GOLD)
-    c.setFont("Inter-Bold", 8.5)
-    c.drawCentredString(M + 150, y - 230, spaced("Автор и руководитель курса"))
-    c.setFillColor(MUTED)
-    c.setFont("Inter", 9)
-    c.drawCentredString(M + 150, y - 250, "Master in Business Management")
-    c.drawCentredString(M + 150, y - 264, "Hotel Institute Montreux · выпускник")
+    c.setFillColor(WHITE)
+    c.drawString(M + 16, y - 211, "Егор Тарасенко")
+    c.setFont("Inter", 8.5)
+    c.setFillColor(HexColor("#B9D2E2"))
+    c.drawString(M + 16, y - 233, "Master in Business Management")
+    c.drawString(M + 16, y - 249, "Hotel Institute Montreux")
     X = M + 340
     bullets_block(c, [
         ("Выпускник программы Master in Business Management в Hotel Institute Montreux.",
          "Курс задуман как вклад выпускника: мост между швейцарской традицией гостеприимства HIM и сегодняшней глобальной сценой."),
         ("Фокус: стратегия, бренд и экономика современных ресторанов и баров.",
          "От концепции и инженерии атмосферы до юнит-экономики и стратегии работы с рейтингами."),
-        ("Основа — первоисточники индустрии, курс обновляется ежегодно.",
+        ("Основа — первоисточники индустрии; курс обновляется ежегодно.",
          "Церемонии гида MICHELIN, рейтинги и материалы The 50 Best, экспертные обзоры GreatList, программы Diageo World Class."),
         ("Формат: лекции + кейс-лаборатории + сенсорная практика + приглашённые спикеры.",
          "Практики индустрии подключаются очно или онлайн; студенты работают с реальными списками и заведениями."),
@@ -153,7 +130,8 @@ def build(c):
     c.showPage()
 
     # ================= MODULE SLIDES helper =================
-    def module_slide(num, weeks, title, sub, topics, cases, question):
+    def module_slide(num, weeks, title, sub, topics, cases, question, photo,
+                     field_label, field_note):
         top = std(c)
         accent = MODULE_COLORS[num]
         y = CONTENT_TOP
@@ -161,7 +139,7 @@ def build(c):
         c.setFillColor(accent)
         c.setFont("Inter-XB", 11)
         c.drawString(M + 16, y - 8, spaced(f"Модуль {num} · Недели {weeks}"))
-        c.setFillColor(TEXT)
+        c.setFillColor(NAVY)
         c.setFont("Inter-XB", 23)
         c.drawString(M + 16, y - 32, title)
         c.setFont("Inter", 10)
@@ -173,12 +151,22 @@ def build(c):
         bullets_block(c, topics, M, y - 104, 480, size=10, gap=8)
         X2 = M + 520; W2 = PAGE_W - M - X2
         c.setFillColor(PANEL)
-        c.roundRect(X2, y - 318, W2, 254, 8, stroke=0, fill=1)
+        c.setStrokeColor(LINE)
+        c.setLineWidth(0.55)
+        c.roundRect(X2, y - 318, W2, 254, 8, stroke=1, fill=1)
         c.vrect(X2, y - 318, 3, 254, accent)
         c.setFillColor(accent)
         c.setFont("Inter-Bold", 9)
-        c.drawString(X2 + 18, y - 84, "КЕЙСЫ И ПОЛЕВЫЕ МАТЕРИАЛЫ")
-        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.3, gap=9, color=TEXT, bullet_color=accent)
+        c.drawString(X2 + 18, y - 84, "КЕЙСЫ И ПОЛЕВОЙ МАТЕРИАЛ")
+        bullets_block(c, cases, X2 + 18, y - 104, W2 - 36, size=9.3, gap=9,
+                      color=TEXT, bullet_color=accent)
+        # Реальные фотографии HIM поддерживают логику обучения через людей,
+        # практику и живую среду кампуса.
+        draw_photo(c, photo, X2 + 18, y - 302, 136, 74, focus_x=0.5, focus_y=0.55)
+        c.setFont("Inter-Bold", 7.1)
+        c.setFillColor(RED if num == 5 else BLUE)
+        c.drawString(X2 + 166, y - 257, field_label.upper())
+        para(c, field_note, X2 + 166, y - 267, W2 - 184, 8.1, MUTED, leading=10.5)
         c.setFillColor(PANEL2)
         c.roundRect(X2, y - 396, W2, 66, 8, stroke=0, fill=1)
         c.setFillColor(GOLD)
@@ -204,7 +192,8 @@ def build(c):
             "Tuju (Сан-Паулу) — Art of Hospitality 2026: меньше гостей, меню по темам климата.",
             "Gerbou (Дубай) — Prix Versailles 2025 за архитектуру; эмиратская кухня как fine dining.",
         ],
-        "Если заведение открывается сегодня, какие тренды будут актуальны в 2030-м?")
+        "Если заведение открывается сегодня, какие тренды будут актуальны в 2030-м?",
+        photo=STUDENTS_PHOTO, field_label="Монтрё · мировое сообщество", field_note="Глобальные истории — в международном сообществе студентов.")
 
     # ================= 8. МОДУЛЬ 2 =================
     module_slide(2, "4–5", "Дизайн и атмосфера заведения",
@@ -223,7 +212,8 @@ def build(c):
             "Himkok (Осло) — Best Bar Design: устойчивая реинтерпретация 200-летнего пространства.",
             "Hanu (Дубай) — эстетика Сеула: угольные грили, тёмное дерево, бронзовые двери.",
         ],
-        "Можно ли измерить атмосферу — и управлять ею как строкой в P&L?")
+        "Можно ли измерить атмосферу — и управлять ею как строкой в P&L?",
+        photo=CAMPUS_PHOTO, field_label="Монтрё как полевая лаборатория", field_note="Город становится живым кейсом для полевого аудита.")
 
     # ================= 9. МОДУЛЬ 3 =================
     module_slide(3, "6–7", "Нейрогастрономия и опыт гостя",
@@ -242,7 +232,8 @@ def build(c):
             "Tuju: радикальная персонализация — очки для чтения, детский набор для рисования, меню дождя и ветра.",
             "Bar Leone: простота как сенсорная стратегия — «коктейли для людей».",
         ],
-        "Каков вкус вашего заведения — до того, как подан первый кусок?")
+        "Каков вкус вашего заведения — до того, как подан первый кусок?",
+        photo=OPEN_DAY_PHOTO, field_label="Сенсорная практика", field_note="Наблюдение превращает впечатление в учебный навык.")
 
     # ================= 10. МОДУЛЬ 4 =================
     module_slide(4, "8–9", "Технологии и автоматизация",
@@ -261,7 +252,8 @@ def build(c):
             "Феличе Капассо: Sesto Senso Academy — образование барменов как бизнес-модель.",
             "«Военная комната» рейтингов: как сами рейтинги используют данные, голосование и медиатехнологии.",
         ],
-        "Где технологии усиливают гостеприимство — а где убивают его?")
+        "Где технологии усиливают гостеприимство — а где убивают его?",
+        photo=CLASSROOM_PHOTO, field_label="Люди + технологии", field_note="Цифровые инструменты усиливают человекоцентричный сервис.")
 
     # ================= 11. МОДУЛЬ 5 =================
     module_slide(5, "10–12", "Ведущие рестораны и бары мира",
@@ -280,7 +272,8 @@ def build(c):
             "Bar Leone (Гонконг) — лучший бар мира 2025, первый азиатский №1, через два года после открытия.",
             "Myojaku (Токио) — повышение до трёх звёзд MICHELIN в гиде 2026 года.",
         ],
-        "Что объединяет все заведения №1 — и можно ли этому научить?")
+        "Что объединяет все заведения №1 — и можно ли этому научить?",
+        photo=STUDENTS_PHOTO, field_label="Be world ready", field_note="От Монтрё — к мировым ресторанам и барам.")
 
     # ================= 12. ЭКОСИСТЕМА РЕЙТИНГОВ =================
     top = std(c)
@@ -528,24 +521,11 @@ def build(c):
     c.showPage()
 
     # ================= 22. ФИНАЛ =================
-    c.bg()
-    c.setStrokeColor(GOLD); c.setLineWidth(1.1)
-    c.rect(18, 18, PAGE_W - 36, PAGE_H - 36, stroke=1, fill=0)
-    c.setFont("Inter-Bold", 8.5)
-    c.setFillColor(GOLD)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 120, spaced("Contemporary HoReCa Scene · Предложение курса"))
-    para(c, "Приведём лучшее гостеприимство мира\nв Монтрё.", PAGE_W / 2 - 330, PAGE_H - 150, 660, 33, TEXT, "Inter-XB", leading=42, align=TA_CENTER)
-    c.vrect(PAGE_W / 2 - 46, PAGE_H - 296, 92, 4, GOLD)
-    c.setFont("Inter-XB", 16)
-    c.setFillColor(TEXT)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 336, "Егор Тарасенко")
-    c.setFont("Inter", 10)
-    c.setFillColor(MUTED)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 356, "Автор и руководитель курса · Master in Business Management, выпускник Hotel Institute Montreux")
-    c.setFont("Inter", 9.5)
-    c.setFillColor(GOLD_SOFT)
-    c.drawCentredString(PAGE_W / 2, PAGE_H - 384, "email · LinkedIn — добавить          Монтрё, 2026")
-    c.setFont("Inter", 8.5)
-    c.setFillColor(MUTED)
-    c.drawCentredString(PAGE_W / 2, 60, "Источники: гид MICHELIN · The 50 Best (the50.com) · GreatList (greatlist.ru) · Diageo World Class (diageo.com)")
-    c.showPage()
+    closing_page(
+        c,
+        "Приведём лучшее гостеприимство мира\nв Монтрё.",
+        "Егор Тарасенко",
+        "Master in Business Management · выпускник Hotel Institute Montreux",
+        "Источники: гид MICHELIN · The 50 Best · GreatList · Diageo World Class",
+        "Монтрё · 2026",
+    )
