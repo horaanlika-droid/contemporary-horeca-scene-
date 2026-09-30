@@ -1,6 +1,6 @@
 # Presentation assets
 
-These assets support the bilingual Contemporary HoReCa Scene course deck. They are included for reproducible builds; the presentation is a course proposal, not an official HIM Business School publication.
+These assets support the bilingual Contemporary Horeca Scene course deck. They are included for reproducible builds; the presentation is a course proposal, not an official HIM Business School publication.
 
 ## Brand asset
 
@@ -8,7 +8,7 @@ These assets support the bilingual Contemporary HoReCa Scene course deck. They a
 | --- | --- |
 | `him-logo-white.png` | Official HIM logo asset linked from the [Swiss Education Group HIM Business School page](https://www.swisseducation.com/en/him-business-school/). |
 
-## Thematic HoReCa photography
+## Thematic Horeca photography
 
 The deck deliberately uses subject-led hospitality imagery rather than photographs of the institute, campus, classrooms, or students.
 

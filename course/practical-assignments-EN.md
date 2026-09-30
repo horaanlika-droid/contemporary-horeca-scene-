@@ -82,10 +82,19 @@ Design the marketing engine:
 - Target list(s): MICHELIN / The 50 Best / GreatList / bar awards — pick one primary.
 - 3-year plan: what to change each year to deserve it; press & academy-relations ethics.
 - Loyalty & community: regulars programme, "friends of the house".
+- Sourcing & budget plan: ten key elements of the venue — for each, one second-hand, reused or self-built option and its cost; total versus the "catalogue" version.
+- Scenography page: which theatrical techniques (painted flats, forced perspective, backdrop, scrim, trompe-l'œil, patina, gold leaf, haze, one tight beam) replace expensive materials — and why the trick never announces itself.
 
-### W12 · Final pitch — "Open & Operate"
+### W12 · Physical mockup — your venue as a set
+Build a physical mockup of your own project, like stage scenery: paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a small torch for light.
+- Scale 1:20 or 1:50 — a model you can hold, not a floor plan.
+- Decide and show: the entrance, the first sightline, where the light comes from, which surfaces are real and which are painted illusions.
+- The three details that carry the atmosphere (and one detail you deliberately removed because it would wake the guest from the fairy tale).
+- Photograph it at guest height: three frames — arrival, the peak moment, the table. These photographs go into the pitch deck.
+
+### W12 · Final pitch — "Open & Operate" (with the mockup)
 Full deck (10–12 slides / 10 minutes + Q&A):
-1. USP & story; 2. trends; 3. design & atmosphere board; 4. menu & beverage (neurogastronomy); 5. operations & tech; 6. marketing engine (guest shifts, brand partnerships, launch); 7. roadmap to recognition; 8. unit-economics sketch (average check, covers, rent logic, payback horizon); 9. team & values; 10. the one slide that makes the panel remember you.
+1. USP & story; 2. trends; 3. design & atmosphere board; 4. menu & beverage (neurogastronomy); 5. operations & tech; 6. marketing engine (guest shifts, brand partnerships, launch); 7. roadmap to recognition; 8. unit-economics sketch (average check, covers, rent logic, payback horizon); 9. team & values; 10. budget realisation: what is bought, found, reused or built, and the theatrical techniques that carry the atmosphere; 11. the physical mockup photographed at guest height; 12. the one slide that makes the panel remember you.
 **Panel:** lecturer + invited industry professionals. Verdicts: "ready to open", "open after fixes", "reconcept".
 
 ---

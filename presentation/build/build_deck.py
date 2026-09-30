@@ -9,14 +9,14 @@ DIST = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 os.makedirs(DIST, exist_ok=True)
 
 targets = [
-    ("Contemporary-HoReCa-Scene-Course-Pitch-EN.pdf", content_en, "Hotel Institute Montreux · Course Proposal"),
-    ("Contemporary-HoReCa-Scene-Course-Pitch-RU.pdf", content_ru, "Hotel Institute Montreux · Предложение курса"),
+    ("Contemporary-Horeca-Scene-Course-Pitch-EN.pdf", content_en, "Hotel Institute Montreux · Course Proposal"),
+    ("Contemporary-Horeca-Scene-Course-Pitch-RU.pdf", content_ru, "Hotel Institute Montreux · Предложение курса"),
 ]
 
 for fname, mod, label in targets:
     path = os.path.join(DIST, fname)
     c = DeckCanvas(path, footer_label=label)
-    c.setTitle("Contemporary HoReCa Scene — Course Proposal")
+    c.setTitle("Contemporary Horeca Scene — Course Proposal")
     c.setAuthor("Egor Tarasenko, HIM Alumnus (Master in Business Management)")
     mod.build(c)
     c.save()
