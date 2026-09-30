@@ -49,6 +49,19 @@ window.COURSE = {
       takeaway: 'Mixology is not blind trend-chasing; it is aligning flavour, aroma, texture and colour with the venue’s concept at operational speed.'
     },
     {
+      id: 'egor-tarasenko',
+      name: 'Egor Tarasenko (Егор Тарасенко)',
+      role: 'Course Author · Practitioner & Founder',
+      venues: 'Joi Espresso Bar (ДЖОЙ · 2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific / Пасифик (барные решения) · TAM',
+      moduleId: 'budget',
+      moduleNumber: '09 & 04',
+      block: 'Budget Realisation & Scenography · Projects Built from Found Objects',
+      image: 'project-joi-arcade.jpg',
+      summary: 'The author of this elective builds the venues, identities and bar objects the course teaches from: an espresso bar assembled from the street, a pastel cake room, a croffle bar with a cartoon cup on the window, and a bar-furniture studio drawing stations in blackened steel and stone.',
+      lessonAngle: 'Every project in the archive is a working answer to one question: what can you make when the budget is small and the point of view is clear? The photos are the primary sources — sourcing, patina, signage, crockery, lighting, merchandise — and students are asked to read them the way they will later read their own flea-market finds.',
+      takeaway: 'A consistent point of view, applied to cheap objects with patience, reads as luxury to a guest who never sees the invoice.'
+    },
+    {
       id: 'remy-savage',
       name: 'Rémy Savage (Реми Саваж)',
       role: 'Concept Architect · Pioneer of 50 Best Conceptual Menus',
@@ -217,6 +230,23 @@ window.COURSE = {
           case: '50 Best Menu Breakdown: Little Red Door & Shapes (Rémy Savage) · El Copitas (Igor Zernov) · Bar Leone · Tuju',
           practitioners: ['Rémy Savage (Реми Саваж)', 'Igor Zernov (Игорь Зернов)'],
           challenge: 'Practical Assignment 04 (Concept & 50 Best Menu Breakdown): Analyse two menu concepts from The World’s 50 Best Bars/Restaurants (e.g. Rémy Savage, El Copitas, Bar Leone, Paradiso, Tuju) and design the physical Menu Concept for your own venue (structure, tactile material, naming rules, pricing presentation, 6–10 items). Attach your menu concept draft/photos for admin review.'
+        },
+        {
+          id: 'concept-objects',
+          title: 'Concept objects: the menu, the merchandise, the furniture',
+          duration: '17 min',
+          intro: 'A concept becomes real when it leaves the wall and lands in the guest’s hands — as a menu, a coaster, a cube, a stool, or a bar station drawn for the workshop.',
+          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The objects around the drinks: the TAM project treats a bar as a product line — engraved stainless-steel flavour cubes reading smoky · dirty · fruits · sweet · shake · umami · agave · brandy turn a drinks list into a hand-held menu; a mirror-polished bar-top tool case, a flick-style bar blade and a folding stool extend the venue into guest shifts and souvenirs. (3) The furniture that carries the room: Pacific (Пасифик · барные решения) designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
+          ideas: [
+            'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
+            'TAM flavour cubes: merchandise can teach the drinks list instead of decorating the shelf.',
+            'Pacific (Пасифик): the bar itself is a designed object — draw the ice well, the speed rail and the glass hanger, not just the countertop.',
+            'CooCoo Coffee: a single alliterative product trio (coffee · croffles · cookies) makes naming, signage, packaging and menu structure fall into place.',
+            'A concept object only counts when it can be produced, priced and replaced — prototypes are part of the business model.'
+          ],
+          case: 'Concept Objects: TAM (flavour cubes, tool case, bar blade, stool) · CooCoo Coffee (coffee · croffles · cookies) · Pacific / Пасифик (bar stations & drawings)',
+          practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
+          challenge: 'Practical Assignment 04B (Concept Objects): Design three physical objects for your venue — one menu artefact the guest keeps, one item of merchandise that teaches the concept, and one piece of working furniture or equipment (sketch with dimensions and materials). Explain the production route and the unit cost of each. Attach sketches/photos for admin review.'
         }
       ]
     },
@@ -365,6 +395,24 @@ window.COURSE = {
           case: 'Live Found-Object Mockup · Antique Tableware, Candles & 50 Best Menu Artefacts (Denis Bobkov · Joi Espresso Bar · Rémy Savage)',
           practitioners: ['Denis Bobkov (Денис Бобков)', 'Rémy Savage (Реми Саваж)', 'Hiroyasu Kayama (Хироясу Каяма)'],
           challenge: 'Practical Assignment 09B (Found-Object Live Mockup & Menu Concept): Assemble a real physical mockup of your venue from improvised and found objects — antique tableware/glassware, candles, textures, props and a physical prototype of your 50 Best-inspired Menu Concept. Light it with real candles/focused light and photograph 3 views at guest eye level. Attach your photographs and description for admin confirmation.'
+        },
+        {
+          id: 'small-venues',
+          title: 'Small venues, real budgets: the author’s project archive',
+          duration: '18 min',
+          intro: 'Four built venues, one cake room, one bar-furniture studio: what a small budget actually buys, photographed on the day the rooms were finished.',
+          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (ДЖОЙ, opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific (Пасифик · барные решения) moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
+          ideas: [
+            'Joi Espresso Bar (ДЖОЙ · 2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
+            'Passie Cakes Co.: props do the branding — a chandelier, a pastel banquette, a hand-drawn logo and flowers, all replaceable at flea-market prices.',
+            'CooCoo Coffee: one product trio and one palette make signage, menu and packaging self-evident.',
+            'Pacific (Пасифик): design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
+            'Chicken Connection: the finish pass, boxed delivery and open kitchen are the content of the room, not the back of house.',
+            'Collect the details: chessboards, resin ashtrays, pasted posters, bric-a-brac glassware in red light — a research file is cheaper than a renovation.'
+          ],
+          case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific / Пасифик · TAM',
+          practitioners: ['Egor Tarasenko (Егор Тарасенко)'],
+          challenge: 'Practical Assignment 09C (Archive Reading): Choose four photographs from the author’s project archive and write a sourcing analysis for each: what was bought new, what was found second-hand, what was made or repaired by hand, and what it would cost to repeat in your own city. Then add one detail you would copy and one you would refuse. Attach your notes for admin confirmation.'
         }
       ]
     },
@@ -488,13 +536,50 @@ window.COURSE = {
     {
       title: 'Joi Espresso Bar · Egor Tarasenko',
       location: 'Author’s own project',
-      year: 'Budget build & Found objects',
+      year: 'Opened 2025 · by OGONEK TEAM',
       industry: 'Espresso bar · Found objects, vintage tableware & scenography',
-      image: 'horeca-atmosphere-candle.jpg',
+      image: 'project-joi-arcade.jpg',
       context: 'A small espresso bar assembled by the author of this course almost entirely from what the street and the flea markets offered — furniture, fixtures, cups, lamps, equipment and objects other people had already discarded.',
-      what: 'Instead of ordering a fitted interior, the space was built piece by piece: second-hand and reclaimed objects, adjusted, repaired and re-finished by hand until the room held together as one story.',
-      why: 'Direct evidence that a venue with soul does not require a large investment: the constraint became the character.',
-      takeaway: 'Budget is not the opposite of atmosphere. Money buys speed and finish; intention buys soul.'
+      what: 'Instead of ordering a fitted interior, the space was built piece by piece: a poster facade, café bulbs strung along the arcade, paper cups carrying the logo, a reconditioned brass lever machine, second-hand grinders and a counter that hides more inventory than seats. Everything was adjusted, repaired and re-finished by hand until the room held together as one story.',
+      why: 'Direct evidence that a venue with soul does not require a large investment: the constraint became the character, and the mess of a working bar became the visual identity.',
+      takeaway: 'Budget is not the opposite of atmosphere. Money buys speed and finish; intention buys soul.',
+      gallery: ['project-joi-arcade.jpg', 'project-joi-facade.jpg', 'project-joi-brand.jpg', 'project-joi-cups.jpg', 'project-joi-machine.jpg', 'project-joi-grinder.jpg', 'project-joi-bar.jpg', 'project-joi-arcade-lights.jpg', 'project-joi-arcade-arches.jpg']
+    },
+    {
+      title: 'Passie Cakes Co. & CooCoo Coffee · small-venue scenography',
+      location: 'Two street venues',
+      year: '2025–2026 · built on small budgets',
+      industry: 'Cake shop & croffle bar · Identity built from props, graphics and light',
+      image: 'project-passie-wall.jpg',
+      context: 'Two small venues from the author’s practice, documented from inside: a cake room in pastel pinks with a crystal chandelier and a hand-drawn bear logo, and a street coffee bar in turquoise where a cartoon cup with googly eyes sells three alliterative products — coffee, croffles, cookies.',
+      what: 'Neither room was designed with custom joinery. The identity is carried by paint, props, printed paper, pastel crockery, fairy lights and a chandelier bought second-hand, while the product itself is staged like a window display — a birthday cake with duck decorations, a croffle on a pink table, a slice on an old china plate.',
+      why: 'Shows how far a concept can travel on graphics and props alone: guests photograph the wall, the cup and the table vignette before they photograph the food.',
+      takeaway: 'When there is no budget for architecture, spend it on one colour story, one drawn character and one photographable table.',
+      gallery: ['project-passie-wall.jpg', 'project-passie-cake.jpg', 'project-passie-cheesecake.jpg', 'project-passie-sakura.jpg', 'project-passie-room.jpg', 'project-passie-counter.jpg', 'project-passie-window.jpg', 'project-coocoo-pour.jpg', 'project-coocoo-room.jpg', 'project-coocoo-bulbs.jpg', 'project-coocoo-team.jpg', 'project-coocoo-menu.jpg']
+    },
+    {
+      title: 'Pacific / Пасифик & TAM · bar objects',
+      location: 'Design & fabrication projects',
+      year: 'Product design for hospitality',
+      industry: 'Bar furniture, working equipment & merchandise · Пасифик (барные решения) · TAM / TYT',
+      image: 'project-pacific-station.jpg',
+      context: 'Two product-side projects of the author: Pacific (Пасифик · барные решения) designs and fabricates bar stations and consoles; TAM builds the objects that surround the drinks — flavour cubes, tool sets, bar blades, folding stools and textiles.',
+      what: 'Pacific draws the working parts of the bar — sintered-stone tops, recessed ice wells, speed rails, under-counter glass hangers, cantilevered consoles on castors — and delivers 3D visualisations plus technical drawings for the workshop. TAM engraves the vocabulary of a drinks list onto stainless-steel cubes (smoky · dirty · fruits · sweet · shake · umami · agave · brandy) and packages tools so they can be carried between venues.',
+      why: 'Proves that the atmosphere of a venue is often decided upstream — by whoever drew the furniture and by whoever chose which objects leave the building with the guest.',
+      takeaway: 'Design the ice well, the speed rail and the takeaway object with the same seriousness as the candlelit table.',
+      gallery: ['project-pacific-logo.png', 'project-pacific-station.jpg', 'project-pacific-console.jpg', 'project-pacific-render.jpg', 'project-pacific-drawing.jpg', 'project-tam-cubes.jpg', 'project-tam-mirror.jpg', 'project-tam-flatlay.jpg', 'project-tam-tool.jpg', 'project-tam-opener.jpg', 'project-tam-stool.jpg', 'project-tam-socks.jpg']
+    },
+    {
+      title: 'Chicken Connection · Moscow',
+      location: 'Moscow',
+      year: 'Pilot episode · venue visit',
+      industry: 'Chicken concept & food media · filmed with Dmitry Konnikov',
+      image: 'project-chicken-connection-kitchen.jpg',
+      context: 'A pilot episode shot inside a Moscow chicken concept with Dmitry Konnikov: the open finish pass, the rotisserie, the branded delivery boxes and a rooster mascot waiting on the shelf.',
+      what: 'The camera stands where the kitchen hands work, so the film shows what the guest never sees — heat, boxes, branded packaging and the physical comedy of a full pass at service speed.',
+      why: 'For a modern food venue the kitchen is not the back of house; it is the content, the queue entertainment and the proof of freshness at the same time.',
+      takeaway: 'Whatever a venue films — its kitchen, its prep, its crew — becomes part of its atmosphere long before the guest arrives.',
+      gallery: ['project-chicken-connection-kitchen.jpg', 'project-chicken-connection-pass.jpg']
     },
     {
       title: '50 Best Menu Concepts · Bar Leone & Tuju',
@@ -508,7 +593,218 @@ window.COURSE = {
       takeaway: 'Design your menu as an object guests want to hold, photograph and remember.'
     }
   ],
+  projects: {
+    eyebrow: 'PROJECTS OF THE AUTHOR',
+    title: 'Built, repaired, drawn — and photographed.',
+    lead: 'The venues, identities and objects behind this course, documented as working evidence: what was found, what was bought second-hand, what was made by hand. Every photograph was taken on site — in the arcade, behind the counter, on the pavement — not in a showroom.',
+    note: 'Primary sources for Module 09 (Budget Realisation & Scenography) and Module 04 (Concept Objects). Students read the archive the way they will later read their own flea-market finds: what was bought, what was found, what was made, and what it cost to keep the story coherent.',
+    items: [
+      {
+        id: 'joi',
+        index: '01',
+        name: 'Joi Espresso Bar (ДЖОЙ)',
+        role: 'Espresso bar · Found objects & scenography',
+        year: '2025',
+        team: 'By OGONEK TEAM',
+        moduleId: 'budget',
+        moduleNumber: '09',
+        image: 'project-joi-arcade.jpg',
+        tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
+        summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
+        ru: 'Собственный проект автора курса и главный кейс модуля 09. «ДЖОЙ» открылся в 2025 году: стеклянная дверь за постерным фасадом, гирлянды лампочек под арками, бумажные стаканы с логотипом, восстановленная латунная рычажная кофемашина и кофемолки с барахолки на стойке, под которой больше инвентаря, чем посадочных мест. Здесь ничего не куплено одним заказом из шоу-рума — комната держится потому, что сначала была придумана история, а потом её собирала одна пара глаз.',
+        facts: [
+          ['ROLE', 'Author’s own project · the case behind Module 09'],
+          ['OPENED', '2025 · by OGONEK TEAM'],
+          ['BUILT FROM', 'Street finds, second-hand equipment, salvage, hand-set signage and glassware'],
+          ['IN THE COURSE', 'Module 09 · “Soul before budget” and the live found-object mockup']
+        ],
+        photos: [
+          { file: 'project-joi-arcade.jpg', caption: 'The arcade: vaults, café bulbs and stone floors — the kind of address a small bar can still afford, and the first thing the guest sees.', captionRu: 'Галерея: своды, лампочки и каменный пол — адрес, который маленький бар ещё может себе позволить, и первое, что видит гость.' },
+          { file: 'project-joi-facade.jpg', caption: 'The facade as a menu: photographs in the windows, a painted “открыто” sign, and the opening date — ДЖОЙ · 2025 BY OGONEK TEAM.', captionRu: 'Фасад как меню: фотографии в витрине, нарисованное «открыто» и дата открытия — ДЖОЙ · 2025 BY OGONEK TEAM.' },
+          { file: 'project-joi-brand.jpg', caption: 'The brand mark is a date and three letters, set by hand. No agency, no system — but the same logo on every cup.', captionRu: 'Логотип — это дата и три буквы, набранные вручную. Без агентства и брендбука, но один и тот же знак на каждом стакане.' },
+          { file: 'project-joi-cups.jpg', caption: 'Stacks of paper cups behind the bar: the cheapest brand touchpoint in hospitality, used as inventory.', captionRu: 'Стопки бумажных стаканов за стойкой: самая дешёвая точка контакта с брендом, работающая как склад.' },
+          { file: 'project-joi-machine.jpg', caption: 'A brass lever machine on a small counter — the one object worth spending money on, because the guest hears it work.', captionRu: 'Латунная рычажная кофемашина на небольшой стойке — тот единственный объект, на который стоит потратиться: гость слышит, как она работает.' },
+          { file: 'project-joi-grinder.jpg', caption: 'Second-hand grinders, still carrying the roaster’s sticker: Brazil, Colibri. Equipment wears its own history.', captionRu: 'Кофемолки с барахолки — со стикером обжарщика: Бразилия, Колибри. Техника носит свою историю как есть.' },
+          { file: 'project-joi-bar.jpg', caption: 'The bar, photographed as the crew works — a red-lit counter, paper, cups and no styling.', captionRu: 'Стойка, снятая в работе: красный свет, бумага, стаканы — без ретуши и постановки.' },
+          { file: 'project-joi-arcade-lights.jpg', caption: 'Café bulbs under the vaults: theatrical light borrowed from the building, not commissioned from a designer.', captionRu: 'Лампочки под сводами: театральный свет, взятый у самого здания, а не заказанный у дизайнера.' },
+          { file: 'project-joi-arcade-arches.jpg', caption: 'The approach at service time — the sightline that decides whether a passer-by becomes a guest.', captionRu: 'Подход к бару в час работы: линия взгляда, которая решает, станет ли прохожий гостем.' }
+        ]
+      },
+      {
+        id: 'passie',
+        index: '02',
+        name: 'Passie Cakes Co.',
+        role: 'Cake shop & pastry counter · identity built from props',
+        year: '2025–2026',
+        team: 'Prop-led interior & hand-drawn identity',
+        moduleId: 'experience',
+        moduleNumber: '02 & 09',
+        image: 'project-passie-wall.jpg',
+        tagline: 'A one-room cake shop where the props do the branding: pastel banquettes, a crystal chandelier, flowers and a bear with a birthday cake.',
+        summary: 'A tiny venue built on a single promise — cake, made and decorated the same day. The concept lives in the cheapest possible cast: pastel pink booth seating, a second-hand crystal chandelier, lilac cups and old lace-edged china plates, a water jug used as a vase, hand-written gift cards, and one hand-drawn logo of a bear holding a cake, painted straight onto the wall. Guests photograph the wall, the fridge and the table before they photograph the plate.',
+        ru: 'Маленькое заведение с одним обещанием — торт, приготовленный и украшенный в тот же день. Концепция живёт на самых дешёвых «актёрах»: пастельно-розовые диваны, хрустальная люстра с барахолки, сиреневые чашки и старые тарелки с кружевным краем, кувшин вместо вазы, подписанные от руки открытки — и нарисованный прямо на стене медвежонок с тортом. Гости фотографируют стену, витрину и стол раньше, чем тарелку.',
+        facts: [
+          ['ROLE', 'Small-venue scenography · identity through props'],
+          ['CONCEPT', 'One product, one colour story, one photographable room'],
+          ['THE SET', 'Pastel banquettes · crystal chandelier · flowers · hand-drawn logo'],
+          ['IN THE COURSE', 'Module 02 · the “sweet fairy tale” maintained on a small budget']
+        ],
+        photos: [
+          { file: 'project-passie-wall.jpg', caption: 'PASSIE CAKES CO. painted straight onto the plaster — the cheapest signage there is, and the most photographed surface in the room.', captionRu: 'PASSIE CAKES CO. прямо на стене — самая дешёвая вывеска в мире и самая фотографируемая поверхность в зале.' },
+          { file: 'project-passie-cake.jpg', caption: 'A birthday cake with duck decorations in the display fridge: the product is the window display.', captionRu: 'Торт с утятами в витрине-холодильнике: сам продукт и есть витрина.' },
+          { file: 'project-passie-cheesecake.jpg', caption: 'A slice on an old china plate with a lace edge, a daisy napkin, and a vase that is really a water jug.', captionRu: 'Кусок на старой фарфоровой тарелке с кружевным краем, ромашковая салфетка и «ваза», которая на самом деле кувшин.' },
+          { file: 'project-passie-sakura.jpg', caption: 'The same idea at 30 centimetres: a green tray, a lilac cup, a cake card and a glass of water — a table vignette, exactly like the mockup brief.', captionRu: 'Та же идея на 30 сантиметрах: зелёный поднос, сиреневая чашка, карточка пирожного и стакан воды — тот же приём, что в задании с макетом.' },
+          { file: 'project-passie-room.jpg', caption: 'The room: mirrored tiles, fairy lights, drinks fridge and a counter that doubles as a shop window.', captionRu: 'Зал: зеркальная плитка, гирлянды, холодильник с напитками и стойка, которая работает витриной.' },
+          { file: 'project-passie-counter.jpg', caption: 'A chandelier over a paper menu with a cartoon duck: the same room operates at two registers at once.', captionRu: 'Люстра над бумажным меню с утёнком: одна комната одновременно работает в двух регистрах.' },
+          { file: 'project-passie-window.jpg', caption: 'Seen from the street: tables, chairs and a chandelier — the interior is legible from the pavement.', captionRu: 'Вид с улицы: столы, стулья и люстра — интерьер читается прямо с тротуара.' }
+        ]
+      },
+      {
+        id: 'coocoo',
+        index: '03',
+        name: 'CooCoo Coffee (coffee · croffles · cookies)',
+        role: 'Street coffee & dessert concept',
+        year: '2025–2026',
+        team: 'One alliterative promise, one palette',
+        moduleId: 'concepts',
+        moduleNumber: '04',
+        image: 'project-coocoo-pour.jpg',
+        tagline: 'Coffee, croffles, cookies — one alliterative promise, a turquoise facade and a pair of googly eyes on the window.',
+        summary: 'A street concept that solves naming, signage, menu and packaging with a single sentence. The turquoise frontage carries a cartoon cup with eyes and the line “WE ARE COOCOO”; inside there is checkered tile, café bulbs strung over the counter, a paper menu taped to the wall and a croffle served on a pink table. Nothing in the room is expensive. Everything in the room says the same three words.',
+        ru: 'Уличный концепт, который решает нейминг, вывеску, меню и упаковку одной фразой. Бирюзовый фасад несёт нарисованный стакан с глазами и надпись «WE ARE COOCOO»; внутри — плитка в шашечку, лампочки над стойкой, бумажное меню на скотче и кроффл на розовом столе. В зале нет ничего дорогого — но всё говорит одни и те же три слова.',
+        facts: [
+          ['ROLE', 'Street coffee & dessert concept · graphics-first'],
+          ['CONCEPT', 'One alliterative product trio: coffee · croffles · cookies'],
+          ['GRAPHICS', 'Logo · window art · paper cups · printed menu boards'],
+          ['IN THE COURSE', 'Module 04 · the menu and the cup as takeaway objects']
+        ],
+        photos: [
+          { file: 'project-coocoo-pour.jpg', caption: '“WE ARE COOCOO · COFFEE | CROFFLES | COOKIES”: the whole brand on one paper cup and one pane of glass.', captionRu: '«WE ARE COOCOO · COFFEE | CROFFLES | COOKIES»: весь бренд на одном стакане и одном стекле.' },
+          { file: 'project-coocoo-room.jpg', caption: 'The room: checkered tiles, fairy lights, a soft-serve machine and a croffle on a pink table.', captionRu: 'Зал: плитка в шашечку, гирлянды, аппарат мягкого мороженого и кроффл на розовом столе.' },
+          { file: 'project-coocoo-bulbs.jpg', caption: 'Café bulbs and a paper menu above the bar — theatrical light on a street-food budget.', captionRu: 'Лампочки и бумажное меню над стойкой — театральный свет на бюджет стритфуда.' },
+          { file: 'project-coocoo-team.jpg', caption: 'The frame the brand needs: aprons, flowers and cartoons behind the counter.', captionRu: 'Кадр, который нужен бренду: фартуки, цветы и мультяшки за стойкой.' },
+          { file: 'project-coocoo-menu.jpg', caption: 'A printed board taped to the tiles: transparent pricing, made in an afternoon and replaced in ten minutes.', captionRu: 'Печатное меню на скотче: прозрачные цены, сделано за вечер, меняется за десять минут.' }
+        ]
+      },
+      {
+        id: 'chicken',
+        index: '04',
+        name: 'Chicken Connection · Moscow',
+        role: 'Chicken concept · pilot episode & venue visit',
+        year: 'Filmed with Dmitry Konnikov',
+        team: 'Food media production',
+        moduleId: 'technology',
+        moduleNumber: '05',
+        image: 'project-chicken-connection-kitchen.jpg',
+        tagline: 'A chicken concept seen from inside the pass — and filmed for the pilot episode of a food series.',
+        summary: 'A pilot episode shot inside a Moscow chicken venue with Dmitry Konnikov: the open finish pass, the rotisserie, branded delivery boxes and a rooster mascot waiting on the shelf. The camera stands where the kitchen hands stand, so the film shows heat, boxes and the comedy of a full pass at service speed. For a modern food venue the kitchen is not the back of house — it is the content, the queue entertainment and the proof of freshness at once.',
+        ru: 'Пилотный выпуск, снятый в московском курином заведении вместе с Дмитрием Конниковым: открытая раздача, гриль, брендированные коробки доставки и маска петуха на полке. Камера стоит там, где стоят руки повара, поэтому в кадр попадают жар, коробки и комедия полной раздачи в час пик. Для современного заведения кухня — не «задний двор», а контент, развлечение для очереди и доказательство свежести одновременно.',
+        facts: [
+          ['ROLE', 'Food-media pilot · venue visit'],
+          ['VENUE', 'Chicken concept · Moscow'],
+          ['HOST', 'Dmitry Konnikov (Дмитрий Конников)'],
+          ['IN THE COURSE', 'Module 05 · operations on camera, brand theatre at the pass']
+        ],
+        photos: [
+          { file: 'project-chicken-connection-kitchen.jpg', caption: 'The pass as a stage: branded boxes, rotisserie heat and a rooster mascot waiting on the shelf.', captionRu: 'Раздача как сцена: брендированные коробки, жар гриля и маска петуха на полке.' },
+          { file: 'project-chicken-connection-pass.jpg', caption: 'Shot from behind the counter: the pilot episode of CHICKEN CONNECTION with Dmitry Konnikov, filmed where the food is finished.', captionRu: 'Снято из-за стойки: пилотный выпуск CHICKEN CONNECTION с Дмитрием Конниковым — там, где еда доводится до готовности.' }
+        ]
+      },
+      {
+        id: 'pacific',
+        index: '05',
+        name: 'Pacific (Пасифик · барные решения)',
+        role: 'Bar furniture, stations & equipment design',
+        year: 'Design & fabrication',
+        team: '3D visualisation · technical drawings · production',
+        moduleId: 'technology',
+        moduleNumber: '05 & 04',
+        image: 'project-pacific-station.jpg',
+        tagline: 'Bar solutions drawn to be fabricated: blackened steel, sintered stone and glass, specified to the last millimetre.',
+        summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
+        ru: 'Проект не заведения, а оснащения: модульные барные станции и консоли, разработанные как единый набор — рабочая станция с каменной столешницей, врезной ледницей, рейлами и подвесом для бокалов; консоль-кронштейн на колёсах; навесной сервер и компактный барный инструментальный шкаф. Всё отдаётся как 3D-визуализации и рабочие чертежи, потому что эргономика, придуманная за стойкой, — это та атмосфера, которую гость не замечает, пока её нет.',
+        facts: [
+          ['ROLE', 'Bar furniture & equipment design'],
+          ['OUTPUT', '3D visualisations · technical drawings · fabrication'],
+          ['MATERIALS', 'Blackened steel · sintered stone · glass · castors'],
+          ['IN THE COURSE', 'Modules 05 & 04 · ergonomics as scenography, objects as concept']
+        ],
+        photos: [
+          { file: 'project-pacific-logo.png', caption: 'Пасифик — барные решения: a brand for a workshop rather than a venue.', captionRu: 'Пасифик — барные решения: бренд мастерской, а не заведения.' },
+          { file: 'project-pacific-station.jpg', caption: 'The station: stone top, ice well, speed rail, under-counter glass hanger, powder-coated steel body.', captionRu: 'Станция: каменная столешница, ледница, рейлы, подвес для бокалов под стойкой, корпус из стали с порошковой окраской.' },
+          { file: 'project-pacific-console.jpg', caption: 'A cantilevered console on castors — the service bar becomes mobile furniture.', captionRu: 'Консоль-кронштейн на колёсах — сервизная стойка превращается в мобильную мебель.' },
+          { file: 'project-pacific-render.jpg', caption: '“FUTURE OF BARTENDING”: the project the furniture was drawn for.', captionRu: '«FUTURE OF BARTENDING» — проект, под который рисовалась мебель.' },
+          { file: 'project-pacific-drawing.jpg', caption: 'Technical drawing — a concept only exists once the cabinetmaker can read it.', captionRu: 'Рабочий чертёж — концепция существует ровно с того момента, как её может прочитать мастер.' }
+        ]
+      },
+      {
+        id: 'tam',
+        index: '06',
+        name: 'TAM · TYT — bar objects & merchandise',
+        role: 'Bar brand & object design',
+        year: 'Product line',
+        team: 'Cubes · tools · furniture · textiles',
+        moduleId: 'concepts',
+        moduleNumber: '04',
+        image: 'project-tam-cubes.jpg',
+        tagline: 'A bar that leaves the building: cubes, tools, stools and socks designed as souvenirs of a cocktail menu.',
+        summary: 'A product line built around a bar concept. Engraved stainless-steel cubes carry the vocabulary of the drinks list — smoky, dirty, fruits, sweet, shake, umami, agave, brandy — so the menu becomes something a guest can hold, stack and take home. Around them: a bar-top tool set with mirror-polished cladding, a flick-style bar blade, a folding stool that packs flat for guest shifts, bar mats and knitted TAM / TYT socks. Merchandise that teaches the menu is worth more than merchandise that decorates a shelf.',
+        ru: 'Линейка продуктов вокруг барного концепта. Гравированные стальные кубики несут словарь карты напитков — smoky, dirty, fruits, sweet, shake, umami, agave, brandy — и меню становится предметом, который гость может подержать, сложить и унести домой. Рядом: барный набор инструментов с зеркальной панелью, барный нож-бабочка, складной стул для гостевых смен, коврики и трикотажные носки с марками TAM и TYT. Мерч, который учит меню, стоит больше, чем мерч, который украшает полку.',
+        facts: [
+          ['ROLE', 'Bar brand & object design'],
+          ['OBJECTS', 'Flavour cubes · tool set · bar blade · folding stool · textiles'],
+          ['IDEA', 'Merchandise that teaches the drinks list'],
+          ['IN THE COURSE', 'Module 04 · the takeaway object as part of the concept']
+        ],
+        photos: [
+          { file: 'project-tam-cubes.jpg', caption: 'Flavour cubes: smoky · dirty · fruits · sweet · shake · umami · agave · brandy.', captionRu: 'Кубики вкуса: smoky · dirty · fruits · sweet · shake · umami · agave · brandy.' },
+          { file: 'project-tam-mirror.jpg', caption: 'A stainless-steel bar-top tool set with a mirror-polished panel and a black bar blade.', captionRu: 'Стальной барный набор с зеркальной панелью и чёрным барным ножом.' },
+          { file: 'project-tam-flatlay.jpg', caption: 'The same objects in a case: designed to be packed, carried between venues and photographed.', captionRu: 'Те же предметы в кейсе: их можно собрать, перевезти на другую площадку и снять.' },
+          { file: 'project-tam-tool.jpg', caption: 'A flick-style bar blade — the tool bartenders actually keep in a pocket, so it must look like the brand.', captionRu: 'Барный нож-бабочка — инструмент, который бармен действительно носит в кармане, поэтому он должен выглядеть как бренд.' },
+          { file: 'project-tam-opener.jpg', caption: '“BITTER IS BETTER”: a powder-coated portrait of a bent cocktail spoon, cast into a solid handle.', captionRu: '«BITTER IS BETTER»: порошковая печать по портрету согнутой барной ложки — и литая ручка рядом.' },
+          { file: 'project-tam-stool.jpg', caption: 'A folding stool with a matte frame: guest-shift furniture that fits in a bag.', captionRu: 'Складной стул с матовой рамой: мебель для гостевых смен, которая помещается в сумку.' },
+          { file: 'project-tam-socks.jpg', caption: 'TAM / TYT socks — the cheapest brand touchpoint in hospitality, done properly.', captionRu: 'Носки TAM / TYT — самая дешёвая точка контакта с брендом в хореке, сделанная как следует.' }
+        ]
+      },
+      {
+        id: 'details',
+        index: '07',
+        name: 'Found objects & small details (Детали и находки)',
+        role: 'Research file for the mockup brief',
+        year: 'Collected across the venues',
+        team: 'Flea markets · salvage · the street',
+        moduleId: 'budget',
+        moduleNumber: '09',
+        image: 'project-detail-nine-lives.jpg',
+        tagline: 'The atmosphere lives in the small things: a matchbox, a chessboard, a pasted poster, a glass of parsley, a lemon press on the pavement.',
+        summary: 'A collecting file of details observed across the venues in this archive: flea-market chess sets and resin ashtrays, glassware standing in red light, a chalkboard drinks list, a vintage television reused as a planter, a black cat poster reading NINE LIVES, NONE LEFT, an ice press working on the pavement outside, and a menu covered in hand-written stickers. These are the objects students are asked to hunt for before they are asked to design anything: cheap, specific, already full of someone else’s history.',
+        ru: 'Файл деталей, собранных в заведениях этого архива: шахматы и смоляные пепельницы с барахолки, стекло в красном свете, меловая карта напитков, старый телевизор в роли кашпо, постер с чёрным котом и надписью NINE LIVES, NONE LEFT, пресс для цитрусовых, работающий прямо на тротуаре, и меню, заклеенное рукописными стикерами. Именно такие предметы студенты ищут до того, как начинают что-то проектировать: дешёвые, конкретные, уже наполненные чужой историей.',
+        facts: [
+          ['ROLE', 'Research file · sources for the found-object mockup'],
+          ['SOURCES', 'Flea markets · demolition salvage · city pavements'],
+          ['USE', 'Module 09 · object hunting before drawing'],
+          ['RULE', 'Buy the story, not the finish']
+        ],
+        photos: [
+          { file: 'project-detail-nine-lives.jpg', caption: 'NINE LIVES, NONE LEFT: a pasted poster, a toy CCTV camera and a vintage television parked on the counter.', captionRu: 'NINE LIVES, NONE LEFT: наклеенный постер, игрушечная камера слежения и старый телевизор на стойке.' },
+          { file: 'project-detail-nine-lives-bar.jpg', caption: 'The same room from behind the bar: red brick, an enamel lampshade and a wall that advertises itself.', captionRu: 'Та же комната из-за стойки: красный кирпич, эмалированный абажур и стена, которая сама себя рекламирует.' },
+          { file: 'project-detail-chess.jpg', caption: 'A flea-market chessboard, a resin ashtray, a green smoothie: the table is the concept.', captionRu: 'Шахматы с барахолки, смоляная пепельница, зелёный смузи: стол и есть концепция.' },
+          { file: 'project-detail-chess-morning.jpg', caption: 'The same table in morning light — two drinks, two guests, no styling.', captionRu: 'Тот же стол в утреннем свете — два напитка, два гостя, без постановки.' },
+          { file: 'project-detail-342.jpg', caption: 'A wooden counter, bunting lights and a menu covered in hand-written stickers.', captionRu: 'Деревянная стойка, гирлянда и меню, заклеенное рукописными стикерами.' },
+          { file: 'project-detail-street-press.jpg', caption: 'A citrus press working on the pavement: production moves outside and becomes the show.', captionRu: 'Пресс для цитрусовых прямо на тротуаре: производство выходит на улицу и становится шоу.' },
+          { file: 'project-detail-street-press-2.jpg', caption: 'Second-hand press, second-hand board, one pair of hands — the cheapest theatre there is.', captionRu: 'Пресс с барахолки, доска с барахолки, одна пара рук — самый дешёвый театр из возможных.' },
+          { file: 'project-detail-backbar.jpg', caption: 'A backbar shelf: bottles, trade magazines, a metal teapot and a cap left by a guest.', captionRu: 'Полка бэкбара: бутылки, журналы, металлический чайник и кепка, забытая гостем.' }
+        ]
+      }
+    ]
+  },
   updates: [
+    {
+      tag: 'PROJECTS OF THE AUTHOR · PHOTO ARCHIVE',
+      title: 'Forty-three new photographs: the author’s own venues, objects and studio work',
+      date: 'September 2026',
+      text: 'The app now carries a photographic archive of the author’s own practice: Joi Espresso Bar (ДЖОЙ · 2025 · OGONEK TEAM), Passie Cakes Co., CooCoo Coffee, Chicken Connection (Moscow, filmed with Dmitry Konnikov), Pacific / Пасифик (барные решения) and the TAM / TYT object line — plus a collecting file of found details. Open “Projects of the Author” from the main navigation or from Module 09.'
+    },
     {
       tag: 'INDUSTRY LEADERS & 50 BEST MENUS',
       title: 'Eight practitioners & World’s 50 Best menu concepts',

@@ -78,10 +78,13 @@ Ten modules / eleven learning units:
 
 ### Module 09 — Budget Realisation & Scenography
 
-Two learning units:
+Three learning units:
 
 1. **Soul before budget** — a venue does not need a large budget to feel alive; it needs a point of view and the patience to hunt for objects that carry one. Sourcing discipline (flea markets, auctions, demolition yards, liquidations, the street), repair / reuse / re-upholstery, and the case of **Joi Espresso Bar** — the author's own project, assembled almost entirely from the street and flea markets. *Money buys speed and finish; intention buys soul.*
 2. **Theatrical techniques & the live found-object mockup** — scenography borrowed from the stage: painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and one tight beam of light. A theatrical trick must support the story and never announce itself.
+3. **Small venues, real budgets: the author's project archive** — the photographic evidence behind the method: **Joi Espresso Bar** (ДЖОЙ · 2025 · OGONEK TEAM), **Passie Cakes Co.**, **CooCoo Coffee**, **Chicken Connection** (Moscow, filmed with Dmitry Konnikov), **Pacific / Пасифик (барные решения)** and the **TAM / TYT** object line, plus a collecting file of found details (chessboards, resin ashtrays, pasted posters, a lemon press on the pavement). Students read the archive and write down what was bought, what was found and what was made.
+
+Module 04 also gained a learning unit, **Concept objects: the menu, the merchandise, the furniture**, reading the same archive through the takeaway object: a menu that leaves the venue, flavour cubes that teach a drinks list, and bar stations drawn for the workshop.
 
 **Final exercise:** every student stages a live physical mockup directly from found objects — antique tableware, candles, vintage glassware, found textures and props, and a physical menu concept — at 1:20 or 1:50. It is a set rather than a plan: entrance, first sightline, light source, and the details that carry the atmosphere. Photograph it at guest height for the final pitch.
 
@@ -89,7 +92,8 @@ Two learning units:
 
 ## Product experience
 
-- **Password gate** (SEG-styled split screen) → public editorial landing page with the elective's positioning, subject areas, learning sequence, case files, the fairy-tale principle, the budget & scenography block, author timeline, ten-module structure and final challenge.
+- **Password gate** (SEG-styled split screen) → public editorial landing page with the elective's positioning, subject areas, learning sequence, case files, the fairy-tale principle, the budget & scenography block, a strip of the author's projects, author timeline, ten-module structure and final challenge.
+- **Projects of the author** (`#/projects`, `#/project/<id>`) — 43 photographs across seven project files: Joi Espresso Bar, Passie Cakes Co., CooCoo Coffee, Chicken Connection, Pacific / Пасифик, TAM / TYT and a found-object research file. Each file carries facts, a bilingual explanation (EN + RU) and a captioned gallery with a keyboard-accessible lightbox; the same photographs appear inside the matching case files and course modules.
 - **Student space** with course progress, next lesson, modules, editorial lesson pages, case studies, assignment submissions (concept + mockup photographs), quiz, feedback, updates and a printable certificate.
 - **Instructor space** for reviewing work, assigning a score, providing feedback and approving or returning submissions for revision.
 - **Admin view** for the generic institution/license model, edition overview, password-access status and license demonstration.
@@ -99,7 +103,8 @@ Two learning units:
 ## Content, architecture and boundaries
 
 - `access.js` owns the password gate and boots `app.js` (`window.bootCourse`) only after `course-data.js` has been unlocked and loaded.
-- `course-data.js` holds portable content seed data: course identity, edition, modules, lessons, case files and updates. Renderers in `app.js` consume this structure; UI markup is not the source of truth for lesson text.
+- `course-data.js` holds portable content seed data: course identity, edition, modules, lessons, case files, the `projects` archive (seven files with captioned photography) and updates. Renderers in `app.js` consume this structure; UI markup is not the source of truth for lesson text.
+- The original photographs live in the repository root (`IMG_*.jpeg`, `IMG_8809.png`) and are never referenced directly by the app. `presentation/build/build_project_assets.py` derives the optimised, metadata-free web set (`presentation/assets/project-*.jpg|png`, max edge 1400 px) from them, so the camera files stay untouched and the shipped assets stay small and stably named. Re-run it after adding photographs: `python3 presentation/build/build_project_assets.py`.
 - The initial generic domain is: **Institution → User / Enrollment → Course → Edition → Module → Lesson**; learning and operations entities include **Video, CaseStudy, ReadingMaterial, Assignment, Submission, Feedback, Quiz, Question, Answer, Progress, Certificate, License, CourseUpdate, Notification**.
 - Progress and quiz records are scoped to user and edition. Submissions record the student and edition context; an institution-scoped instructor review view is the intended authorization boundary.
 - Course content and author IP remain separate from the institution's licensed access. A new edition can evolve independently, without overwriting existing edition records.

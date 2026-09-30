@@ -53,13 +53,25 @@ window.bootCourse = () => {
       else if (page === 'login') go('');
       else if (page === 'module') go('course');
       else if (page === 'dashboard' || !page) tg.close?.();
-      else if (['course', 'cases', 'progress', 'profile', 'updates', 'assignment', 'quiz', 'certificate', 'search'].includes(page)) go(user()?.role === 'INSTRUCTOR' ? 'instructor' : user()?.role === 'ADMIN' ? 'admin' : 'dashboard');
+      else if (page === 'project') go('projects');
+      else if (['course', 'cases', 'projects', 'progress', 'profile', 'updates', 'assignment', 'quiz', 'certificate', 'search'].includes(page)) go(user()?.role === 'INSTRUCTOR' ? 'instructor' : user()?.role === 'ADMIN' ? 'admin' : 'dashboard');
       else tg.close?.();
     });
   }
 
   const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy">`;
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
+  const projectList = () => C.projects?.items || [];
+  const projectById = id => projectList().find(x => x.id === id);
+  const projectPhotos = p => p?.photos || [];
+  const captionFor = file => {
+    const photo = projectList().flatMap(p => projectPhotos(p)).find(ph => ph.file === file);
+    return photo ? `${photo.caption}${photo.captionRu ? ` · ${photo.captionRu}` : ''}` : '';
+  };
+  const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${ASSET}${esc(file)}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
+        <img src="${ASSET}${esc(file)}" alt="${esc(alt)}" loading="lazy">
+        ${caption ? `<figcaption><span>${esc(caption)}</span></figcaption>` : ''}
+      </figure>`;
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
   const nextLesson = () => allLessons.find(x => !progressFor().includes(x.id)) || allLessons[0];
 
@@ -84,23 +96,24 @@ window.bootCourse = () => {
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
+        <a class="nav-link" href="#/" data-scroll="projects">PROJECTS</a>
         <a class="nav-link" href="#/" data-scroll="author">THE AUTHOR</a>
         <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
     const role = u?.role;
     const home = role === 'INSTRUCTOR' ? 'instructor' : role === 'ADMIN' ? 'admin' : 'dashboard';
-    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Analytics', 'instructor']]
-      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Cases', 'cases'], ['Course', 'course']]
-        : [['Home', 'dashboard'], ['Course', 'course'], ['Cases', 'cases'], ['Progress', 'progress']];
+    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Projects', 'projects']]
+      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Course', 'course'], ['Projects', 'projects'], ['Cases', 'cases']]
+        : [['Home', 'dashboard'], ['Course', 'course'], ['Projects', 'projects'], ['Cases', 'cases'], ['Progress', 'progress']];
     return `<header class="app-header">${brandBlock(`#/${home}`)}<nav class="app-nav" aria-label="Application navigation">${links.map(([t, p]) => `<a href="#/${p}">${t}</a>`).join('')}<button data-action="search">SEARCH ⌕</button></nav><div class="user-chip"><span>${esc(u?.name || 'Guest')}</span><span class="avatar">${initials(u?.name)}</span><button class="nav-link" data-action="profile">PROFILE</button>${role !== 'STUDENT' ? '<button class="nav-link" data-action="logout">SIGN OUT</button>' : ''}</div></header>`;
   };
 
   const bottomNav = () => {
     const role = user()?.role;
-    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']];
+    const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Projects', 'projects', '✦'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
+      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Projects', 'projects', '✦'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
+        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Projects', 'projects', '✦'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕']];
     return `<nav class="mobile-bottom" aria-label="Mobile navigation">${links.map(([t, p, i]) => p === 'search' ? `<button data-action="search"><span>${i}</span>${t}</button>` : `<a href="#/${p}"${route()[0] === p ? ' class="active"' : ''}><span>${i}</span>${t}</a>`).join('')}</nav>`;
   };
 
@@ -110,7 +123,7 @@ window.bootCourse = () => {
 
   /* ---------------------------------------------------------------- landing */
   function landing() {
-    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · built from the street', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
+    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · ДЖОЙ · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Пасифик · барные решения', 'TAM · objects that teach the menu', 'Himkok · Oslo', 'Tuju · São Paulo', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
         <div class="hero-media">${image('horeca-interior-design.jpg', 'An atmospheric contemporary hotel bar with warm lighting and considered materials')}</div>
@@ -214,20 +227,42 @@ window.bootCourse = () => {
         </div>
       </section>
 
+      <section class="section" id="projects">
+        <div class="section-head">
+          <div><span class="eyebrow">06 — PROJECTS OF THE AUTHOR</span><h2>Built, repaired,<br><em>drawn</em>.</h2></div>
+          <p>${esc(C.projects?.lead || 'The venues, identities and objects behind this course, documented as working evidence.')}</p>
+        </div>
+        <div class="project-strip">
+          ${projectList().slice(0, 6).map(pr => `<a class="project-tile" href="#/project/${esc(pr.id)}">
+            ${image(pr.image, `${pr.name} — ${pr.role}`)}
+            <span class="project-index">${esc(pr.index)}</span>
+            <span class="project-tile-copy">
+              <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
+              <strong>${esc(pr.name)}</strong>
+              <span class="form-help">${esc(pr.tagline)}</span>
+            </span>
+          </a>`).join('')}
+        </div>
+        <div class="project-strip-actions">
+          ${button('OPEN THE PROJECT ARCHIVE', 'projects')}
+          <span class="meta">${projectList().length} PROJECT FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span>
+        </div>
+      </section>
+
       <section class="section" id="author">
         <div class="section-head">
-          <div><span class="eyebrow">06 — THE AUTHOR</span><h2>Egor<br><em>Tarasenko</em></h2></div>
+          <div><span class="eyebrow">07 — THE AUTHOR</span><h2>Egor<br><em>Tarasenko</em></h2></div>
           <p>HIM alumnus · Master in Business Management<br><br>Created by a hospitality practitioner and HIM graduate, this elective brings lived industry experience — including venues built by hand on a small budget — into an academic framework.</p>
         </div>
         <div class="timeline">
           <div class="timeline-aside">A PRACTICE-LED<br>POINT OF VIEW</div>
-          <div class="timeline-list">${[['EDUCATION', 'Hotel Institute Montreux', 'Master in Business Management'], ['HOSPITALITY', 'Crowne Plaza St. Petersburg', 'Foundations in hotel operations'], ['INTERNATIONAL', 'Jumeirah Beach Hotel Dubai', 'A global perspective on guest experience'], ['ENTREPRENEURSHIP', 'Hospitality entrepreneurship', 'From an idea to a working concept'], ['OWN PROJECT', 'Joi Espresso Bar', 'Assembled entirely from the street and flea markets — proof that soul does not need a large budget'], ['CONCEPTS', 'Restaurant & bar concepts', 'Positioning, experience and operations'], ['TECHNOLOGY', 'Hospitality technology', 'Tools in service of better hospitality'], ['TODAY', 'Current projects', 'Building the next generation of hospitality education']].map(a => `<div class="timeline-row"><span class="meta">${a[0]}</span><span><strong>${a[1]}</strong><br><span>${a[2]}</span></span></div>`).join('')}</div>
+          <div class="timeline-list">${[['EDUCATION', 'Hotel Institute Montreux', 'Master in Business Management'], ['HOSPITALITY', 'Crowne Plaza St. Petersburg', 'Foundations in hotel operations'], ['INTERNATIONAL', 'Jumeirah Beach Hotel Dubai', 'A global perspective on guest experience'], ['ENTREPRENEURSHIP', 'Hospitality entrepreneurship', 'From an idea to a working concept'], ['OWN VENUE', 'Joi Espresso Bar · ДЖОЙ (2025)', 'Espresso bar assembled from the street and flea markets — <a href="#/project/joi">open the project file ↗</a>'], ['SMALL VENUES', 'Passie Cakes Co. · CooCoo Coffee', 'Cake room and croffle bar where props, graphics and light carry the identity — <a href="#/project/passie">project file ↗</a>'], ['DESIGN & BUILD', 'Pacific / Пасифик · барные решения', 'Bar stations, consoles and equipment drawn for fabrication — <a href="#/project/pacific">project file ↗</a>'], ['OBJECTS & MEDIA', 'TAM · Chicken Connection', 'Merchandise designed to teach the menu, and a food-media pilot shot with Dmitry Konnikov — <a href="#/project/tam">project file ↗</a>'], ['CONCEPTS', 'Restaurant & bar concepts', 'Positioning, experience and operations'], ['TODAY', 'Current projects', 'Building the next generation of hospitality education — <a href="#/projects">the whole archive ↗</a>']].map(a => `<div class="timeline-row"><span class="meta">${a[0]}</span><span><strong>${a[1]}</strong><br><span>${a[2]}</span></span></div>`).join('')}</div>
         </div>
       </section>
 
       <section class="section">
         <div class="section-head">
-          <div><span class="eyebrow">07 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
+          <div><span class="eyebrow">08 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
           <p>Move from the signals shaping the industry to a final concept grounded in your own point of view — and a mockup you can hold.</p>
         </div>
         <div class="module-preview">${C.modules.map(m => `<a class="module-row" href="#/module/${m.id}"><span class="module-num">${m.number}</span><div><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div><span class="meta module-meta">${word(m.lessons.length)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>
@@ -324,6 +359,7 @@ window.bootCourse = () => {
       </div>
       <section class="dash-section" style="margin-top:42px">
         <div class="simple-row"><span><span class="meta">WHAT'S NEW · SEPTEMBER 2026</span><br><strong>Module 09 — Budget Realisation &amp; Scenography: found objects, theatrical techniques and the final live found-object mockup.</strong></span><a class="button text" href="#/updates">VIEW UPDATES →</a></div>
+        <div class="simple-row"><span><span class="meta">PROJECTS OF THE AUTHOR · ${projectList().length} FILES · ${projectList().reduce((n, p) => n + projectPhotos(p).length, 0)} PHOTOGRAPHS</span><br><strong>Joi Espresso Bar, Passie Cakes Co., CooCoo, Chicken Connection, Пасифик, TAM — photographed evidence for your own sourcing plan.</strong></span><a class="button text" href="#/projects">OPEN THE ARCHIVE →</a></div>
       </section>
       <div class="dash-lower">
         <section class="dash-section">
@@ -452,7 +488,93 @@ window.bootCourse = () => {
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Bar Leone · Hong Kong</h3><p>“Cocktail Popolari” frames a neighbourhood archive through familiar classics and clear ingredient storytelling.</p></article><article class="case-item"><h3>Tuju · São Paulo</h3><p>Seasonal tasting menus become meteorological notebooks — Rain, Wind and Drought — connecting ingredient research to narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
         ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
-        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>`).join('')}</div>
+        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
+    </main>`);
+  }
+
+  /* ---------------------------------------------------------------- projects */
+  function projectsPage() {
+    const items = projectList();
+    const totalPhotos = items.reduce((n, p) => n + projectPhotos(p).length, 0);
+    return layout(`<main class="app-main">
+      <div class="page-head">
+        <div>
+          <span class="eyebrow">${esc(C.projects?.eyebrow || 'PROJECTS OF THE AUTHOR')} · FIELD EVIDENCE</span>
+          <h1 class="page-title">Built, repaired,<br><em>drawn</em>.</h1>
+          <p>${esc(C.projects?.lead || '')}</p>
+        </div>
+        <button class="button light" data-action="search">SEARCH THE ELECTIVE <span aria-hidden="true">⌕</span></button>
+      </div>
+      <div class="course-meta">
+        <div><strong>${items.length}</strong><span>Project files</span></div>
+        <div><strong>${totalPhotos}</strong><span>Photographs</span></div>
+        <div><strong>${items.filter(p => p.moduleId === 'budget').length}</strong><span>Mockup references</span></div>
+        <div><strong>${items.reduce((n, p) => n + (p.facts?.length || 0), 0)}</strong><span>Documented facts</span></div>
+      </div>
+      <div class="project-grid">
+        ${items.map(pr => `<a class="project-card" href="#/project/${esc(pr.id)}">
+          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>
+          <div class="project-card-copy">
+            <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
+            <h2>${esc(pr.name)}</h2>
+            <p>${esc(pr.tagline)}</p>
+            <span class="project-card-foot"><span class="meta">${projectPhotos(pr).length} PHOTOGRAPHS</span><span class="meta">MODULE ${esc(pr.moduleNumber)} ↗</span></span>
+          </div>
+        </a>`).join('')}
+      </div>
+      <section class="section" style="padding:44px 0 0;border-bottom:0">
+        <span class="eyebrow tight">HOW TO READ THE ARCHIVE</span>
+        <p class="form-help" style="max-width:76ch;font-size:13px">${esc(C.projects?.note || '')}</p>
+      </section>
+    </main>`);
+  }
+
+  function projectPage(id) {
+    const items = projectList();
+    const pr = projectById(id);
+    if (!pr) return notFound();
+    const position = items.indexOf(pr);
+    const previous = items[(position - 1 + items.length) % items.length];
+    const next = items[(position + 1) % items.length];
+    const module = C.modules.find(m => m.id === pr.moduleId);
+    const photos = projectPhotos(pr);
+    return layout(`<main class="app-main">
+      <a class="crumb" href="#/projects"><span class="meta">PROJECTS OF THE AUTHOR</span> <span aria-hidden="true">→</span> <span class="meta">INDEX</span></a>
+      <div class="project-head">
+        <div>
+          <span class="eyebrow">PROJECT FILE ${esc(pr.index)} · ${esc(pr.role)} · ${esc(pr.year)}</span>
+          <h1 class="page-title">${esc(pr.name)}</h1>
+          <p class="project-tagline">${esc(pr.tagline)}</p>
+        </div>
+        <div class="project-facts">
+          ${(pr.facts || []).map(f => `<div class="project-fact"><span class="meta">${esc(f[0])}</span><strong>${esc(f[1])}</strong></div>`).join('')}
+        </div>
+      </div>
+      <div class="project-gallery project-gallery-lead">
+        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}
+      </div>
+      <div class="project-body">
+        <p>${esc(pr.summary)}</p>
+        ${pr.ru ? `<p class="project-ru"><span class="meta">ПО-РУССКИ</span>${esc(pr.ru)}</p>` : ''}
+      </div>
+      <section style="margin-top:clamp(30px,4vw,52px)">
+        <span class="eyebrow tight">THE FILE · ${photos.length} PHOTOGRAPHS ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
+        <div class="project-gallery">
+          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — photograph ${i + 2}`, `${ph.caption}${ph.captionRu ? `\n\n${ph.captionRu}` : ''}`)).join('')}
+        </div>
+      </section>
+      <div class="project-next">
+        <a class="simple-row" href="#/project/${esc(previous.id)}"><span><span class="meta">PREVIOUS FILE</span><br><strong>${esc(previous.name)}</strong></span><span aria-hidden="true">←</span></a>
+        <a class="simple-row" href="#/project/${esc(next.id)}"><span><span class="meta">NEXT FILE</span><br><strong>${esc(next.name)}</strong></span><span aria-hidden="true">→</span></a>
+      </div>
+      <div class="project-cta">
+        ${module ? `<div class="institution-panel" style="margin-top:26px">
+          <span class="eyebrow tight">USED IN THE COURSE</span>
+          <h2>Module ${esc(module.number)} · ${esc(module.title)}</h2>
+          <p>${esc(module.description)}</p>
+          <a class="button text" href="#/module/${esc(module.id)}">OPEN THE MODULE <span aria-hidden="true">→</span></a>
+        </div>` : ''}
+      </div>
     </main>`);
   }
 
@@ -714,6 +836,7 @@ window.bootCourse = () => {
       m.lessons.forEach(l => { if (`${l.title} ${l.intro} ${l.body} ${l.ideas.join(' ')}`.toLowerCase().includes(q)) results.push({ type: 'LESSON', title: l.title, desc: l.intro, href: `lesson/${m.id}/${l.id}` }); });
     });
     C.cases.forEach(x => { if (`${x.title} ${x.location} ${x.context} ${x.takeaway} ${x.industry}`.toLowerCase().includes(q)) results.push({ type: 'CASE STUDY', title: x.title, desc: x.context, href: 'cases' }); });
+    projectList().forEach(pr => { if (`${pr.name} ${pr.role} ${pr.year} ${pr.tagline} ${pr.summary} ${pr.team}`.toLowerCase().includes(q)) results.push({ type: 'PROJECT FILE', title: pr.name, desc: pr.tagline, href: `project/${pr.id}` }); });
     return layout(`<main class="app-main">
       <div class="page-head"><div><span class="eyebrow">GLOBAL SEARCH · EDUCATIONAL CONTENT</span><h1 class="page-title">Find a <em>thread</em>.</h1></div></div>
       <form id="search-form" style="display:flex;gap:10px;margin:26px 0;flex-wrap:wrap">
@@ -734,6 +857,7 @@ window.bootCourse = () => {
   /* ----------------------------------------------------------------- router */
   function render() {
     state = getState();
+    closeLightbox();
     syncTelegramNavigation();
     const r = route();
     const u = user();
@@ -745,6 +869,8 @@ window.bootCourse = () => {
     else if (r[0] === 'module') app.innerHTML = modulePage(r[1]);
     else if (r[0] === 'lesson') app.innerHTML = lessonPage(r[1], r[2]);
     else if (r[0] === 'cases') app.innerHTML = casesPage();
+    else if (r[0] === 'projects') app.innerHTML = projectsPage();
+    else if (r[0] === 'project') app.innerHTML = projectPage(r[1]);
     else if (r[0] === 'assignment') app.innerHTML = assignmentPage(r[1], r[2]);
     else if (r[0] === 'instructor' && u.role === 'INSTRUCTOR') app.innerHTML = instructorPage();
     else if (r[0] === 'review' && u.role === 'INSTRUCTOR') app.innerHTML = reviewPage(r[1]);
@@ -803,12 +929,44 @@ window.bootCourse = () => {
     location.reload();
   }
 
+  /* -------------------------------------------------------------- lightbox */
+  function lightboxEl() {
+    let el = document.getElementById('lightbox');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'lightbox';
+      el.className = 'lightbox';
+      el.innerHTML = '<button class="lightbox-close" data-action="lightbox-close" aria-label="Close image">✕ CLOSE</button><figure><img alt=""><figcaption></figcaption></figure>';
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  function openLightbox(src, alt, caption) {
+    const el = lightboxEl();
+    el.querySelector('img').src = src;
+    el.querySelector('img').alt = alt || '';
+    el.querySelector('figcaption').textContent = caption || '';
+    el.classList.add('show');
+    document.body.classList.add('lightbox-open');
+    el.querySelector('.lightbox-close').focus();
+  }
+
+  function closeLightbox() {
+    const el = document.getElementById('lightbox');
+    if (!el) return;
+    el.classList.remove('show');
+    document.body.classList.remove('lightbox-open');
+  }
+
   /* --------------------------------------------------------------- events */
   document.addEventListener('click', async e => {
     const role = e.target.closest('[data-role]');
     if (role) { demoUser(role.dataset.role); return; }
     const actionEl = e.target.closest('[data-action]');
     const action = actionEl?.dataset.action;
+    if (action === 'lightbox') { openLightbox(actionEl.dataset.src, actionEl.querySelector('img')?.alt, actionEl.dataset.caption); return; }
+    if (action === 'lightbox-close' || e.target.id === 'lightbox') { closeLightbox(); return; }
     if (action === 'complete') { updateProgress(actionEl.dataset.lesson); return; }
     if (action === 'search') { e.preventDefault(); openSearch(); return; }
     if (action === 'profile') { go('profile'); return; }
@@ -846,6 +1004,12 @@ window.bootCourse = () => {
   });
 
   document.addEventListener('ended', e => { if (e.target.matches('video[data-video-lesson]')) updateProgress(e.target.dataset.videoLesson); }, true);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLightbox(); return; }
+    const figure = e.target.closest?.('.gallery-item[data-action="lightbox"]');
+    if (figure && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openLightbox(figure.dataset.src, figure.querySelector('img')?.alt, figure.dataset.caption); }
+  });
 
   document.addEventListener('submit', async e => {
     e.preventDefault();
