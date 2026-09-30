@@ -26,9 +26,9 @@ The visual language is taken from **Swiss Education Group** (swisseducation.com)
 | Micro-labels | **Inter** 10.5px, uppercase, `.16em` tracking | SEG pretitle/footer labels |
 | Key figures | giant light-weight numbers on hairline columns | SEG “4 schools / 6K+ students” strip |
 
-Signature moves used across the site: full-bleed hero stage with giant light-weight uppercase type and an italic serif accent word; a pretitle eyebrow with a red dash and a hairline rule; a marquee ticker of the venues “on the scene”; a maroon quote band with a red bottom border; rectangular buttons that fill red from below on hover; underline-animated text links; hairline module tables with hover shift; SEG-style key-figure counters.
+Signature moves used across the site: a split hero stage (giant light-weight uppercase type on ink, the photograph hung whole beside it) with an italic serif accent word; a pretitle eyebrow with a red dash and a hairline rule; a marquee ticker of the venues “on the scene”; a maroon quote band with a red bottom border; rectangular buttons that fill red from below on hover; underline-animated text links; hairline module tables with hover shift; SEG-style key-figure counters.
 
-The **course author is credited inside the product** (author section, footer, profile, certificate small print, instructor identity) but is **not shown on the title visuals** — hero, password gate, login visual, deck cover.
+The **course author is credited inside the product** (author section, footer, profile, certificate small print, instructor identity) but his **name is not shown on the title visuals** — hero, login visual, deck cover. Because the protected content is only loaded after the password, the **public start page carries the information a visitor can read without access**: the password gate (`.gate-page` → `.gate-stage` + `.gate-info`) states what the course is (modules, learning units, pace, the physical mockup, what each block covers) and who made it (Egor Tarasenko — HIM alumnus, hospitality practice, own venues), with a couple of full frames from his projects used as part of that section's design. Author projects are deliberately **not a separate landing-page block**: the archive lives inside the product (`#/projects`, `#/project/<id>`) and the landing only touches it where it belongs — a frame in the budget & scenography section and the creator section.
 
 ## Run locally / deploy on BotHost
 
@@ -92,12 +92,13 @@ Module 04 also gained a learning unit, **Concept objects: the menu, the merchand
 
 ## Product experience
 
-- **Password gate** (SEG-styled split screen) → public editorial landing page with the elective's positioning, subject areas, learning sequence, case files, the fairy-tale principle, the budget & scenography block, a strip of the author's projects, author timeline, ten-module structure and final challenge.
+- **Public start page** (SEG-styled split screen: gate visual + password form) followed by the course-and-creator band — what the elective covers and who wrote it — then, once access is granted, the editorial landing page with the elective's positioning, subject areas, learning sequence, case files, the fairy-tale principle, the budget & scenography block with two found-object frames, the course-and-creator section (timeline + three frames from the author's venues), ten-module structure and final challenge.
 - **Projects of the author** (`#/projects`, `#/project/<id>`) — 43 photographs across seven project files: Joi Espresso Bar, Passie Cakes Co., CooCoo Coffee, Chicken Connection, Pacific / Пасифик, TAM / TYT and a found-object research file. Each file carries facts, a bilingual explanation (EN + RU) and a captioned gallery with a keyboard-accessible lightbox; the same photographs appear inside the matching case files and course modules.
 - **Student space** with course progress, next lesson, modules, editorial lesson pages, case studies, assignment submissions (concept + mockup photographs), quiz, feedback, updates and a printable certificate.
 - **Instructor space** for reviewing work, assigning a score, providing feedback and approving or returning submissions for revision.
 - **Admin view** for the generic institution/license model, edition overview, password-access status and license demonstration.
 - Responsive desktop and mobile navigation, search across course content, accessible form labels, keyboard-operable controls, reduced-motion and print styles.
+- **Photography is shown whole.** Source frames are mostly 3:4 / 4:5 phone photographs, so content images (case cards, project cards, galleries, creator and budget frames, the hero plate) render at their natural proportions instead of being cropped to a fixed-height strip. Only surfaces that are treated as background fields — hero on mobile, the gate/login visual, the case feature band, module and lesson banners — are cropped, and their `object-position` is set deliberately.
 - Existing course materials and photography remain available; the new UI uses the existing hospitality imagery and does not present the HIM or SEG logos as a claim of institutional endorsement.
 
 ## Content, architecture and boundaries

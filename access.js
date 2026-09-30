@@ -189,12 +189,14 @@
     document.documentElement.classList.remove('telegram-webapp');
     root.innerHTML = `
     <main class="gate-page">
+      <div class="gate-stage">
       <div class="gate-visual">
         <img src="presentation/assets/horeca-atmosphere-candle.jpg" alt="A candle-lit contemporary bar interior">
         <div class="gate-visual-copy">
           <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
           <p>A living digital elective on the venues, 50 Best menu concepts, industry leaders, found-object mockups and budgets shaping the contemporary horeca scene.</p>
+          <button class="gate-more" type="button" data-scroll-info>О КУРСЕ И О СОЗДАТЕЛЕ ↓</button>
         </div>
       </div>
       <div class="gate-form-wrap">
@@ -236,7 +238,57 @@
           </div>
         </div>
       </div>
+      </div>
+
+      <section class="gate-info" id="gate-info">
+        <div class="gate-info-inner">
+          <article class="gate-card">
+            <span class="eyebrow">О КУРСЕ · ABOUT THE ELECTIVE</span>
+            <h3>Десять модулей о том,<br>из чего <em>состоит</em> сцена.</h3>
+            <p><b>Contemporary Horeca Scene</b> — живой цифровой электив Hotel Institute Montreux (2026 edition). Мы читаем индустрию как сцену: рейтинги и <b>World's 50 Best</b>, меню как редакционный артефакт, опыт гостя и нейрогастрономия, бокал и свет, технологии и ИИ, будущее F&amp;B, предпринимательство — и реальная реализация всего этого на небольшой бюджет.</p>
+            <p>Финал — не эссе. Своя venue собирается руками: макет <b>1:20 / 1:50</b> из найденных предметов, винтажной посуды, свечей, текстиля и бумажного меню, защищённый вместе со сметой и сетом.</p>
+            <div class="gate-facts">
+              <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
+              <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
+              <div class="gate-fact"><strong>12<i>+</i></strong><span>Weeks · suggested pace</span></div>
+              <div class="gate-fact"><strong>01</strong><span>Physical mockup per student</span></div>
+            </div>
+            <ul class="gate-points">
+              <li><b>01</b><span>Разборы заведений и людей, которые двигают сцену: 50 Best, MICHELIN, World Class, локальные проекты.</span></li>
+              <li><b>02</b><span>Атмосфера как инструмент: свет, стекло, тактильность, хореография сервиса, «сказка», из которой гостя не будит мелочь.</span></li>
+              <li><b>03</b><span>Бюджет и сценография: барахолки, salvage, реставрация, trompe-l'œil, золочение, бэкдроп и один узкий луч.</span></li>
+              <li><b>04</b><span>Технологии, ИИ и операции: что автоматизировать, что обязательно оставить человеку.</span></li>
+              <li><b>05</b><span>Практические задания и защита концепции; после проверки — сертификат.</span></li>
+              <li><b>06</b><span>Пароль открывает весь курс сразу: все модули и уроки доступны без поштучной выдачи.</span></li>
+            </ul>
+            <figure class="gate-frame gate-frame-wide">
+              <img src="presentation/assets/horeca-concept-pitch.jpg" alt="A concept pitch table with materials, sketches and models" loading="lazy">
+              <figcaption>Final exercise · стол, на котором venue собирается до того, как её построили</figcaption>
+            </figure>
+          </article>
+
+          <article class="gate-card">
+            <span class="eyebrow">О СОЗДАТЕЛЕ · THE CREATOR</span>
+            <h3>Egor<br><em>Tarasenko</em></h3>
+            <p class="gate-role">HIM alumnus · Master in Business Management · Hotel Institute Montreux</p>
+            <p>Курс написал практик, который сам строит заведения, о которых учит. Операционная школа — <b>Crowne Plaza St. Petersburg</b> и <b>Jumeirah Beach Hotel Dubai</b>; дальше — собственная практика: эспрессо-бар <b>«ДЖОЙ» / Joi Espresso Bar</b> (2025, OGONEK TEAM), собранный почти целиком из улицы и барахолок, <b>Passie Cakes Co.</b> и <b>CooCoo Coffee</b>, где идентификацию держат пропсы и свет, барные решения <b>«Пасифик»</b> и линейка предметов <b>TAM</b>.</p>
+            <p>В курсе эти проекты — не портфолио, а рабочие источники: фотографии, сметы и детали разбираются в модуле 09 и в задании 09C, а внутри продукта к ним можно вернуться целиком.</p>
+            <div class="gate-frames">
+              <figure class="gate-frame"><img src="presentation/assets/project-joi-arcade.jpg" alt="The arcade outside Joi Espresso Bar: vaults, café bulbs and stone floors" loading="lazy"><figcaption>Joi Espresso Bar · аркада, 2025</figcaption></figure>
+              <figure class="gate-frame"><img src="presentation/assets/project-passie-wall.jpg" alt="Passie Cakes Co. logo painted by hand onto a plaster wall" loading="lazy"><figcaption>Passie Cakes Co. · стена, нарисованная руками</figcaption></figure>
+            </div>
+            <p class="gate-note-line">Вопросы по курсу, лицензированию и программе: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="gate-foot">
+        <span>© 2026 Egor Tarasenko · Course content &amp; author IP</span>
+        <span>Contemporary Horeca Scene · 2026 Edition</span>
+        <span>Hotel Institute Montreux</span>
+      </footer>
     </main>`;
+    root.querySelector('[data-scroll-info]')?.addEventListener('click', () => document.getElementById('gate-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     const field = document.getElementById('course-password');
     field?.focus({ preventScroll: true });
   }
