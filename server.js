@@ -22,9 +22,119 @@ const MIME = {
 };
 const ADMIN_IDS = new Set((process.env.ADMIN_IDS || '').split(/[\s,;]+/).filter(Boolean));
 
-function json(res, status, data) {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+/* --- course access gate ----------------------------------------------------
+   The course opens with a cohort password. A correct password issues a signed,
+   HttpOnly cookie that unlocks the course content files. Override with
+   COURSE_PASSWORD (or a comma-separated COURSE_PASSWORDS list) and ACCESS_SECRET
+   in production; the defaults keep the local/BotHost prototype working.       */
+const PASSWORDS = (process.env.COURSE_PASSWORDS || process.env.COURSE_PASSWORD || 'Mzgnxtj8')
+  .split(/[\s,;]+/).map(value => value.trim()).filter(Boolean);
+const ACCESS_SECRET = process.env.ACCESS_SECRET
+  || crypto.createHash('sha256').update(`chs-access|${PASSWORDS.join('|')}`).digest('hex');
+const ACCESS_COOKIE = 'chs_access';
+const ACCESS_TTL = 60 * 60 * 24 * 30; // 30 days
+/* Content that only an unlocked visitor may read. */
+const PROTECTED = ['/course-data.js', '/course/', '/presentation/dist/', '/presentation/build/'];
+
+const attempts = new Map();
+const ATTEMPT_WINDOW = 10 * 60 * 1000;
+const ATTEMPT_LIMIT = 12;
+
+function json(res, status, data, headers = {}) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff',
+    ...headers,
+  });
   res.end(JSON.stringify(data));
+}
+
+function respond(res, status, message) {
+  res.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8', 'X-Content-Type-Options': 'nosniff' });
+  res.end(message);
+}
+
+function signAccess(expiry) {
+  return crypto.createHmac('sha256', ACCESS_SECRET).update(`chs-access|${expiry}`).digest('hex');
+}
+
+function issueToken() {
+  const expiry = Math.floor(Date.now() / 1000) + ACCESS_TTL;
+  return `${expiry}.${signAccess(expiry)}`;
+}
+
+function tokenFromRequest(req) {
+  const header = req.headers.cookie || '';
+  for (const part of header.split(';')) {
+    const [name, ...rest] = part.trim().split('=');
+    if (name === ACCESS_COOKIE) return decodeURIComponent(rest.join('='));
+  }
+  return null;
+}
+
+function accessGranted(req) {
+  const token = tokenFromRequest(req);
+  if (!token) return false;
+  const [expiry, signature] = token.split('.');
+  const expiryNumber = Number(expiry);
+  if (!Number.isFinite(expiryNumber) || expiryNumber < Math.floor(Date.now() / 1000)) return false;
+  if (typeof signature !== 'string' || signature.length !== 64) return false;
+  const expected = Buffer.from(signAccess(expiryNumber), 'hex');
+  const received = Buffer.from(signature, 'hex');
+  return expected.length === received.length && crypto.timingSafeEqual(expected, received);
+}
+
+function cookieHeader(value, req, maxAge = ACCESS_TTL) {
+  const forwarded = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  const secure = forwarded === 'https';
+  return [
+    `${ACCESS_COOKIE}=${value}`,
+    'Path=/',
+    'HttpOnly',
+    'SameSite=Lax',
+    `Max-Age=${maxAge}`,
+    secure ? 'Secure' : '',
+  ].filter(Boolean).join('; ');
+}
+
+function readBody(req, limit = 8192) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    let tooLarge = false;
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > limit && !tooLarge) {
+        tooLarge = true;
+        reject(Object.assign(new Error('Request too large'), { status: 413 }));
+        req.destroy();
+      }
+    });
+    req.on('end', () => { if (!tooLarge) resolve(body); });
+    req.on('error', reject);
+  });
+}
+
+function throttle(ip) {
+  const now = Date.now();
+  const record = attempts.get(ip) || { count: 0, resetAt: now + ATTEMPT_WINDOW };
+  if (now > record.resetAt) { record.count = 0; record.resetAt = now + ATTEMPT_WINDOW; }
+  record.count += 1;
+  attempts.set(ip, record);
+  if (attempts.size > 5000) {
+    for (const [key, value] of attempts) if (now > value.resetAt) attempts.delete(key);
+  }
+  return record.count > ATTEMPT_LIMIT ? Math.ceil((record.resetAt - now) / 1000) : 0;
+}
+
+function matchesPassword(candidate) {
+  const value = Buffer.from(String(candidate ?? ''));
+  let ok = false;
+  for (const password of PASSWORDS) {
+    const expected = Buffer.from(password);
+    if (expected.length === value.length && crypto.timingSafeEqual(expected, value)) ok = true;
+  }
+  return ok;
 }
 
 function verifyTelegramInitData(initData) {
@@ -61,17 +171,40 @@ function verifyTelegramInitData(initData) {
   }
 }
 
-function respond(res, status, message) {
-  res.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8', 'X-Content-Type-Options': 'nosniff' });
-  res.end(message);
-}
-
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   let pathname;
   try {
     pathname = decodeURIComponent(new URL(req.url, `http://${req.headers.host || 'localhost'}`).pathname);
   } catch {
     return respond(res, 400, 'Bad request');
+  }
+
+  /* --- course access API --- */
+  if (pathname === '/api/access') {
+    if (req.method === 'GET' || req.method === 'HEAD') {
+      return json(res, 200, { unlocked: accessGranted(req), course: 'Contemporary Horeca Scene' });
+    }
+    if (req.method !== 'POST') return respond(res, 405, 'Method not allowed');
+    const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || 'local';
+    let payload;
+    try {
+      payload = JSON.parse(await readBody(req) || '{}');
+    } catch (error) {
+      if (error.status === 413) return json(res, 413, { error: 'Request too large' });
+      return json(res, 400, { error: 'Invalid request body' });
+    }
+    if (payload.action === 'revoke') {
+      return json(res, 200, { unlocked: false }, { 'Set-Cookie': cookieHeader('', req, 0) });
+    }
+    const retryAfter = throttle(ip);
+    if (retryAfter > 0) {
+      return json(res, 429, { error: 'Too many attempts', retryAfter }, { 'Retry-After': String(retryAfter) });
+    }
+    if (!matchesPassword(payload.password)) {
+      return json(res, 401, { unlocked: false, error: 'Incorrect course password' });
+    }
+    attempts.delete(ip);
+    return json(res, 200, { unlocked: true, course: 'Contemporary Horeca Scene' }, { 'Set-Cookie': cookieHeader(issueToken(), req) });
   }
 
   if (pathname === '/api/telegram-auth') {
@@ -107,6 +240,11 @@ const server = http.createServer((req, res) => {
     return res.end(req.method === 'HEAD' ? undefined : 'ok');
   }
 
+  /* --- course content is password-protected --- */
+  if (PROTECTED.some(prefix => pathname === prefix || pathname.startsWith(prefix)) && !accessGranted(req)) {
+    return json(res, 403, { error: 'Course access required', course: 'Contemporary Horeca Scene' });
+  }
+
   const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
   const filePath = path.resolve(ROOT, relative);
   if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) return respond(res, 403, 'Forbidden');
@@ -118,7 +256,7 @@ const server = http.createServer((req, res) => {
       'Content-Type': MIME[ext] || 'application/octet-stream',
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=300',
+      'Cache-Control': ext === '.html' ? 'no-cache' : (PROTECTED.some(prefix => pathname === prefix || pathname.startsWith(prefix)) ? 'private, max-age=300' : 'public, max-age=300'),
       'Content-Length': stat.size,
     });
     if (req.method === 'HEAD') return res.end();
@@ -127,7 +265,8 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`Contemporary HoReCa Scene listening on http://${HOST}:${PORT}`);
+  console.log(`Contemporary Horeca Scene listening on http://${HOST}:${PORT}`);
+  console.log(`Course access: ${PASSWORDS.length} password(s) configured · content behind ${ACCESS_COOKIE} cookie`);
 });
 
 server.on('error', error => {

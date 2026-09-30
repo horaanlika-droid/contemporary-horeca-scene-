@@ -54,6 +54,14 @@ One-page profiles for seminar work. Fields: format, city, why it matters, teachi
 
 **Mimi Kakushi — Dubai (Best Bar in Middle East) / Hero Bar — Nairobi (Best Bar in Africa).** Angle: the widening map of cocktail culture.
 
+## Budget builds & scenography
+
+**Joi Espresso Bar — the course author's own project.** Assembled almost entirely from the street and flea markets: furniture, fixtures, equipment and objects other people had already discarded, adjusted, repaired and re-finished by hand until the room held together as one story. No large investment behind it. Angle: you do not always need enormous budgets to open something with soul — a point of view and patience in sourcing do the work; money buys speed and finish, intention buys soul.
+
+**Scenography as a budget tool.** Theatrical decorative techniques replace expensive materials: painted flats that read as marble or plaster, forced perspective that deepens a small room, backdrops instead of architecture, scrim and gauze instead of joinery, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, re-upholstery, haze and a single tight beam of light. Angle: the stage builds believable worlds for one evening on almost nothing — a venue can borrow the entire toolbox, provided the trick never announces itself.
+
+**The fairy-tale test.** A bar or restaurant is a sweet fairy tale; any small detail can instantly wake the guest from that dream — a harsh light, a plastic tray, a visible printer, a dirty door handle. Angle: use the test as an audit question for every design, sourcing and service decision.
+
 ## GreatList Sessions 2025 (field format)
 
 Guest dinners transferring expertise between world scenes: Hanu (Kyung Soo Moon) at Due Forni; Gerbou (Ionel Catau) at Grace Bistro; Bait Maryam (Salam Daqqaq) at MINA; Jun's (Kelvin Cheung) at Selfie; BOCA (Patricia Roig) at KM20; TakaHisa at Wa Garden; Signor Sassi (Luca Rossi) at Buro Tsum & Quadrum; Moonrise (Solemann Haddad) at IKRA; Row on 45 (Daniel Birk) at Savva. Angle: chef residencies as knowledge exchange and PR.

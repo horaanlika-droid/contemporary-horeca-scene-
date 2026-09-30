@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""EN slide deck: Contemporary HoReCa Scene — course proposal for Hotel Institute Montreux."""
+"""EN slide deck: Contemporary Horeca Scene — course proposal for Hotel Institute Montreux."""
 from deck_lib import *
 
 def std(c, kicker="COURSE PROPOSAL · HOTEL INSTITUTE MONTREUX"):
@@ -11,7 +11,7 @@ def build(c):
     course_cover(
         c,
         "Course Proposal · 2026–27",
-        "Trends · Design & Atmosphere · Neurogastronomy · Technology · World's Best Restaurants & Bars",
+        "Trends · Design & Atmosphere · Neurogastronomy · Technology · World's Best Restaurants & Bars · Budget & Scenography",
         "A 12-week elective that turns the global hospitality scene into a practical business lens — for the next generation of world-ready leaders.",
         "AUTHOR & COURSE LEADER",
         "Egor Tarasenko",
@@ -82,7 +82,7 @@ def build(c):
         ("BBA · MIB", "audience", "Bachelor and master students of hospitality & business"),
         ("4", "assessment blocks", "Participation, field notes, module tasks, final pitch"),
     ], M, y - 6, PAGE_W - 2 * M, card_h=98, cols=3, gap=14)
-    para(c, "Positioning: a business-perspective tour of the contemporary HoReCa scene — what the world's best venues do,\nwhy guests love them, and how rankings, design, science and technology create competitive advantage.",
+    para(c, "Positioning: a business-perspective tour of the contemporary Horeca scene — what the world's best venues do,\nwhy guests love them, and how rankings, design, science and technology create competitive advantage.",
          M, y - 252, PAGE_W - 2 * M, 10.5, MUTED, "Inter-Italic", leading=15)
     c.showPage()
 
@@ -91,7 +91,7 @@ def build(c):
     y = slide_title_block(c, "Learning outcomes", "What students will be able to do after 12 weeks")
     outs = [
         ("Navigate the global ranking ecosystem", "Michelin, The 50 Best, GreatList, World Class — how they work and how to use them in marketing and strategy."),
-        ("Analyse HoReCa trends", "Turn macro-trends — experience economy, anti-luxury, mindfulness — into concrete business decisions."),
+        ("Analyse Horeca trends", "Turn macro-trends — experience economy, anti-luxury, mindfulness — into concrete business decisions."),
         ("Design venue concepts", "Interior, light, sound, scent and guest journey (CJM) — atmosphere as a managed product."),
         ("Apply culinary science & neurogastronomy", "Physics & chemistry of flavour, multisensory design of menus, serves and service: from plate weight to sound pairing."),
         ("Evaluate technology & AI", "Reservations, revenue management, kitchen automation, data personalisation — with an ethics filter."),
@@ -117,15 +117,16 @@ def build(c):
 
     # ================= 6. COURSE MAP =================
     top = std(c)
-    y = slide_title_block(c, "Course map", "Five modules, one arc: from trends to a world-class concept")
+    y = slide_title_block(c, "Course map", "Six modules, one arc: from trends to a world-class concept you can build by hand")
     rows = [
         ["#", "Module", "Weeks", "Core question", "Signature cases"],
-        ["1", "Contemporary HoReCa Trends", "1–3", "Where is the industry heading?", "50 Best week in Lima; Californios ★★★; Gerbou"],
+        ["1", "Contemporary Horeca Trends", "1–3", "Where is the industry heading?", "50 Best week in Lima; Californios ★★★; Gerbou"],
         ["2", "Venue Design & Atmosphere", "4–5", "What makes a space unforgettable?", "GreatList criteria; Himkok; Hanu Dubai"],
         ["3", "Neurogastronomy & Guest Experience", "6–7", "How do senses shape taste?", "Spence's gastrophysics; World Class multisensory"],
         ["4", "Technology & Automation", "8–9", "What should be human, what — smart?", "AI-inspired serve (Don Julio 1942); Sesto Senso Academy"],
-        ["5", "World's Leading Restaurants & Bars", "10–12", "Who sets the global standard?", "Noma; Maido; Bar Leone; Myojaku; Felice Capasso"],
-        ["+", "Final Pitch Day", "12", "Can your venue win the world stage?", "Student concepts judged by an expert panel"],
+        ["5", "World's Leading Restaurants & Bars", "10", "Who sets the global standard?", "Noma; Maido; Bar Leone; Myojaku; Felice Capasso"],
+        ["6", "Budget Realisation & Scenography", "11–12", "Can you build it with soul — and with what money?", "Joi Espresso Bar (built from flea markets); Himkok"],
+        ["+", "Mockup + Final Pitch Day", "12", "Can your venue win the world stage?", "Concept decks and paper mockups judged by an expert panel"],
     ]
     make_table(c, rows, M, y - 4, [34, 258, 62, 216, 278], row_h=44, header_h=26, font_size=9.3)
     c.showPage()
@@ -175,7 +176,7 @@ def build(c):
         c.showPage()
 
     # ================= 7. MODULE 1 =================
-    module_slide(1, "1–3", "Contemporary HoReCa Trends",
+    module_slide(1, "1–3", "Contemporary Horeca Trends",
         "Lecture seminars: reading the industry's present and near future",
         [
             "Experience economy: dining as theatre — chef's tables, counters, storytelling formats.",
@@ -273,6 +274,27 @@ def build(c):
         ],
         "What do all №1 venues share — and can it be taught?",
         photo=PHOTO_HOTEL_BAR, field_label="World service benchmarks", field_note="The martini trolley ritual and the renaissance of iconic hotel bars.")
+
+    # ================= 11b. MODULE 6 =================
+    module_slide(6, "11–12", "Budget Realisation & Scenography",
+        "Opening something with soul without a large budget — then building it by hand, like stage scenery",
+        [
+            "Soul before budget: a small budget is a creative brief, not a limitation.",
+            "Sourcing discipline: flea markets, auctions, demolition yards, liquidations, the street.",
+            "Repair, repurpose, re-upholster — patina is expensive to fake and free to keep.",
+            "Scenography: painted flats, forced perspective, backdrops, scrim, one tight beam of light.",
+            "Decorative techniques: trompe-l'œil, glazing, patina, stencil & gold leaf, faux bois / faux marbre.",
+            "The fairy-tale test: a venue is a sweet fairy tale — any small detail can wake the guest up.",
+            "Final exercise: a physical mockup of your own venue from paper and found materials (1:20 / 1:50).",
+        ],
+        [
+            "Joi Espresso Bar — the course author's own project, assembled almost entirely from the street and flea markets.",
+            "Himkok (Oslo) — a 200-year-old space reimagined instead of rebuilt; Best Bar Design.",
+            "Handshake Speakeasy — hidden-door dramaturgy as stagecraft.",
+        ],
+        "What can be found, reused or painted — and what genuinely has to be bought?",
+        photo=PHOTO_ATMOSPHERE_CANDLE, field_label="The paper mockup",
+        field_note="Entrance, first sightline, light source and three atmosphere details — photographed at guest height.")
 
     # ================= 12. RANKING ECOSYSTEM =================
     top = std(c)
@@ -455,7 +477,7 @@ def build(c):
         ["Assignment 0 & participation", "10%", "Week-1 «favourite venue» talk; case discussions, war-room sessions"],
         ["Field Notes (weekly)", "15%", "One-page weekly reviews: a venue visit, a ranking change, an industry article"],
         ["«My Venue» weekly milestones", "35%", "Eleven weekly pages of the student's own concept; peer-reviewed"],
-        ["Final pitch «Open & Operate»", "40%", "Full concept deck defended before an expert panel"],
+        ["Final pitch «Open & Operate»", "40%", "Full concept deck plus a physical mockup of the venue (paper, cardboard, light — like stage scenery), defended before an expert panel"],
     ]
     make_table(c, rows, M, y - 2, [232, 70, 546], row_h=52, header_h=26, font_size=9.6)
     para(c, "Grading follows HIM regulations. Late work policy and AI-use disclosure follow the institute's academic integrity rules.",
@@ -470,7 +492,7 @@ def build(c):
         ("02", "Design & atmosphere", "Concept board: interior, light, sound, scent, tableware — managed senses."),
         ("03", "Menu, beverage & operations", "Neurogastronomy-backed serves; service model, tech stack, unit-economics sketch."),
         ("04", "Marketing engine", "Guest shifts & chef residencies (GreatList Sessions model); alcohol-brand partnerships (World Class formats); 90-day launch plan."),
-        ("05", "Roadmap to recognition", "One target guide or list — and a 3-year plan to earn it."),
+        ("05", "Mockup & roadmap", "A physical mockup of the venue — paper, cardboard, light, photographed at guest height — plus a 3-year plan to earn one target guide or list."),
     ]
     colw = (PAGE_W - 2 * M - 4 * 12) / 5
     for i, (n, h, b) in enumerate(steps):
@@ -521,7 +543,7 @@ def build(c):
     y = slide_title_block(c, "Week-by-week plan", "12 sessions · each lesson has its own full prose & photo presentation deck")
     rows = [
         ["Wk", "Session"],
-        ["1", "Lesson 1. Introduction. Anatomy of contemporary HoReCa. Rankings as industry infrastructure."],
+        ["1", "Lesson 1. Introduction. Anatomy of contemporary Horeca. Rankings as industry infrastructure."],
         ["2", "Lesson 2. Macro-trends I: experience economy 2.0, anti-luxury, casualization of fine dining."],
         ["3", "Lesson 3. Macro-trends II: mindfulness, regional cuisines go global, gastro-tourism & hotel F&B."],
         ["4", "Lesson 4. Venue design: concept as narrative, architecture, interior, ergonomics (Prix Versailles; GreatList)."],
@@ -530,9 +552,9 @@ def build(c):
         ["7", "Lesson 7. Neurogastronomy II: menu psychology, pricing, peak–end design, World Class multisensory case."],
         ["8", "Lesson 8. Technology I: reservations, revenue management, kitchen & floor automation, CRM."],
         ["9", "Lesson 9. Technology II: AI in creativity and operations, Sesto Senso Academy, ethics & future of work."],
-        ["10", "Lesson 10. World restaurants: chef philosophies (Noma et al.), MICHELIN & 50 Best deep dive."],
-        ["11", "Lesson 11. World bars: 50 Best Bars, World Class, hotel bars; Moscow–Dubai–Doha via GreatList."],
-        ["12", "Lesson 12. Final Pitch Day «Open & Operate»: defending student concepts before an expert panel."],
+        ["10", "Lesson 10. World restaurants & bars: chef philosophies (Noma et al.), MICHELIN, 50 Best, World Class, hotel bars."],
+        ["11", "Lesson 11. Budget realisation & scenography: sourcing with soul, theatrical decorative techniques (Joi Espresso Bar case)."],
+        ["12", "Lesson 12. Mockup build + Final Pitch Day «Open & Operate»: concept deck defended together with a physical mockup."],
     ]
     make_table(c, rows, M, y - 2, [46, 802], row_h=25, header_h=22, font_size=9.1)
     c.showPage()

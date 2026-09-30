@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Contemporary HoReCa Scene — slide rendering library (ReportLab, 16:9).
+Contemporary Horeca Scene — slide rendering library (ReportLab, 16:9).
 
-Visual direction: bright editorial pages, Swiss-blue structure, a restrained red
-accent, generous white space, and thematic HoReCa photography (fine dining,
-craft bars, architecture & atmosphere, neurogastronomy, hospitality technology).
+Visual direction: Swiss Education Group brand language — white pages, ink-black
+structure, the SEG signal red #e42313 as the single accent, deep maroon #410c0c
+for dark pages, hairline rules, generous white space, and thematic Horeca
+photography (fine dining, craft bars, architecture & atmosphere, scenography).
 """
 import os
 from reportlab.lib.colors import HexColor
@@ -20,7 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ASSET_DIR = os.path.normpath(os.path.join(HERE, "..", "assets"))
 LOGO_PATH = os.path.join(ASSET_DIR, "him-logo-white.png")
 
-# ---------- Thematic HoReCa photography ----------
+# ---------- Thematic Horeca photography ----------
 PHOTO_CHEFS_COUNTER = os.path.join(ASSET_DIR, "horeca-chefs-counter.jpg")
 PHOTO_CRAFT_BAR = os.path.join(ASSET_DIR, "horeca-craft-bar.jpg")
 PHOTO_COCKTAIL_SHAKER = os.path.join(ASSET_DIR, "horeca-cocktail-shaker.jpg")
@@ -77,27 +78,29 @@ pdfmetrics.registerFontFamily(
 )
 
 # ---------- Palette ----------
+# SEG brand palette (swisseducation.com): white ground, ink structure, signal red.
 BG = HexColor("#FFFFFF")
-PANEL = HexColor("#F1F6F9")
-PANEL2 = HexColor("#E5F0F6")
-NAVY = HexColor("#102F49")
-BLUE = HexColor("#087CA8")
-BLUE_MID = HexColor("#3996B8")
-RED = HexColor("#D83945")
-TEXT = HexColor("#18364C")
-MUTED = HexColor("#5E788A")
-LINE = HexColor("#D6E2E9")
+PANEL = HexColor("#F4F3F0")
+PANEL2 = HexColor("#EDEBE7")
+NAVY = HexColor("#0A0A0A")     # ink (kept as NAVY for compatibility)
+BLUE = HexColor("#E42313")     # SEG signal red
+BLUE_MID = HexColor("#410C0C")  # SEG deep maroon
+RED = HexColor("#E42313")
+TEXT = HexColor("#0A0A0A")
+MUTED = HexColor("#6D6D6A")
+LINE = HexColor("#E6E6E6")
 WHITE = HexColor("#FFFFFF")
 
 GOLD = BLUE
 GOLD_SOFT = BLUE_MID
 
 MODULE_COLORS = {
-    1: HexColor("#087CA8"),  # contemporary blue
-    2: HexColor("#1C8FB6"),  # lake blue
-    3: HexColor("#3A9CC0"),  # clear sky
-    4: HexColor("#276F98"),  # deep blue
-    5: HexColor("#D83945"),  # Swiss red, reserved for the global-scene module
+    1: HexColor("#0A0A0A"),  # ink
+    2: HexColor("#410C0C"),  # maroon
+    3: HexColor("#8C1A0F"),  # burnt red
+    4: HexColor("#E42313"),  # SEG signal red
+    5: HexColor("#B81C0E"),  # deep red
+    6: HexColor("#6D6D6A"),  # graphite — budget & scenography
 }
 
 PAGE_W, PAGE_H = 960.0, 540.0
@@ -377,7 +380,7 @@ def cards_grid(c, cards, x, y, w, card_w=None, card_h=92, cols=3, gap=14):
 
 def course_cover(c, deck_label, descriptor, positioning, author_label, author_name,
                  credential, location_label, format_label, cover_photo=PHOTO_CHEFS_COUNTER):
-    """Split cover with thematic contemporary HoReCa photography."""
+    """Split cover with thematic contemporary Horeca photography."""
     c.bg()
     photo_x = 540
     draw_photo(c, cover_photo, photo_x, 0, PAGE_W - photo_x, PAGE_H, focus_x=0.5, focus_y=0.5)
@@ -390,32 +393,34 @@ def course_cover(c, deck_label, descriptor, positioning, author_label, author_na
     c.setFillColor(WHITE)
     c.drawString(M + 89, PAGE_H - 67, "HIM BUSINESS SCHOOL")
     c.setFont("Inter", 7.5)
-    c.setFillColor(HexColor("#B9D2E2"))
+    c.setFillColor(HexColor("#C9C5BF"))
     c.drawString(M + 89, PAGE_H - 82, "HOTEL INSTITUTE MONTREUX")
 
     c.setFont("Inter-Bold", 7.8)
-    c.setFillColor(HexColor("#91CAE1"))
+    c.setFillColor(HexColor("#E42313"))
     c.drawString(M + 6, PAGE_H - 160, spaced(deck_label, "  "))
     c.setFont("Inter-XB", 36)
     c.setFillColor(WHITE)
     c.drawString(M + 6, PAGE_H - 212, "CONTEMPORARY")
     c.drawString(M + 6, PAGE_H - 256, "HORECA SCENE")
     c.vrect(M + 6, PAGE_H - 275, 54, 3, RED)
-    para(c, descriptor, M + 6, PAGE_H - 291, 430, 10.2, HexColor("#D6E7F0"), "Inter-Medium", leading=14)
-    para(c, positioning, M + 6, PAGE_H - 338, 432, 9.1, HexColor("#B9D2E2"), "Inter", leading=13)
+    para(c, descriptor, M + 6, PAGE_H - 291, 430, 10.2, HexColor("#EDEAE5"), "Inter-Medium", leading=14)
+    para(c, positioning, M + 6, PAGE_H - 338, 432, 9.1, HexColor("#C9C5BF"), "Inter", leading=13)
 
-    c.hline(M + 6, 112, 428, HexColor("#46647A"), 0.65)
+    # Title visual: no author credit on the cover (the author is introduced on
+    # the "About the author" slide and on the closing page).
+    c.hline(M + 6, 112, 428, HexColor("#4A4A47"), 0.65)
     c.setFont("Inter-Bold", 7.2)
-    c.setFillColor(HexColor("#91CAE1"))
-    c.drawString(M + 6, 92, author_label.upper())
+    c.setFillColor(HexColor("#E42313"))
+    c.drawString(M + 6, 92, spaced("Digital elective · Edition 2026–27", " "))
     c.setFont("Inter-XB", 14)
     c.setFillColor(WHITE)
-    c.drawString(M + 6, 71, author_name)
+    c.drawString(M + 6, 71, location_label)
     c.setFont("Inter", 7.9)
-    c.setFillColor(HexColor("#B9D2E2"))
-    c.drawString(M + 6, 54, credential)
-    c.drawRightString(photo_x - 20, 92, location_label)
-    c.drawRightString(photo_x - 20, 76, format_label)
+    c.setFillColor(HexColor("#C9C5BF"))
+    c.drawString(M + 6, 54, format_label)
+    c.drawRightString(photo_x - 20, 92, spaced("Password-protected course", " "))
+    c.drawRightString(photo_x - 20, 76, "Course proposal · Hotel Institute Montreux")
     c.showPage()
 
 
@@ -429,20 +434,20 @@ def closing_page(c, headline, author_name, credential, source_line, location_lab
     c.setFillColor(NAVY)
     c.rect(0, 0, PAGE_W, 230, stroke=0, fill=1)
     c.setFont("Inter-Bold", 7.8)
-    c.setFillColor(HexColor("#91CAE1"))
+    c.setFillColor(HexColor("#E42313"))
     c.drawString(M, 205, spaced("CONTEMPORARY HORECA SCENE", "  "))
     para(c, headline, M, 191, PAGE_W - 2 * M, 25, WHITE, "Inter-XB", leading=31)
     c.setFont("Inter-XB", 12.5)
     c.setFillColor(WHITE)
     c.drawString(M, 104, author_name)
     c.setFont("Inter", 8.4)
-    c.setFillColor(HexColor("#B9D2E2"))
+    c.setFillColor(HexColor("#C9C5BF"))
     c.drawString(M, 88, credential)
     c.setFont("Inter", 7.5)
-    c.setFillColor(HexColor("#91CAE1"))
+    c.setFillColor(HexColor("#E42313"))
     c.drawString(M, 54, location_label)
     c.setFont("Inter", 6.7)
-    c.setFillColor(HexColor("#B9D2E2"))
+    c.setFillColor(HexColor("#C9C5BF"))
     c.drawString(M, 35, source_line)
     draw_logo(c, PAGE_W - M - 63, 42, 56, 56)
     c.showPage()

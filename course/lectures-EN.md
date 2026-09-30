@@ -4,7 +4,7 @@ Working notes for the lecturer. Each module: core theses (with facts from primar
 
 ---
 
-## MODULE 1 — Contemporary HoReCa Trends (Weeks 1–3)
+## MODULE 1 — Contemporary Horeca Trends (Weeks 1–3)
 
 ### 1.1 The industry as a system of rankings
 - Three rating families coexist and complement each other: **MICHELIN** (inspectors, cuisine consistency), **The 50 Best / The 50** (academy voting, experience), **city guides such as GreatList** (expert panels, full guest experience). Each encodes a different definition of "best".
@@ -37,7 +37,13 @@ Working notes for the lecturer. Each module: core theses (with facts from primar
 Light (intensity, temperature, rhythm of the evening) → acoustics (music tempo and perceived dwell time) → scent (identity and memory) → tableware (weight, texture) → service choreography (pace, visibility, silence).
 - Design awards are industry signals: Prix Versailles (architecture; Gerbou 2025), Best Bar Design (Himkok, Oslo — a sustainable reimagining of a 200-year-old space).
 
-### 2.3 Practice
+### 2.3 The sweet fairy tale (the principle of the module)
+- A bar or a restaurant is a sweet fairy tale: for two hours the guest agrees to believe in a world you built, where the light is warm, the noise of the street disappears and everything on the table belongs to the story.
+- The spell is fragile. One harsh overhead light, one plastic tray, one visible printer, one dirty door handle, one ringtone from the service station — and the guest is out of the dream; the rest of the evening happens in a room, not in a story.
+- Consequence for design: continuity is the craft. Everything the guest can see, hear, touch and smell must stay inside the same narrative — including the back-of-house, the toilet, the coat check and the way the team speaks.
+- Exercise: name three details in a venue you know that keep the fairy tale, and one detail that breaks it.
+
+### 2.4 Practice
 - **Atmosphere audit**: teams evaluate 2–3 venues in Montreux/Riviera using a GreatList-style scorecard (food, service CJM, design, light, sound, scent, ergonomics). Deliverable: a one-page audit + one recommendation the venue could implement next month.
 - **Practical ("My Venue"):** W4 design & narrative ("three scenes", zoning); W5 atmosphere spec + audit of a real Montreux venue.
 
@@ -81,7 +87,7 @@ Front of house: reservations/waitlist platforms, dynamic pricing and revenue man
 
 ---
 
-## MODULE 5 — World's Leading Restaurants & Bars (Weeks 10–12)
+## MODULE 5 — World's Leading Restaurants & Bars (Week 10)
 
 ### 5.1 MICHELIN deep dive
 - Star semantics and economics; 2026 reveals: Tokyo (Myojaku promoted to three stars; 18 new stars; Service and Sommelier awards), California (Californios — first Mexican three-star), Toronto (Restaurant Pearl Morissette, two stars). The Moscow chapter (2021 debut — first stars in Russia & CIS; suspended 2022) as a governance case.
@@ -100,6 +106,33 @@ Front of house: reservations/waitlist platforms, dynamic pricing and revenue man
 Teams present "Your Venue on the World Stage": positioning; design & atmosphere board; menu & beverage programme (neurogastronomy-backed); operations & technology; roadmap to recognition. Panel feedback; best concept recommended for HIM competitions.
 - **Practical ("My Venue"):** W10 marketing engine — guest shifts & residencies (GreatList Sessions model), alcohol-brand partnerships (World Class formats), 90-day launch; W11 three-year roadmap to a chosen guide/list; W12 final pitch "Open & Operate".
 
+
+## MODULE 6 — Budget Realisation & Scenography (Weeks 11–12)
+
+### 6.1 Soul before budget
+- A venue does not need a large budget to feel alive; it needs a point of view and the patience to hunt for objects that carry one. Some of the most convincing rooms in the world were assembled rather than constructed.
+- Sourcing discipline: write the feeling first, then look for it in flea markets, auctions, demolition yards, restaurant liquidations, estate sales and on the street — before opening a supplier catalogue.
+- Mismatched objects read as curated when one point of view chose them. Repair, repurpose, re-upholster before replacing: patina is expensive to fake and free to keep.
+- **Case — Joi Espresso Bar (the course author's own project).** Assembled almost entirely from the street and flea markets: furniture, fixtures, equipment and objects other people had already discarded, adjusted by hand until the room held together as one story. No large investment; the constraint became the character. Teaching angle: money buys speed and finish, intention buys soul.
+
+### 6.2 Theatrical decorative techniques
+- The stage has always built believable worlds on budgets that would never survive a building permit — and for one evening only. Venues can borrow the whole toolbox.
+- Scenography: painted flats that read as marble or plaster; forced perspective that deepens a small room; a backdrop that turns a blank wall into a horizon; scrim and gauze that soften a corner; a practical lamp that anchors a table.
+- Decorative techniques: trompe-l'œil, glazing, patina and distressing, stencil and gold leaf, faux bois / faux marbre, drapery and re-upholstery, haze and one tight beam of light.
+- The rule: a theatrical trick must support the story and never announce itself. The moment the guest notices the trick, the fairy tale ends (see 2.3).
+- Budget test: for each expensive material in your concept, name the theatrical substitute and its real cost.
+
+### 6.3 The physical mockup (final exercise)
+- Every student builds a physical mockup of their own project — paper, cardboard, matchboxes, wire, fabric scraps, clay, printed photographs, a small torch for light. Not a floor plan: a set, like stage scenery.
+- Scale 1:20 or 1:50. Decide the entrance, the first sightline, the light source, which materials are real and which are painted illusions, and the three details that carry the atmosphere.
+- Photograph it at guest height — that is the image you pitch with. The mockup is the fastest way to discover that an elegant document does not stand up in three dimensions, and the most persuasive object in front of an investor, a landlord or a future team.
+
+### 6.4 Practice
+- **Sourcing sprint:** list ten elements of "My Venue"; for each, one second-hand, reused or self-built option and its cost. Compare the two totals.
+- **Mockup workshop (week 12):** build, photograph at guest height, then defend the concept deck together with the mockup in front of the panel.
+- **Practical ("My Venue"):** W11 sourcing & budget plan + scenography page; W12 physical mockup + final pitch "Open & Operate".
+
+---
 
 ### Audience questions: five-minute think, then discuss
 Choose one question per class. Allow 5 minutes of silent individual notes (claim + reason + example), 8–12 minutes of pair/small-group exchange, then 10 minutes plenary. For Modules 3 and 5, use: “What makes cooking a science without reducing it to a lab formula?” and “Which parts of René Redzepi’s or another chef’s model can transfer to a business, and which depend on a specific person and team?”
