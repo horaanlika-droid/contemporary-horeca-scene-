@@ -1,43 +1,80 @@
 # CONTEMPORARY HORECA SCENE
 
-**Образовательный курс для Hotel Institute Montreux · Educational course proposal for Hotel Institute Montreux**
-Автор / Author: **Егор Тарасенко / Egor Tarasenko** — Master in Business Management, Hotel Institute Montreux Alumnus
+**THE FUTURE OF HOSPITALITY** — a living digital elective for Hotel Institute Montreux, created by Egor Tarasenko, HIM alumnus and Master in Business Management.
 
-Курс о трендах ресторанной индустрии, дизайне заведений и создании атмосферы, нейрогастрономии, автоматизации и новых технологиях — и о ведущих барах и ресторанах мира. Построен на четырёх первоисточниках:
+> A digital elective exploring the ideas, technologies and experiences shaping the next generation of hospitality.
 
-1. **GreatList** — [greatlist.ru](https://greatlist.ru) — международный ресторанный гид (методология, критерии, география, GreatList Sessions).
-2. **The 50 Best (the50.com)** — [the50.com](https://www.the50.com) — The World's 50 Best Restaurants & Bars, истории, церемонии.
-3. **Гид MICHELIN** — [michelin.ru](http://www.michelin.ru/) / guide.michelin.com — звёздная система, релизы 2026 (Токио, Калифорния, Торонто), история московского гида.
-4. **Diageo World Class** — [diageo.com](https://www.diageo.com/en/news-and-media/press-releases/2025/diageo-crowns-worlds-best-bartender-2025-at-world-class-finals) — глобальный конкурс барменов, победитель 2025 Феличе Капассо.
+## Repository audit and implementation decision
 
-## Структура репозитория
+This repository started as a **course proposal and content library**, not an application. The initial audit found:
 
+- **Framework / frontend:** no web framework or frontend application; no package manifest or dependency tree.
+- **Backend / database / APIs:** none present.
+- **Authentication / user flows:** none present.
+- **Routing / components / design system:** none present.
+- **Existing product assets:** hospitality photography and a HIM logo in `presentation/assets/`; bilingual syllabus, lecture notes, assignments and case files in `course/`; reproducible English and Russian pitch decks in `presentation/`.
+- **Environment / deployment:** no environment variables or deployment configuration.
+
+The existing curriculum, photo library and pitch-deck sources are retained. To avoid inventing a backend or replacing the repository with an unrelated stack, the new experience is implemented as a dependency-free, responsive web app. Course content is edition-scoped and separate from the UI. A browser-persisted demo adapter makes the core student and instructor journeys testable immediately. The seam for a future API/CMS, persistent database, institution SSO and secure file service is documented below.
+
+## Run locally / deploy on BotHost
+
+This is a **Node.js-served web app** (not Python). No npm packages are required. Node 18 or newer is sufficient.
+
+```bash
+npm start
 ```
-presentation/
-  dist/   Contemporary-HoReCa-Scene-Course-Pitch-EN.pdf  ← презентация курса (EN)
-          Contemporary-HoReCa-Scene-Course-Pitch-RU.pdf  ← презентация курса (RU)
-  assets/ тематические фотографии HoReCa + официальный логотип HIM
-  build/  исходники генератора слайдов (Python + reportlab):
-          deck_lib.py, content_en.py, content_ru.py, build_deck.py
-course/
-  syllabus-EN.md / syllabus-RU.md            силлабус (12 недель, 5 модулей, оценка)
-  lectures-EN.md / lectures-RU.md            конспекты лекций по модулям
-  cases-EN.md / cases-RU.md                  база кейсов (рейтинги, рестораны, бары)
-  practical-assignments-EN.md / -RU.md       практические задания: «Моё заведение»
-```
 
-## Курс в одну минуту
+The server binds to `0.0.0.0` and listens on `process.env.PORT` (default `3000`), as expected by app hosts such as BotHost. It serves the site and exposes `/healthz` for health checks. Opening `index.html` as a `file://` URL is not supported; use the server so browser storage and assets work correctly.
 
-- **Формат:** семестровый электив, 12 недель × 3 ч (36 контактных часов), английский; BBA/MIB.
-- **Модули:** 1) тренды современной HoReCa · 2) дизайн и атмосфера · 3) нейрогастрономия · 4) технологии и автоматизация · 5) ведущие рестораны и бары мира.
-- **Практика:** на первом занятии каждый рассказывает о любимом баре/ресторане; весь семестр каждый студент строит собственное заведение («Моё заведение») до состояния «открывайся и работай»: УТП, дизайн, меню, операции, маркетинг (гостевые смены, партнёрства с алкобрендами), дорожная карта к рейтингам. Финал — питч перед экспертной панелью.
-- **Оценка:** Задание 0 и участие 10% · Field Notes 15% · майлстоуны «Моё заведение» 35% · финальный питч 40%.
+On BotHost, provide only two app variables: `BOT_TOKEN` and `ADMIN_IDS` (a comma- or space-separated list of Telegram numeric user IDs). BotHost supplies `PORT` automatically. The Node server keeps the bot token private and uses it to verify Telegram Mini App `initData`; the admin ID list determines which verified Telegram users receive the `ADMIN` role. Never put the bot token in front-end code.
 
-## Визуальная система презентации
+## Telegram launch
 
-Визуальная система сохраняет светлую редакционную подачу, уверенную типографику, деловой синий и светло-голубой цвета со сдержанным швейцарским красным акцентом. Вместо фотографий института, кампуса и студентов используются тематические кадры современной HoReCa: кухни и chef's counter, бары и коктейльные ритуалы, архитектура и атмосфера, нейрогастрономия, технологии и концепт-дизайн. Официальный знак HIM используется только как контекст предложения курса; презентация не является официальным шаблоном или одобрением института.
+The responsive site can be opened directly on its HTTPS domain or launched inside Telegram as a **Mini App**. Point your bot's `web_app` button (or menu button) to the deployed site URL. The front end detects Telegram's Web App SDK, calls `ready()` / `expand()`, syncs the viewport, and uses Telegram's back button when available. Local HTTP is only for development; the public Mini App URL must use HTTPS.
 
-## Пересборка презентации
+When launched inside Telegram, the Node server verifies the SDK's signed `initData` at `POST /api/telegram-auth` using `BOT_TOKEN`; the token never reaches the browser. Telegram users whose numeric ID is listed in `ADMIN_IDS` receive the administrator role, and other verified Telegram users enter as students. The email/password demo flow remains available only in a normal browser outside Telegram. Bot menu/launch-button configuration is still done in BotFather.
+
+## Demo access
+
+Use **Student login**, then select one of the demo roles. The login form also accepts an email and any non-empty password in this local prototype.
+
+- Student: `student@him.edu`
+- Instructor: `instructor@him.edu`
+- Admin: `admin@him.edu`
+
+Demo state is saved in the browser (`localStorage`); attached submission files are kept in IndexedDB. For an end-to-end review flow, submit work as the student, sign out, sign in as instructor, open the submission and approve it or request a revision. No demo accounts or student records are sent to a server.
+
+## Product experience
+
+- Public editorial landing page with the elective's positioning, subject areas, learning sequence, case files, author timeline, nine-module structure and final challenge.
+- Student space with course progress, next lesson, modules, editorial lesson pages, case studies, assignment submissions, quiz, feedback, updates and printable certificate.
+- Instructor space for reviewing work, assigning a score, providing feedback and approving or returning submissions for revision.
+- Admin view for the generic institution/license model, edition overview and license status demonstration.
+- Responsive desktop and mobile navigation, search across course content, accessible form labels and keyboard-operable controls.
+- Existing course materials and images remain available; the new UI uses the existing hospitality photography and does not present the HIM logo as a claim of institutional endorsement.
+
+## Content, architecture and boundaries
+
+- `course-data.js` holds portable content seed data: course identity, edition, modules, lessons, case files and updates. Renderers in `app.js` consume this structure; UI markup is not the source of truth for lesson text.
+- The initial generic domain is: **Institution → User / Enrollment → Course → Edition → Module → Lesson**; learning and operations entities include **Video, CaseStudy, ReadingMaterial, Assignment, Submission, Feedback, Quiz, Question, Answer, Progress, Certificate, License, CourseUpdate, Notification**.
+- Progress and quiz records are scoped to user and edition. Submissions record the student and edition context; an institution-scoped instructor review view is the intended authorization boundary.
+- Course content and author IP remain separate from the institution's licensed access. A new edition can evolve independently, without overwriting existing edition records.
+- `course/` remains the source library for the full bilingual syllabus, lectures, assignments and case material. `presentation/` remains the reproducible proposal-deck project.
+
+### Important production boundary
+
+The repository includes a lightweight Node server and verifies Telegram Mini App `initData` against `BOT_TOKEN`; `ADMIN_IDS` grants the `ADMIN` role to configured Telegram accounts. However, it has **no database, persistent server-side sessions, server-backed learning APIs, content-management service or production file storage**. Progress, quizzes, submissions and feedback are still browser-local and editable, and uploaded files stay in that browser. Telegram identity is signed and verified, but this alone does not make the learning records production-secure. Do not use this build for real student records until a database/API and server-enforced institution/course/role access, secure upload storage, retention/backup policies and monitoring are in place.
+
+## Original course proposal
+
+The educational proposal is a 12-week, 36-contact-hour elective in English for BBA/MIB students. Its original five-part syllabus and grading model remain in `course/` and can inform future editorial expansion of the nine digital modules.
+
+The course brings together hospitality futures, experience design, neurogastronomy, restaurant and bar concepts, technology, AI, food & beverage and entrepreneurship. Its through-line is a student-designed hospitality concept, developed through to a final pitch.
+
+## Existing proposal deck
+
+`presentation/dist/Contemporary-HoReCa-Scene-Course-Pitch-EN.pdf` and `...-RU.pdf` are retained proposal artefacts. Rebuild them with:
 
 ```bash
 python3 -m venv .venv
@@ -45,14 +82,4 @@ python3 -m venv .venv
 .venv/bin/python presentation/build/build_deck.py
 ```
 
-Генератор предпочитает Inter, если он доступен через `HIM_FONT_DIR`, и использует DejaVu Sans как Latin/Cyrillic fallback. PDF-артефакты записываются в `presentation/dist`.
-
-## Ключевые факты, заложенные в курс (2025–2026)
-
-- The World's 50 Best Restaurants 2025: №1 Maido (Лима); церемония 2026 — Лима, 4 ноября 2026.
-- The World's 50 Best Bars 2025 (Гонконг): №1 Bar Leone — первый азиатский №1.
-- MICHELIN 2026: Myojaku (Токио) — три звезды; Californios — первый трёхзвёздный мексиканский ресторан мира; Restaurant Pearl Morissette (Торонто) — две звезды.
-- Diageo World Class 2025 (Торонто): победитель Феличе Капассо (Норвегия); 51 страна; жюри — владельцы знаковых баров.
-- GreatList: 100+ экспертов, анонимные визиты; география — Россия, ОАЭ, Катар, Таиланд, Китай.
-
-*Данные о событиях после июня 2026 приведены по открытым источникам, доступным на дату подготовки курса (30 сентября 2026).*
+The deck generator prefers Inter when available through `HIM_FONT_DIR`, with DejaVu Sans as a fallback.
