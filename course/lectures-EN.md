@@ -1,6 +1,6 @@
 # CONTEMPORARY HORECA SCENE — LECTURE NOTES (EN)
 
-Working notes for the lecturer. Each module: core theses (with facts from primary sources), discussion prompts, in-class exercises.
+Working notes for the lecturer. Each module: core theses (with facts from primary sources), audience questions, and in-class exercises. **Discussion rhythm:** 5 minutes of individual thinking and notes, then 8–12 minutes in pairs or small groups, followed by plenary discussion. Gather student arguments first; then connect them to the case.
 
 ---
 
@@ -49,10 +49,10 @@ Light (intensity, temperature, rhythm of the evening) → acoustics (music tempo
 - Flavour is constructed in the brain from all senses (crossmodal correspondences, C. Spence). Sound changes perceived sweetness/bitterness; colour and weight of tableware shift perceived quality; names change expectations and liking.
 - Peak–end rule: guests remember the strongest moment and the ending — design both deliberately (the welcome ritual, the chef's appearance, the farewell gift).
 
-### 3.2 Menu psychology
+### 3.3 Menu psychology
 - Choice architecture (category counts), anchoring (decoy dishes), naming ("farm names" raise perceived quality), price presentation (no currency signs, no columns of dots), sequencing.
 
-### 3.3 Live cases
+### 3.4 Live cases
 - World Class 2025, Singleton challenge: Felice Capasso paired his cocktail "Between Us" with a custom record sleeve inspired by "That's Amore" — a Napoli street-corner warmth delivered as a multisensory story.
 - Don Julio 1942 challenge: a serve inspired by an original AI artwork — creativity augmented, not replaced.
 - Tuju: hospitality personalisation (reading glasses, children's drawing materials, menus themed on rain and wind) — memory engineering.
@@ -96,6 +96,10 @@ Front of house: reservations/waitlist platforms, dynamic pricing and revenue man
 ### 5.4 GreatList & the city-guide model
 - Methodology recap; geography (Russia, UAE, Qatar, Thailand, China; Singapore & Seoul soon); GreatList Sessions 2025 — guest-chef dinners as knowledge transfer (Hanu, Gerbou, Row on 45, Signor Sassi…).
 
-### 5.5 Final pitch
+### 5.6 Final pitch
 Teams present "Your Venue on the World Stage": positioning; design & atmosphere board; menu & beverage programme (neurogastronomy-backed); operations & technology; roadmap to recognition. Panel feedback; best concept recommended for HIM competitions.
 - **Practical ("My Venue"):** W10 marketing engine — guest shifts & residencies (GreatList Sessions model), alcohol-brand partnerships (World Class formats), 90-day launch; W11 three-year roadmap to a chosen guide/list; W12 final pitch "Open & Operate".
+
+
+### Audience questions: five-minute think, then discuss
+Choose one question per class. Allow 5 minutes of silent individual notes (claim + reason + example), 8–12 minutes of pair/small-group exchange, then 10 minutes plenary. For Modules 3 and 5, use: “What makes cooking a science without reducing it to a lab formula?” and “Which parts of René Redzepi’s or another chef’s model can transfer to a business, and which depend on a specific person and team?”
