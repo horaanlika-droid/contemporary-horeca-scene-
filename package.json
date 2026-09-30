@@ -1,0 +1,13 @@
+{
+  "name": "contemporary-horeca-scene",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A responsive hospitality learning web app and Telegram Mini App",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check app.js && node --check course-data.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
