@@ -1,0 +1,101 @@
+# CONTEMPORARY HORECA SCENE — LECTURE NOTES (EN)
+
+Working notes for the lecturer. Each module: core theses (with facts from primary sources), discussion prompts, in-class exercises.
+
+---
+
+## MODULE 1 — Contemporary HoReCa Trends (Weeks 1–3)
+
+### 1.1 The industry as a system of rankings
+- Three rating families coexist and complement each other: **MICHELIN** (inspectors, cuisine consistency), **The 50 Best / The 50** (academy voting, experience), **city guides such as GreatList** (expert panels, full guest experience). Each encodes a different definition of "best".
+- Facts: MICHELIN inspectors are anonymous and evaluate cuisine on five criteria (quality of ingredients; mastery of technique; harmony of flavours; the chef's personality; consistency). The 50 Best restaurants' voters "are given no criteria whatsoever — simply asked to name their eight best restaurant experiences" of the year. GreatList's team (100+ experts) visits venues several times, at different hours, pays its own bills, and evaluates food, service across the whole CJM, design & ergonomics, and atmosphere "from scent to music".
+- Business meaning: a listing is not a prize — it is demand infrastructure. The 50 Best week in Lima (2–4 Nov 2026) is projected to bring ~$2M of immediate local spending; a star changes occupancy, ADR and recruitment.
+
+### 1.2 Seven trends of 2025–2026
+1. **Experience economy 2.0** — dining as dramaturgy: chef's counters, storytelling formats, multi-act evenings (Alchemist, DiverXO, 8-seat "Eight" in Calgary).
+2. **Anti-luxury / casualization** — Bar Leone's "cocktail popolari": world №1 built on classics served without pretension; refinement migrates from decor to intention.
+3. **Sustainability → mindfulness** — MICHELIN's Green Star transitions into the "Mindful Voices" initiative; bars win Sustainable Bar awards (The Cambridge Public House, Paris).
+4. **Regional cuisines enter fine dining** — Californios becomes the world's first three-MICHELIN-star Mexican restaurant (California 2026); Emirati cuisine (Gerbou, Dubai) wins Prix Versailles 2025 and earns a MICHELIN recommendation.
+5. **Gravity shift** — Lima (Maido №1, Kjolle №9), Mexico City (Quintonil №3), Bangkok (Gaggan №6), Hong Kong (Bar Leone №1 bar): the map of excellence is polycentric.
+6. **Gastro-tourism & city branding** — cities bid to host ceremonies; rankings become tourism policy.
+7. **Hotel F&B renaissance** — hotel venues return to lists (Connaught Bar №6; Quadrum/Four Seasons hosts GreatList Sessions).
+
+### 1.3 Discussion & exercises
+- Debate: do rankings create quality or merely certify it? What happens to a city scene when a guide leaves (Moscow 2022 case)?
+- Exercise "Trend radar": teams map 10 current trends on impact/longevity axes and defend which three to build a concept around.
+- **Practical ("My Venue"):** Assignment 0 — 5-min "favourite venue" talk through the four lenses; W2 concept & USP with three world benchmarks; W3 trend memo.
+
+---
+
+## MODULE 2 — Venue Design & Atmosphere (Weeks 4–5)
+
+### 2.1 Concept as narrative
+- A venue is a story guests retell; design is the plot. Examples: Hanu (Dubai) — Seoul aesthetics with personal charcoal grills, dark wood, bronze doors; Handshake Speakeasy — the hidden-door dramaturgy; Paradiso (Barcelona) — the hidden-world entrance.
+- GreatList treats design and ergonomics as a selection criterion equal to food — atmosphere includes dozens of elements, "from scent to music".
+
+### 2.2 The layers of atmosphere
+Light (intensity, temperature, rhythm of the evening) → acoustics (music tempo and perceived dwell time) → scent (identity and memory) → tableware (weight, texture) → service choreography (pace, visibility, silence).
+- Design awards are industry signals: Prix Versailles (architecture; Gerbou 2025), Best Bar Design (Himkok, Oslo — a sustainable reimagining of a 200-year-old space).
+
+### 2.3 Practice
+- **Atmosphere audit**: teams evaluate 2–3 venues in Montreux/Riviera using a GreatList-style scorecard (food, service CJM, design, light, sound, scent, ergonomics). Deliverable: a one-page audit + one recommendation the venue could implement next month.
+- **Practical ("My Venue"):** W4 design & narrative ("three scenes", zoning); W5 atmosphere spec + audit of a real Montreux venue.
+
+---
+
+## MODULE 3 — Neurogastronomy & Guest Experience (Weeks 6–7)
+
+### 3.1 Gastrophysics in one page
+- Flavour is constructed in the brain from all senses (crossmodal correspondences, C. Spence). Sound changes perceived sweetness/bitterness; colour and weight of tableware shift perceived quality; names change expectations and liking.
+- Peak–end rule: guests remember the strongest moment and the ending — design both deliberately (the welcome ritual, the chef's appearance, the farewell gift).
+
+### 3.2 Menu psychology
+- Choice architecture (category counts), anchoring (decoy dishes), naming ("farm names" raise perceived quality), price presentation (no currency signs, no columns of dots), sequencing.
+
+### 3.3 Live cases
+- World Class 2025, Singleton challenge: Felice Capasso paired his cocktail "Between Us" with a custom record sleeve inspired by "That's Amore" — a Napoli street-corner warmth delivered as a multisensory story.
+- Don Julio 1942 challenge: a serve inspired by an original AI artwork — creativity augmented, not replaced.
+- Tuju: hospitality personalisation (reading glasses, children's drawing materials, menus themed on rain and wind) — memory engineering.
+
+### 3.4 Sensory lab protocol
+Blind tasting of one dish/serve under three conditions (light, music, naming varied). Students record perceived intensity and liking; compare distributions; write a one-page managerial conclusion.
+- **Practical ("My Venue"):** W6 three signature serves built on sensory effects; W7 menu architecture, pricing, an A/B test.
+
+---
+
+## MODULE 4 — Technology & Automation (Weeks 8–9)
+
+### 4.1 The operations stack
+Front of house: reservations/waitlist platforms, dynamic pricing and revenue management, CRM personalisation. Back of house: KDS, inventory and waste analytics, kitchen automation. New layers: delivery/dark kitchens, omnichannel loyalty.
+- Principle: automate repetition, keep humanity where emotion is the product (welcome, apology, recommendation).
+
+### 4.2 AI in hospitality
+- Creative AI: World Class 2025 used AI artwork as a brief for a signature serve (Don Julio 1942 challenge). Operational AI: demand forecasting, menu engineering, content. Ethics: disclosure, authenticity, humane workplaces (industry pressure discussed around the 2026 rankings).
+
+### 4.3 Education as technology
+- Felice Capasso's Sesto Senso Academy: education of bartenders as a scalable business and brand asset; World Class has trained 450,000+ bartenders ("drink better, not more").
+
+### 4.4 Exercise
+"Human/Machine matrix": list 20 touchpoints of a fine-dining evening; decide human / assisted / automated for each; defend the line.
+- **Practical ("My Venue"):** W8 operations & technology choices; W9 AI & ethics page of the concept.
+
+---
+
+## MODULE 5 — World's Leading Restaurants & Bars (Weeks 10–12)
+
+### 5.1 MICHELIN deep dive
+- Star semantics and economics; 2026 reveals: Tokyo (Myojaku promoted to three stars; 18 new stars; Service and Sommelier awards), California (Californios — first Mexican three-star), Toronto (Restaurant Pearl Morissette, two stars). The Moscow chapter (2021 debut — first stars in Russia & CIS; suspended 2022) as a governance case.
+
+### 5.2 The 50 Best deep dive
+- 2025 world list: Maido №1; Asador Etxebarri №2; Quintonil №3; DiverXO №4; Alchemist №5; Gaggan №6; Sézanne №7; Table by Bruno Verjus №8; Kjolle №9; Don Julio №10. Lima hosts the 2026 ceremony (Teatro Municipal, 4 Nov 2026); Tuju (São Paulo) takes the 2026 Art of Hospitality Award.
+- Bars 2025 (Hong Kong ceremony): Bar Leone №1 (first Asian №1; №1 two years after opening), Handshake Speakeasy №2, Sips №3, Paradiso №4, Tayēr + Elementary №5, Connaught Bar №6, Moebius Milano №7, Line №8, Jigger & Pony №9, Tres Monos №10. New continental awards (Africa: Hero Bar, Nairobi; Middle East: Mimi Kakushi, Dubai).
+
+### 5.3 World Class & the bartender economy
+- 16th season; 51 countries; finals in Toronto. Winner 2025: Felice Capasso (Norway). Jury of venue owners: Eric Van Beek, Monica Berg, Ago Perrone. Competitions as talent market and R&D lab.
+
+### 5.4 GreatList & the city-guide model
+- Methodology recap; geography (Russia, UAE, Qatar, Thailand, China; Singapore & Seoul soon); GreatList Sessions 2025 — guest-chef dinners as knowledge transfer (Hanu, Gerbou, Row on 45, Signor Sassi…).
+
+### 5.5 Final pitch
+Teams present "Your Venue on the World Stage": positioning; design & atmosphere board; menu & beverage programme (neurogastronomy-backed); operations & technology; roadmap to recognition. Panel feedback; best concept recommended for HIM competitions.
+- **Practical ("My Venue"):** W10 marketing engine — guest shifts & residencies (GreatList Sessions model), alcohol-brand partnerships (World Class formats), 90-day launch; W11 three-year roadmap to a chosen guide/list; W12 final pitch "Open & Operate".
