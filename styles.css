@@ -851,8 +851,17 @@ body.tribute-open{overflow:hidden}
 .tribute-price-badge{margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line);font-family:var(--ui);font-size:10.5px;font-weight:600;letter-spacing:var(--track);text-transform:uppercase;color:var(--red)}
 .tribute-desc{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 16px}
 .tribute-direct-box{background:var(--paper-warm);border:1px solid var(--line-strong);padding:20px;margin:18px 0}
+.tribute-flow{display:grid;gap:0;margin:20px 0 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tribute-flow>div{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+.tribute-flow>div:last-child{border-bottom:0}
+.tribute-flow>div>span{font:500 11px var(--ui);letter-spacing:.12em;color:var(--red)}
+.tribute-flow p{margin:0;font-size:13px;line-height:1.55;color:var(--muted)}
+.tribute-flow strong{color:var(--ink);font-weight:600}
+.tribute-flow code,.tribute-help code{font:600 11px var(--mono);color:var(--red)}
+.tribute-actions{display:grid;gap:10px;margin-top:16px}
 .tribute-direct-pay{display:block;width:100%;text-align:center;font-weight:500;padding:14px 20px;text-decoration:none}
-.tribute-link-url{margin-top:12px;font-size:12px;color:var(--muted);word-break:break-all}
-.tribute-link-url a{color:var(--ink);border-bottom:1px solid var(--red)}
-.tribute-link-url a:hover{color:var(--red)}
+.tribute-direct-pay[disabled]{opacity:.52;cursor:not-allowed;pointer-events:none}
+.tribute-bot-start{display:block;width:100%;text-align:center;text-decoration:none}
+.tribute-setup-note,.tribute-unavailable{margin:10px 0 0;padding:12px;background:#fff;border-left:3px solid var(--red);font-size:12px;line-height:1.5;color:var(--muted)}
+.tribute-help{margin:14px 0 0;font-size:12px;line-height:1.55;color:var(--muted)}
 

@@ -29,20 +29,36 @@ const MIME = {
 };
 
 const ADMIN_IDS = new Set((process.env.ADMIN_IDS || '').split(/[\s,;]+/).filter(Boolean));
-const PASSWORDS = (process.env.COURSE_PASSWORDS || process.env.COURSE_PASSWORD || 'Mzgnxtj8')
+const PASSWORDS = (process.env.COURSE_PASSWORDS || process.env.COURSE_PASSWORD || '')
   .split(/[\s,;]+/).map(value => value.trim()).filter(Boolean);
-const ACCESS_SECRET = process.env.ACCESS_SECRET
-  || crypto.createHash('sha256').update(`chs-access|${PASSWORDS.join('|')}`).digest('hex');
+const ACCESS_SECRET = process.env.ACCESS_SECRET || crypto.randomBytes(32).toString('hex');
 const ACCESS_COOKIE = 'chs_access';
 const ACCESS_TTL = 60 * 60 * 24 * 30; // 30 days
 const PROTECTED = ['/course-data.js', '/course/', '/presentation/dist/', '/presentation/build/'];
 
+/* Tribute sends signed HTTPS webhooks to this service; it does not issue a bot command. */
 const TRIBUTE_API_KEY = process.env.TRIBUTE_API_KEY || '';
-const TRIBUTE_API_URL = process.env.TRIBUTE_API_URL || 'https://api.tribute.tg';
-const TRIBUTE_PRODUCT_ID = process.env.TRIBUTE_PRODUCT_ID || 'chs-2026-digital-elective';
-const TRIBUTE_PRICE = process.env.TRIBUTE_PRICE || '49 EUR';
-const TRIBUTE_PRODUCT_URL = process.env.TRIBUTE_PRODUCT_URL || process.env.TRIBUTE_PAYMENT_URL || process.env.TRIBUTE_INTERNAL_PAYMENT_URL || '';
-const TRIBUTE_INTERNAL_PAYMENT_URL = process.env.TRIBUTE_INTERNAL_PAYMENT_URL || process.env.TRIBUTE_PAYMENT_URL || process.env.TRIBUTE_PRODUCT_URL || 'https://t.me/tribute/app?startapp=chs2026';
+const TRIBUTE_PRODUCT_ID = String(process.env.TRIBUTE_PRODUCT_ID || '').trim();
+const TRIBUTE_SUBSCRIPTION_ID = String(process.env.TRIBUTE_SUBSCRIPTION_ID || '').trim();
+const TRIBUTE_PRODUCT_TITLE = process.env.TRIBUTE_PRODUCT_TITLE || 'Contemporary Horeca Scene · 2026 Edition';
+const TRIBUTE_PRICE = process.env.TRIBUTE_PRICE || '';
+const TRIBUTE_PRODUCT_PRICE = process.env.TRIBUTE_PRODUCT_PRICE || TRIBUTE_PRICE;
+const TRIBUTE_SUBSCRIPTION_PRICE = process.env.TRIBUTE_SUBSCRIPTION_PRICE || TRIBUTE_PRICE;
+const legacyTributePaymentUrl = String(
+  process.env.TRIBUTE_PRODUCT_URL || process.env.TRIBUTE_INTERNAL_PAYMENT_URL || process.env.TRIBUTE_PAYMENT_URL || ''
+).trim();
+const TRIBUTE_PRODUCT_URL = String(TRIBUTE_PRODUCT_ID ? legacyTributePaymentUrl : '').trim();
+const TRIBUTE_SUBSCRIPTION_URL = String(
+  TRIBUTE_SUBSCRIPTION_ID
+    ? (process.env.TRIBUTE_SUBSCRIPTION_URL || process.env.TRIBUTE_SUBSCRIPTION_PAYMENT_URL || (!TRIBUTE_PRODUCT_ID ? legacyTributePaymentUrl : ''))
+    : ''
+).trim();
+const BOT_USERNAME = String(process.env.BOT_USERNAME || '').trim().replace(/^@/, '');
+const BOT_START_URL = /^[A-Za-z0-9_]{5,32}$/.test(BOT_USERNAME)
+  ? `https://t.me/${BOT_USERNAME}?start=course`
+  : '';
+const COURSE_URL = String(process.env.COURSE_URL || '').trim();
+const TRIBUTE_WEBHOOK_PATH = '/api/tribute/webhook';
 
 const ALL_LESSON_IDS = [
   'signals',
@@ -62,7 +78,7 @@ const attempts = new Map();
 const ATTEMPT_WINDOW = 10 * 60 * 1000;
 const ATTEMPT_LIMIT = 20;
 
-/* --- persistent store (passwords, submissions, Tribute stub, Admin Bot) --- */
+/* --- persistent store (passwords, submissions, Tribute purchases, Admin Bot) --- */
 function ensureDirs() {
   try {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -75,18 +91,7 @@ function defaultStore() {
     submissions: [],
     progress: {},
     quizzes: {},
-    tribute: {
-      mode: process.env.TRIBUTE_API_KEY ? 'live' : 'stub',
-      apiKey: TRIBUTE_API_KEY,
-      apiUrl: TRIBUTE_API_URL,
-      productId: TRIBUTE_PRODUCT_ID,
-      productTitle: 'Contemporary Horeca Scene — 2026 Edition (Digital Product)',
-      productPrice: TRIBUTE_PRICE,
-      productUrl: TRIBUTE_PRODUCT_URL || TRIBUTE_INTERNAL_PAYMENT_URL,
-      paymentUrl: TRIBUTE_INTERNAL_PAYMENT_URL,
-      internalPaymentUrl: TRIBUTE_INTERNAL_PAYMENT_URL,
-      orders: [],
-    },
+    tribute: { orders: [] },
     adminBot: {
       adminChatIds: [...ADMIN_IDS],
       logs: [
@@ -94,7 +99,7 @@ function defaultStore() {
           id: 'log-boot',
           at: new Date().toISOString(),
           type: 'system',
-          text: 'Admin Bot & Tribute Digital Product API ready. Commands: /pending, /approve <id> <feedback>, /revise <id> <feedback>, /genpass [name] [email], /students',
+          text: 'Access Bot ready. Admin commands: /pending, /approve <id> <feedback>, /revise <id> <feedback>, /students, /orders, /resend <telegram_id>'
         },
       ],
     },
@@ -107,11 +112,55 @@ function loadStore() {
     if (fs.existsSync(STORE_FILE)) {
       const parsed = JSON.parse(fs.readFileSync(STORE_FILE, 'utf8'));
       const def = defaultStore();
+      const oldOrders = Array.isArray(parsed.tribute?.orders) ? parsed.tribute.orders : [];
+      const demoStudentIds = new Set(oldOrders
+        .filter(order => order.status === 'PAID_STUB')
+        .map(order => order.studentId).filter(Boolean));
+      const students = (Array.isArray(parsed.students) ? parsed.students : []).map(student => {
+        const hasPaidProduct = oldOrders.some(order => (
+          order.studentId === student.id
+          && order.kind === 'digital-product'
+          && order.status === 'PAID'
+        ));
+        const hasPaidSubscription = oldOrders.some(order => (
+          order.studentId === student.id
+          && order.kind === 'subscription'
+          && order.status === 'PAID'
+          && ['new_subscription', 'renewed_subscription'].includes(order.eventName)
+        ));
+        if (demoStudentIds.has(student.id)) {
+          return { ...student, active: false, revokedReason: 'Legacy test checkout was removed.' };
+        }
+        if (!hasPaidProduct && !hasPaidSubscription && student.active !== false) {
+          return { ...student, active: false, revokedReason: 'A confirmed Tribute payment is required for course access.' };
+        }
+        return student;
+      });
+      const orders = oldOrders.map(order => {
+        if (order.status !== 'PAID_STUB') return order;
+        const { passwordIssued, ...rest } = order;
+        return { ...rest, status: 'TEST_ORDER_REVOKED', deliveryStatus: 'NOT_DELIVERED' };
+      });
+      const submissions = (Array.isArray(parsed.submissions) ? parsed.submissions : []).map(submission => {
+        if (!submission || typeof submission !== 'object') return submission;
+        const { passwordCode, ...safeSubmission } = submission;
+        return safeSubmission;
+      });
+      const logs = Array.isArray(parsed.adminBot?.logs)
+        ? parsed.adminBot.logs.filter(log => !/demo checkout completed/i.test(log.text || ''))
+        : def.adminBot.logs;
       return {
         ...def,
         ...parsed,
-        tribute: { ...def.tribute, ...(parsed.tribute || {}) },
-        adminBot: { ...def.adminBot, ...(parsed.adminBot || {}) },
+        students,
+        submissions,
+        tribute: { orders },
+        adminBot: {
+          ...def.adminBot,
+          ...(parsed.adminBot || {}),
+          adminChatIds: [...new Set([...(parsed.adminBot?.adminChatIds || []), ...ADMIN_IDS])],
+          logs,
+        },
       };
     }
   } catch (err) {
@@ -142,6 +191,70 @@ function addBotLog(type, text) {
   saveStore();
 }
 
+function configuredHttpsUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return url.protocol === 'https:' ? url.toString() : '';
+  } catch {
+    return '';
+  }
+}
+
+function getTributeStatus(includeOrders = false) {
+  const productUrl = configuredHttpsUrl(TRIBUTE_PRODUCT_URL);
+  const subscriptionUrl = configuredHttpsUrl(TRIBUTE_SUBSCRIPTION_URL);
+  const courseUrl = configuredHttpsUrl(COURSE_URL);
+  const botConfigured = Boolean(process.env.BOT_TOKEN);
+  const productCheckoutReady = Boolean(TRIBUTE_PRODUCT_ID && productUrl);
+  const subscriptionCheckoutReady = Boolean(TRIBUTE_SUBSCRIPTION_ID && subscriptionUrl);
+  const productConfigured = productCheckoutReady || subscriptionCheckoutReady;
+  const webhookConfigured = Boolean(TRIBUTE_API_KEY);
+  const paymentConfigured = productCheckoutReady || subscriptionCheckoutReady;
+  const deliveryReady = Boolean(paymentConfigured && webhookConfigured && botConfigured && BOT_START_URL);
+  const status = {
+    mode: deliveryReady ? 'ready' : 'not-configured',
+    productTitle: TRIBUTE_PRODUCT_TITLE,
+    productPrice: TRIBUTE_PRODUCT_PRICE,
+    subscriptionPrice: TRIBUTE_SUBSCRIPTION_PRICE,
+    productId: TRIBUTE_PRODUCT_ID,
+    subscriptionId: TRIBUTE_SUBSCRIPTION_ID,
+    productUrl,
+    subscriptionUrl,
+    productCheckoutReady,
+    subscriptionCheckoutReady,
+    botStartUrl: BOT_START_URL,
+    courseUrl,
+    webhookEndpoint: TRIBUTE_WEBHOOK_PATH,
+    paymentConfigured,
+    productConfigured,
+    webhookConfigured,
+    botConfigured,
+    botUsernameConfigured: Boolean(BOT_START_URL),
+    deliveryReady,
+    ordersCount: store.tribute.orders.length,
+    paidOrdersCount: store.tribute.orders.filter(order => order.status === 'PAID').length,
+    pendingDeliveriesCount: store.tribute.orders.filter(order => order.status === 'PAID' && order.deliveryStatus !== 'DELIVERED').length,
+  };
+  if (includeOrders) {
+    status.orders = store.tribute.orders.slice(0, 20).map(order => ({
+      id: order.id,
+      kind: order.kind,
+      eventName: order.eventName,
+      productTitle: order.productTitle,
+      buyerName: order.buyerName,
+      buyerEmail: order.buyerEmail,
+      telegramId: order.telegramId,
+      telegramUsername: order.telegramUsername,
+      amount: order.amount,
+      status: order.status,
+      deliveryStatus: order.deliveryStatus,
+      createdAt: order.createdAt,
+      studentId: order.studentId,
+    }));
+  }
+  return status;
+}
+
 function generatePersonalPassword() {
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let part1 = '';
@@ -154,23 +267,36 @@ function generatePersonalPassword() {
   return code;
 }
 
-function createStudentPassword({ name, email, telegramId, telegramUsername, source = 'tribute', tributeOrderId = null, clientId = null }) {
+function createStudentPassword({
+  name, email, telegramId, telegramUsername, tributeUserId,
+  source = 'tribute-product', tributeOrderId = null, clientId = null,
+}) {
   const password = generatePersonalPassword();
-  const cleanEmail = (email || '').trim().toLowerCase() || `student-${password.toLowerCase()}@chs.local`;
-  const cleanName = (name || '').trim() || (telegramUsername ? `@${telegramUsername}` : cleanEmail.split('@')[0]);
+  const cleanTelegramId = telegramId ? String(telegramId) : null;
+  const cleanEmail = String(email || '').trim().toLowerCase()
+    || (cleanTelegramId ? `telegram-${cleanTelegramId}@tribute.local` : `student-${password.toLowerCase()}@chs.local`);
+  const cleanUsername = String(telegramUsername || '').trim().replace(/^@/, '') || null;
+  const cleanName = String(name || '').trim() || (cleanUsername ? `@${cleanUsername}` : cleanEmail.split('@')[0]);
   const student = {
-    id: `stu-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    id: `stu-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
     password,
     name: cleanName,
     email: cleanEmail,
     role: 'STUDENT',
     institutionId: 'him-001',
-    telegramId: telegramId ? String(telegramId) : null,
-    telegramUsername: telegramUsername || null,
+    telegramId: cleanTelegramId,
+    telegramUsername: cleanUsername,
+    tributeUserId: tributeUserId ? String(tributeUserId) : null,
     boundClientId: clientId || null,
     boundAt: clientId ? new Date().toISOString() : null,
     source,
     tributeOrderId,
+    subscriptionId: null,
+    subscriptionExpiresAt: null,
+    subscriptionStatus: null,
+    passwordDeliveryStatus: cleanTelegramId ? 'PENDING' : 'NOT_AVAILABLE',
+    passwordDeliveredAt: null,
+    passwordDeliveryAttempts: 0,
     unlockedLessons: [...ALL_LESSON_IDS],
     completedLessons: [],
     active: true,
@@ -179,6 +305,41 @@ function createStudentPassword({ name, email, telegramId, telegramUsername, sour
   store.students.unshift(student);
   saveStore();
   return student;
+}
+
+function studentHasPaidDigitalAccess(student) {
+  return store.tribute.orders.some(order => (
+    order.studentId === student.id
+    && order.kind === 'digital-product'
+    && order.status === 'PAID'
+  ));
+}
+
+function isStudentAccessActive(student) {
+  if (!student || student.active === false) return false;
+  if (student.subscriptionExpiresAt && !studentHasPaidDigitalAccess(student)) {
+    const expiry = Date.parse(student.subscriptionExpiresAt);
+    if (!Number.isFinite(expiry) || expiry <= Date.now()) return false;
+  }
+  return true;
+}
+
+function adminStudentSummary(student) {
+  return {
+    id: student.id,
+    name: student.name,
+    email: student.email,
+    active: isStudentAccessActive(student),
+    telegramId: student.telegramId || null,
+    telegramUsername: student.telegramUsername || null,
+    source: student.source || 'unknown',
+    passwordDeliveryStatus: student.passwordDeliveryStatus || 'UNKNOWN',
+    passwordDeliveredAt: student.passwordDeliveredAt || null,
+    subscriptionStatus: student.subscriptionStatus || null,
+    subscriptionExpiresAt: student.subscriptionExpiresAt || null,
+    deviceBound: Boolean(student.boundClientId),
+    createdAt: student.createdAt || null,
+  };
 }
 
 /* --- HTTP & auth helpers -------------------------------------------------- */
@@ -259,13 +420,12 @@ function resolveSession(req) {
         role: 'ADMIN',
         isMaster: true,
         institutionId: 'him-001',
-        passwordCode: 'MASTER',
         unlockedLessons: [...ALL_LESSON_IDS],
       },
     };
   }
-  const student = store.students.find(s => s.id === parsed.subject && s.active !== false);
-  if (!student) return null;
+  const student = store.students.find(s => s.id === parsed.subject);
+  if (!isStudentAccessActive(student)) return null;
   return {
     unlocked: true,
     token: raw,
@@ -277,7 +437,6 @@ function resolveSession(req) {
       role: 'STUDENT',
       isMaster: false,
       institutionId: student.institutionId || 'him-001',
-      passwordCode: student.password,
       telegramId: student.telegramId || null,
       telegramUsername: student.telegramUsername || null,
       unlockedLessons: [...ALL_LESSON_IDS],
@@ -383,26 +542,181 @@ function verifyTelegramInitData(initData) {
   }
 }
 
-/* --- Telegram Admin Bot helper & command processor ----------------------- */
+/* --- Telegram Admin / Access Bot ----------------------------------------- */
+const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+}[char]));
+
 async function sendTelegramMessage(chatId, text, replyMarkup = undefined) {
   if (!process.env.BOT_TOKEN || !chatId) return false;
   try {
     const body = { chat_id: chatId, text, parse_mode: 'HTML' };
     if (replyMarkup) body.reply_markup = replyMarkup;
-    const res = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10_000),
     });
-    return res.ok;
+    const result = await response.json().catch(() => null);
+    return Boolean(response.ok && result?.ok === true);
   } catch {
     return false;
   }
 }
 
+function paymentKeyboard() {
+  const status = getTributeStatus();
+  if (!status.deliveryReady) return undefined;
+  const buttons = [];
+  if (status.productCheckoutReady) buttons.push({ text: 'Buy lifetime course access · Tribute', url: status.productUrl });
+  if (status.subscriptionCheckoutReady) buttons.push({ text: 'Start course subscription · Tribute', url: status.subscriptionUrl });
+  return buttons.length ? { inline_keyboard: buttons.map(button => [button]) } : undefined;
+}
+
+function courseKeyboard() {
+  const url = configuredHttpsUrl(COURSE_URL);
+  return url ? { inline_keyboard: [[{ text: 'Open the course', url }]] } : undefined;
+}
+
+function findStudentByTelegramId(telegramId, includeRevoked = false) {
+  const id = String(telegramId || '');
+  if (!id) return null;
+  return store.students.find(student => (
+    String(student.telegramId || '') === id
+    && (includeRevoked || student.active !== false)
+  )) || null;
+}
+
+function individualPasswordMessage(student) {
+  const courseLink = configuredHttpsUrl(COURSE_URL);
+  return [
+    '🎉 <b>Tribute confirmed your Contemporary Horeca Scene purchase.</b>',
+    '',
+    'Your individual course password:',
+    `<code>${escapeHtml(student.password)}</code>`,
+    '',
+    'Enter this password on the course access screen. It is for your personal use; keep it private.',
+    'Send /password in this chat whenever you need to retrieve it again.',
+    courseLink ? `\n<a href="${escapeHtml(courseLink)}">Open the course</a>` : '',
+  ].filter(Boolean).join('\n');
+}
+
+async function sendStudentPassword(student, { force = false } = {}) {
+  if (!student?.telegramId || !process.env.BOT_TOKEN || !isStudentAccessActive(student)) return false;
+  if (!force && student.passwordDeliveryStatus === 'DELIVERED') return true;
+  const sent = await sendTelegramMessage(student.telegramId, individualPasswordMessage(student), courseKeyboard());
+  student.passwordDeliveryAttempts = (Number(student.passwordDeliveryAttempts) || 0) + 1;
+  student.passwordDeliveryStatus = sent ? 'DELIVERED' : 'PENDING';
+  student.passwordDeliveredAt = sent ? new Date().toISOString() : student.passwordDeliveredAt || null;
+  student.passwordDeliveryUpdatedAt = new Date().toISOString();
+  if (sent) {
+    for (const order of store.tribute.orders) {
+      if (order.studentId === student.id && order.status === 'PAID' && order.deliveryStatus !== 'DELIVERED') {
+        order.deliveryStatus = 'DELIVERED';
+        order.deliveryUpdatedAt = student.passwordDeliveryUpdatedAt;
+      }
+    }
+  }
+  saveStore();
+  return sent;
+}
+
+async function deliverTributeOrder(order, student, { force = false, resendPassword = false } = {}) {
+  if (!order || !student) return false;
+  if (!force && order.deliveryStatus === 'DELIVERED') return true;
+
+  let sent;
+  const isRenewal = order.kind === 'subscription' && order.eventName === 'renewed_subscription';
+  if (isRenewal && !resendPassword && student.passwordDeliveryStatus === 'DELIVERED') {
+    const expiry = student.subscriptionExpiresAt ? new Date(student.subscriptionExpiresAt).toLocaleDateString('en-GB') : 'the current billing period';
+    sent = await sendTelegramMessage(
+      student.telegramId,
+      `✅ <b>Your Contemporary Horeca Scene subscription has renewed.</b>\nAccess is active until ${escapeHtml(expiry)}. Send /password if you need your individual course password again.`,
+      courseKeyboard(),
+    );
+  } else {
+    sent = await sendStudentPassword(student, { force: true });
+  }
+
+  order.deliveryAttempts = (Number(order.deliveryAttempts) || 0) + 1;
+  order.deliveryStatus = sent ? 'DELIVERED' : 'PENDING';
+  order.deliveryUpdatedAt = new Date().toISOString();
+  saveStore();
+  if (!sent) {
+    addBotLog('tribute-delivery', `Payment ${order.id}: password delivery is pending for Telegram user ${order.telegramId || 'unknown'}; the buyer may need to start the Access Bot.`);
+    const notice = `⚠️ Tribute payment confirmed, but the password message could not be delivered.\nOrder: <code>${escapeHtml(order.id)}</code>\nBuyer: ${escapeHtml(order.buyerName || 'Telegram buyer')} · ID <code>${escapeHtml(order.telegramId || 'unknown')}</code>\nAsk the buyer to open the Access Bot and send /start; use /resend ${escapeHtml(order.telegramId || '')} if needed.`;
+    for (const adminId of store.adminBot.adminChatIds) await sendTelegramMessage(adminId, notice);
+  }
+  return sent;
+}
+
+function tributeOrderForStudent(studentId) {
+  return store.tribute.orders.find(order => order.studentId === studentId && order.status === 'PAID') || null;
+}
+
+async function handleAccessBotMessage(message) {
+  const chatId = String(message?.chat?.id || '');
+  const senderId = String(message?.from?.id || chatId);
+  const text = String(message?.text || '').trim();
+  if (!chatId || !text || message.chat?.type !== 'private') return;
+
+  const command = text.split(/\s+/)[0].split('@')[0].toLowerCase();
+  const student = findStudentByTelegramId(senderId, true);
+  if (command === '/start') {
+    if (student && isStudentAccessActive(student)) {
+      const pendingOrder = store.tribute.orders.find(order => (
+        order.studentId === student.id && order.status === 'PAID' && order.deliveryStatus !== 'DELIVERED'
+      ));
+      if (pendingOrder) {
+        await deliverTributeOrder(pendingOrder, student, { force: true, resendPassword: true });
+        return;
+      }
+      await sendTelegramMessage(
+        chatId,
+        `Welcome back, ${escapeHtml(student.name)}. Your course access is active. Send /password to receive your individual code again.`,
+        courseKeyboard(),
+      );
+      return;
+    }
+    if (student?.subscriptionExpiresAt && student.active !== false) {
+      const messageText = `Your course subscription expired on ${escapeHtml(new Date(student.subscriptionExpiresAt).toLocaleDateString('en-GB'))}. Renew through Tribute to restore access.`;
+      await sendTelegramMessage(chatId, messageText, paymentKeyboard());
+      return;
+    }
+    const keyboard = paymentKeyboard();
+    const messageText = keyboard
+      ? 'Welcome to Contemporary Horeca Scene. Start here: pay securely inside Telegram with Tribute, and I will send your individual course password to this chat as soon as the payment is confirmed. Keep this chat open.'
+      : 'Welcome to Contemporary Horeca Scene. Automatic Tribute checkout is being configured. Please check back soon or contact the course team.';
+    await sendTelegramMessage(chatId, messageText, keyboard);
+    return;
+  }
+
+  if (command === '/password') {
+    if (!student || !isStudentAccessActive(student)) {
+      if (student?.subscriptionExpiresAt && student.active !== false) {
+        await sendTelegramMessage(chatId, `Your subscription expired on ${escapeHtml(new Date(student.subscriptionExpiresAt).toLocaleDateString('en-GB'))}. Renew through Tribute to restore access.`, paymentKeyboard());
+      } else {
+        await sendTelegramMessage(chatId, 'No active Tribute purchase is linked to this Telegram account yet. If you have just paid, wait for confirmation and send /password again.');
+      }
+      return;
+    }
+    const sent = await sendStudentPassword(student, { force: true });
+    if (!sent) await sendTelegramMessage(chatId, 'I could not deliver your password just now. Please try again in a moment or contact the course team.');
+    return;
+  }
+
+  if (command === '/help') {
+    await sendTelegramMessage(chatId, 'I send your individual course password after Tribute confirms payment. Use /password to retrieve it again. To purchase, send /start.');
+    return;
+  }
+
+  await sendTelegramMessage(chatId, 'Use /start to purchase course access or /password to retrieve a password already issued to this Telegram account.');
+}
+
 async function notifyAdminsOnSubmission(submission) {
   const fileNames = (submission.files || []).map(f => f.name).join(', ') || 'No files';
-  const summary = `📩 <b>New submission: ${submission.assignment}</b>\nStudent: ${submission.name} (${submission.student})\nPassword: ${submission.passwordCode || '—'}\nFiles: ${fileNames}\nID: <code>${submission.id}</code>\n\nAnswer:\n${submission.answer.slice(0, 600)}`;
+  const summary = `📩 <b>New submission: ${submission.assignment}</b>\nStudent: ${submission.name} (${submission.student})\nFiles: ${fileNames}\nID: <code>${submission.id}</code>\n\nAnswer:\n${submission.answer.slice(0, 600)}`;
   addBotLog('submission', `New submission ${submission.id} from ${submission.name} (${submission.assignment}) · Files: ${fileNames}`);
   for (const chatId of store.adminBot.adminChatIds) {
     await sendTelegramMessage(chatId, summary, {
@@ -432,7 +746,7 @@ function applyAdminReview({ submissionId, decision, feedbackText, score = null, 
   sub.updatedAt = new Date().toISOString();
 
   if (status === 'APPROVED' && sub.lessonId) {
-    const stu = store.students.find(s => s.id === sub.studentId || s.email === sub.student || s.password === sub.passwordCode);
+    const stu = store.students.find(s => s.id === sub.studentId || s.email === sub.student);
     if (stu) {
       if (!stu.completedLessons.includes(sub.lessonId)) stu.completedLessons.push(sub.lessonId);
     }
@@ -454,11 +768,11 @@ function applyAdminReview({ submissionId, decision, feedbackText, score = null, 
   return { ok: true, submission: sub };
 }
 
-function executeBotCommand(rawCommand) {
+async function executeBotCommand(rawCommand) {
   const cmdLine = String(rawCommand || '').trim();
-  if (!cmdLine) return { ok: false, reply: 'Enter a command, for example: /pending, /genpass, /approve <id> <feedback>, /revise <id> <feedback>, /students' };
-  const [cmd, ...args] = cmdLine.split(/\s+/);
-  const command = cmd.toLowerCase();
+  if (!cmdLine) return { ok: false, reply: 'Enter a command, for example: /pending, /orders, /resend <telegram_id>, /approve <id> <feedback>, /revise <id> <feedback>, /students' };
+  const [cmdToken, ...args] = cmdLine.split(/\s+/);
+  const command = cmdToken.split('@')[0].toLowerCase();
 
   if (command === '/start' || command === '/help') {
     const reply = [
@@ -467,117 +781,362 @@ function executeBotCommand(rawCommand) {
       '• <code>/pending</code> — list submissions awaiting review',
       '• <code>/approve &lt;id&gt; &lt;feedback&gt;</code> — approve an assignment and send feedback to the student',
       '• <code>/revise &lt;id&gt; &lt;feedback&gt;</code> — request a revision with feedback',
-      '• <code>/genpass [Name] [email]</code> — generate a personal password (one password per person)',
-      '• <code>/students</code> — list issued passwords and students',
+      '• <code>/students</code> — list paid learners and password-delivery status',
+      '• <code>/orders</code> — inspect recent Tribute payments and delivery status',
+      '• <code>/resend &lt;telegram_id&gt;</code> — resend the paid learner’s password',
     ].join('\n');
-    addBotLog('command', `${cmdLine} → help displayed`);
+    addBotLog('command', `${cmdLine} → admin help displayed`);
     return { ok: true, reply };
   }
 
   if (command === '/pending') {
-    const waiting = store.submissions.filter(s => s.status === 'WAITING FOR REVIEW');
+    const waiting = store.submissions.filter(submission => submission.status === 'WAITING FOR REVIEW');
     if (!waiting.length) {
-      const reply = 'No submissions are awaiting review.';
       addBotLog('command', '/pending → 0 submissions');
-      return { ok: true, reply };
+      return { ok: true, reply: 'No submissions are awaiting review.' };
     }
-    const reply = waiting.map(s => `• <code>${s.id}</code> | ${s.name} (${s.student}) — ${s.assignment} [Files: ${(s.files || []).map(f => f.name).join(', ') || 'none'}]`).join('\n');
+    const reply = waiting.map(submission => (
+      `• <code>${escapeHtml(submission.id)}</code> | ${escapeHtml(submission.name)} (${escapeHtml(submission.student)}) — ${escapeHtml(submission.assignment)} [Files: ${escapeHtml((submission.files || []).map(file => file.name).join(', ') || 'none')}]`
+    )).join('\n');
     addBotLog('command', `/pending → ${waiting.length} submissions found`);
     return { ok: true, reply };
   }
 
-  if (command === '/genpass') {
-    const emailArg = args.find(a => a.includes('@')) || '';
-    const nameArg = args.filter(a => !a.includes('@')).join(' ') || 'Tribute Buyer';
-    const existing = emailArg ? store.students.find(s => s.email.toLowerCase() === emailArg.toLowerCase()) : null;
-    if (existing) return { ok: false, reply: `A personal password has already been issued for ${emailArg}. Use the existing account.` };
-    const student = createStudentPassword({ name: nameArg, email: emailArg, source: 'admin-bot' });
-    const reply = `🔑 Personal password generated (one person): ${student.password}\nStudent: ${student.name} (${student.email})`;
-    addBotLog('command', `/genpass → password ${student.password} created for ${student.name}`);
-    return { ok: true, reply, student };
+  if (command === '/students') {
+    const learners = store.students.filter(student => student.source?.startsWith('tribute-'));
+    if (!learners.length) return { ok: true, reply: 'No Tribute-paid learners have been recorded yet.' };
+    const reply = learners.slice(0, 20).map(student => (
+      `• ${escapeHtml(student.name)} (${escapeHtml(student.email)}) · ${isStudentAccessActive(student) ? 'ACTIVE' : 'INACTIVE'} · delivery ${escapeHtml(student.passwordDeliveryStatus || 'UNKNOWN')} · Telegram ${escapeHtml(student.telegramId || 'not linked')}`
+    )).join('\n');
+    addBotLog('command', `/students → ${learners.length} paid learner records`);
+    return { ok: true, reply };
   }
 
-  if (command === '/students') {
-    if (!store.students.length) {
-      return { ok: true, reply: 'No personal passwords have been created yet. Use /genpass or Tribute checkout.' };
-    }
-    const reply = store.students.slice(0, 20).map(s => `• ${s.password} — ${s.name} (${s.email}) · ${s.boundClientId ? 'Assigned (activated)' : 'Not yet activated'} · source: ${s.source}`).join('\n');
-    addBotLog('command', `/students → ${store.students.length} records`);
+  if (command === '/orders') {
+    if (!store.tribute.orders.length) return { ok: true, reply: 'No Tribute payment events have been received yet.' };
+    const reply = store.tribute.orders.slice(0, 15).map(order => (
+      `• <code>${escapeHtml(order.id)}</code> · ${escapeHtml(order.buyerName || 'Telegram buyer')} · ${escapeHtml(order.status)} / ${escapeHtml(order.deliveryStatus || '—')}`
+    )).join('\n');
+    addBotLog('command', `/orders → ${store.tribute.orders.length} payment events`);
     return { ok: true, reply };
+  }
+
+  if (command === '/resend') {
+    const telegramId = String(args[0] || '').trim();
+    if (!/^\d{4,20}$/.test(telegramId)) return { ok: false, reply: 'Usage: /resend <telegram_id>' };
+    const student = findStudentByTelegramId(telegramId);
+    if (!student || !isStudentAccessActive(student)) return { ok: false, reply: 'No active paid learner was found for that Telegram ID.' };
+    const sent = await sendStudentPassword(student, { force: true });
+    addBotLog('command', `/resend → password delivery ${sent ? 'succeeded' : 'failed'} for Telegram user ${telegramId}`);
+    return { ok: sent, reply: sent ? `✅ The individual password was sent to Telegram user ${telegramId}.` : `Delivery failed. Ask the learner to open the Access Bot and send /start, then try /resend ${telegramId}.` };
   }
 
   if (command === '/approve' || command === '/revise') {
     const subId = args[0];
     const feedbackText = args.slice(1).join(' ').trim();
-    if (!subId || !feedbackText) {
-      return { ok: false, reply: `Usage: ${command} <submission_id> <feedback text>` };
-    }
+    if (!subId || !feedbackText) return { ok: false, reply: `Usage: ${command} <submission_id> <feedback text>` };
     const decision = command === '/approve' ? 'APPROVED' : 'REVISION REQUESTED';
-    const res = applyAdminReview({ submissionId: subId, decision, feedbackText, via: 'admin-bot' });
-    if (res.error) return { ok: false, reply: `Error: submission ${subId} was not found.` };
+    const result = applyAdminReview({ submissionId: subId, decision, feedbackText, via: 'admin-bot' });
+    if (result.error) return { ok: false, reply: `Error: submission ${escapeHtml(subId)} was not found.` };
     return {
       ok: true,
-      reply: `✅ Status ${decision} saved for submission ${subId} (${res.submission.name}). Feedback sent to the student.`,
-      submission: res.submission,
+      reply: `✅ Status ${decision} saved for submission ${escapeHtml(subId)} (${escapeHtml(result.submission.name)}). Feedback sent to the student.`,
+      submission: result.submission,
     };
   }
 
-  return { ok: false, reply: `Unknown command: ${command}. Enter /help for the command list.` };
+  return { ok: false, reply: `Unknown command: ${escapeHtml(command)}. Enter /help for the command list.` };
 }
 
-/* Optional Telegram long-polling when BOT_TOKEN is configured */
+/* Telegram long polling handles both customer access and the private admin console. */
 if (process.env.BOT_TOKEN) {
   let offset = 0;
   const pollTelegram = async () => {
     try {
-      const res = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates?timeout=15&offset=${offset}`);
-      if (res.ok) {
-        const data = await res.json();
-        for (const upd of data.result || []) {
-          offset = upd.update_id + 1;
-          const msg = upd.message;
-          if (msg?.text && msg?.chat?.id) {
-            const chatId = String(msg.chat.id);
-            if (msg.text.startsWith('/admin ')) {
-              const candidate = msg.text.slice(7).trim();
-              if (matchesMasterPassword(candidate)) {
-                if (!store.adminBot.adminChatIds.includes(chatId)) {
-                  store.adminBot.adminChatIds.push(chatId);
-                  saveStore();
-                }
-                await sendTelegramMessage(chatId, '✅ You are authorised as an administrator for Contemporary Horeca Scene. Enter /help for the command list.');
+      const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates?timeout=15&offset=${offset}`);
+      if (!response.ok) throw new Error(`Telegram polling returned ${response.status}`);
+      const data = await response.json();
+      if (data.ok === false) throw new Error(data.description || 'Telegram polling failed');
+      for (const update of data.result || []) {
+        if (Number.isSafeInteger(update.update_id)) offset = update.update_id + 1;
+        const message = update.message;
+        if (message?.text && message?.chat?.id) {
+          const chatId = String(message.chat.id);
+          const admin = store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId);
+          const adminCommand = message.text.match(/^\/admin(?:@[A-Za-z0-9_]+)?\s+(.+)$/s);
+          if (adminCommand) {
+            if (matchesMasterPassword(adminCommand[1].trim())) {
+              if (!store.adminBot.adminChatIds.includes(chatId)) {
+                store.adminBot.adminChatIds.push(chatId);
+                saveStore();
               }
-              continue;
+              await sendTelegramMessage(chatId, '✅ You are authorised as an administrator for Contemporary Horeca Scene. Enter /help for the admin command list.');
             }
-            if (store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId)) {
-              const out = executeBotCommand(msg.text);
-              await sendTelegramMessage(chatId, out.reply);
-            }
+          } else if (admin) {
+            const result = await executeBotCommand(message.text);
+            await sendTelegramMessage(chatId, result.reply);
+          } else {
+            await handleAccessBotMessage(message);
           }
-          const cb = upd.callback_query;
-          if (cb?.data && cb?.message?.chat?.id) {
-            const chatId = String(cb.message.chat.id);
-            if (store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId)) {
-              const [act, subId] = cb.data.split(':');
-              if (act === 'approve') {
-                const r = applyAdminReview({
-                  submissionId: subId,
-                  decision: 'APPROVED',
-                  feedbackText: 'Great work! Your assignment has been approved through the Admin Bot.',
-                  via: 'admin-bot',
-                });
-                if (!r.error) await sendTelegramMessage(chatId, `✅ Submission ${subId} approved! To add detailed feedback: <code>/approve ${subId} your feedback</code>`);
-              } else if (act === 'revise') {
-                await sendTelegramMessage(chatId, `✏️ Send a command with your feedback:\n<code>/revise ${subId} what needs to change</code>`);
-              }
+        }
+
+        const callback = update.callback_query;
+        if (callback?.data && callback?.message?.chat?.id) {
+          const chatId = String(callback.message.chat.id);
+          if (store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId)) {
+            const [action, submissionId] = callback.data.split(':');
+            if (action === 'approve') {
+              const result = applyAdminReview({
+                submissionId,
+                decision: 'APPROVED',
+                feedbackText: 'Great work! Your assignment has been approved through the Admin Bot.',
+                via: 'admin-bot',
+              });
+              if (!result.error) await sendTelegramMessage(chatId, `✅ Submission ${escapeHtml(submissionId)} approved! To add detailed feedback: <code>/approve ${escapeHtml(submissionId)} your feedback</code>`);
+            } else if (action === 'revise') {
+              await sendTelegramMessage(chatId, `✏️ Send a command with your feedback:\n<code>/revise ${escapeHtml(submissionId)} what needs to change</code>`);
             }
           }
         }
       }
-    } catch { /* ignore network errors in sandbox */ }
+    } catch (error) {
+      console.warn('Telegram bot polling error:', error.message);
+    }
     setTimeout(pollTelegram, 3000);
   };
   setTimeout(pollTelegram, 1500);
+}
+
+function tributeEventKey(eventName, payload, event) {
+  if (eventName === 'new_digital_product' || eventName === 'digital_product_refunded') {
+    const purchaseId = String(payload.purchase_id || '').trim();
+    return purchaseId ? `${eventName === 'new_digital_product' ? 'digital' : 'refund'}:${purchaseId}` : '';
+  }
+  if (['new_subscription', 'renewed_subscription', 'cancelled_subscription'].includes(eventName)) {
+    const subscriptionId = String(payload.subscription_id || '').trim();
+    const periodRef = String(payload.period_id || payload.expires_at || event.created_at || event.sent_at || '').trim();
+    return subscriptionId && periodRef ? `subscription:${eventName}:${subscriptionId}:${periodRef}` : '';
+  }
+  return '';
+}
+
+function findTributeStudent({ telegramId, tributeUserId, email, subscriptionId }) {
+  return store.students.find(student => (
+    student.active !== false
+    && (
+      (telegramId && String(student.telegramId || '') === telegramId)
+      || (tributeUserId && String(student.tributeUserId || '') === tributeUserId)
+      || (subscriptionId && String(student.subscriptionId || '') === subscriptionId)
+      || (email && !student.telegramId && String(student.email || '').toLowerCase() === email)
+    )
+  )) || null;
+}
+
+function tributeOrderBase(eventName, payload, event, id, kind, student = null) {
+  const telegramId = String(payload.telegram_user_id || payload.telegramId || '').trim() || null;
+  const telegramUsername = String(payload.telegram_username || '').trim().replace(/^@/, '') || null;
+  const fallbackPrice = kind.includes('subscription') ? TRIBUTE_SUBSCRIPTION_PRICE : TRIBUTE_PRODUCT_PRICE;
+  const amount = payload.amount !== undefined && payload.amount !== null
+    ? `${payload.amount} ${String(payload.currency || 'EUR').toUpperCase()}`
+    : fallbackPrice;
+  return {
+    id,
+    kind,
+    eventName,
+    productId: payload.product_id !== undefined ? String(payload.product_id) : null,
+    subscriptionId: payload.subscription_id !== undefined ? String(payload.subscription_id) : null,
+    periodId: payload.period_id !== undefined ? String(payload.period_id) : null,
+    purchaseId: payload.purchase_id !== undefined ? String(payload.purchase_id) : null,
+    transactionId: payload.transaction_id !== undefined ? String(payload.transaction_id) : null,
+    productTitle: payload.product_name || payload.subscription_name || TRIBUTE_PRODUCT_TITLE,
+    amount,
+    buyerName: String(payload.user_name || payload.first_name || (telegramUsername ? `@${telegramUsername}` : 'Telegram learner')),
+    buyerEmail: String(payload.email || student?.email || '').trim().toLowerCase(),
+    telegramId,
+    telegramUsername,
+    tributeUserId: payload.trb_user_id !== undefined ? String(payload.trb_user_id) : null,
+    studentId: student?.id || null,
+    status: 'PAID',
+    deliveryStatus: 'PENDING',
+    deliveryAttempts: 0,
+    createdAt: event.created_at || new Date().toISOString(),
+  };
+}
+
+async function processTributeEvent(event) {
+  const eventName = String(event.name || '').trim();
+  const payload = event.payload && typeof event.payload === 'object' ? event.payload : null;
+  if (!eventName || !payload) return { status: 400, body: { ok: false, error: 'Invalid Tribute webhook payload' } };
+
+  const isDigitalEvent = ['new_digital_product', 'digital_product_refunded'].includes(eventName);
+  const isSubscriptionEvent = ['new_subscription', 'renewed_subscription', 'cancelled_subscription'].includes(eventName);
+  if (!isDigitalEvent && !isSubscriptionEvent) return { status: 200, body: { ok: true, ignored: true } };
+
+  if (isSubscriptionEvent && eventName !== 'cancelled_subscription' && String(payload.type || '').toLowerCase() === 'trial') {
+    return { status: 200, body: { ok: true, ignored: true, reason: 'trial-event' } };
+  }
+
+  const configuredId = isDigitalEvent ? TRIBUTE_PRODUCT_ID : TRIBUTE_SUBSCRIPTION_ID;
+  const eventResourceId = String(isDigitalEvent ? payload.product_id || '' : payload.subscription_id || '').trim();
+  if (!configuredId) return { status: 200, body: { ok: true, ignored: true, reason: 'product-id-not-configured' } };
+  if (!eventResourceId) return { status: 400, body: { ok: false, error: 'Tribute product or subscription ID is missing' } };
+  if (eventResourceId !== configuredId) return { status: 200, body: { ok: true, ignored: true, reason: 'different-product' } };
+
+  const id = tributeEventKey(eventName, payload, event);
+  if (!id) return { status: 400, body: { ok: false, error: 'A stable Tribute purchase, period or event ID is required' } };
+  const previous = store.tribute.orders.find(order => order.id === id);
+  if (previous) {
+    if (previous.status === 'PAID' && previous.deliveryStatus !== 'DELIVERED') {
+      const student = store.students.find(item => item.id === previous.studentId);
+      if (student) await deliverTributeOrder(previous, student, { force: true, resendPassword: true });
+    }
+    return { status: 200, body: { ok: true, duplicate: true, deliveryStatus: previous.deliveryStatus || null } };
+  }
+
+  if (eventName === 'cancelled_subscription') {
+    const telegramId = String(payload.telegram_user_id || payload.telegramId || '').trim();
+    const tributeUserId = String(payload.trb_user_id || '').trim();
+    const subscriptionId = String(payload.subscription_id || '').trim();
+    const student = store.students.find(item => (
+      item.active !== false
+      && ((telegramId && String(item.telegramId || '') === telegramId)
+        || (tributeUserId && String(item.tributeUserId || '') === tributeUserId)
+        || (subscriptionId && String(item.subscriptionId || '') === subscriptionId))
+    )) || null;
+    const expiry = Date.parse(String(payload.expires_at || ''));
+    if (student) {
+      student.subscriptionId = subscriptionId || student.subscriptionId;
+      if (Number.isFinite(expiry)) student.subscriptionExpiresAt = new Date(expiry).toISOString();
+      student.subscriptionStatus = 'CANCELLED';
+    }
+    const order = {
+      ...tributeOrderBase(eventName, payload, event, id, 'subscription-cancellation', student),
+      status: 'CANCELLED',
+      deliveryStatus: 'NOT_REQUIRED',
+    };
+    store.tribute.orders.unshift(order);
+    saveStore();
+    addBotLog('tribute', `Tribute subscription cancellation ${id} recorded${student ? ` for ${student.name}` : ' without a matching learner'}.`);
+    if (student?.telegramId) {
+      const accessUntil = student.subscriptionExpiresAt
+        ? new Date(student.subscriptionExpiresAt).toLocaleDateString('en-GB')
+        : 'the end of the current billing period';
+      await sendTelegramMessage(student.telegramId, `Your subscription has been cancelled. Course access remains available until ${escapeHtml(accessUntil)}.`);
+    }
+    return { status: 200, body: { ok: true, cancelled: Boolean(student) } };
+  }
+
+  if (eventName === 'digital_product_refunded') {
+    const purchaseId = String(payload.purchase_id || '').trim();
+    const paidOrder = store.tribute.orders.find(order => order.kind === 'digital-product' && order.purchaseId === purchaseId);
+    if (paidOrder) {
+      paidOrder.status = 'REFUNDED';
+      paidOrder.refundedAt = payload.refunded_at || event.created_at || new Date().toISOString();
+    }
+    const refundOrder = {
+      id,
+      kind: 'digital-product-refund',
+      eventName,
+      productId: String(payload.product_id),
+      purchaseId,
+      status: paidOrder ? 'REFUNDED' : 'REFUND_UNMATCHED',
+      deliveryStatus: 'NOT_REQUIRED',
+      studentId: paidOrder?.studentId || null,
+      createdAt: event.created_at || new Date().toISOString(),
+    };
+    store.tribute.orders.unshift(refundOrder);
+    const student = paidOrder ? store.students.find(item => item.id === paidOrder.studentId) : null;
+    if (student) {
+      const hasActiveSubscription = student.subscriptionExpiresAt && Date.parse(student.subscriptionExpiresAt) > Date.now();
+      if (student.source.startsWith('tribute-') && !studentHasPaidDigitalAccess(student) && !hasActiveSubscription) {
+        student.active = false;
+        student.revokedReason = 'Tribute purchase refunded.';
+      }
+      if (!isStudentAccessActive(student) && student.telegramId) {
+        await sendTelegramMessage(student.telegramId, 'A refund was recorded for your course purchase, so this password is no longer active. Please contact the course team if you believe this is a mistake.');
+      }
+    }
+    saveStore();
+    addBotLog('tribute', `Tribute refund ${id} recorded${student ? ` for ${student.name}` : ' without a matching purchase'}.`);
+    return { status: 200, body: { ok: true, refunded: Boolean(paidOrder) } };
+  }
+
+  const telegramId = String(payload.telegram_user_id || payload.telegramId || '').trim();
+  if (!/^\d{1,20}$/.test(telegramId)) {
+    return { status: 400, body: { ok: false, error: 'A valid Tribute telegram_user_id is required for password delivery' } };
+  }
+  const telegramUsername = String(payload.telegram_username || '').trim().replace(/^@/, '') || null;
+  const tributeUserId = String(payload.trb_user_id || '').trim() || null;
+  const email = String(payload.email || '').trim().toLowerCase();
+  const subscriptionId = isSubscriptionEvent ? String(payload.subscription_id) : null;
+  let student = findTributeStudent({ telegramId, tributeUserId, email, subscriptionId });
+  const buyerName = String(payload.user_name || payload.first_name || (telegramUsername ? `@${telegramUsername}` : 'Telegram learner'));
+
+  if (isSubscriptionEvent) {
+    const expiresAt = String(payload.expires_at || '').trim();
+    const expiryTime = Date.parse(expiresAt);
+    if (!Number.isFinite(expiryTime)) return { status: 400, body: { ok: false, error: 'A valid Tribute subscription expires_at value is required' } };
+    if (!student) {
+      student = createStudentPassword({
+        name: buyerName,
+        email,
+        telegramId,
+        telegramUsername,
+        tributeUserId,
+        source: 'tribute-subscription',
+      });
+    } else {
+      student.telegramId = telegramId;
+      if (telegramUsername) student.telegramUsername = telegramUsername;
+      if (tributeUserId) student.tributeUserId = tributeUserId;
+      if (email) student.email = email;
+    }
+    student.subscriptionId = subscriptionId;
+    student.subscriptionExpiresAt = new Date(expiryTime).toISOString();
+    student.subscriptionStatus = 'ACTIVE';
+    student.active = true;
+  } else {
+    const purchaseId = String(payload.purchase_id || '').trim();
+    const alreadyRefunded = store.tribute.orders.some(order => (
+      order.kind === 'digital-product-refund' && order.purchaseId === purchaseId
+    ));
+    if (alreadyRefunded) {
+      store.tribute.orders.unshift({
+        ...tributeOrderBase(eventName, payload, event, id, 'digital-product'),
+        status: 'REFUNDED',
+        deliveryStatus: 'NOT_REQUIRED',
+      });
+      saveStore();
+      addBotLog('tribute', `Tribute purchase ${id} was already refunded; no access password was issued.`);
+      return { status: 200, body: { ok: true, refunded: true } };
+    }
+    if (!student) {
+      student = createStudentPassword({
+        name: buyerName,
+        email,
+        telegramId,
+        telegramUsername,
+        tributeUserId,
+        source: 'tribute-product',
+        tributeOrderId: id,
+      });
+    } else {
+      student.telegramId = telegramId;
+      if (telegramUsername) student.telegramUsername = telegramUsername;
+      if (tributeUserId) student.tributeUserId = tributeUserId;
+      if (email) student.email = email;
+      student.active = true;
+    }
+  }
+
+  const kind = isSubscriptionEvent ? 'subscription' : 'digital-product';
+  const order = tributeOrderBase(eventName, payload, event, id, kind, student);
+  store.tribute.orders.unshift(order);
+  if (store.tribute.orders.length > 5000) store.tribute.orders.length = 5000;
+  saveStore();
+  addBotLog('tribute', `Tribute ${eventName} ${id} confirmed for ${student.name}; automatic password delivery started.`);
+  await deliverTributeOrder(order, student, { force: true });
+  return { status: 200, body: { ok: true, issued: true, deliveryStatus: order.deliveryStatus } };
 }
 
 /* --- HTTP server --------------------------------------------------------- */
@@ -601,14 +1160,7 @@ const server = http.createServer(async (req, res) => {
         user: session?.user || null,
         course: 'Contemporary Horeca Scene',
         authorEmail: AUTHOR_EMAIL,
-        tribute: {
-          mode: store.tribute.mode,
-          productTitle: store.tribute.productTitle,
-          productPrice: store.tribute.productPrice,
-          productUrl: store.tribute.productUrl,
-          paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-          internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-        },
+        tribute: getTributeStatus(),
       });
     }
     if (req.method !== 'POST') return respond(res, 405, 'Method not allowed');
@@ -646,28 +1198,29 @@ const server = http.createServer(async (req, res) => {
           role: 'ADMIN',
           isMaster: true,
           institutionId: 'him-001',
-          passwordCode: 'MASTER',
           unlockedLessons: [...ALL_LESSON_IDS],
         },
       }, { 'Set-Cookie': cookieHeader(token, req) });
     }
 
-    /* Check personal 1-per-person passwords generated via Tribute or Admin */
+    /* Personal access is granted only by an issued password. */
     const personal = store.students.find(
-      s => s.active !== false && s.password.toUpperCase() === candidate.toUpperCase()
+      student => String(student.password || '').toUpperCase() === candidate.toUpperCase()
     );
     if (personal) {
-      const requestTelegramId = String(payload.telegramId || '').trim();
-      if (personal.telegramId && requestTelegramId !== String(personal.telegramId)) {
+      if (!isStudentAccessActive(personal)) {
+        const expired = Boolean(personal.subscriptionExpiresAt && Date.parse(personal.subscriptionExpiresAt) <= Date.now());
         return json(res, 403, {
           unlocked: false,
-          error: 'This password is assigned to your Telegram profile. Open the course from the Telegram account used for your purchase.',
+          error: expired
+            ? 'This subscription has expired. Renew your access through Tribute or contact the course team.'
+            : 'This personal password is no longer active. Please contact the course team.',
         });
       }
       if (personal.boundClientId && personal.boundClientId !== clientId) {
         return json(res, 403, {
           unlocked: false,
-          error: 'This personal password has already been activated by another person (one password per person). Get your own access through Tribute.',
+          error: 'This personal password has already been activated on another device. Please contact the course team if you need to move it.',
         });
       }
       if (!personal.boundClientId) {
@@ -694,7 +1247,6 @@ const server = http.createServer(async (req, res) => {
           role: 'STUDENT',
           isMaster: false,
           institutionId: personal.institutionId || 'him-001',
-          passwordCode: personal.password,
           telegramId: personal.telegramId || null,
           telegramUsername: personal.telegramUsername || null,
           unlockedLessons: [...ALL_LESSON_IDS],
@@ -709,169 +1261,42 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
-  /* --- 2. Tribute Digital Product API Stub & Webhook (/api/tribute/*) --- */
+  /* --- 2. Tribute payment status and signed webhook ----------------------- */
   if (pathname === '/api/tribute/status') {
-    return json(res, 200, {
-      mode: store.tribute.mode,
-      productId: store.tribute.productId,
-      productTitle: store.tribute.productTitle,
-      productPrice: store.tribute.productPrice,
-      productUrl: store.tribute.productUrl,
-      paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-      internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-      apiUrl: TRIBUTE_API_URL,
-      webhookEndpoint: '/api/tribute/webhook',
-      issuedCount: store.students.length,
-      ordersCount: store.tribute.orders.length,
-    });
+    if (req.method !== 'GET' && req.method !== 'HEAD') return respond(res, 405, 'Method not allowed');
+    return json(res, 200, getTributeStatus());
   }
 
   if (pathname === '/api/tribute/checkout') {
-    if (req.method !== 'POST') return respond(res, 405, 'Method not allowed');
-    let payload;
-    try {
-      payload = JSON.parse(await readBody(req, 32768) || '{}');
-    } catch {
-      return json(res, 400, { error: 'Invalid JSON body' });
-    }
-    const buyerName = String(payload.name || '').trim() || 'Student';
-    const buyerEmail = String(payload.email || '').trim().toLowerCase() || `buyer-${Date.now()}@student.him.edu`;
-    const telegramUsername = String(payload.telegram || '').trim().replace(/^@/, '') || null;
-    const telegramId = payload.telegramId ? String(payload.telegramId) : null;
-    const clientId = String(payload.clientId || '').trim() || null;
-    const existingBuyer = store.students.find(s =>
-      s.email.toLowerCase() === buyerEmail
-      || (telegramId && String(s.telegramId || '') === telegramId)
-      || (telegramUsername && s.telegramUsername?.toLowerCase() === telegramUsername.toLowerCase())
-    );
-    if (existingBuyer) {
-      return json(res, 409, { ok: false, error: 'A personal password has already been issued for this buyer. Please use the password from your original checkout or contact egor.tarasenko@him-mail.ch.' });
-    }
-
-    const orderId = `trbt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-    const student = createStudentPassword({
-      name: buyerName,
-      email: buyerEmail,
-      telegramId,
-      telegramUsername,
-      source: 'tribute',
-      tributeOrderId: orderId,
-      clientId,
-    });
-
-    const order = {
-      id: orderId,
-      productId: store.tribute.productId,
-      productTitle: store.tribute.productTitle,
-      amount: store.tribute.productPrice,
-      buyerName: student.name,
-      buyerEmail: student.email,
-      telegramUsername,
-      passwordIssued: student.password,
-      studentId: student.id,
-      status: 'PAID_STUB',
-      createdAt: new Date().toISOString(),
-    };
-    store.tribute.orders.unshift(order);
-    saveStore();
-    addBotLog('tribute', `Tribute digital-product demo checkout completed: ${student.name} (${student.email}) → personal password ${student.password} issued`);
-
-    return json(res, 200, {
-      ok: true,
-      stub: store.tribute.mode === 'stub',
-      order,
-      password: student.password,
-      student: {
-        id: student.id,
-        name: student.name,
-        email: student.email,
-        passwordCode: student.password,
-      },
-      message: 'Tribute demo checkout completed. No real charge was made. A personal password for one person has been generated.',
-    });
+    return json(res, 410, { ok: false, error: 'Direct/demo checkout has been removed. Only confirmed Tribute webhooks can issue passwords.' });
   }
 
-  if (pathname === '/api/tribute/webhook') {
+  if (pathname === TRIBUTE_WEBHOOK_PATH) {
     if (req.method !== 'POST') return respond(res, 405, 'Method not allowed');
-    const rawBody = await readBody(req, 65536);
-    if (process.env.TRIBUTE_API_KEY) {
-      const signature = String(req.headers['trbt-signature'] || '');
-      const expected = crypto.createHmac('sha256', process.env.TRIBUTE_API_KEY).update(rawBody).digest('hex');
-      if (!signature || signature !== expected) {
-        return json(res, 401, { error: 'Invalid Tribute webhook signature' });
-      }
+    if (!TRIBUTE_API_KEY) return json(res, 503, { ok: false, error: 'Tribute webhook signature verification is not configured' });
+
+    let rawBody;
+    try {
+      rawBody = await readBody(req, 65536);
+    } catch (error) {
+      return json(res, error.status === 413 ? 413 : 400, { ok: false, error: error.status === 413 ? 'Webhook payload is too large' : 'Unable to read webhook payload' });
     }
+    const signature = String(req.headers['trbt-signature'] || '').trim().replace(/^sha256=/i, '');
+    const expected = crypto.createHmac('sha256', TRIBUTE_API_KEY).update(rawBody).digest();
+    let received;
+    try { received = Buffer.from(signature, 'hex'); } catch { received = Buffer.alloc(0); }
+    if (!/^[a-f0-9]{64}$/i.test(signature) || received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+      return json(res, 401, { ok: false, error: 'Invalid Tribute webhook signature' });
+    }
+
     let event;
     try {
       event = JSON.parse(rawBody || '{}');
     } catch {
-      return json(res, 400, { error: 'Invalid webhook payload' });
+      return json(res, 400, { ok: false, error: 'Invalid Tribute webhook JSON' });
     }
-    const payload = event.payload || event;
-    const buyerName = payload.user_name || payload.first_name || payload.buyerName || 'Tribute Buyer';
-    const buyerEmail = payload.email || payload.buyerEmail || '';
-    const telegramId = payload.telegram_user_id || payload.telegramId || null;
-    const telegramUsername = payload.telegram_username || null;
-    const orderId = String(payload.order_id || payload.id || `trbt-wh-${Date.now()}`);
-    const previousOrder = store.tribute.orders.find(o => o.id === orderId);
-    if (previousOrder) return json(res, 200, { ok: true, duplicate: true, password: previousOrder.passwordIssued, studentId: previousOrder.studentId });
-
-    const priorBuyer = store.students.find(s =>
-      (buyerEmail && s.email.toLowerCase() === String(buyerEmail).trim().toLowerCase())
-      || (telegramId && String(s.telegramId || '') === String(telegramId))
-    );
-    if (priorBuyer) {
-      store.tribute.orders.unshift({
-        id: orderId,
-        productId: store.tribute.productId,
-        productTitle: store.tribute.productTitle,
-        buyerName: priorBuyer.name,
-        buyerEmail: priorBuyer.email,
-        telegramId: priorBuyer.telegramId,
-        telegramUsername: priorBuyer.telegramUsername,
-        passwordIssued: priorBuyer.password,
-        studentId: priorBuyer.id,
-        status: 'PAID_WEBHOOK_EXISTING_BUYER',
-        createdAt: new Date().toISOString(),
-      });
-      saveStore();
-      addBotLog('tribute', `Tribute webhook (${orderId}): repeat purchase by existing student ${priorBuyer.name}; no second password created.`);
-      if (telegramId) await sendTelegramMessage(telegramId, `Your personal access already exists. Use your previously issued password or contact egor.tarasenko@him-mail.ch.`);
-      return json(res, 200, { ok: true, duplicateBuyer: true, studentId: priorBuyer.id });
-    }
-
-    const student = createStudentPassword({
-      name: buyerName,
-      email: buyerEmail,
-      telegramId,
-      telegramUsername,
-      source: 'tribute-webhook',
-      tributeOrderId: orderId,
-    });
-    store.tribute.orders.unshift({
-      id: orderId,
-      productId: store.tribute.productId,
-      productTitle: store.tribute.productTitle,
-      amount: payload.amount ? `${payload.amount} ${payload.currency || 'EUR'}` : store.tribute.productPrice,
-      buyerName: student.name,
-      buyerEmail: student.email,
-      telegramId,
-      telegramUsername,
-      passwordIssued: student.password,
-      studentId: student.id,
-      status: 'PAID_WEBHOOK',
-      createdAt: new Date().toISOString(),
-    });
-    saveStore();
-    addBotLog('tribute', `Tribute webhook (${orderId}): password ${student.password} issued for ${student.name}`);
-
-    if (telegramId) {
-      await sendTelegramMessage(
-        telegramId,
-        `🎉 <b>Thank you for purchasing Contemporary Horeca Scene!</b>\n\nYour personal password (valid for one person):\n<code>${student.password}</code>\n\nEnter it on the app’s start screen to open every lesson.`
-      );
-    }
-    return json(res, 200, { ok: true, password: student.password, studentId: student.id });
+    const result = await processTributeEvent(event);
+    return json(res, result.status, result.body);
   }
 
   /* --- 3. Platform State & Submissions API (/api/state, /api/submissions) --- */
@@ -895,14 +1320,8 @@ const server = http.createServer(async (req, res) => {
       })),
       progress: session.isAdmin ? store.progress : Object.fromEntries(Object.entries(store.progress).filter(([key]) => key.startsWith(`${session.user.email}:`))),
       quizzes: {},
-      students: session.isAdmin ? store.students : [],
-      tribute: session.isAdmin ? store.tribute : {
-        productTitle: store.tribute.productTitle,
-        productPrice: store.tribute.productPrice,
-        productUrl: store.tribute.productUrl,
-        paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-        internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
-      },
+      students: session.isAdmin ? store.students.map(adminStudentSummary) : [],
+      tribute: getTributeStatus(session.isAdmin),
       adminBot: session.isAdmin ? store.adminBot : {},
     });
   }
@@ -973,9 +1392,8 @@ const server = http.createServer(async (req, res) => {
     const submission = {
       id: subId,
       studentId: session.user.id,
-      student: session.user.email || 'student@him.edu',
+      student: session.user.email || 'student@unknown.local',
       name: session.user.name || 'Student',
-      passwordCode: session.user.passwordCode || null,
       telegramId: session.user.telegramId || null,
       institutionId: 'him-001',
       courseId: 'contemporary-horeca-scene',
@@ -1069,38 +1487,24 @@ const server = http.createServer(async (req, res) => {
     } catch {
       return json(res, 400, { error: 'Invalid JSON' });
     }
-    if (payload.action === 'generate') {
-      const requestedEmail = String(payload.email || '').trim().toLowerCase();
-      if (requestedEmail && store.students.some(s => s.email.toLowerCase() === requestedEmail)) {
-        return json(res, 409, { error: 'A personal password already exists for this email.' });
-      }
-      const student = createStudentPassword({
-        name: payload.name || 'Student',
-        email: requestedEmail,
-        telegramUsername: payload.telegram || '',
-        source: 'admin-panel',
-      });
-      addBotLog('admin', `Personal password ${student.password} generated for ${student.name}`);
-      return json(res, 200, { ok: true, student, students: store.students });
-    }
     if (payload.action === 'reset-binding') {
-      const stu = store.students.find(s => s.id === payload.studentId || s.password === payload.password);
+      const stu = store.students.find(s => s.id === payload.studentId);
       if (stu) {
         stu.boundClientId = null;
         stu.boundAt = null;
         saveStore();
-        addBotLog('admin', `Device assignment reset for password ${stu.password}`);
+        addBotLog('admin', `Device assignment reset for student ${stu.id}`);
       }
-      return json(res, 200, { ok: true, students: store.students });
+      return json(res, 200, { ok: true, students: store.students.map(adminStudentSummary) });
     }
     if (payload.action === 'revoke') {
-      const stu = store.students.find(s => s.id === payload.studentId || s.password === payload.password);
+      const stu = store.students.find(s => s.id === payload.studentId);
       if (stu) {
         stu.active = false;
         saveStore();
-        addBotLog('admin', `Password revoked: ${stu.password} (${stu.name})`);
+        addBotLog('admin', `Course access revoked for student ${stu.id} (${stu.name})`);
       }
-      return json(res, 200, { ok: true, students: store.students });
+      return json(res, 200, { ok: true, students: store.students.map(adminStudentSummary) });
     }
     return json(res, 400, { error: 'Unknown action' });
   }
@@ -1115,8 +1519,8 @@ const server = http.createServer(async (req, res) => {
     } catch {
       return json(res, 400, { error: 'Invalid JSON' });
     }
-    const out = executeBotCommand(payload.command);
-    return json(res, 200, { ...out, logs: store.adminBot.logs, students: store.students, submissions: store.submissions });
+    const out = await executeBotCommand(payload.command);
+    return json(res, 200, { ...out, logs: store.adminBot.logs, submissions: store.submissions });
   }
 
   /* --- 5. Telegram Mini App Auth --- */

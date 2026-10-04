@@ -75,29 +75,18 @@ window.bootCourse = () => {
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
   const nextLesson = () => allLessons.find(x => !progressFor().includes(x.id)) || allLessons[0];
 
-  const demoUser = (role = 'student') => {
-    const presets = {
-      student: { name: 'Alex Morgan', email: 'student@him.edu', role: 'STUDENT' },
-      instructor: { name: 'Egor Tarasenko', email: 'instructor@him.edu', role: 'INSTRUCTOR' },
-      admin: { name: 'HIM Administrator', email: 'admin@him.edu', role: 'ADMIN' },
-    };
-    const profile = { ...presets[role], institutionId: 'him-001' };
-    sessionStorage.setItem('chs-user', JSON.stringify(profile));
-    ensureEnrollment(profile);
-    go(role === 'student' ? 'dashboard' : role === 'instructor' ? 'instructor' : 'admin');
-  };
-
   const brandBlock = href => `<a class="brand" href="${href}"><span class="brand-mark" aria-hidden="true">CHS</span><span class="brand-text"><strong>Contemporary Horeca Scene</strong><small>${C.edition} Edition · Digital elective</small></span></a>`;
 
   const header = (publicPage = false) => {
     const u = user();
     if (publicPage) {
+      const home = u?.role === 'INSTRUCTOR' ? 'instructor' : u?.role === 'ADMIN' ? 'admin' : 'dashboard';
       return `<header class="site-header">${brandBlock('#/')}<nav class="nav" aria-label="Main navigation">
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
         <button class="nav-link" type="button" data-author-open>ABOUT THE AUTHOR</button>
-        <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
+        <a class="button small" href="#/${home}">YOUR LEARNING SPACE <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
     const role = u?.role;
@@ -132,7 +121,7 @@ window.bootCourse = () => {
           <p>${C.modules.length} modules on the venues, ideas, techniques and budgets shaping the contemporary horeca scene — and a final challenge that ends with your own concept built by hand, as a mockup, like stage scenery.</p>
           <div class="hero-actions">
             <a class="button" href="#/course">EXPLORE THE COURSE <span aria-hidden="true">↗</span></a>
-            <a class="button text" href="#/login">STUDENT LOGIN <span aria-hidden="true">→</span></a>
+            <a class="button text" href="#/dashboard">YOUR LEARNING SPACE <span aria-hidden="true">→</span></a>
           </div>
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
@@ -260,41 +249,9 @@ window.bootCourse = () => {
 
       <section class="cta-band">
         <h2>Stay curious about what comes next.</h2>
-        <a class="button" href="#/login">START THE ELECTIVE <span aria-hidden="true">↗</span></a>
+        <a class="button" href="#/dashboard">GO TO YOUR LEARNING SPACE <span aria-hidden="true">↗</span></a>
       </section>
     </main>`, true);
-  }
-
-  /* ------------------------------------------------------------------ login */
-  function login() {
-    if (user()) { go('dashboard'); return ''; }
-    return `<main class="login-page">
-      <div class="login-visual">${image('horeca-chefs-counter.jpg', 'A chef at work in an open kitchen')}
-        <div class="login-visual-copy">
-          <span class="eyebrow">CONTEMPORARY HORECA SCENE · ${C.edition} EDITION</span>
-          <h1>Contemporary<br><em>Horeca</em> Scene</h1>
-          <p>${esc(C.descriptor)}</p>
-        </div>
-      </div>
-      <div class="login-form-wrap">
-        <form class="login-form" id="login-form">
-          <span class="eyebrow">STUDENT ACCESS · ${C.edition} EDITION</span>
-          <h2>Welcome <em>back</em>.</h2>
-          <p>Course access is already unlocked on this device. Choose a profile to continue your learning journey.</p>
-          <div class="field"><label for="email">Email address</label><input class="form-control" id="email" name="email" type="email" autocomplete="username" required placeholder="name@institution.edu"></div>
-          <div class="field"><label for="password">Password</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password"></div>
-          <p id="login-error" class="form-help" role="alert"></p>
-          <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
-          <div class="demo-access">
-            <span class="eyebrow">DEMO ACCESS</span>
-            <p>Explore the working product flows with a local demo profile. No account setup required.</p>
-            <div class="demo-buttons"><button type="button" data-role="student">DEMO STUDENT</button><button type="button" data-role="instructor">INSTRUCTOR</button><button type="button" data-role="admin">ADMIN</button></div>
-            <p>Demo identities: student@him.edu · instructor@him.edu · admin@him.edu</p>
-          </div>
-          <a href="#/" class="button text" style="margin-top:18px">← BACK TO THE ELECTIVE</a>
-        </form>
-      </div>
-    </main>`;
   }
 
   /* -------------------------------------------------------------- dashboard */
@@ -636,7 +593,7 @@ window.bootCourse = () => {
         <div><span class="eyebrow">INSTRUCTOR SPACE · ${esc(C.institution.toUpperCase())}</span><h1>Course<br><em>overview</em>.</h1><p>Review student work and return feedback that moves ideas forward.</p></div>
         <span class="edition-tag meta">${C.edition} EDITION · ACTIVE</span>
       </div>
-      <p class="form-help">Sample cohort snapshot for product demonstration; connect live analytics before institutional use.</p>
+      <p class="form-help">Illustrative cohort snapshot; connect live analytics before institutional use.</p>
       <div class="metric-grid">
         <div class="metric"><span>Total students</span><strong>24</strong></div>
         <div class="metric"><span>Active this week</span><strong>18</strong></div>
@@ -648,19 +605,15 @@ window.bootCourse = () => {
           <div><span class="eyebrow">STUDENT WORK</span><h2 class="page-title" style="font-size:clamp(30px,4vw,50px)">Submissions</h2><p>Review work for the ${C.edition} edition — concept notes, sourcing plans and mockup photographs. Student submissions remain edition-scoped.</p></div>
         </div>
         ${list.length ? `<div class="submission-row" style="border-bottom:1px solid var(--ink)"><span class="meta">STUDENT</span><span class="meta">ASSIGNMENT</span><span class="meta">SUBMITTED</span><span class="meta">STATUS</span></div>${list.map(s => `<a class="submission-row" href="#/review/${s._index}"><strong>${esc(s.name)}</strong><span>${esc(s.assignment)}</span><span class="meta">${new Date(s.date).toLocaleDateString()}</span><span class="status-pill">${esc(s.status)}</span></a>`).join('')}`
-          : `<div class="empty"><span class="eyebrow">NO SUBMISSIONS YET</span><p>Student work will appear here when it is submitted for review.</p><p>To test the complete flow, sign in as the demo student, submit the final challenge, then return here as the instructor.</p></div>`}
+          : `<div class="empty"><span class="eyebrow">NO SUBMISSIONS YET</span><p>Student work will appear here when it is submitted for review.</p></div>`}
       </section>
       <section class="section" style="padding:42px 0 18px" id="admin-review">
         <span class="eyebrow">ADMIN PANEL · ASSIGNMENT REVIEW</span><h2 class="page-title" style="font-size:clamp(30px,4vw,48px)">Student work &amp; <em>feedback</em>.</h2>
         <p>Accept or return each assignment. Written feedback is required; students keep immediate access to every lesson regardless of review.</p>
         <div class="admin-submissions">${state.submissions.length ? state.submissions.slice().reverse().map(s => `<article class="institution-panel" style="margin:18px 0"><div class="simple-row"><span><span class="meta">${esc(s.assignment)} · ${esc(s.lessonId || '')}</span><br><strong>${esc(s.name)} · ${esc(s.student)}</strong></span><span class="status-pill">${esc(s.status)}</span></div><p class="review-work">${esc(s.answer || '')}${s.link ? `<br><a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.link)}</a>` : ''}</p><div>${(s.files || []).map((f, i) => `<a class="button text" href="${esc(f.url || '#')}" data-action="download-file" data-url="${esc(f.url || '')}" data-name="${esc(f.name || f)}">${esc(f.name || f)} ↓</a>`).join(' ')}</div><form id="review-form" data-id="${esc(s.id)}" class="review-actions" style="margin-top:18px"><div class="field"><label>Required feedback to student</label><textarea class="form-control" name="feedback" rows="3" required placeholder="Specific, useful feedback from Egor Tarasenko">${esc(s.feedback?.text || '')}</textarea></div><div class="field"><label>Score (optional)</label><input class="form-control" type="number" name="score" min="0" max="100" value="${esc(s.feedback?.score ?? '')}"></div><button class="button" name="decision" value="APPROVED">APPROVE &amp; SEND FEEDBACK ✓</button> <button class="button light" name="decision" value="REVISION REQUESTED">REQUEST REVISION ↗</button></form></article>`).join('') : '<div class="empty">No student assignments submitted yet.</div>'}</div>
       </section>
-      <section class="dash-lower" style="margin:32px 0">
-        <div class="institution-panel"><span class="eyebrow">PERSONAL PASSWORDS · ONE PER PERSON</span><h2>Generate a course password</h2><form id="student-password-form"><div class="field"><label>Name</label><input class="form-control" name="name" required></div><div class="field"><label>Email (optional)</label><input class="form-control" name="email" type="email"></div><button class="button">GENERATE PASSWORD ↗</button></form><div id="generated-password"></div><div class="simple-list" style="margin-top:16px">${(state.serverStudents || []).slice(0,12).map(st => `<div class="simple-row"><span>${esc(st.name)} · ${esc(st.email)}</span><code>${esc(st.password)}</code></div>`).join('')}</div></div>
-        <div class="institution-panel"><span class="eyebrow">TELEGRAM ADMIN BOT CONSOLE</span><h2>Run a bot command</h2><p>Commands: <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>, <code>/genpass Name email</code>, <code>/students</code></p><form id="admin-bot-form"><div class="field"><label>Command</label><input class="form-control" name="command" required placeholder="/pending"></div><button class="button">RUN COMMAND ↗</button></form><pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0,5).map(x => x.text).join('\n'))}</pre></div>
-      </section>
       <div class="dash-lower" id="analytics">
-        <section><h2 class="serif" style="font-size:26px">Module performance</h2><p class="form-help">Illustrative overview for this demo edition.</p><div class="chart-bars">${[76, 62, 54, 68, 45, 36, 51, 29, 44, 8].map((n, i) => `<div style="height:${n}%"><span>${String(i + 1).padStart(2, '0')}</span></div>`).join('')}</div></section>
+        <section><h2 class="serif" style="font-size:26px">Module performance</h2><p class="form-help">Illustrative overview for this edition.</p><div class="chart-bars">${[76, 62, 54, 68, 45, 36, 51, 29, 44, 8].map((n, i) => `<div style="height:${n}%"><span>${String(i + 1).padStart(2, '0')}</span></div>`).join('')}</div></section>
         <section><h2 class="serif" style="font-size:26px">Recent activity</h2><div class="empty">${list.length ? `${list.length} submission${list.length > 1 ? 's' : ''} in this edition.` : 'Course activity will appear as learners progress through the edition.'}</div></section>
       </div>
     </main>`);
@@ -692,34 +645,66 @@ window.bootCourse = () => {
   }
 
   function adminPage() {
+    const tribute = state.tribute || {};
+    const students = state.serverStudents || [];
+    const orders = tribute.orders || [];
+    const checks = [
+      ['One-time product link + product ID', tribute.productCheckoutReady],
+      ['Subscription link + subscription ID', tribute.subscriptionCheckoutReady],
+      ['Tribute webhook signature', tribute.webhookConfigured],
+      ['Telegram bot token', tribute.botConfigured],
+      ['Bot username and start link', tribute.botUsernameConfigured],
+    ];
     return layout(`<main class="app-main">
       <div class="welcome">
-        <div><span class="eyebrow">PLATFORM ADMINISTRATION · MULTI-INSTITUTION</span><h1>Institutions<br>&amp; <em>editions</em>.</h1><p>Manage access across institutions without tying the course to a single school.</p></div>
-        <span class="edition-tag meta">ADMINISTRATOR</span>
+        <div><span class="eyebrow">COURSE ADMINISTRATION</span><h1>Access &amp; <em>payments</em>.</h1><p>Tribute confirms the payment; the Access Bot creates one individual password and delivers it to the buyer’s Telegram chat.</p></div>
+        <span class="edition-tag meta">${tribute.deliveryReady ? 'TRIBUTE AUTOMATION READY' : 'TRIBUTE SETUP REQUIRED'}</span>
       </div>
       <div class="metric-grid">
-        <div class="metric"><span>Institutions</span><strong>01</strong></div>
-        <div class="metric"><span>Active licenses</span><strong>${state.licenseActive ? '01' : '00'}</strong></div>
-        <div class="metric"><span>Licensed students</span><strong>24 / 100</strong></div>
+        <div class="metric"><span>Issued passwords</span><strong>${students.length}</strong></div>
+        <div class="metric"><span>Confirmed Tribute payments</span><strong>${tribute.paidOrdersCount || 0}</strong></div>
+        <div class="metric"><span>Pending password deliveries</span><strong>${tribute.pendingDeliveriesCount || 0}</strong></div>
         <div class="metric"><span>Active edition</span><strong>${C.edition}</strong></div>
       </div>
-      <section id="institutions" class="institution-panel">
+
+      <section class="institution-panel" id="tribute-setup">
+        <span class="eyebrow">TRIBUTE · AUTOMATIC PASSWORD DELIVERY</span>
+        <h2>${tribute.deliveryReady ? 'Payment flow is connected.' : 'Finish the payment setup.'}</h2>
+        <p>Set these values on the Node host. The webhook URL to enter in Tribute is <code>${esc(tribute.webhookEndpoint || '/api/tribute/webhook')}</code>. Tribute sends a signed server-to-server event; no password is issued by the public page.</p>
+        <div class="simple-list">${checks.map(([label, ready]) => `<div class="simple-row"><span>${esc(label)}</span><strong class="status-pill">${ready ? 'READY' : 'MISSING'}</strong></div>`).join('')}</div>
+        <p style="margin-top:14px">A buyer must open the Access Bot once before payment so Telegram allows it to message them. If a message is missed, the buyer can send <code>/password</code>; an admin can use <code>/resend TELEGRAM_ID</code>.</p>
+      </section>
+
+      <section class="institution-panel" id="tribute-orders">
+        <span class="eyebrow">RECENT PAYMENT EVENTS</span>
+        <h2>Tribute orders</h2>
+        <div class="simple-list">${orders.length ? orders.slice(0, 12).map(order => `<div class="simple-row"><span><strong>${esc(order.buyerName || order.telegramUsername || 'Telegram buyer')}</strong><br><span class="meta">${esc(order.productTitle || order.kind || 'Tribute event')} · ${esc(order.amount || '')} · ${esc(order.id)}</span></span><span><span class="status-pill">${esc(order.status || '—')}</span><br><span class="meta">DELIVERY · ${esc(order.deliveryStatus || '—')}</span></span></div>`).join('') : '<div class="empty">No confirmed Tribute events yet. They will appear here after the first signed webhook.</div>'}</div>
+      </section>
+
+      <div class="dash-lower" style="margin:32px 0">
+        <section class="institution-panel">
+          <span class="eyebrow">PAID LEARNERS · DELIVERY STATUS</span><h2>Issued access</h2>
+          <div class="simple-list">${students.length ? students.slice(0, 12).map(student => `<div class="simple-row"><span><strong>${esc(student.name)}</strong><br><span class="meta">${esc(student.email)} · ${esc(student.telegramUsername ? `@${student.telegramUsername}` : student.telegramId || 'Telegram not linked')}</span></span><span class="status-pill">${student.active ? esc(student.passwordDeliveryStatus || 'ISSUED') : 'INACTIVE'}</span></div>`).join('') : '<div class="empty">No paid learners yet.</div>'}</div>
+          <p style="margin-top:14px">Passwords are sent privately by the Access Bot after Tribute confirms payment. For a missed message, use <code>/resend TELEGRAM_ID</code>; the code is never shown in this dashboard.</p>
+        </section>
+        <section class="institution-panel">
+          <span class="eyebrow">TELEGRAM ADMIN BOT</span><h2>Run a bot command</h2>
+          <p>Commands: <code>/orders</code>, <code>/resend TELEGRAM_ID</code>, <code>/students</code>, <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>.</p>
+          <form id="admin-bot-form"><div class="field"><label for="admin-bot-command">Command</label><input class="form-control" id="admin-bot-command" name="command" required placeholder="/orders"></div><button class="button">RUN COMMAND ↗</button></form>
+          <pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0, 5).map(entry => entry.text).join('\n'))}</pre>
+        </section>
+      </div>
+
+      <section class="institution-panel" id="institutions">
         <span class="eyebrow">INSTITUTION · HIM-001</span>
         <h2>${esc(C.institution)}</h2>
         <p>${esc(C.title)} · ${C.edition} Edition</p>
         <div class="simple-list">
           <div class="simple-row"><span class="meta">LICENSE PERIOD</span><strong>01.09.2026 — 31.08.2027</strong></div>
-          <div class="simple-row"><span class="meta">STUDENT LIMIT</span><strong>24 / 100</strong></div>
           <div class="simple-row"><span class="meta">STATUS</span><span class="status-pill">${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}</span></div>
-          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Personal password · all lessons available immediately</strong></div>
-          <div class="simple-row"><span class="meta">CONTENT OWNERSHIP</span><strong>Author-owned · institution access by license</strong></div>
+          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Individual password · confirmed Tribute purchase</strong></div>
         </div>
-        <button class="button light" data-action="toggle-license" style="margin-top:22px">${state.licenseActive ? 'SUSPEND DEMO LICENSE' : 'REACTIVATE DEMO LICENSE'} <span aria-hidden="true">↻</span></button>
       </section>
-      <div class="dash-lower" id="analytics">
-        <section><h2 class="serif" style="font-size:26px">Course editions</h2><div class="simple-list"><div class="simple-row"><span><strong>${C.edition} Edition</strong><br><span class="meta">ACTIVE · HIM</span></span><span class="status-pill">CURRENT</span></div><div class="simple-row"><span><strong>2027 Edition</strong><br><span class="meta">CONTENT PLANNING</span></span><span class="meta">FUTURE</span></div><div class="simple-row"><span><strong>2028 Edition</strong><br><span class="meta">NOT STARTED</span></span><span class="meta">FUTURE</span></div></div></section>
-        <section><h2 class="serif" style="font-size:26px">Platform architecture</h2><p class="form-help">Institution · User · Course · Edition · Module · Lesson · Submission · Feedback · Progress · License · Enrollment · Certificate</p><div class="empty">Edition-scoped progress and assessment records preserve student work when course content evolves.</div></section>
-      </div>
     </main>`);
   }
 
@@ -853,7 +838,7 @@ window.bootCourse = () => {
     syncTelegramNavigation();
     const r = route();
     const u = user();
-    if (r[0] === 'login') { app.innerHTML = login(); return; }
+    if (r[0] === 'login') { go('dashboard'); return; }
     if (!r[0]) { app.innerHTML = landing(); return; }
     if (!u) { location.hash = '/'; return; }
     if (r[0] === 'dashboard' && u.role === 'STUDENT') app.innerHTML = dashboard();
@@ -916,7 +901,7 @@ window.bootCourse = () => {
   async function lockDevice() {
     if (!confirm('Lock Contemporary Horeca Scene on this device? You will need the course password to reopen it.')) return;
     try { await fetch('/api/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'revoke' }) }); } catch { /* static hosting */ }
-    try { localStorage.removeItem('chs-access-v1'); localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
+    try { localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
     location.hash = '';
     location.reload();
   }
@@ -953,8 +938,6 @@ window.bootCourse = () => {
 
   /* --------------------------------------------------------------- events */
   document.addEventListener('click', async e => {
-    const role = e.target.closest('[data-role]');
-    if (role) { demoUser(role.dataset.role); return; }
     const actionEl = e.target.closest('[data-action]');
     const action = actionEl?.dataset.action;
     if (action === 'lightbox') { openLightbox(actionEl.dataset.src, actionEl.querySelector('img')?.alt, actionEl.dataset.caption); return; }
@@ -962,11 +945,11 @@ window.bootCourse = () => {
     if (action === 'complete') { updateProgress(actionEl.dataset.lesson); return; }
     if (action === 'search') { e.preventDefault(); openSearch(); return; }
     if (action === 'profile') { go('profile'); return; }
-    if (action === 'logout') { if (confirm('Sign out of this demo profile?')) go('logout'); return; }
+    if (action === 'logout') { if (confirm('Sign out of this course session?')) go('logout'); return; }
     if (action === 'lock') { await lockDevice(); return; }
     if (action === 'retake-quiz') { state = getState(); delete state.quizzes[`${key()}:quiz01`]; saveState(state); render(); return; }
     if (action === 'print') { window.print(); return; }
-    if (action === 'toggle-license') { state = getState(); state.licenseActive = !state.licenseActive; state.licenses[0].status = state.licenseActive ? 'ACTIVE' : 'SUSPENDED'; saveState(state); render(); toast(`DEMO LICENSE ${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}`); return; }
+    if (action === 'toggle-license') { state = getState(); state.licenseActive = !state.licenseActive; state.licenses[0].status = state.licenseActive ? 'ACTIVE' : 'SUSPENDED'; saveState(state); render(); toast(`LICENSE ${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}`); return; }
     if (action === 'revise') { state = getState(); const prior = state.submissions.filter(s => s.student === user().email && s.courseId === C.id && s.edition === C.edition).at(-1); if (prior) prior.status = 'SUPERSEDED'; sessionStorage.setItem('chs-revising', '1'); saveState(state); render(); return; }
     if (action === 'download-file') {
       e.preventDefault();
@@ -1005,11 +988,6 @@ window.bootCourse = () => {
 
   document.addEventListener('submit', async e => {
     e.preventDefault();
-    if (e.target.id === 'login-form') {
-      const d = new FormData(e.target), email = String(d.get('email')).trim().toLowerCase(), pass = String(d.get('password'));
-      if (!email || pass.length < 1) { document.getElementById('login-error').textContent = 'Enter your email and password.'; return; }
-      document.getElementById('login-error').textContent = 'Use your course password on the access screen; all lessons open immediately after access is granted.'; return;
-    }
     if (e.target.id === 'assignment-form') {
       const u = user(), fd = new FormData(e.target), files = [...document.getElementById('files').files];
       if (files.some(f => f.size > 15 * 1024 * 1024)) { toast('EACH FILE MUST BE UNDER 15 MB'); return; }
@@ -1018,7 +996,7 @@ window.bootCourse = () => {
         courseId: C.id, edition: C.edition,
         assignment: `${allLessons.find(l => l.id === e.target.dataset.lesson)?.title || 'Final Challenge'} · Practical Assignment`,
         moduleId: e.target.dataset.module || 'final', lessonId: e.target.dataset.lesson || 'final-brief',
-        studentId: u.id, passwordCode: u.passwordCode, telegramId: u.telegramId || null,
+        studentId: u.id, telegramId: u.telegramId || null,
         answer: String(fd.get('answer') || ''), link: String(fd.get('link') || ''),
         files: files.map(f => f.name), date: new Date().toISOString(), status: 'WAITING FOR REVIEW', feedback: null,
       };
@@ -1086,17 +1064,6 @@ window.bootCourse = () => {
         await syncServerState(); render();
         const replyBox = document.getElementById('bot-response');
         if (replyBox) replyBox.textContent = data.reply || '';
-      } catch (error) { toast(error.message); }
-      return;
-    }
-    if (e.target.id === 'student-password-form') {
-      const fd = new FormData(e.target);
-      try {
-        const response = await fetch('/api/admin/students', { method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() }, body: JSON.stringify({ action: 'generate', name: fd.get('name'), email: fd.get('email') }) });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Password generation failed');
-        document.getElementById('generated-password').innerHTML = `<div class="simple-row"><span>New personal password (1 person)</span><code>${esc(data.student.password)}</code></div>`;
-        await syncServerState(); render();
       } catch (error) { toast(error.message); }
       return;
     }

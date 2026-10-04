@@ -4,11 +4,13 @@
 
 > A digital elective that reads the contemporary horeca scene through rankings, design, neurogastronomy, technology and entrepreneurship — and ends with a live found-object mockup assembled from antique tableware, candles, vintage glassware, found props and a physical menu concept.
 
-## Access
+## Access and payment flow
 
-Students use an individual password issued through the Tribute digital-product flow (one password per person). A valid password immediately opens every module and lesson; assignment review is not an access check and does not lock lessons. The app remembers access on the device for 30 days.
+Course entry is password-only. Tribute is the payment route; a payment link never unlocks the course. Each confirmed buyer receives an individual password that opens every module and lesson. The signed-in session is remembered on that device for 30 days.
 
-The Node service verifies the student password and issues a signed session (`POST /api/access`). `/course-data.js`, `/course/`, `/presentation/dist/` and `/presentation/build/` are protected until access is granted. Repeated wrong entries are throttled (`429` after 20 attempts per 10 minutes). Administrators use the master password configured with `COURSE_PASSWORD` (the repository default is for local development only); set a strong private value before deployment. `ACCESS_SECRET` controls signed session tokens and should also be set to a stable secret in production.
+The customer journey is deliberately short: open the course Access Bot and tap **Start**, buy the one-time product or start a subscription through Tribute, then receive an individual password in that same bot chat after confirmation. Starting the bot first is important because Telegram does not let a bot initiate a private conversation. If a payment notification arrives before the customer starts the bot, delivery is retried when they send `/start`; `/password` resends an already-issued code.
+
+Tribute sends a signed HTTPS webhook to `POST /api/tribute/webhook`. The Node service verifies `trbt-signature`, matches the configured product or subscription ID, processes duplicate events safely, creates one password per Telegram user, and sends it through the Telegram Bot API. Only that webhook can issue a Tribute password. The old demo checkout and static password fallback have been removed. `/course-data.js`, `/course/`, `/presentation/dist/` and `/presentation/build/` remain protected until the server verifies a password. Repeated incorrect entries are throttled (`429` after 20 attempts per 10 minutes). The administrator uses a private `COURSE_PASSWORD`; `ACCESS_SECRET` should be set to a stable secret in production.
 
 ## Brand & design system
 
@@ -42,23 +44,17 @@ npm test           # English-only copy, author/figure separation and API regress
 
 The server binds to `0.0.0.0`, serves the site, exposes `/healthz`, verifies Telegram `initData` and enforces the course password. Opening `index.html` as a `file://` URL is not supported; use the server so cookies, storage and assets work correctly.
 
-On BotHost, provide a private `COURSE_PASSWORD` for the administrator, a stable `ACCESS_SECRET`, and for Telegram launch `BOT_TOKEN` plus `ADMIN_IDS` (comma- or space-separated Telegram numeric user IDs). BotHost supplies `PORT`. The bot token and passwords stay server-side; never put them in front-end code.
+On BotHost, set a private `COURSE_PASSWORD`, a stable `ACCESS_SECRET`, the Telegram `BOT_TOKEN`, `BOT_USERNAME`, and `ADMIN_IDS` (comma- or space-separated Telegram numeric user IDs). For paid delivery, set `TRIBUTE_API_KEY` and configure the matching Tribute IDs and HTTPS links: `TRIBUTE_PRODUCT_ID` with `TRIBUTE_PRODUCT_URL` for lasting one-time access, and/or `TRIBUTE_SUBSCRIPTION_ID` with `TRIBUTE_SUBSCRIPTION_URL` for recurring access. Optional display prices are `TRIBUTE_PRODUCT_PRICE` and `TRIBUTE_SUBSCRIPTION_PRICE`; `COURSE_URL` adds an Open Course button. BotHost supplies `PORT`. Secrets stay server-side; never put bot tokens, passwords or the Tribute key in front-end code.
 
 ## Telegram launch
 
 The responsive site can be opened directly on its HTTPS domain or launched inside Telegram as a **Mini App**. Point your bot's `web_app` button (or menu button) at the deployed URL. The front end detects Telegram's Web App SDK, calls `ready()` / `expand()`, syncs the viewport and header colours (both on the password gate and inside the course), and uses Telegram's back button when available. The public Mini App URL must use HTTPS.
 
-When launched inside Telegram, the Node server verifies the SDK's signed `initData` at `POST /api/telegram-auth` using `BOT_TOKEN`. Telegram users whose numeric ID is listed in `ADMIN_IDS` receive the administrator role; other verified users enter as students. The course password gate applies to Telegram sessions as well. Bot menu/launch-button configuration is done in BotFather.
+When launched inside Telegram, the client initializes the Web App SDK. After course access is established with a valid password, the app can verify the SDK's signed `initData` at `POST /api/telegram-auth` using `BOT_TOKEN` and attach the Telegram identity to the profile. This verification does not bypass the password gate. `ADMIN_IDS` is used to authorize private admin-bot chats; configure the menu or launch button in BotFather.
 
-## Demo identities
+## Learner and admin sessions
 
-Course access is the password above. Inside the course, **Student login** accepts an email and any non-empty password in this prototype:
-
-- Student: `student@him.edu`
-- Instructor: `instructor@him.edu` (course author identity)
-- Admin: `admin@him.edu`
-
-Demo state is saved in the browser (`localStorage`); attached submission files are kept in IndexedDB. For an end-to-end review flow, submit work as the student, sign out, sign in as the instructor, open the submission and approve it or request a revision. No demo accounts or student records are sent to a server.
+There are no public demo profiles, link-based previews, manual password-generation tools or secondary email/password logins. A personal password is issued only after a verified Tribute payment; the configured master password is reserved for administrators. Learning progress and quiz state are saved in the browser (`localStorage`). Confirmed payment, password-delivery and order records are stored server-side in `data/store.json`; uploaded assignment files are kept in `data/uploads/`.
 
 ## Course structure (2026 edition)
 
@@ -97,18 +93,18 @@ Module 04 also gained a learning unit, **Concept objects: the menu, the merchand
 - **Projects of the author** (`#/projects`, `#/project/<id>`) — 43 photographs across seven project files: Joi Espresso Bar, Passie Cakes Co., CooCoo Coffee, Chicken Connection, Pacific, TAM / TYT and a found-object research file. Each file carries facts, an English explanation and a captioned gallery with a keyboard-accessible lightbox. The full archive is reached via the About the author pop-up rather than a separate main-navigation item; its photographs also remain course evidence in the relevant cases and modules.
 - **Student space** with course progress, next lesson, modules, editorial lesson pages, case studies, assignment submissions (concept + mockup photographs), quiz, feedback, updates and a printable certificate.
 - **Instructor space** for reviewing work, assigning a score, providing feedback and approving or returning submissions for revision.
-- **Admin view** for the generic institution/license model, edition overview, password-access status and license demonstration.
+- **Admin view** for Tribute setup readiness, signed-webhook payment events, password-delivery status, paid-learner summaries and the Telegram admin-command console.
 - Responsive desktop and mobile navigation, search across course content, accessible form labels, keyboard-operable controls, reduced-motion and print styles.
 - **Photography is shown whole.** Source frames are mostly 3:4 / 4:5 phone photographs, so content images (case cards, project cards, galleries, creator and budget frames, the hero plate) render at their natural proportions instead of being cropped to a fixed-height strip. Only surfaces that are treated as background fields — hero on mobile, the gate/login visual, the case feature band, module and lesson banners — are cropped, and their `object-position` is set deliberately.
 - Existing course materials and photography remain available; the new UI uses the existing hospitality imagery and does not present the HIM or SEG logos as a claim of institutional endorsement.
 
 ## Language and editorial boundaries
 
-The gate, checkout, author dialog, lessons, captions, project archive, administration, Telegram bot and downloadable materials are English-only. Cyrillic name duplicates and translated project/caption fields are not shipped. The deck builder produces the English PDF only; there are no alternate-language course handouts or decks.
+The gate, Tribute instructions, author dialog, lessons, captions, project archive, administration, Telegram Access Bot and downloadable materials are English-only. Cyrillic name duplicates and translated project/caption fields are not shipped. The deck builder produces the English PDF only; there are no alternate-language course handouts or decks.
 
 The author dialog contains the author’s own career and projects. Perfect Bars Team’s venues belong in Ivan Lyashuk’s and Vladimir Nikolaev’s industry profiles; Artender is identified as a media and creative-community project, not a sixth bar. These profiles link to the team’s primary sources. Original documentary photographs are preserved unchanged, including any signage visible within them.
 
-`npm test` guards the language and attribution rules, alongside isolated checks of server-provided access, checkout and bot messages.
+`npm test` guards the language and attribution rules, password-only access, signed Tribute webhooks, duplicate-payment handling and Telegram delivery.
 
 ## Content, architecture and boundaries
 
@@ -118,11 +114,11 @@ The author dialog contains the author’s own career and projects. Perfect Bars 
 - The initial generic domain is: **Institution → User / Enrollment → Course → Edition → Module → Lesson**; learning and operations entities include **Video, CaseStudy, ReadingMaterial, Assignment, Submission, Feedback, Quiz, Question, Answer, Progress, Certificate, License, CourseUpdate, Notification**.
 - Progress and quiz records are scoped to user and edition. Submissions record the student and edition context; an institution-scoped instructor review view is the intended authorization boundary.
 - Course content and author IP remain separate from the institution's licensed access. A new edition can evolve independently, without overwriting existing edition records.
-- `course/` is the English-only source library for the full syllabus, lectures, assignments and case material, including Module 6 — Budget Realisation & Scenography, the Joi Espresso Bar case and the mockup brief. `presentation/` is the reproducible proposal-deck project.
+- `course/` is the English-only source library for the full syllabus, lectures, assignments and case material, including Module 6 — Budget Realisation & Scenography, the Joi Espresso Bar and Pacific cases, and the mockup brief. `presentation/` is the reproducible proposal-deck project.
 
 ### Important production boundary
 
-The repository includes a lightweight Node server that verifies Telegram Mini App `initData` against `BOT_TOKEN`, grants `ADMIN` to `ADMIN_IDS`, and enforces the course password with a signed `HttpOnly` cookie. However, it has **no database, persistent server-side sessions, server-backed learning APIs, content-management service or production file storage**. Progress, quizzes, submissions and feedback are still browser-local and editable, and uploaded files stay in that browser. The password gate protects content delivery from this server; it is not a substitute for per-student accounts. Do not use this build for real student records until a database/API, server-enforced institution/course/role access, secure upload storage, retention/backup policies and monitoring are in place.
+The Node service verifies Tribute webhook signatures, issues password sessions with a signed `HttpOnly` cookie, and can run the customer Access Bot and admin commands through the Telegram Bot API. It persists passwords, Tribute orders and submissions in `data/store.json` and uploaded files in `data/uploads/`. It still has **no database, persistent server-side learning API, content-management service or production-grade file storage**: learning progress and quiz state remain browser-local and editable. Before using it for real student work, add a database-backed learning API, secure upload storage, retention/backup policies and monitoring. Keep the JSON store and uploaded files on persistent host storage.
 
 ## Original course proposal
 
@@ -145,8 +141,8 @@ The deck generator prefers Inter when available through `HIM_FONT_DIR`, with Dej
 
 ## Access, lessons, submissions and administration
 
-A valid personal Tribute password (one per person) or the administrator password opens the course immediately. All 13 lessons and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Help/reference email: `egor.tarasenko@him-mail.ch`.
+A valid individual password or the configured administrator password opens the course immediately. All 13 learning units and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Help/reference email: `egor.tarasenko@him-mail.ch`.
 
-The self-hosted Node service persists records in `data/store.json` and uploaded files in `data/uploads/` (excluded from Git). Tribute integration is a clearly labelled digital-product stub until real credentials/configuration are supplied. Admin tools include assignment review with required written feedback, password generation, and a bot-command console. Optional Telegram Bot API integration uses `BOT_TOKEN` and configured admin chat IDs.
+The Tribute integration is event-driven, not a fake checkout. A signed `new_digital_product` event grants lasting access; `new_subscription` issues access through its verified `expires_at`, `renewed_subscription` extends that date, and `cancelled_subscription` stops renewal while preserving access only through Tribute’s reported expiry. Each confirmed buyer receives an individual password through the Access Bot. In the Tribute creator dashboard, set the webhook URL to `https://YOUR-DOMAIN/api/tribute/webhook`. Set `TRIBUTE_API_KEY` to the key used to sign webhooks. Configure `TRIBUTE_PRODUCT_ID` with `TRIBUTE_PRODUCT_URL` for the one-time product and/or `TRIBUTE_SUBSCRIPTION_ID` with `TRIBUTE_SUBSCRIPTION_URL` for a recurring plan. The matching purchase CTA remains disabled until its Tribute ID and link, webhook verification, bot token and bot username are all configured.
 
-Configuration: `COURSE_PASSWORD` (or comma-separated `COURSE_PASSWORDS`) for administrator access; `ACCESS_SECRET` for stable signed sessions; `TRIBUTE_API_KEY`, `TRIBUTE_API_URL`, `TRIBUTE_PRODUCT_ID`, `TRIBUTE_PRODUCT_URL`, `TRIBUTE_PAYMENT_URL`, `TRIBUTE_INTERNAL_PAYMENT_URL`, `TRIBUTE_PRICE`, `BOT_TOKEN`, and `ADMIN_IDS` as needed. The course entrance features an internal Tribute payment link in a pop-up modal dialog for purchasing personal one-person access. Run with `npm start`; run syntax checks with `npm run check`.
+The buyer should start the Access Bot before paying. If the bot cannot deliver the first message, delivery stays pending; `/start` retries it and `/password` resends an issued code. Admin commands include `/orders`, `/resend <telegram_id>`, `/students`, `/pending`, `/approve` and `/revise`. Password generation without a confirmed Tribute event is intentionally unavailable. The admin dashboard also shows Tribute setup readiness, recent payment events and delivery status. Run with `npm start`; run syntax checks with `npm run check` and regression tests with `npm test`.

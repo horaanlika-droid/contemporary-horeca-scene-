@@ -648,6 +648,17 @@ window.COURSE = {
       what: 'Built from street finds and flea-market discoveries: a poster facade, café bulbs, hand-set branding, reconditioned equipment and second-hand furniture without a large budget.',
       why: 'Direct proof that with great desire you do not need a super budget: a clear point of view and resourcefulness build real soul.',
       takeaway: 'With strong vision and desire, you do not need a huge budget. Money buys speed and finish; intention and soul come from your vision.'
+    },
+    {
+      title: 'Pacific · Bar Stations & Equipment Design',
+      location: 'Bar equipment design & fabrication studio',
+      year: 'Author’s own project',
+      industry: 'Bar ergonomics · Technical drawings · Made-to-measure fabrication',
+      image: 'project-pacific-station.jpg',
+      context: 'Pacific is the course author’s bar-equipment design and fabrication studio: a project that shapes the working environment before a guest ever sees the room.',
+      what: 'Designs modular stations and consoles around real service choreography: a sintered-stone top, recessed ice well, speed rails, under-counter glass hanger and mobile castor-mounted furniture, developed through 3D visualisations and workshop-ready technical drawings.',
+      why: 'Shows how operations, ergonomics and scenography meet in one designed object. The team works faster and more comfortably while the guest experiences a room that feels resolved.',
+      takeaway: 'Design the bar around movement and service sequence. Draw every tool, reach and working surface before the workshop builds it.'
     }
   ],
   projects: {
