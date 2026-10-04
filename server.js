@@ -715,6 +715,21 @@ function tributeOrderForStudent(studentId) {
   return store.tribute.orders.find(order => order.studentId === studentId && order.status === 'PAID') || null;
 }
 
+/* Payment transparency: the learner sees their own verified purchase record in the profile. */
+function publicPurchase(order) {
+  if (!order) return null;
+  return {
+    purchaseId: order.purchaseId || order.transactionId || order.id,
+    productTitle: order.productTitle,
+    amount: order.amount,
+    paidAt: order.createdAt,
+    status: order.status,
+    deliveryStatus: order.deliveryStatus,
+    provider: 'Tribute · Telegram checkout',
+    buyer: order.buyerName || null,
+  };
+}
+
 async function handleAccessBotMessage(message) {
   const chatId = String(message?.chat?.id || '');
   const senderId = String(message?.from?.id || chatId);
@@ -1492,7 +1507,7 @@ const server = http.createServer(async (req, res) => {
 
     return json(res, 401, {
       unlocked: false,
-      error: 'Incorrect password. Enter your personal Tribute password or the administrator password.',
+      error: 'Incorrect password. Students: enter the individual password issued after your Tribute payment. The administrator master password opens the admin panel only.',
     });
   }
 
@@ -1557,6 +1572,7 @@ const server = http.createServer(async (req, res) => {
       quizzes: {},
       students: session.isAdmin ? store.students.map(adminStudentSummary) : [],
       tribute: getTributeStatus(session.isAdmin),
+      myPurchase: session.isAdmin ? null : publicPurchase(tributeOrderForStudent(session.user.id)),
       editor: {
         materials: store.editor.materials,
         posts: store.editor.posts,

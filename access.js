@@ -300,6 +300,16 @@
             <span class="eyebrow tight" style="color:var(--red)">SECURE, AUTOMATIC DELIVERY</span>
             <div class="tribute-actions">${botStep}${payStep}</div>
             <p class="tribute-help">Already paid? Open the course bot and send <code>/password</code>. If payment is still processing, the bot will deliver your code as soon as Tribute confirms it.</p>
+            <div class="tribute-transparency">
+              <span class="eyebrow tight">WHAT YOUR PAYMENT COVERS · FULL TRANSPARENCY</span>
+              <ul>
+                <li>The complete elective: all ${C.modules.length} modules, every lesson, human assignment review and the certificate — one individual password, no extra fees.</li>
+                <li>Price and currency are shown in the Tribute checkout; the course app never sees or stores card data.</li>
+                <li>One purchase = one personal password, delivered automatically by the course bot; retrieving it later with <code>/password</code> is free.</li>
+                <li>Receipts and refunds follow the Tribute (Telegram) policy; the course team answers any payment question at egor.tarasenko@him-mail.ch.</li>
+                <li>The administrator master password opens the admin panel only — it is never issued to students, who always receive individual Tribute passwords.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>`;

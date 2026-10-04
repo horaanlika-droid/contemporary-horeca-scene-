@@ -311,7 +311,7 @@ window.COURSE = {
       number: '05',
       title: 'Technology & Automation',
       description: 'Consider where technology, station ergonomics and operational standards improve speed and margins — with Bek Narzi and Artem Talalay.',
-      image: 'project-pacific-station.jpg',
+      image: 'web-insider-station.jpg',
       practitioners: ['Bek Narzi (City Space Bar · The Horeca Code)', 'Artem Talalay (World Class Speed & Ergonomics)'],
       lessons: [
         {
@@ -888,6 +888,10 @@ window.COURSE = {
   imageCredits: {
     statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
     contact: 'egor.tarasenko@him-mail.ch',
+    files: [
+      { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
+      { file: 'web-insider-station.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' }
+    ],
     illustrative: [
       { file: 'project-detail-nine-lives-bar.jpg', note: 'Illustrative bar-counter study from the author’s archive, used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
       { file: 'project-chicken-connection-kitchen.jpg', note: 'Illustrative kitchen photograph from the author’s archive (Chicken Connection shoot, Moscow), used in the René Redzepi · Noma case file. It does not depict the venue.' },

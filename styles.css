@@ -866,4 +866,8 @@ body.tribute-open{overflow:hidden}
 .tribute-bot-start{display:block;width:100%;text-align:center;text-decoration:none}
 .tribute-setup-note,.tribute-unavailable{margin:10px 0 0;padding:12px;background:#fff;border-left:3px solid var(--red);font-size:12px;line-height:1.5;color:var(--muted)}
 .tribute-help{margin:14px 0 0;font-size:12px;line-height:1.55;color:var(--muted)}
+.tribute-transparency{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.tribute-transparency ul{list-style:none;margin:10px 0 0;display:grid;gap:8px}
+.tribute-transparency li{font-size:12px;line-height:1.55;color:var(--muted);padding-left:16px;position:relative}
+.tribute-transparency li::before{content:'—';position:absolute;left:0;color:var(--red)}
 

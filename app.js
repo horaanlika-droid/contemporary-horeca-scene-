@@ -18,7 +18,7 @@ window.bootCourse = () => {
   });
   const getState = () => { try { return { ...seedState(), ...(JSON.parse(localStorage.getItem(stateKey)) || {}) }; } catch { return seedState(); } };
   const tokenHeaders = () => { const t = localStorage.getItem('chs-access-token'); return t ? { 'X-Access-Token': t } : {}; };
-  const adoptServerData = data => { state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; applyContentOverrides(state.editor.overrides); saveState(state); };
+  const adoptServerData = data => { state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; state.myPurchase = data.myPurchase || null; applyContentOverrides(state.editor.overrides); saveState(state); };
   const liveSignatureOf = data => JSON.stringify([data.editor || null, data.tribute || null, data.students || null]);
   let liveSignature = '';
   const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); adoptServerData(data); liveSignature = liveSignatureOf(data); } catch { /* local/offline preview */ } };
@@ -89,7 +89,7 @@ window.bootCourse = () => {
 
   const IMAGE_FALLBACK = 'project-detail-backbar.jpg';
   const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${ASSET}${IMAGE_FALLBACK}';this.classList.add('image-fallback')">`;
-  const creditGroup = name => (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
+  const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
   const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
   const creditFor = name => `<span class="img-credit">${esc(isIllustrative(name) ? 'ILLUSTRATIVE PHOTO · AUTHOR’S ARCHIVE · NOT THE VENUE' : creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES')}</span>`;
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
@@ -158,7 +158,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img src="${ASSET}project-joi-bar.jpg" alt="The author’s own espresso bar counter: stacked cups, warm lamps and a working machine at guest height">
+          <img src="${ASSET}web-insider-hall.jpg" alt="A contemporary bar hall: rammed-earth walls, a sculpted ceiling and a central laboratory bar station">
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -842,6 +842,18 @@ window.bootCourse = () => {
           <button class="button text" data-action="lock">LOCK THE COURSE ON THIS DEVICE →</button>
         </div>
       </section>
+      ${state.myPurchase ? `<section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">YOUR PURCHASE · PAYMENT TRANSPARENCY</span>
+        <div class="simple-list">
+          <div class="simple-row"><span class="meta">PRODUCT</span><strong>${esc(state.myPurchase.productTitle)}</strong></div>
+          <div class="simple-row"><span class="meta">AMOUNT PAID</span><strong>${esc(state.myPurchase.amount)}</strong></div>
+          <div class="simple-row"><span class="meta">PAID AT</span><strong>${esc(new Date(state.myPurchase.paidAt).toLocaleString())}</strong></div>
+          <div class="simple-row"><span class="meta">PURCHASE ID</span><strong>${esc(state.myPurchase.purchaseId)}</strong></div>
+          <div class="simple-row"><span class="meta">PROVIDER</span><strong>${esc(state.myPurchase.provider)} · the course never sees card data</strong></div>
+          <div class="simple-row"><span class="meta">PASSWORD DELIVERY</span><strong>${esc(state.myPurchase.deliveryStatus === 'DELIVERED' ? 'DELIVERED AUTOMATICALLY' : state.myPurchase.deliveryStatus)}</strong></div>
+        </div>
+        <p style="margin-top:14px">One individual password per purchase. Refunds follow the Tribute policy inside Telegram; any question about your payment: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>.</p>
+      </section>` : u.role === 'STUDENT' ? '<section class="institution-panel" style="margin-top:22px"><span class="eyebrow">YOUR PURCHASE</span><p>No verified Tribute purchase is registered for this account yet. Write to the course team if you have paid — the record appears here automatically.</p></section>' : ''}
     </main>`);
   }
 
@@ -890,10 +902,12 @@ window.bootCourse = () => {
     (C.figures || []).forEach(f => collect(f.image));
     C.modules.forEach(m => collect(m.image));
     (projectList() || []).forEach(p => collect(p.image));
+    collect('web-insider-hall.jpg');
     const rows = [...used].sort().map(name => {
       const ill = (ic.illustrative || []).find(x => x.file === name);
       const g = creditGroup(name);
-      return `<div class="simple-row"><span><strong>${esc(name)}</strong><br><span class="meta">${esc(ill ? 'ILLUSTRATIVE · AUTHOR’S ARCHIVE · NOT THE VENUE PICTURED' : g?.credit || 'SOURCE ON REQUEST')}</span></span><span class="meta">${esc(g?.license || '')}</span></div>`;
+      const source = g?.source ? `<br><a href="${esc(g.source)}" target="_blank" rel="noopener noreferrer">${esc(g.source.replace(/^https?:\/\//, ''))} ↗</a>` : '';
+      return `<div class="simple-row"><span><strong>${esc(name)}</strong><br><span class="meta">${esc(ill ? 'ILLUSTRATIVE · AUTHOR’S ARCHIVE · NOT THE VENUE PICTURED' : g?.credit || 'SOURCE ON REQUEST')}</span></span><span class="meta">${esc(g?.license || '')}${source}</span></div>`;
     }).join('');
     return layout(`<main class="app-main">
       <div class="page-head">

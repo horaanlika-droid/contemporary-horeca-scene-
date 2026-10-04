@@ -308,6 +308,10 @@ test('course entry is password-only and the old demo checkout cannot issue acces
   const removedDefault = await unconfiguredAdmin.post('/api/access', { password: 'Mzgnxtj8' });
   assert.equal(removedDefault.status, 401, 'No built-in administrator password is accepted');
 
+  const master = await server.post('/api/access', { password: 'english-regression-test' });
+  assert.equal(master.status, 200);
+  assert.equal(master.body.user?.role, 'ADMIN', 'The master password signs in as administrator only, never as a student');
+
   const checkout = await server.post('/api/tribute/checkout', { name: 'Test Buyer' });
   assert.equal(checkout.status, 410);
   assert.doesNotMatch(JSON.stringify(checkout.body), /CHS-[A-Z0-9]{4}-[A-Z0-9]{4}/);
@@ -400,6 +404,9 @@ test('images carry provenance credits, fallbacks and an email submission channel
   // project paragraphs show venues or illustrative archive photos, never a floating portrait
   assert.match(course, /image: 'project-joi-bar\.jpg'/);
   assert.match(course, /image: 'project-detail-nine-lives-bar\.jpg'/);
+  // internet-sourced atmospheric photography must carry its source
+  assert.match(course, /insider\.bar\.lab/);
+  assert.match(course, /web-insider-station\.jpg/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
   assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
