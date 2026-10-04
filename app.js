@@ -87,7 +87,11 @@ window.bootCourse = () => {
     });
   }
 
-  const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy">`;
+  const IMAGE_FALLBACK = 'project-detail-backbar.jpg';
+  const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${ASSET}${IMAGE_FALLBACK}';this.classList.add('image-fallback')">`;
+  const creditGroup = name => (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
+  const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
+  const creditFor = name => `<span class="img-credit">${esc(isIllustrative(name) ? 'ILLUSTRATIVE PHOTO · AUTHOR’S ARCHIVE · NOT THE VENUE' : creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES')}</span>`;
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
   const projectList = () => C.projects?.items || [];
   const projectById = id => projectList().find(x => x.id === id);
@@ -134,7 +138,7 @@ window.bootCourse = () => {
   };
 
   const layout = (content, publicPage = false) => `${publicPage ? header(true) : header()}${content}${publicPage
-    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span><button class="footer-link" type="button" data-author-open>About the author</button></footer>`
+    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span><a class="footer-link" href="#/credits">Image sources &amp; rights</a><button class="footer-link" type="button" data-author-open>About the author</button></footer>`
     : bottomNav()}`;
 
   /* ---------------------------------------------------------------- landing */
@@ -154,7 +158,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img src="${ASSET}horeca-interior-design.jpg" alt="A bar seen through a brick archway: lit shelves, hanging glassware and a green banquette in warm low light">
+          <img src="${ASSET}project-joi-bar.jpg" alt="The author’s own espresso bar counter: stacked cups, warm lamps and a working machine at guest height">
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -207,8 +211,8 @@ window.bootCourse = () => {
           <div><span class="eyebrow">04 — REAL INDUSTRY CASES</span><h2>Look closer.<br>Learn from <em>practice</em>.</h2></div>
           <p>Editorial case files turn current hospitality practice into material for discussion, analysis and action.</p>
         </div>
-        <div class="case-feature">${image(C.cases[0].image, 'A considered bar interior with a warm, tactile atmosphere')}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a></div></div>
-        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(x.image, x.title)}</div><span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
+        <div class="case-feature">${image(C.cases[0].image, 'A considered bar interior with a warm, tactile atmosphere')}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(C.cases[0].image)}</div></div>
+        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(x.image, x.title)}</div>${creditFor(x.image)}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
       </section>
 
       <div class="quote-band">
@@ -249,7 +253,7 @@ window.bootCourse = () => {
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
             <span class="eyebrow">THE LIVE FOUND-OBJECT MOCKUP</span>
-            <div class="shot">${image('horeca-concept-pitch.jpg', 'A concept pitch table with materials, sketches and models')}</div>
+            <div class="shot">${image('project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor('project-detail-chess.jpg')}</div>
             <h4>Build your venue as a set, not a plan.</h4>
             <p>Assemble it directly from what you find: antique tableware, candles, vintage glassware, fabric, wood, bottles, found textures and props, plus a physical menu concept. Work at 1:20 or 1:50; arrange the objects to show the entrance, first sightline, light and three details that carry the atmosphere. Photograph it at guest height.</p>
             <span class="meta">EVERY STUDENT · MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} → FINAL CHALLENGE</span>
@@ -359,7 +363,6 @@ window.bootCourse = () => {
         </div>
         ${button('CONTINUE', `lesson/${next.module.id}/${next.id}`)}
       </div>
-      ${image('horeca-interior-sconces.jpg', 'Atmospheric contemporary hospitality interior', 'course-hero-image')}
       <div class="section-head">
         <div><span class="eyebrow">YOUR LEARNING JOURNEY</span><h2 style="font-size:clamp(30px,4vw,50px)">Explore the <em>modules</em>.</h2></div>
         <p>Move at your own pace. Each module brings together a focused lesson, an industry case and a challenge to apply your thinking.</p>
@@ -386,8 +389,7 @@ window.bootCourse = () => {
           <div class="case-inline"><span class="meta">INDUSTRY CASE</span><h3>${esc(l.case)}</h3><p>Examine the choices behind the experience, and what they reveal about contemporary hospitality.</p><a class="button text" href="#/cases">OPEN CASE FILES →</a></div>
         </div>
         <div>
-          ${image(m.image, `${m.title} editorial feature image`, 'module-photo')}
-          <span class="eyebrow" style="margin-top:22px">LEARNING OBJECTIVES</span>
+          <span class="eyebrow">LEARNING OBJECTIVES</span>
           <ul class="objective-list">${l.ideas.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>
           <blockquote class="case-quote">“${esc(l.intro)}”</blockquote>
         </div>
@@ -412,7 +414,7 @@ window.bootCourse = () => {
         <div class="lesson-number"><span class="meta">LESSON ${String(i + 1).padStart(2, '0')}</span><br><span class="meta">${l.duration.toUpperCase()}</span></div>
       </div>
       <section class="video-frame" aria-label="Lesson media">
-        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${ASSET}${esc(l.thumbnail)}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}</div>
+        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${ASSET}${esc(l.thumbnail)}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}${creditFor(l.thumbnail)}</div>
         <div class="video-info">
           <span class="eyebrow">${l.videoUrl ? 'LESSON FILM' : 'EDITORIAL LESSON'} · ${l.duration.toUpperCase()}</span>
           <h2>${esc(l.title)}</h2>
@@ -458,7 +460,7 @@ window.bootCourse = () => {
         <span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span>
         <div class="figure-grid">${(C.figures || []).map(f => `
           <article class="case-item">
-            ${f.image ? `<div class="shot">${image(f.image, f.name)}</div>` : ''}
+            ${f.image ? `<div class="shot">${image(f.image, f.name)}</div>${creditFor(f.image)}` : ''}
             <span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span>
             <h3>${esc(f.name)}</h3>
             <p>${esc(f.role)} · ${esc(f.venues)}</p>
@@ -470,8 +472,8 @@ window.bootCourse = () => {
       </section>
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Sips Drinkery House · Simone Caporale</h3><p>Drinkery House counterless bar: bespoke tactile vessels and 360-degree guest connection.</p></article><article class="case-item"><h3>Krasota Gastro-Theatre · Boris Zarkov</h3><p>Multisensory immersion: 360-degree projections and synchronized sound matching the culinary narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
-        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
-        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
+        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>${image(x.image, `${x.title} case image`)}`
+        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
     </main>`);
   }
 
@@ -496,7 +498,7 @@ window.bootCourse = () => {
       </div>
       <div class="project-grid">
         ${items.map(pr => `<a class="project-card" href="#/project/${esc(pr.id)}">
-          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>
+          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>${creditFor(pr.image)}
           <div class="project-card-copy">
             <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
             <h2>${esc(pr.name)}</h2>
@@ -534,7 +536,7 @@ window.bootCourse = () => {
         </div>
       </div>
       <div class="project-gallery project-gallery-lead">
-        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}
+        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}${creditFor(photos[0]?.file || pr.image)}
       </div>
       <div class="project-body">
         <p>${esc(pr.summary)}</p>
@@ -592,7 +594,7 @@ window.bootCourse = () => {
           <span class="meta">THE PHYSICAL MOCKUP</span>
           <p>For the physical concept, build a live found-object set (1:20 or 1:50), not a paper model: use antique tableware, candles, vintage glassware, found textures/props and a physical menu concept. Decide the entrance, sightline, light source and three atmosphere-carrying details. Photograph it at guest height and attach the images.</p>
           <span class="meta">SUBMISSION FORMAT</span>
-          <p>Write your concept here and attach a PDF, images of your mockup or a presentation. You may also include a link to your work.</p>
+          <p>Write your concept here and attach a PDF, images of your mockup or a presentation — or send the same package by email (see the email option above the form). You may also include a link to your work.</p>
           <span class="meta">REVIEW</span>
           <p>Your instructor will provide human, editorial feedback. Work may be approved or returned for revision.</p>
         </section>
@@ -606,7 +608,8 @@ window.bootCourse = () => {
             <div class="review-work" style="margin:20px 0">${esc(mine.answer)}</div>
             ${mine.feedback ? `<div class="case-inline"><span class="meta">INSTRUCTOR FEEDBACK · SCORE ${esc(mine.feedback.score ?? '—')}</span><p>${esc(mine.feedback.text)}</p></div>` : ''}
             ${mine.status === 'REVISION REQUESTED' ? '<button class="button light" data-action="revise" style="margin-top:18px">RESUBMIT REVISION <span aria-hidden="true">↗</span></button>' : ''}`
-          : `<form id="assignment-form" data-lesson="${esc(assignmentId)}" data-module="${esc(current.module.id)}">
+          : `<div class="case-inline" style="margin:0 0 20px"><span class="meta">PREFER EMAIL? BOTH CHANNELS ARE EQUAL</span><p>Send your concept note, mockup photographs and attachments to <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a> with the subject “${esc(C.edition)} · ${esc(current.title)} · your name”. The in-app form and the email inbox reach the same instructor review.</p><a class="button light" href="mailto:egor.tarasenko@him-mail.ch?subject=${encodeURIComponent(`${C.edition} · ${current.title} · assignment`)}">SEND BY EMAIL <span aria-hidden="true">↗</span></a></div>
+            <form id="assignment-form" data-lesson="${esc(assignmentId)}" data-module="${esc(current.module.id)}">
               <div class="field"><label for="answer">Concept note</label><textarea class="form-control" id="answer" name="answer" rows="10" required placeholder="What are you building, for whom, and why does it matter? Include sourcing, budget, menu concept and your found-object mockup: entrance, first sightline, light and the three details that carry the atmosphere.">${esc(revising ? mine?.answer || '' : '')}</textarea></div>
               <div class="field"><label for="link">Link to your presentation (optional)</label><input class="form-control" id="link" name="link" type="url" value="${esc(revising ? mine?.link || '' : '')}" placeholder="https://"></div>
               <div class="field"><label>Attach supporting files &amp; mockup photographs</label><div class="file-drop"><label class="meta" for="files">PDF · IMAGE · PRESENTATION · UP TO 15 MB EACH</label><br><input type="file" name="files" id="files" accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx,.key" multiple><p class="form-help">Files are uploaded securely to the course app (maximum 15 MB per file). Feedback and help: egor.tarasenko@him-mail.ch</p></div></div>
@@ -878,6 +881,43 @@ window.bootCourse = () => {
     return layout(`<main class="app-main"><div class="page-head"><div><span class="eyebrow">404 · PAGE NOT FOUND</span><h1 class="page-title">Not this <em>way</em>.</h1><p>The page may have moved or may not be part of this edition.</p></div>${button('RETURN TO THE ELECTIVE', user() ? 'dashboard' : '')}</div></main>`);
   }
 
+  /* ----------------------------------------------------------------- credits */
+  function creditsPage() {
+    const ic = C.imageCredits || {};
+    const used = new Set();
+    const collect = name => name && used.add(name);
+    C.cases.forEach(x => collect(x.image));
+    (C.figures || []).forEach(f => collect(f.image));
+    C.modules.forEach(m => collect(m.image));
+    (projectList() || []).forEach(p => collect(p.image));
+    const rows = [...used].sort().map(name => {
+      const ill = (ic.illustrative || []).find(x => x.file === name);
+      const g = creditGroup(name);
+      return `<div class="simple-row"><span><strong>${esc(name)}</strong><br><span class="meta">${esc(ill ? 'ILLUSTRATIVE · AUTHOR’S ARCHIVE · NOT THE VENUE PICTURED' : g?.credit || 'SOURCE ON REQUEST')}</span></span><span class="meta">${esc(g?.license || '')}</span></div>`;
+    }).join('');
+    return layout(`<main class="app-main">
+      <div class="page-head">
+        <div>
+          <span class="eyebrow">TRANSPARENCY FOR STUDENTS &amp; INSTITUTION</span>
+          <h1 class="page-title">Image sources<br>&amp; <em>rights</em>.</h1>
+          <p>${esc(ic.statement || '')}</p>
+        </div>
+      </div>
+      <section class="institution-panel" id="image-sources">
+        <span class="eyebrow">EVERY IMAGE USED IN THE ELECTIVE</span>
+        <div class="simple-list">${rows}</div>
+      </section>
+      <section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">ILLUSTRATIVE PHOTOGRAPHS</span>
+        <div class="simple-list">${(ic.illustrative || []).map(x => `<div class="simple-row"><span><strong>${esc(x.file)}</strong><br>${esc(x.note)}</span></div>`).join('')}</div>
+      </section>
+      <section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">RIGHTS HOLDERS &amp; TAKEDOWN</span>
+        <p>Write to <a href="mailto:${esc(ic.contact || '')}">${esc(ic.contact || '')}</a> — credited images are listed above, and any rights-holder request is honoured promptly without discussion.</p>
+      </section>
+    </main>`);
+  }
+
   /* ----------------------------------------------------------------- router */
   function render() {
     state = getState();
@@ -903,6 +943,7 @@ window.bootCourse = () => {
     else if (r[0] === 'certificate') app.innerHTML = certificatePage();
     else if (r[0] === 'admin' && u.role === 'ADMIN') app.innerHTML = adminPage();
     else if (r[0] === 'updates') app.innerHTML = updatesPage();
+    else if (r[0] === 'credits') app.innerHTML = creditsPage();
     else if (r[0] === 'profile') app.innerHTML = profilePage();
     else if (r[0] === 'search') app.innerHTML = searchPage(new URLSearchParams(location.hash.split('?')[1] || '').get('q') || '');
     else if (r[0] === 'logout') { sessionStorage.removeItem('chs-user'); go(''); }

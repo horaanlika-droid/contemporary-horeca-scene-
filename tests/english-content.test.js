@@ -382,6 +382,29 @@ test('password access and admin controls cannot create a learner password withou
   assert.deepEqual(state.body.students, []);
 });
 
+test('images carry provenance credits, fallbacks and an email submission channel', t => {
+  const app = read('app.js');
+  const course = read('course-data.js');
+  const gate = read('access.js');
+  // broken files can never show a broken glyph: every img falls back to a repo photograph
+  assert.match(app, /onerror="this\.onerror=null;this\.src='\$\{ASSET\}\$\{IMAGE_FALLBACK\}'/);
+  // provenance registry + public transparency page
+  assert.match(course, /imageCredits:/);
+  assert.match(course, /illustrative:/);
+  assert.match(app, /r\[0\] === 'credits'/);
+  assert.match(app, /Image sources &amp; rights/);
+  assert.match(gate, /credited editorial sources/);
+  // no unidentified stock photography left in the app-facing content
+  assert.ok(!/image: 'horeca-/.test(course), 'module and case images must come from the credited archive');
+  assert.ok(!/horeca-[a-z-]+\.jpg/.test(gate), 'gate visual must come from the credited archive');
+  // project paragraphs show venues or illustrative archive photos, never a floating portrait
+  assert.match(course, /image: 'project-joi-bar\.jpg'/);
+  assert.match(course, /image: 'project-detail-nine-lives-bar\.jpg'/);
+  // homework reaches the instructor in-app or by email
+  assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
+  assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
+});
+
 test('admin bot editor manages block materials, live updates and copy overrides', async t => {
   const server = await isolatedServer(t);
   const token = await adminToken(server);

@@ -161,7 +161,7 @@
     <main class="gate-page">
       <div class="gate-stage">
       <div class="gate-visual">
-        <img src="presentation/assets/horeca-atmosphere-candle.jpg" alt="A candle-lit contemporary bar interior">
+        <img src="presentation/assets/project-coocoo-room.jpg" alt="The author’s own café room: cloud ceiling, pastel counter and a signature serve on a tray">
         <div class="gate-visual-copy">
           <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
@@ -209,6 +209,7 @@
             </div>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
             <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
+            <p class="gate-note-line">Photography: the author’s archive and credited editorial sources — the full list with rights is published inside the course.</p>
           </article>
         </div>
       </section>

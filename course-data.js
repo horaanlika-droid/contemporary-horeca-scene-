@@ -95,7 +95,7 @@ window.COURSE = {
       moduleId: 'budget',
       moduleNumber: '09 & 04',
       block: 'Budget Realisation & Scenography · Projects Built from Found Objects',
-      image: 'project-joi-arcade.jpg',
+      image: 'author-joi-2025.jpg',
       summary: 'The author of this elective builds the venues, identities and bar objects the course teaches from: an espresso bar assembled from the street, a pastel cake room, a croffle bar with a cartoon cup on the window, and a bar-furniture studio drawing stations in blackened steel and stone.',
       lessonAngle: 'Every project in the archive is a working answer to one question: what can you make when the budget is small and the point of view is clear? The photos are the primary sources — sourcing, patina, signage, crockery, lighting, merchandise — and students are asked to read them the way they will later read their own flea-market finds.',
       takeaway: 'A consistent point of view, applied to cheap objects with patience, reads as luxury to a guest who never sees the invoice.'
@@ -185,7 +185,7 @@ window.COURSE = {
       number: '01',
       title: 'Hospitality Futures',
       description: 'Read the signals reshaping hospitality, from global rankings (MICHELIN, The 50 Best, GreatList) to the shokunin mastery of Jiro Ono and the independent scene-building of Igor Zernov.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'project-detail-street-press.jpg',
       practitioners: ['Jiro Ono (Sukiyabashi Jiro, Tokyo)', 'Igor Zernov (El Copitas / #FollowTheRabbits)'],
       lessons: [
         {
@@ -212,7 +212,7 @@ window.COURSE = {
       number: '02',
       title: 'Experience Design',
       description: 'Explore how space, service choreography, antique vessels, candlelight and sound keep the “sweet fairy tale” intact — with Simone Caporale, Alex Kratena and Denis Bobkov.',
-      image: 'horeca-interior-design.jpg',
+      image: 'project-coocoo-room.jpg',
       practitioners: ['Simone Caporale (Sips Barcelona · №1 World’s 50 Best Bars 2023)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Denis Bobkov (Pub Life Group · Black Swan · Bambule)'],
       lessons: [
         {
@@ -239,7 +239,7 @@ window.COURSE = {
       number: '03',
       title: 'Neurogastronomy',
       description: 'Understand how perception, gastrophysics, vessel weight and multisensory design shape flavour — through Artem Talalay, Dave Arnold, Jiro Ono and Hiroyasu Kayama.',
-      image: 'horeca-neurogastronomy-serve.jpg',
+      image: 'project-tam-cubes.jpg',
       practitioners: ['Artem Talalay (World Class Russia Winner)', 'Dave Arnold (Liquid Intelligence)', 'Jiro Ono (Sukiyabashi Jiro)', 'Hiroyasu Kayama (Bar Benfiddich)'],
       lessons: [
         {
@@ -266,7 +266,7 @@ window.COURSE = {
       number: '04',
       title: 'Restaurant & Bar Concepts & 50 Best Menu Breakdown',
       description: 'Deconstruct how the World’s 50 Best Bars & Restaurants build concepts and physical menu artefacts — learning from Rémy Savage, Alex Kratena, Boris Zarkov, Igor Zernov, Bar Leone and Tuju.',
-      image: 'horeca-craft-bar.jpg',
+      image: 'project-joi-brand.jpg',
       practitioners: ['Rémy Savage (Little Red Door · Shapes · Bar Nouveau)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Igor Zernov (El Copitas · Tagliatella Caffe · Paloma Cantina)'],
       lessons: [
         {
@@ -311,7 +311,7 @@ window.COURSE = {
       number: '05',
       title: 'Technology & Automation',
       description: 'Consider where technology, station ergonomics and operational standards improve speed and margins — with Bek Narzi and Artem Talalay.',
-      image: 'horeca-tech-operations.jpg',
+      image: 'project-pacific-station.jpg',
       practitioners: ['Bek Narzi (City Space Bar · The Horeca Code)', 'Artem Talalay (World Class Speed & Ergonomics)'],
       lessons: [
         {
@@ -337,7 +337,7 @@ window.COURSE = {
       number: '06',
       title: 'AI in Hospitality',
       description: 'Assess emerging AI workflows, creative briefs and operational forecasting — contrasting algorithmic tools with the human authorship of Rémy Savage and Simone Caporale.',
-      image: 'horeca-ai-mixology-lab.jpg',
+      image: 'project-tam-tool.jpg',
       practitioners: ['Rémy Savage (Conceptual Authorship)', 'Simone Caporale (Bespoke Vessel Craft & Avant-Garde Mixology)'],
       lessons: [
         {
@@ -363,7 +363,7 @@ window.COURSE = {
       number: '07',
       title: 'Food & Beverage Futures',
       description: 'Explore farm-to-glass mixology, hyper-seasonal terroir, fermentation and beverage science through Hiroyasu Kayama, René Redzepi, Dave Arnold and Artem Talalay.',
-      image: 'horeca-sustainable-terroir.jpg',
+      image: 'project-passie-counter.jpg',
       practitioners: ['Hiroyasu Kayama (Bar Benfiddich, Tokyo)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)', 'Artem Talalay (World Class)'],
       lessons: [
         {
@@ -392,7 +392,7 @@ window.COURSE = {
       number: '08',
       title: 'Entrepreneurship',
       description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov and Boris Zarkov.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'project-joi-facade.jpg',
       practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · Krasota · IKRA)'],
       lessons: [
         {
@@ -419,7 +419,7 @@ window.COURSE = {
       number: '09',
       title: 'Budget Realisation, Scenography & Found-Object Mockup',
       description: 'Prove that a venue with soul does not need a fortune: Denis Bobkov’s salvage-built theatrical pubs (Black Swan, Bambule), Egor Tarasenko’s street-sourced Joi Espresso Bar — and your real physical mockup assembled from found objects, antique tableware, candles and menu concepts.',
-      image: 'horeca-atmosphere-candle.jpg',
+      image: 'project-detail-chess-morning.jpg',
       practitioners: ['Denis Bobkov (Pub Life Group · Black Swan · Bambule · Abbey Players)', 'Egor Tarasenko (Joi Espresso Bar)'],
       lessons: [
         {
@@ -481,7 +481,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'project-joi-bar.jpg',
       practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
@@ -610,7 +610,7 @@ window.COURSE = {
       location: 'New York City',
       year: 'Beverage Science Pioneer',
       industry: 'Beverage Science & Laboratory Cocktail Technique',
-      image: 'case-dave-arnold.jpg',
+      image: 'project-tam-flatlay.jpg',
       context: 'Author of Liquid Intelligence and founder of Booker & Dax, applying scientific rigor to the physics and chemistry of cocktails.',
       what: 'Applies controlled experiments to temperature, dilution, clarification (agar, centrifuge), rapid nitro-infusion and carbonation to make complex beverage craft rigorously repeatable.',
       why: 'Shifts drink-making from superstitious guesswork to measurable, repeatable science where every variable is understood.',
@@ -621,7 +621,7 @@ window.COURSE = {
       location: 'Copenhagen, Denmark',
       year: 'Multiple №1 World’s 50 Best Restaurants',
       industry: 'New Nordic Cuisine · Foraging, Fermentation & Seasonality',
-      image: 'case-rene-redzepi.jpg',
+      image: 'project-chicken-connection-kitchen.jpg',
       context: 'Pioneered New Nordic gastronomy through hyper-local wild foraging, koji fermentation and micro-seasonality at Noma.',
       what: 'Redefined the global culinary language by championing native wild produce, game, coastal seaweeds and koji fermentation, building an R&D laboratory (Noma Projects) alongside seasonal menu iterations.',
       why: 'Demonstrates that a regional terroir and deep curiosity can spark a worldwide culinary movement.',
@@ -632,7 +632,7 @@ window.COURSE = {
       location: 'Old Street, London',
       year: 'Top-5 World’s 50 Best Bars',
       industry: 'Dual-Concept Hospitality · Casual Tap Bar & Produce-Led R&D Counter',
-      image: 'case-alex-kratena.jpg',
+      image: 'project-detail-nine-lives-bar.jpg',
       context: 'Created by Alex Kratena and Monica Berg, uniting an accessible everyday front bar with a progressive produce-driven backroom.',
       what: 'Elementary serves draft highballs and quick snacks in an open daylight room, while Tayēr operates an industrial U-shaped counter serving daily changing, ingredient-first drinks numbered rather than named.',
       why: 'Solves the dilemma of bar accessibility versus progressive laboratory R&D by creating two distinct stages under one roof.',
@@ -643,7 +643,7 @@ window.COURSE = {
       location: 'Author’s own project',
       year: 'Opened 2025 · OGONEK TEAM',
       industry: 'Espresso bar · Found objects, street sourcing & low-budget scenography',
-      image: 'project-joi-arcade.jpg',
+      image: 'project-joi-bar.jpg',
       context: 'A small espresso bar assembled by the course author almost entirely from found objects, flea markets and second-hand equipment.',
       what: 'Built from street finds and flea-market discoveries: a poster facade, café bulbs, hand-set branding, reconditioned equipment and second-hand furniture without a large budget.',
       why: 'Direct proof that with great desire you do not need a super budget: a clear point of view and resourcefulness build real soul.',
@@ -676,7 +676,7 @@ window.COURSE = {
         team: 'By OGONEK TEAM',
         moduleId: 'budget',
         moduleNumber: '09',
-        image: 'project-joi-arcade.jpg',
+        image: 'project-joi-bar.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
         facts: [
@@ -884,5 +884,19 @@ window.COURSE = {
       date: 'September 2026',
       text: 'Each student receives an automatically generated 1-per-person password through Tribute Digital Product checkout, unlocking immediate access to all modules and lessons. Practical assignments and files can be submitted inside the app (or sent to egor.tarasenko@him-mail.ch) and receive feedback via the Admin Panel or Admin Bot.'
     }
-  ]
+  ],
+  imageCredits: {
+    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    contact: 'egor.tarasenko@him-mail.ch',
+    illustrative: [
+      { file: 'project-detail-nine-lives-bar.jpg', note: 'Illustrative bar-counter study from the author’s archive, used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
+      { file: 'project-chicken-connection-kitchen.jpg', note: 'Illustrative kitchen photograph from the author’s archive (Chicken Connection shoot, Moscow), used in the René Redzepi · Noma case file. It does not depict the venue.' },
+      { file: 'project-tam-flatlay.jpg', note: 'Illustrative R&D flat-lay from the author’s TAM / TYT object line, used in the Dave Arnold · Liquid Intelligence case file. It does not depict a laboratory.' }
+    ],
+    groups: [
+      { prefix: ['project-', 'author-'], short: 'PHOTO · EGOR TARASENKO ARCHIVE', credit: '© Egor Tarasenko — author’s personal archive', license: 'All rights reserved · published with the author’s permission', source: 'Original camera files kept in the course repository (repository root)' },
+      { prefix: ['case-', 'figure-'], short: 'PHOTO · EDITORIAL REFERENCE · © RESPECTIVE PHOTOGRAPHER', credit: '© respective photographers and venues — editorial reference images', license: 'Educational commentary inside the password-protected elective · takedown requests honoured', source: 'Curated from public press and website materials, September 2026' },
+      { prefix: ['him-logo-white.png'], short: '© SWISS EDUCATION GROUP / HIM', credit: 'HIM Business School logo · © Swiss Education Group', license: 'Trademark · used for identification only', source: 'swisseducation.com — HIM Business School page' }
+    ]
+  }
 };
