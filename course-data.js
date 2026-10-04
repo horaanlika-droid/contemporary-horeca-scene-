@@ -419,7 +419,7 @@ window.COURSE = {
       number: '09',
       title: 'Budget Realisation, Scenography & Found-Object Mockup',
       description: 'Prove that a venue with soul does not need a fortune: Denis Bobkov’s salvage-built theatrical pubs (Black Swan, Bambule), Egor Tarasenko’s street-sourced Joi Espresso Bar — and your real physical mockup assembled from found objects, antique tableware, candles and menu concepts.',
-      image: 'project-detail-chess-morning.jpg',
+      image: 'studio-m09-found.jpg',
       practitioners: ['Denis Bobkov (Pub Life Group · Black Swan · Bambule · Abbey Players)', 'Egor Tarasenko (Joi Espresso Bar)'],
       lessons: [
         {
@@ -481,7 +481,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
-      image: 'web-insider-lab.webp',
+      image: 'studio-m10-mockup.jpg',
       practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
