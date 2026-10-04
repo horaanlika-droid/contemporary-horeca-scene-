@@ -632,7 +632,7 @@ window.COURSE = {
       location: 'Old Street, London',
       year: 'Top-5 World’s 50 Best Bars',
       industry: 'Dual-Concept Hospitality · Casual Tap Bar & Produce-Led R&D Counter',
-      image: 'project-detail-nine-lives-bar.jpg',
+      image: 'project-detail-nine-lives-bar-ai.jpg',
       context: 'Created by Alex Kratena and Monica Berg, uniting an accessible everyday front bar with a progressive produce-driven backroom.',
       what: 'Elementary serves draft highballs and quick snacks in an open daylight room, while Tayēr operates an industrial U-shaped counter serving daily changing, ingredient-first drinks numbered rather than named.',
       why: 'Solves the dilemma of bar accessibility versus progressive laboratory R&D by creating two distinct stages under one roof.',
@@ -643,7 +643,7 @@ window.COURSE = {
       location: 'Author’s own project',
       year: 'Opened 2025 · OGONEK TEAM',
       industry: 'Espresso bar · Found objects, street sourcing & low-budget scenography',
-      image: 'project-joi-bar.jpg',
+      image: 'project-joi-bar-ai.jpg',
       context: 'A small espresso bar assembled by the course author almost entirely from found objects, flea markets and second-hand equipment.',
       what: 'Built from street finds and flea-market discoveries: a poster facade, café bulbs, hand-set branding, reconditioned equipment and second-hand furniture without a large budget.',
       why: 'Direct proof that with great desire you do not need a super budget: a clear point of view and resourcefulness build real soul.',
@@ -893,15 +893,17 @@ window.COURSE = {
     }
   ],
   imageCredits: {
-    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. A few author-archive photographs carry subtle AI processing (exposure and shadow-detail recovery only, composition untouched); each processed file is labelled “AI-processed” both under the image and in this list. Third-party editorial photographs and venue photographs (including Insider Bar Lab) are never altered. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
     contact: 'egor.tarasenko@him-mail.ch',
     files: [
       { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
       { file: 'web-insider-station.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
-      { file: 'web-insider-lab.webp', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab cocktail laboratory (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph via the Cocktail Pilgrim feature · educational commentary · takedown on request', source: 'https://questamiamilano.com/cocktailpilgrim/insidermoscow' }
+      { file: 'web-insider-lab.webp', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab cocktail laboratory (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph via the Cocktail Pilgrim feature · educational commentary · takedown on request', source: 'https://questamiamilano.com/cocktailpilgrim/insidermoscow' },
+      { file: 'project-joi-bar-ai.jpg', short: 'PHOTO · AUTHOR’S ARCHIVE · AI-PROCESSED (EXPOSURE ONLY)', credit: '© Egor Tarasenko — author’s archive; subtle AI exposure and shadow-detail recovery, composition unchanged', license: 'All rights reserved · AI processing disclosed', source: 'Derived in-app from project-joi-bar.jpg (original camera file in the repository)' },
+      { file: 'project-detail-nine-lives-bar-ai.jpg', short: 'PHOTO · AUTHOR’S ARCHIVE · AI-PROCESSED (EXPOSURE ONLY)', credit: '© Egor Tarasenko — author’s archive; subtle AI exposure and shadow-detail recovery, composition unchanged', license: 'All rights reserved · AI processing disclosed', source: 'Derived in-app from project-detail-nine-lives-bar.jpg (original in presentation/assets)' }
     ],
     illustrative: [
-      { file: 'project-detail-nine-lives-bar.jpg', note: 'Illustrative bar-counter study from the author’s archive, used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
+      { file: 'project-detail-nine-lives-bar-ai.jpg', note: 'Illustrative bar-counter study from the author’s archive (subtle AI exposure recovery), used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
       { file: 'project-chicken-connection-kitchen.jpg', note: 'Illustrative kitchen photograph from the author’s archive (Chicken Connection shoot, Moscow), used in the René Redzepi · Noma case file. It does not depict the venue.' },
       { file: 'project-tam-flatlay.jpg', note: 'Illustrative R&D flat-lay from the author’s TAM / TYT object line, used in the Dave Arnold · Liquid Intelligence case file. It does not depict a laboratory.' }
     ],

@@ -91,7 +91,7 @@ window.bootCourse = () => {
   const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${ASSET}${IMAGE_FALLBACK}';this.classList.add('image-fallback')">`;
   const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
   const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
-  const creditFor = name => `<span class="img-credit">${esc(isIllustrative(name) ? 'ILLUSTRATIVE PHOTO · AUTHOR’S ARCHIVE · NOT THE VENUE' : creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES')}</span>`;
+  const creditFor = name => { const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES'; return `<span class="img-credit">${esc(isIllustrative(name) ? `ILLUSTRATIVE · ${base} · NOT THE VENUE` : base)}</span>`; };
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
   const projectList = () => C.projects?.items || [];
   const projectById = id => projectList().find(x => x.id === id);

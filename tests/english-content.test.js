@@ -403,7 +403,7 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.ok(!/horeca-[a-z-]+\.jpg/.test(gate), 'gate visual must come from the credited archive');
   // project paragraphs show venues or illustrative archive photos, never a floating portrait
   assert.match(course, /image: 'project-joi-bar\.jpg'/);
-  assert.match(course, /image: 'project-detail-nine-lives-bar\.jpg'/);
+  assert.match(course, /image: 'project-detail-nine-lives-bar-ai\.jpg'/);
   // internet-sourced atmospheric photography must carry its source
   assert.match(course, /insider\.bar\.lab/);
   assert.match(course, /web-insider-station\.jpg/);
@@ -411,6 +411,9 @@ test('images carry provenance credits, fallbacks and an email submission channel
   // Pacific Mirain specification is part of the shipped content
   assert.match(course, /Mirain station line/);
   assert.match(course, /dedicated pumps/);
+  // AI-processed author photographs are disclosed, not hidden
+  assert.match(course, /AI-PROCESSED \(EXPOSURE ONLY\)/);
+  assert.match(course, /project-joi-bar-ai\.jpg/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
   assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
