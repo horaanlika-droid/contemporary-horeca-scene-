@@ -154,29 +154,43 @@
   }
 
   /* --- gate view ---------------------------------------------------------- */
-  function renderGate(message = '') {
+  /* Editable public copy: defaults ship in site-copy.js; the server merges the
+     administrator's Russian admin-console overrides at GET /api/site. */
+  const fetchSiteCopy = async () => {
+    try {
+      const response = await fetch('/api/site', { headers: { Accept: 'application/json' } });
+      if (!response.ok) return window.SITE || null;
+      return await response.json();
+    } catch {
+      return window.SITE || null;
+    }
+  };
+
+  function renderGate(message = '', site = null) {
     booted = false;
     document.documentElement.classList.remove('telegram-webapp');
+    const escG = escapeHtml;
+    const g = { ...(window.SITE?.gate || {}), ...((site && site.gate) || {}) };
     root.innerHTML = `
     <main class="gate-page">
       <div class="gate-stage">
       <div class="gate-visual">
-        <img src="presentation/assets/project-coocoo-room.jpg" alt="The author’s own café room: cloud ceiling, pastel counter and a signature serve on a tray">
+        <img src="presentation/assets/studio-gate-still-life.jpg" alt="Generated studio still life in the course palette: candlelight, antique porcelain and glass with a narrow plane of focus">
         <div class="gate-visual-copy">
-          <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
-          <h1>Contemporary<br><em>Horeca</em> Scene</h1>
-          <p>A living digital elective on the venues, 50 Best menu concepts, industry leaders, found-object mockups and budgets shaping the contemporary horeca scene.</p>
-          <button class="gate-more" type="button" data-scroll-info>ABOUT THE COURSE ↓</button>
-          <button class="gate-more" type="button" data-author-open>ABOUT THE AUTHOR ↗</button>
+          <span class="eyebrow">${escG(g.eyebrow)}</span>
+          <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
+          <p>${escG(g.lead)}</p>
+          <button class="gate-more" type="button" data-scroll-info>${escG(g.aboutCourse)}</button>
+          <button class="gate-more" type="button" data-author-open>${escG(g.aboutAuthor)}</button>
         </div>
       </div>
       <div class="gate-form-wrap">
         <div class="gate-form">
           <form id="gate-form" novalidate>
             <div class="gate-lock"><i aria-hidden="true">✳</i><span>Individual course password<br>Delivered after Tribute payment</span></div>
-            <span class="eyebrow">ENTER THE COURSE</span>
-            <h2>Password <em>required.</em></h2>
-            <p>Enter the individual password sent by the course bot after your payment is confirmed by <b>Tribute</b>. One password opens every module, lesson and assignment.</p>
+            <span class="eyebrow">${escG(g.formEyebrow)}</span>
+            <h2>${escG(g.formTitle)} <em>${escG(g.formAccent)}</em></h2>
+            <p>${escG(g.formLead)}</p>
             <div class="field">
               <label for="course-password">Individual password</label>
               <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
@@ -199,9 +213,9 @@
       <section class="gate-info" id="gate-info">
         <div class="gate-info-inner gate-info-slim">
           <article class="gate-card">
-            <span class="eyebrow">ABOUT THE ELECTIVE</span>
-            <h3>Ten modules on what<br><em>shapes</em> the scene.</h3>
-            <p><b>Contemporary Horeca Scene</b> reads the industry as a living scene — and ends with a hospitality concept and a physical mockup you build and defend yourself.</p>
+            <span class="eyebrow">${escG(g.infoEyebrow)}</span>
+            <h3>${escG(g.infoTitleTop)}<br><em>${escG(g.infoTitleAccent)}</em> ${escG(g.infoTitleBottom)}</h3>
+            <p><b>Contemporary Horeca Scene</b> ${escG(g.infoLead)}</p>
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
               <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
@@ -393,10 +407,10 @@
         tgApp.setHeaderColor?.('#0a0a0a'); tgApp.setBackgroundColor?.('#ffffff');
       } catch { /* SDK not available */ }
     }
-    const status = await apiStatus();
+    const [status, site] = await Promise.all([apiStatus(), fetchSiteCopy()]);
     if (status.state === 'granted') { await unlock(true); return; }
     renderGate(status.state === 'unsupported'
       ? 'THE SECURE PASSWORD SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'
-      : '');
+      : '', site);
   })();
 })();

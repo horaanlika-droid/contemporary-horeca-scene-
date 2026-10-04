@@ -35,19 +35,28 @@ window.bootCourse = () => {
   const buildAllLessons = () => C.modules.flatMap(m => m.lessons.map(l => ({ ...l, module: m, thumbnail: l.thumbnail || m.image, videoUrl: l.videoUrl || null })));
   let allLessons = buildAllLessons();
 
-  /* The admin bot edits course copy server-side; overrides are applied on top of course-data.js. */
+  /* The admin bot edits course copy server-side; overrides are applied on top of
+     course-data.js and the public site copy (window.SITE). Scopes: module, lesson,
+     case (by index), figure, project, site (gate/landing). */
   const overrideOriginals = new Map();
+  function overrideTarget(scope, targetId) {
+    if (scope === 'module') return C.modules.find(m => m.id === targetId) || null;
+    if (scope === 'lesson') {
+      const module = C.modules.find(m => m.lessons.some(l => l.id === targetId));
+      return module ? module.lessons.find(l => l.id === targetId) : null;
+    }
+    if (scope === 'case') { const i = Number(targetId); return Number.isInteger(i) ? (C.cases || [])[i] || null : null; }
+    if (scope === 'figure') return (C.figures || []).find(f => f.id === targetId) || null;
+    if (scope === 'project') return ((C.projects && C.projects.items) || []).find(p => p.id === targetId) || null;
+    if (scope === 'site') return (window.SITE && window.SITE[targetId]) || null;
+    return null;
+  }
   function applyContentOverrides(overrides = []) {
     for (const record of overrideOriginals.values()) record.target[record.field] = record.original;
     overrideOriginals.clear();
     for (const override of overrides || []) {
-      const module = override.scope === 'module'
-        ? C.modules.find(m => m.id === override.targetId)
-        : C.modules.find(m => m.lessons.some(l => l.id === override.targetId));
-      const target = override.scope === 'module'
-        ? module
-        : module?.lessons.find(l => l.id === override.targetId);
-      if (!target || typeof override.text !== 'string' || !(override.field in target)) continue;
+      const target = overrideTarget(override.scope, override.targetId);
+      if (!target || typeof override.text !== 'string' || !(override.field in target) || typeof target[override.field] !== 'string') continue;
       const key = `${override.scope}:${override.targetId}:${override.field}`;
       if (!overrideOriginals.has(key)) overrideOriginals.set(key, { target, field: override.field, original: target[override.field] });
       target[override.field] = override.text;
@@ -88,7 +97,12 @@ window.bootCourse = () => {
   }
 
   const IMAGE_FALLBACK = 'project-detail-backbar.jpg';
-  const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${ASSET}${IMAGE_FALLBACK}';this.classList.add('image-fallback')">`;
+  const image = (name, alt = '', cls = '') => {
+    const remote = /^https:\/\//i.test(String(name || ''));
+    const src = remote ? esc(name) : `${ASSET}${esc(name)}`;
+    const fallback = remote ? src : `${ASSET}${IMAGE_FALLBACK}`;
+    return `<img class="${cls}" src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
+  };
   const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
   const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
   const creditFor = name => { const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES'; return `<span class="img-credit">${esc(isIllustrative(name) ? `ILLUSTRATIVE · ${base} · NOT THE VENUE` : base)}</span>`; };
@@ -143,14 +157,16 @@ window.bootCourse = () => {
 
   /* ---------------------------------------------------------------- landing */
   function landing() {
+    const SL = (window.SITE && window.SITE.landing) || {};
+    const whyParts = String(SL.whyBig || '').split(SL.whyBigAccent || '§');
     const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific Mirain · prep in seconds', 'Sips · Barcelona', 'Himkok · Oslo', 'Krasota · gastro-theatre', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
         <span class="hero-index">${C.edition} EDITION · 01 / ${String(C.modules.length).padStart(2, '0')}</span>
         <div class="hero-copy">
-          <span class="eyebrow">A LIVING DIGITAL ELECTIVE · ${C.edition} EDITION</span>
+          <span class="eyebrow">${esc(SL.heroEyebrow)}</span>
           <h1><span>CONTEMPORARY</span><span><em>Horeca</em> SCENE</span></h1>
-          <p>${C.modules.length} modules on the venues, ideas, techniques and budgets shaping the contemporary horeca scene — and a final challenge that ends with your own concept built by hand, as a mockup, like stage scenery.</p>
+          <p>${esc(SL.heroLead)}</p>
           <div class="hero-actions">
             <a class="button" href="#/course">EXPLORE THE COURSE <span aria-hidden="true">↗</span></a>
             <a class="button text" href="#/dashboard">YOUR LEARNING SPACE <span aria-hidden="true">→</span></a>
@@ -158,7 +174,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img src="${ASSET}web-insider-hall.jpg" alt="A contemporary bar hall: rammed-earth walls, a sculpted ceiling and a central laboratory bar station">
+          <img src="${ASSET}studio-hero-scene.jpg" alt="Generated studio still life in the course palette: a bar counter arrangement in signal red, maroon and warm paper light with a narrow plane of focus">
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -182,7 +198,7 @@ window.bootCourse = () => {
           <p>Traditional education cannot update itself at the pace of the industry. This elective brings current thinking, live cases, emerging tools and real budgets into one evolving learning experience.</p>
         </div>
         <div class="why-grid">
-          <div class="why-big">The next generation of hospitality will be shaped by the way we connect <em>people, place and possibility</em> — and by what we can afford to build.</div>
+          <div class="why-big">${esc(whyParts[0] || '')}<em>${esc(SL.whyBigAccent || '')}</em>${esc(whyParts[1] || '')}</div>
           <div class="why-note">
             <p>Explore the intersection of hospitality, design, neuroscience, food &amp; beverage, technology, AI and entrepreneurship — then price it, source it and build it.</p>
             <span class="meta">Learn from the industry · Think beyond the obvious</span>
@@ -217,8 +233,8 @@ window.bootCourse = () => {
 
       <div class="quote-band">
         <div class="quote-band-inner">
-          <div><span class="eyebrow">THE PRINCIPLE</span><p>A bar or a restaurant is a sweet fairy tale. For two hours the guest agrees to believe in a world you built — and any small detail can instantly wake them from that dream.</p></div>
-          <blockquote>One harsh light, one plastic tray, one visible printer — and the <b>fairy tale</b> ends.<br>Design is the discipline of keeping the guest inside the story.</blockquote>
+          <div><span class="eyebrow">${esc(SL.quoteEyebrow)}</span><p>${esc(SL.quoteText)}</p></div>
+          <blockquote>${esc(SL.quoteLead)} <b>${esc(SL.quoteAccent)}</b> ${esc(SL.quoteTail)}<br>${esc(SL.quoteTail2)}</blockquote>
         </div>
       </div>
 
@@ -903,6 +919,8 @@ window.bootCourse = () => {
     C.modules.forEach(m => collect(m.image));
     (projectList() || []).forEach(p => collect(p.image));
     collect('web-insider-hall.jpg');
+    collect('studio-hero-scene.jpg');
+    collect('studio-gate-still-life.jpg');
     const rows = [...used].sort().map(name => {
       const ill = (ic.illustrative || []).find(x => x.file === name);
       const g = creditGroup(name);

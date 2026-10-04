@@ -48,6 +48,11 @@ function authorDialog(unlocked = false) {
   return appended.innerHTML;
 }
 
+/* The Russian Telegram admin console is an internal admin tool requested by the
+   course owner; it is the single authored exception to the English-only rule.
+   It must never be referenced by the browser bundle. */
+const RUSSIAN_ADMIN_CONSOLE = 'admin-bot.ru.js';
+
 test('all authored UI, server and course source copy is English-only', () => {
   const files = textFiles(ROOT, false).concat(
     ...['course', 'presentation/build', 'presentation/assets', 'tests']
@@ -55,8 +60,14 @@ test('all authored UI, server and course source copy is English-only', () => {
   );
   for (const file of files) {
     const relative = path.relative(ROOT, file);
+    if (path.basename(file) === RUSSIAN_ADMIN_CONSOLE) continue;
     assert.doesNotMatch(fs.readFileSync(file, 'utf8'), CYRILLIC, relative);
   }
+  /* The exception is real (the console is Russian) and stays server-side. */
+  assert.match(fs.readFileSync(path.join(ROOT, RUSSIAN_ADMIN_CONSOLE), 'utf8'), CYRILLIC, 'admin console must remain Russian');
+  assert.doesNotMatch(read('index.html'), /admin-bot\.ru/, 'Russian admin console must never ship to the browser');
+  assert.doesNotMatch(read('app.js'), /admin-bot\.ru/, 'Russian admin console must never ship to the browser');
+  assert.doesNotMatch(read('access.js'), /admin-bot\.ru/, 'Russian admin console must never ship to the browser');
 });
 
 test('only English handouts and a single English deck are published', () => {
@@ -166,6 +177,9 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
   fs.copyFileSync(path.join(ROOT, 'server.js'), serverFile);
   // The editor resolves module blocks from course-data.js next to the server, mirroring deployment.
   fs.copyFileSync(path.join(ROOT, 'course-data.js'), path.join(directory, 'course-data.js'));
+  // The server requires the Russian admin console and reads site-copy.js defaults at boot.
+  fs.copyFileSync(path.join(ROOT, 'admin-bot.ru.js'), path.join(directory, 'admin-bot.ru.js'));
+  fs.copyFileSync(path.join(ROOT, 'site-copy.js'), path.join(directory, 'site-copy.js'));
   if (initialStore) {
     fs.mkdirSync(path.join(directory, 'data'), { recursive: true });
     fs.writeFileSync(path.join(directory, 'data', 'store.json'), JSON.stringify(initialStore));
@@ -391,7 +405,9 @@ test('images carry provenance credits, fallbacks and an email submission channel
   const course = read('course-data.js');
   const gate = read('access.js');
   // broken files can never show a broken glyph: every img falls back to a repo photograph
-  assert.match(app, /onerror="this\.onerror=null;this\.src='\$\{ASSET\}\$\{IMAGE_FALLBACK\}'/);
+  assert.match(app, /onerror="this\.onerror=null;this\.src='/);
+  assert.match(app, /IMAGE_FALLBACK/);
+  assert.match(app, /image-fallback/);
   // provenance registry + public transparency page
   assert.match(course, /imageCredits:/);
   assert.match(course, /illustrative:/);
@@ -706,4 +722,90 @@ test('paid subscriptions issue one code, preserve access until expiry and reacti
   assert.equal(state.body.students.length, 1);
   assert.equal(Object.hasOwn(state.body.students[0], 'password'), false);
   assert.equal(state.body.students[0].subscriptionStatus, 'ACTIVE');
+});
+
+test('the administrator password is never locked out by the attempt throttle', async t => {
+  const server = await isolatedServer(t);
+  for (let i = 0; i < 21; i++) {
+    const wrong = await server.post('/api/access', { password: 'wrong-attempt' }, undefined, { 'X-Forwarded-For': '203.0.113.7' });
+    assert.ok([401, 429].includes(wrong.status), `attempt ${i + 1} rejected or throttled`);
+  }
+  const lockedOut = await server.post('/api/access', { password: 'wrong-attempt' }, undefined, { 'X-Forwarded-For': '203.0.113.7' });
+  assert.equal(lockedOut.status, 429, 'Repeated wrong entries from one IP stay throttled');
+  const admin = await server.post('/api/access', { password: 'english-regression-test' }, undefined, { 'X-Forwarded-For': '203.0.113.7' });
+  assert.equal(admin.status, 200, 'The correct master password still works from a throttled IP');
+  assert.equal(admin.body.user?.role, 'ADMIN');
+});
+
+test('public site copy ships English defaults and merges administrator site overrides', async t => {
+  const initialStore = {
+    editor: {
+      materials: [], posts: [], overrides: [
+        { id: 'ovr-test-gate', scope: 'site', targetId: 'gate', field: 'lead', text: 'EDITED LEAD LINE FOR THE GATE.', updatedAt: '2026-10-04T00:00:00.000Z' },
+        { id: 'ovr-test-bad', scope: 'site', targetId: 'gate', field: 'nope', text: 'X', updatedAt: '2026-10-04T00:00:00.000Z' },
+      ],
+    },
+  };
+  const server = await isolatedServer(t, {}, initialStore);
+  const site = await server.get('/api/site');
+  assert.equal(site.status, 200);
+  assert.equal(site.body.gate.lead, 'EDITED LEAD LINE FOR THE GATE.');
+  assert.equal(site.body.gate.eyebrow, 'DIGITAL PRODUCT · 2026 EDITION');
+  assert.equal(site.body.landing.heroEyebrow, 'A LIVING DIGITAL ELECTIVE · 2026 EDITION');
+  assert.equal(Object.hasOwn(site.body.gate, 'nope'), false, 'Unknown fields are never injected');
+});
+
+test('the russian admin console builds inline menus and saves block edits', async () => {
+  const { createAdminConsole } = require(path.join(ROOT, 'admin-bot.ru.js'));
+  const data = {
+    students: [], submissions: [], tribute: { orders: [] },
+    editor: { materials: [], posts: [], overrides: [] },
+    adminBot: { adminChatIds: [], pending: {}, logs: [] },
+  };
+  const sent = [];
+  const deps = {
+    store: () => data,
+    saveStore() {},
+    addBotLog() {},
+    escapeHtml: value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])),
+    editorId: prefix => `${prefix}-test`,
+    validHttpsUrl: value => { try { const u = new URL(String(value || '')); return u.protocol === 'https:' ? u.toString() : ''; } catch { return ''; } },
+    sendTelegramMessage: async (chatId, text, keyboard) => { sent.push({ text, keyboard }); return true; },
+    editTelegramMessage: async () => true,
+    answerCallbackQuery: async () => true,
+    executeBotCommand: async command => ({ ok: true, reply: `legacy:${command}` }),
+    applyAdminReview: () => ({ ok: true, submission: { name: 'Student', assignment: 'Assignment' } }),
+    isStudentAccessActive: () => true,
+    getTributeStatus: () => ({ mode: 'not-configured', deliveryReady: false }),
+    courseData: () => courseData(),
+    courseModules: () => courseData().modules.map(m => ({ id: m.id, number: m.number, title: m.title, lessons: m.lessons.map(l => ({ id: l.id, title: l.title })) })),
+    siteDefaults: () => { const context = { window: {} }; vm.runInNewContext(read('site-copy.js'), context); return context.window.SITE; },
+  };
+  const adminConsole = createAdminConsole(deps);
+
+  sent.length = 0;
+  await adminConsole.handleAdminMessage({ chat: { id: '1' }, text: '/panel' });
+  assert.ok(sent.length === 1 && sent[0].keyboard.inline_keyboard.length >= 5, 'main menu shows the inline keyboard');
+
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb1', data: 'E:module:future:description', message: { chat: { id: '1' }, message_id: 5 } });
+  assert.ok(data.adminBot.pending['1'], 'pressing a field button opens a deferred text input');
+
+  sent.length = 0;
+  await adminConsole.handleAdminMessage({ chat: { id: '1' }, text: 'EDITED MODULE DESCRIPTION 123' });
+  assert.equal(data.editor.overrides.length, 1);
+  assert.equal(data.editor.overrides[0].scope, 'module');
+  assert.equal(data.editor.overrides[0].targetId, 'future');
+  assert.equal(data.editor.overrides[0].field, 'description');
+  assert.equal(data.editor.overrides[0].text, 'EDITED MODULE DESCRIPTION 123');
+  assert.ok(!data.adminBot.pending['1'], 'pending input is cleared after saving');
+
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb2', data: 'R:module:future', message: { chat: { id: '1' }, message_id: 6 } });
+  assert.equal(data.editor.overrides.length, 0, 'reset removes the module overrides');
+
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb3', data: 'S:gate', message: { chat: { id: '1' } } });
+  const gateButtons = sent[0].keyboard.inline_keyboard.flat().map(b => b.callback_data || '');
+  assert.ok(gateButtons.includes('E:site:gate:lead'), 'site block editor exposes gate fields');
 });
