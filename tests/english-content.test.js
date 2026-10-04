@@ -227,7 +227,6 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
       TRIBUTE_SUBSCRIPTION_ID: '',
       TRIBUTE_PRODUCT_TITLE: 'Contemporary Horeca Scene · 2026 Edition',
       TRIBUTE_PRICE: '',
-      TRIBUTE_PRODUCT_URL: '',
       ...envOverrides,
     },
   });
@@ -287,7 +286,7 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
     }
     assert.ok(messages.length >= count, `Expected ${count} Telegram messages; got ${messages.length}`);
   };
-  return { request, post, get, messages, waitForMessages, child };
+  return { request, post, get, messages, waitForMessages, child, directory, port };
 }
 
 function signedTributeRequest(server, event, apiKey = 'tribute-regression-secret') {
@@ -300,6 +299,13 @@ function signedTributeRequest(server, event, apiKey = 'tribute-regression-secret
   });
 }
 
+function registrationUrlFromMessage(message) {
+  const url = message.reply_markup?.inline_keyboard?.flat()?.find(button => button.url)?.url;
+  assert.ok(url, 'The Telegram message carries the shared registration page URL');
+  assert.equal(new URL(url).searchParams.get('register'), '1');
+  return url;
+}
+
 async function adminToken(server) {
   const admin = await server.post('/api/access', { password: 'english-regression-test' });
   assert.equal(admin.status, 200);
@@ -307,15 +313,24 @@ async function adminToken(server) {
   return admin.body.token;
 }
 
-test('course entry is password-only and the old demo checkout cannot issue access', async t => {
+test('course entry offers shared registration only after manual approval, with no in-app Tribute checkout', async t => {
   const access = read('access.js');
   const app = read('app.js');
-  assert.match(access, /Individual password/);
-  assert.doesNotMatch(access, /tribute-checkout-form|DEMO \/ TESTING FLOW|verifyLocal|SHA256|data-use-password/i);
-  assert.doesNotMatch(app, /demo-access|data-role="student"|login-form|student@him\.edu/);
+  assert.match(access, /data-gate-mode=\"login\"/);
+  assert.match(access, /data-gate-mode=\"register\"/);
+  assert.match(access, /id=\"login-form\"/);
+  assert.match(access, /id=\"register-form\"/);
+  assert.match(access, /\/api\/register/);
+  assert.match(access, /shared registration page/i);
+  assert.match(access, /manually approved by the course admin/i);
+  assert.match(access, /used for future sign-ins/i);
+  assert.doesNotMatch(access, /registrationToken|single-use registration link/i);
+  assert.match(app, /\/api\/chat\/stream/);
+  assert.match(app, /Project Q&amp;A/);
+  assert.match(access, /egor\.tarasenko@him-mail\.ch/);
+  assert.doesNotMatch(access + app, /data-tribute-open|data-tribute-close|GET ACCESS VIA TRIBUTE|TRIBUTE PAYMENT SETUP REQUIRED|tribute-overlay/i);
   assert.doesNotMatch(access, /\/api\/tribute\/checkout/);
-  assert.match(access, /ONE-TIME PRODUCT · LIFETIME ACCESS/);
-  assert.match(access, /RECURRING SUBSCRIPTION · EXPIRY SET BY TRIBUTE/);
+  assert.doesNotMatch(access, /DEMO \/ TESTING FLOW|verifyLocal|SHA256|data-use-password/i);
 
   const server = await isolatedServer(t);
   const unconfiguredAdmin = await isolatedServer(t, { COURSE_PASSWORD: '', COURSE_PASSWORDS: '' });
@@ -329,11 +344,16 @@ test('course entry is password-only and the old demo checkout cannot issue acces
   const checkout = await server.post('/api/tribute/checkout', { name: 'Test Buyer' });
   assert.equal(checkout.status, 410);
   assert.doesNotMatch(JSON.stringify(checkout.body), /CHS-[A-Z0-9]{4}-[A-Z0-9]{4}/);
+  const registrationWithoutApproval = await server.post('/api/register', {
+    name: 'Test Buyer', email: 'test@example.test', telegramIdentity: '987654321', password: 'safe-test-password',
+  });
+  assert.equal(registrationWithoutApproval.status, 403, 'Registration requires manual Telegram admission approval');
 
   const status = await server.get('/api/tribute/status');
   assert.equal(status.status, 200);
   assert.equal(status.body.deliveryReady, false);
-  assert.equal(status.body.productUrl, '');
+  assert.equal(Object.hasOwn(status.body, 'productUrl'), false);
+  assert.equal(Object.hasOwn(status.body, 'subscriptionUrl'), false);
   assert.doesNotMatch(JSON.stringify(status.body), /chs2026|apiKey|tribute-regression-secret/);
 
   const webhookWithoutSecret = await server.request('/api/tribute/webhook', {
@@ -349,37 +369,65 @@ test('migration revokes legacy manual and fake-checkout access but preserves a p
       { id: 'legacy-manual', password: 'CHS-AAAA-BBBB', name: 'Legacy Manual', email: 'manual@example.test', source: 'admin-panel', active: true },
       { id: 'paid-product', password: 'CHS-CCCC-DDDD', name: 'Paid Learner', email: 'paid@example.test', source: 'tribute-product', active: true },
       { id: 'legacy-demo', password: 'CHS-EEEE-FFFF', name: 'Legacy Demo', email: 'demo@example.test', source: 'demo-checkout', active: true },
+      { id: 'paid-pending', name: 'Paid Pending', email: 'pending@example.test', source: 'tribute-product', telegramId: '234567890', active: true },
     ],
     submissions: [{ id: 'old-submission', passwordCode: 'CHS-AAAA-BBBB', answer: 'Legacy record' }],
     tribute: { orders: [
       { id: 'digital:paid-1', studentId: 'paid-product', kind: 'digital-product', status: 'PAID', purchaseId: 'paid-1' },
+      { id: 'digital:pending-1', studentId: 'paid-pending', kind: 'digital-product', status: 'PAID', purchaseId: 'pending-1' },
       { id: 'digital:fake-1', studentId: 'legacy-demo', kind: 'digital-product', status: 'PAID_STUB', purchaseId: 'fake-1', passwordIssued: true },
     ] },
   };
   const server = await isolatedServer(t, {}, initialStore);
   const manual = await server.post('/api/access', { password: 'CHS-AAAA-BBBB', clientId: 'legacy-client' });
-  assert.equal(manual.status, 403);
+  assert.equal(manual.status, 401);
   const demo = await server.post('/api/access', { password: 'CHS-EEEE-FFFF', clientId: 'demo-client' });
-  assert.equal(demo.status, 403);
+  assert.equal(demo.status, 401);
   const paid = await server.post('/api/access', { password: 'CHS-CCCC-DDDD', clientId: 'paid-client' });
   assert.equal(paid.status, 200);
 
   const token = await adminToken(server);
   const state = await server.get('/api/state', token);
-  assert.equal(state.body.students.length, 3);
+  assert.equal(state.body.students.length, 4);
   assert.ok(state.body.students.every(student => !Object.hasOwn(student, 'password')));
   assert.equal(state.body.students.find(student => student.id === 'legacy-manual').active, false);
   assert.equal(state.body.students.find(student => student.id === 'legacy-demo').active, false);
   assert.equal(state.body.students.find(student => student.id === 'paid-product').active, true);
+  assert.equal(state.body.students.find(student => student.id === 'paid-pending').active, false);
+  assert.equal(state.body.students.find(student => student.id === 'paid-pending').registrationStatus, 'PENDING_APPROVAL');
+  assert.equal(state.body.tribute.pendingAdmissionsCount, 1);
   assert.equal(Object.hasOwn(state.body.submissions[0], 'passwordCode'), false);
   assert.ok(state.body.tribute.orders.some(order => order.status === 'TEST_ORDER_REVOKED'));
+  const diskStore = JSON.parse(fs.readFileSync(path.join(server.directory, 'data', 'store.json'), 'utf8'));
+  assert.ok(diskStore.students.every(student => !Object.hasOwn(student, 'password')), 'Legacy plaintext access codes are removed on migration');
+  assert.match(diskStore.students.find(student => student.id === 'paid-product').legacyPasswordHash, /^scrypt\$/);
+  assert.equal(Object.hasOwn(diskStore.students.find(student => student.id === 'legacy-manual'), 'legacyPasswordHash'), false);
+  assert.equal(Object.hasOwn(diskStore.students.find(student => student.id === 'legacy-demo'), 'legacyPasswordHash'), false);
+  assert.doesNotMatch(JSON.stringify(diskStore), /CHS-[A-Z0-9]{4}-[A-Z0-9]{4}/);
 });
 
-test('password access and admin controls cannot create a learner password without a Tribute payment', async t => {
+test('legacy secret cleanup is persisted even when no student password is present', async t => {
+  const server = await isolatedServer(t, {}, {
+    students: [],
+    submissions: [{ id: 'legacy-submission', passwordCode: 'CHS-AAAA-BBBB' }],
+    tribute: { orders: [{ id: 'legacy-stub', status: 'PAID_STUB', passwordIssued: true }] },
+    adminBot: { logs: [{ id: 'demo-log', text: 'Demo checkout completed' }] },
+  });
+  const diskStore = JSON.parse(fs.readFileSync(path.join(server.directory, 'data', 'store.json'), 'utf8'));
+  assert.equal(Object.hasOwn(diskStore.submissions[0], 'passwordCode'), false);
+  assert.equal(diskStore.tribute.orders[0].status, 'TEST_ORDER_REVOKED');
+  assert.equal(diskStore.adminBot.logs.some(log => /demo checkout completed/i.test(log.text || '')), false);
+});
+
+test('sign-in and admin controls cannot create learner accounts without manual admission approval', async t => {
   const server = await isolatedServer(t);
   const denied = await server.post('/api/access', { password: 'incorrect' });
   assert.equal(denied.status, 401);
-  assert.match(denied.body.error, /^Incorrect password/);
+  assert.match(denied.body.error, /email or password is incorrect/i);
+  const noApproval = await server.post('/api/register', {
+    name: 'Jordan', email: 'jordan@example.test', telegramIdentity: 'jordanhoreca', password: 'long-enough-password',
+  });
+  assert.equal(noApproval.status, 403);
 
   const token = await adminToken(server);
   const command = text => server.post('/api/admin/bot-command', { command: text }, token);
@@ -404,6 +452,7 @@ test('images carry provenance credits, fallbacks and an email submission channel
   const app = read('app.js');
   const course = read('course-data.js');
   const gate = read('access.js');
+  const styles = read('styles.css');
   // broken files can never show a broken glyph: every img falls back to a repo photograph
   assert.match(app, /onerror="this\.onerror=null;this\.src='/);
   assert.match(app, /IMAGE_FALLBACK/);
@@ -413,7 +462,14 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.match(course, /illustrative:/);
   assert.match(app, /r\[0\] === 'credits'/);
   assert.match(app, /Image sources &amp; rights/);
-  assert.match(gate, /credited editorial sources/);
+  assert.match(gate, /public websites and press materials/);
+  assert.match(course, /publicly available websites and press materials/);
+  assert.doesNotMatch(app + gate + course, /studio-/);
+  assert.match(gate, /project-joi-bar\.jpg/);
+  assert.match(app, /project-joi-cups\.jpg/);
+  assert.match(styles, /\.film-photo\{filter:grayscale\(1\)/);
+  assert.match(course, /black-and-white, film-inspired display treatment/);
+  assert.match(course, /not the image files/);
   // no unidentified stock photography left in the app-facing content
   assert.ok(!/image: 'horeca-/.test(course), 'module and case images must come from the credited archive');
   assert.ok(!/horeca-[a-z-]+\.jpg/.test(gate), 'gate visual must come from the credited archive');
@@ -503,12 +559,45 @@ test('admin bot editor manages block materials, live updates and copy overrides'
   assert.doesNotMatch(access, /gate-points/);
 });
 
-test('Tribute signature, product matching, idempotency and automatic Telegram password delivery', async t => {
+test('pending admissions include paid orders awaiting approval for existing learners', async t => {
+  const studentId = 'student-renewal-approval';
+  const server = await isolatedServer(t, {}, {
+    students: [{
+      id: studentId,
+      name: 'Existing Learner',
+      email: 'existing@example.test',
+      source: 'tribute-subscription',
+      active: true,
+      registrationStatus: 'REGISTERED',
+      admissionApprovedAt: '2026-09-01T10:00:00.000Z',
+      telegramId: '345678901',
+      telegramUsername: 'existinglearner',
+    }],
+    tribute: { orders: [{
+      id: 'subscription-renewal-pending',
+      studentId,
+      kind: 'subscription',
+      eventName: 'renewed_subscription',
+      status: 'PAID',
+      deliveryStatus: 'AWAITING_APPROVAL',
+      amount: '49 EUR',
+    }] },
+  });
+  const token = await adminToken(server);
+  const state = await server.get('/api/state', token);
+  assert.equal(state.body.tribute.pendingAdmissionsCount, 1);
+  const admissions = await server.post('/api/admin/bot-command', { command: '/admissions' }, token);
+  assert.equal(admissions.status, 200);
+  assert.match(admissions.body.reply, /student-renewal-approval/);
+  assert.match(admissions.body.reply, /subscription-renewal-pending/);
+});
+
+test('Tribute webhooks create pending admissions; one shared page works after Telegram approval', async t => {
   const apiKey = 'tribute-regression-secret';
   const server = await isolatedServer(t, {
     TRIBUTE_API_KEY: apiKey,
     TRIBUTE_PRODUCT_ID: '456',
-    TRIBUTE_PRODUCT_URL: 'https://t.me/tribute/app?startapp=p456',
+    TRIBUTE_PRODUCT_URL: 'https://t.me/tribute/app?startapp=p456', // ignored by the course app
     TRIBUTE_PRICE: '49 EUR',
     BOT_TOKEN: 'fake-bot-token',
     BOT_USERNAME: 'chs_access_bot',
@@ -517,10 +606,10 @@ test('Tribute signature, product matching, idempotency and automatic Telegram pa
   const token = await adminToken(server);
   const status = await server.get('/api/tribute/status');
   assert.equal(status.body.deliveryReady, true);
-  assert.equal(status.body.productCheckoutReady, true);
-  assert.equal(status.body.subscriptionCheckoutReady, false);
-  assert.equal(status.body.botStartUrl, 'https://t.me/chs_access_bot?start=course');
-  assert.equal(status.body.productUrl, 'https://t.me/tribute/app?startapp=p456');
+  assert.equal(status.body.productConfigured, true);
+  assert.equal(status.body.subscriptionConfigured, false);
+  assert.equal(status.body.botUsernameConfigured, true);
+  assert.equal(Object.hasOwn(status.body, 'productUrl'), false, 'Tribute checkout URLs are never exposed by the app');
   assert.equal(JSON.stringify(status.body).includes(apiKey), false);
 
   const event = {
@@ -563,35 +652,101 @@ test('Tribute signature, product matching, idempotency and automatic Telegram pa
   const paid = await signedTributeRequest(server, event, apiKey);
   assert.equal(paid.status, 200);
   assert.equal(paid.body.issued, true);
-  assert.equal(paid.body.deliveryStatus, 'DELIVERED');
-  await server.waitForMessages(1);
-  assert.equal(String(server.messages[0].chat_id), '123456789');
-  assert.match(server.messages[0].text, /individual course password/i);
-  assert.match(server.messages[0].text, /\/password/);
-  const issuedCode = server.messages[0].text.match(/<code>(CHS-[A-Z0-9]{4}-[A-Z0-9]{4})<\/code>/)?.[1];
-  assert.ok(issuedCode, 'The bot message contains a generated individual password');
+  assert.equal(paid.body.deliveryStatus, 'AWAITING_APPROVAL');
+  assert.equal(server.messages.length, 0, 'Payment alone does not issue a registration page');
 
   const duplicate = await signedTributeRequest(server, event, apiKey);
   assert.equal(duplicate.status, 200);
   assert.equal(duplicate.body.duplicate, true);
-  await new Promise(resolve => setTimeout(resolve, 30));
-  assert.equal(server.messages.length, 1, 'A duplicate Tribute webhook does not send a second message');
+  assert.equal(server.messages.length, 0, 'A duplicate payment event does not bypass manual approval');
 
-  const state = await server.get('/api/state', token);
-  assert.equal(state.status, 200);
-  assert.equal(state.body.students.length, 1);
-  assert.equal(Object.hasOwn(state.body.students[0], 'password'), false, 'Admin state summaries never expose the issued code');
-  assert.equal(state.body.tribute.orders.length, 1);
-  assert.equal(state.body.tribute.orders[0].deliveryStatus, 'DELIVERED');
-  assert.equal(JSON.stringify(state.body.tribute).includes(apiKey), false);
-  assert.equal(state.body.tribute.pendingDeliveriesCount, 0);
+  const stateBeforeApproval = await server.get('/api/state', token);
+  assert.equal(stateBeforeApproval.body.students.length, 1);
+  const pendingStudent = stateBeforeApproval.body.students[0];
+  assert.equal(pendingStudent.registered, false);
+  assert.equal(pendingStudent.active, false);
+  assert.equal(pendingStudent.registrationStatus, 'PENDING_APPROVAL');
+  assert.equal(Object.hasOwn(pendingStudent, 'password'), false);
+  assert.equal(Object.hasOwn(pendingStudent, 'passwordHash'), false);
+  assert.equal(stateBeforeApproval.body.tribute.orders[0].admissionApproved, false);
+  assert.equal(stateBeforeApproval.body.tribute.pendingAdmissionsCount, 1);
+  assert.equal(stateBeforeApproval.body.tribute.pendingDeliveriesCount, 1);
 
-  const studentSession = await server.post('/api/access', { password: issuedCode, clientId: 'web-purchase-client' });
+  const command = text => server.post('/api/admin/bot-command', { command: text }, token);
+  assert.match((await command('/admissions')).body.reply, /alexhoreca/);
+  const prematureRegistration = await server.post('/api/register', {
+    telegramIdentity: 'alexhoreca', name: 'Alex Learner', email: 'alex@example.test', password: 'choose-a-secure-password-123',
+  });
+  assert.equal(prematureRegistration.status, 403, 'The shared page cannot register an unapproved Telegram account');
+
+  const admitted = await command(`/admit ${pendingStudent.id}`);
+  assert.equal(admitted.status, 200);
+  assert.equal(admitted.body.ok, true);
+  assert.match(admitted.body.reply, /admitted/i);
+  await server.waitForMessages(1);
+  const approvalMessage = server.messages[0];
+  assert.equal(String(approvalMessage.chat_id), '123456789');
+  assert.match(approvalMessage.text, /shared registration link/i);
+  assert.match(approvalMessage.text, /reusable/i);
+  assert.doesNotMatch(approvalMessage.text, /single-use|expires in 30 days|can be used once/i);
+  assert.match(approvalMessage.text, /egor\.tarasenko@him-mail\.ch/);
+  const sharedUrl = registrationUrlFromMessage(approvalMessage);
+  assert.equal(new URL(sharedUrl).origin, 'https://course.example.test');
+  assert.doesNotMatch(sharedUrl, /[A-Za-z0-9_-]{40,}/, 'The shared link contains no per-student secret');
+
+  const invalidEmail = await server.post('/api/register', {
+    telegramIdentity: 'alexhoreca', name: 'Alex Learner', email: 'not-an-email', password: 'choose-a-secure-password-123',
+  });
+  assert.equal(invalidEmail.status, 400, 'Invalid registration details are rejected before account creation');
+  const chosenPassword = 'choose-a-secure-password-123';
+  const registered = await server.post('/api/register', {
+    telegramIdentity: '@alexhoreca', name: 'Alex Learner', email: 'Alex@Example.test', password: chosenPassword,
+  });
+  assert.equal(registered.status, 201);
+  assert.equal(registered.body.unlocked, true);
+  assert.equal(registered.body.user.email, 'alex@example.test');
+  assert.equal(registered.body.user.name, 'Alex Learner');
+  assert.equal(registered.body.user.telegramId, '123456789');
+  assert.equal(Object.hasOwn(registered.body.user, 'password'), false);
+  assert.equal(Object.hasOwn(registered.body.user, 'passwordHash'), false);
+  assert.equal((await server.get('/api/access', registered.body.token)).body.unlocked, true);
+
+  const reusedBySameStudent = await server.post('/api/register', {
+    telegramIdentity: 'alexhoreca', name: 'Another Learner', email: 'another@example.test', password: chosenPassword,
+  });
+  assert.equal(reusedBySameStudent.status, 409, 'The same learner cannot create a second account');
+  const unapprovedAccount = await server.post('/api/register', {
+    telegramIdentity: 'unknownlearner', name: 'Unknown Learner', email: 'unknown@example.test', password: chosenPassword,
+  });
+  assert.equal(unapprovedAccount.status, 403);
+  assert.equal((await server.post('/api/access', { password: chosenPassword })).status, 401, 'New personal passwords require email sign-in');
+  assert.equal((await server.post('/api/access', { email: 'wrong@example.test', password: chosenPassword })).status, 401);
+  assert.equal((await server.post('/api/access', { email: 'alex@example.test', password: 'incorrect-password' })).status, 401);
+  const studentSession = await server.post('/api/access', {
+    email: 'ALEX@example.test', password: chosenPassword, clientId: 'web-purchase-client',
+  });
   assert.equal(studentSession.status, 200);
   assert.equal(studentSession.body.user.telegramId, '123456789');
   assert.equal(Object.hasOwn(studentSession.body.user, 'passwordCode'), false);
-  const otherDevice = await server.post('/api/access', { password: issuedCode, clientId: 'another-device' });
-  assert.equal(otherDevice.status, 403);
+
+  const stored = JSON.parse(fs.readFileSync(path.join(server.directory, 'data', 'store.json'), 'utf8'));
+  const storedStudent = stored.students.find(item => item.id === registered.body.user.id);
+  const storedOrder = stored.tribute.orders.find(item => item.id === 'digital:78901');
+  assert.match(storedStudent.passwordHash, /^scrypt\$/);
+  assert.equal(Object.hasOwn(storedStudent, 'password'), false);
+  assert.equal(storedOrder.admissionApprovedAt !== undefined, true);
+  assert.equal(Object.hasOwn(storedOrder, 'registrationTokenHash'), false);
+  assert.equal(Object.hasOwn(storedOrder, 'registrationTokenUsedAt'), false);
+  assert.equal(JSON.stringify(stored).includes(sharedUrl), false, 'The public shared link is not persisted in plaintext');
+
+  const state = await server.get('/api/state', token);
+  assert.equal(state.status, 200);
+  assert.equal(state.body.students[0].registered, true);
+  assert.equal(state.body.students[0].registrationStatus, 'REGISTERED');
+  assert.equal(state.body.tribute.orders[0].admissionApproved, true);
+  assert.equal(state.body.tribute.pendingAdmissionsCount, 0);
+  assert.equal(state.body.tribute.pendingDeliveriesCount, 0);
+  assert.equal(JSON.stringify(state.body.tribute).includes(apiKey), false);
 
   const submitted = await server.post('/api/submissions', {
     moduleId: 'budget', lessonId: 'budget-builds',
@@ -599,7 +754,6 @@ test('Tribute signature, product matching, idempotency and automatic Telegram pa
   }, studentSession.body.token);
   assert.equal(submitted.status, 200);
   assert.equal(Object.hasOwn(submitted.body.submission, 'passwordCode'), false);
-  const command = text => server.post('/api/admin/bot-command', { command: text }, token);
   assert.match((await command('/pending')).body.reply, /Files: none/);
   const review = await command(`/approve ${submitted.body.submission.id} The concept and budget are clear.`);
   assert.equal(review.body.submission.status, 'APPROVED');
@@ -608,13 +762,15 @@ test('Tribute signature, product matching, idempotency and automatic Telegram pa
 
   const listedLearners = await command('/students');
   assert.match(listedLearners.body.reply, /ACTIVE/);
+  assert.match(listedLearners.body.reply, /account REGISTERED/);
   assert.doesNotMatch(listedLearners.body.reply, /CHS-[A-Z0-9]{4}-[A-Z0-9]{4}/);
   const resend = await command('/resend 123456789');
   assert.equal(resend.status, 200);
   assert.equal(resend.body.ok, true);
   await server.waitForMessages(3);
-  const orders = await command('/orders');
-  assert.match(orders.body.reply, /digital:78901/);
+  assert.match(server.messages[2].text, /cannot be retrieved or resent/i);
+  assert.doesNotMatch(server.messages[2].text, /register=|CHS-/);
+  assert.equal((await command('/orders')).body.reply.includes('digital:78901'), true);
 
   const refund = {
     name: 'digital_product_refunded',
@@ -626,26 +782,28 @@ test('Tribute signature, product matching, idempotency and automatic Telegram pa
   assert.equal(refunded.status, 200);
   assert.equal(refunded.body.refunded, true);
   assert.equal((await server.get('/api/access', studentSession.body.token)).body.unlocked, false);
-  assert.equal((await server.post('/api/access', { password: issuedCode, clientId: 'web-purchase-client' })).status, 403);
+  assert.equal((await server.post('/api/access', { email: 'alex@example.test', password: chosenPassword })).status, 403);
   await server.waitForMessages(4);
 });
 
-test('paid subscriptions issue one code, preserve access until expiry and reactivate on renewal', async t => {
+test('Tribute subscriptions require manual admission and preserve account access until expiry', async t => {
   const apiKey = 'tribute-subscription-secret';
   const server = await isolatedServer(t, {
     TRIBUTE_API_KEY: apiKey,
     TRIBUTE_SUBSCRIPTION_ID: '1644',
-    TRIBUTE_SUBSCRIPTION_URL: 'https://t.me/tribute/app?startapp=s1644',
+    TRIBUTE_SUBSCRIPTION_URL: 'https://t.me/tribute/app?startapp=s1644', // ignored by the course app
     BOT_TOKEN: 'fake-subscription-bot-token',
     BOT_USERNAME: 'chs_access_bot',
+    COURSE_URL: 'https://course.example.test',
   });
   const token = await adminToken(server);
   const status = await server.get('/api/tribute/status');
   assert.equal(status.body.deliveryReady, true);
-  assert.equal(status.body.productCheckoutReady, false);
-  assert.equal(status.body.subscriptionCheckoutReady, true);
-  assert.equal(status.body.productUrl, '');
-  assert.equal(status.body.subscriptionUrl, 'https://t.me/tribute/app?startapp=s1644');
+  assert.equal(status.body.productConfigured, false);
+  assert.equal(status.body.subscriptionConfigured, true);
+  assert.equal(Object.hasOwn(status.body, 'productUrl'), false);
+  assert.equal(Object.hasOwn(status.body, 'subscriptionUrl'), false);
+
   const firstPayment = {
     name: 'new_subscription',
     created_at: '2026-10-04T10:00:00.000Z',
@@ -666,11 +824,21 @@ test('paid subscriptions issue one code, preserve access until expiry and reacti
   };
   const purchase = await signedTributeRequest(server, firstPayment, apiKey);
   assert.equal(purchase.status, 200);
-  assert.equal(purchase.body.deliveryStatus, 'DELIVERED');
+  assert.equal(purchase.body.deliveryStatus, 'AWAITING_APPROVAL');
+  assert.equal(server.messages.length, 0);
+  const stateBeforeApproval = await server.get('/api/state', token);
+  const student = stateBeforeApproval.body.students[0];
+  const command = text => server.post('/api/admin/bot-command', { command: text }, token);
+  assert.match((await command('/admissions')).body.reply, /barlearner/);
+  assert.equal((await command(`/admit ${student.id}`)).body.ok, true);
   await server.waitForMessages(1);
-  const code = server.messages[0].text.match(/<code>(CHS-[A-Z0-9]{4}-[A-Z0-9]{4})<\/code>/)?.[1];
-  assert.ok(code);
-  const session = await server.post('/api/access', { password: code, clientId: 'subscription-client' });
+  const sharedUrl = registrationUrlFromMessage(server.messages[0]);
+  const password = 'subscription-personal-password';
+  const registered = await server.post('/api/register', {
+    telegramIdentity: 'barlearner', name: 'Bar Learner', email: 'bar@example.test', password,
+  });
+  assert.equal(registered.status, 201);
+  const session = await server.post('/api/access', { email: 'bar@example.test', password });
   assert.equal(session.status, 200);
 
   const cancellation = {
@@ -690,7 +858,7 @@ test('paid subscriptions issue one code, preserve access until expiry and reacti
   };
   const cancelled = await signedTributeRequest(server, cancellation, apiKey);
   assert.equal(cancelled.status, 200);
-  const duringPaidPeriod = await server.post('/api/access', { password: code, clientId: 'subscription-client' });
+  const duringPaidPeriod = await server.post('/api/access', { email: 'bar@example.test', password });
   assert.equal(duringPaidPeriod.status, 200, 'Cancellation does not remove access before Tribute expiry');
   assert.equal((await server.get('/api/access', session.body.token)).body.unlocked, true);
 
@@ -700,7 +868,7 @@ test('paid subscriptions issue one code, preserve access until expiry and reacti
   expiryEvent.payload.expires_at = '2000-01-01T00:00:00.000Z';
   const expired = await signedTributeRequest(server, expiryEvent, apiKey);
   assert.equal(expired.status, 200);
-  const expiredAccess = await server.post('/api/access', { password: code, clientId: 'subscription-client' });
+  const expiredAccess = await server.post('/api/access', { email: 'bar@example.test', password });
   assert.equal(expiredAccess.status, 403);
   assert.match(expiredAccess.body.error, /subscription has expired/i);
   assert.equal((await server.get('/api/access', session.body.token)).body.unlocked, false);
@@ -714,14 +882,86 @@ test('paid subscriptions issue one code, preserve access until expiry and reacti
   assert.equal(renewed.status, 200);
   assert.equal(renewed.body.deliveryStatus, 'DELIVERED');
   await server.waitForMessages(4);
-  assert.match(server.messages[3].text, /subscription has renewed/i);
-  const restored = await server.post('/api/access', { password: code, clientId: 'subscription-client' });
+  assert.match(server.messages[3].text, /access is active/i);
+  assert.doesNotMatch(server.messages[3].text, /register=|one-time|single-use/);
+  const restored = await server.post('/api/access', { email: 'bar@example.test', password });
   assert.equal(restored.status, 200);
 
   const state = await server.get('/api/state', token);
   assert.equal(state.body.students.length, 1);
   assert.equal(Object.hasOwn(state.body.students[0], 'password'), false);
+  assert.equal(state.body.students[0].registered, true);
   assert.equal(state.body.students[0].subscriptionStatus, 'ACTIVE');
+  assert.equal(new URL(sharedUrl).searchParams.get('register'), '1');
+});
+
+test('Project Q&A is private, persistent and streams messages live to the learner and admin', async t => {
+  const password = 'chat-student-password-123';
+  const salt = '0123456789abcdef0123456789abcdef';
+  const passwordHash = `scrypt$${salt}$${crypto.scryptSync(password, salt, 64, { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }).toString('hex')}`;
+  const initialStore = {
+    students: [{
+      id: 'stu-chat-alex', name: 'Alex Learner', email: 'alex-chat@example.test', passwordHash,
+      role: 'STUDENT', institutionId: 'him-001', telegramId: '123456789', telegramUsername: 'alexhoreca',
+      source: 'access-request', active: true, admissionApprovedAt: '2026-10-04T10:00:00.000Z',
+      registrationStatus: 'REGISTERED', unlockedLessons: [], completedLessons: [],
+    }],
+    submissions: [], chats: [], progress: {}, quizzes: {}, tribute: { orders: [] },
+  };
+  const server = await isolatedServer(t, {}, initialStore);
+  const adminTokenValue = await adminToken(server);
+  const signedIn = await server.post('/api/access', { email: 'alex-chat@example.test', password });
+  assert.equal(signedIn.status, 200);
+  const studentToken = signedIn.body.token;
+
+  assert.equal((await server.get('/api/chat')).status, 403, 'The chat requires an authenticated course session');
+  assert.equal((await server.get('/api/chat/threads', studentToken)).status, 403, 'Learners cannot browse other students\' threads');
+
+  const question = await server.post('/api/chat', {
+    project: 'My neighbourhood café',
+    text: 'Could you help me think through the first guest touchpoint?',
+  }, studentToken);
+  assert.equal(question.status, 201);
+  assert.equal(question.body.message.studentId, 'stu-chat-alex');
+  assert.equal(question.body.message.senderRole, 'STUDENT');
+  assert.equal(question.body.message.project, 'My neighbourhood café');
+
+  const inbox = await server.get('/api/chat/threads', adminTokenValue);
+  assert.equal(inbox.status, 200);
+  assert.equal(inbox.body.threads[0].unreadCount, 1);
+  assert.equal(inbox.body.threads[0].student.email, 'alex-chat@example.test');
+  const thread = await server.get('/api/chat?studentId=stu-chat-alex', adminTokenValue);
+  assert.equal(thread.status, 200);
+  assert.equal(thread.body.messages.length, 1);
+  assert.equal(thread.body.messages[0].readByAdmin, true);
+  assert.equal((await server.get('/api/chat/threads', adminTokenValue)).body.threads[0].unreadCount, 0);
+
+  const readerResponse = await fetch(`http://127.0.0.1:${server.port}/api/chat/stream?studentId=stu-chat-alex`, {
+    headers: { Authorization: `Bearer ${adminTokenValue}` },
+  });
+  assert.equal(readerResponse.status, 200);
+  assert.match(readerResponse.headers.get('content-type') || '', /text\/event-stream/);
+  const reader = readerResponse.body.getReader();
+  const firstFrame = await reader.read();
+  assert.match(new TextDecoder().decode(firstFrame.value), /event: snapshot/);
+  const liveFramePromise = reader.read();
+
+  const reply = await server.post('/api/chat', {
+    studentId: 'stu-chat-alex', text: 'Start with the moment a guest notices your point of view.',
+  }, adminTokenValue);
+  assert.equal(reply.status, 201);
+  assert.equal(reply.body.message.senderRole, 'ADMIN');
+  const liveFrame = await liveFramePromise;
+  assert.match(new TextDecoder().decode(liveFrame.value), /event: message/);
+  assert.match(new TextDecoder().decode(liveFrame.value), /notices your point of view/);
+  await reader.cancel();
+
+  const learnerHistory = await server.get('/api/chat?studentId=another-student', studentToken);
+  assert.equal(learnerHistory.status, 200, 'A learner query is always scoped to their own thread');
+  assert.equal(learnerHistory.body.messages.length, 2);
+  assert.equal(learnerHistory.body.messages[1].readByStudent, true);
+  const otherThread = await server.get('/api/chat?studentId=not-a-student', adminTokenValue);
+  assert.equal(otherThread.status, 404);
 });
 
 test('the administrator password is never locked out by the attempt throttle', async t => {

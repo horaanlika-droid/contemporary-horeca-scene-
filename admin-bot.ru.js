@@ -348,7 +348,8 @@ function createAdminConsole(deps) {
     '/cancel или /отмена — отменить ввод. /панель — главное меню.',
     '',
     'Текстовые команды (англ.) тоже работают:',
-    '/pending · /approve <id> <текст> · /revise <id> <текст> · /students · /orders · /resend <telegram_id>',
+    '/admissions · /admit <student_id> · /reject <student_id> · /students · /orders · /resend <telegram_id>',
+    '/pending · /approve <id> <текст> · /revise <id> <текст> · /chat — открыть Project Q&A в приложении',
     '/addmat <модуль> <https url> <описание> · /materials · /editmat · /delmat',
     '/post <заголовок> | <текст> · /posts · /delpost',
     '/editmodule · /editlesson · /overrides · /revert <id>',
@@ -502,7 +503,7 @@ function createAdminConsole(deps) {
       const current = currentText(scope, targetId, field) ?? (typeof original === 'string' ? original : '');
       setPending(chatId, { kind: 'text', scope, targetId, field });
       return send(
-        `✏️ <b>Новое значение</b>\nБлок: ${esc(targetLabel(scope, targetId))}\nПоле: «${esc(fieldLabel(scope, targetId, field))}»\nСейчас: ${esc(trunc(current, 200))}\n\nПришлите новый текст одним сообщением.${field === 'image' ? '\nДля обложки: имя файла из presentation/assets/ (например studio-m03-senses.jpg) или https-ссылка.' : ''}\n/cancel — отмена.`,
+        `✏️ <b>Новое значение</b>\nБлок: ${esc(targetLabel(scope, targetId))}\nПоле: «${esc(fieldLabel(scope, targetId, field))}»\nСейчас: ${esc(trunc(current, 200))}\n\nПришлите новый текст одним сообщением.${field === 'image' ? '\nДля обложки: имя файла из presentation/assets/ (например project-joi-bar.jpg) или https-ссылка.' : ''}\n/cancel — отмена.`,
         kb([[btn('❌ Отмена', 'ZC')]]),
       );
     }

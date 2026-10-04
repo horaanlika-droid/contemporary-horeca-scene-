@@ -46,8 +46,8 @@
         <h3 class="author-label">Own projects</h3>
         <div class="author-frames">
           ${projects.map(([file, name, year, id]) => `<figure>${window.COURSE
-            ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
-            : `<img src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
+            ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img class="film-photo" src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
+            : `<img class="film-photo" src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
         </div>
         ${window.COURSE ? '<a class="author-archive-link" href="#/projects" data-author-route>OPEN THE FULL PROJECT ARCHIVE <span aria-hidden="true">→</span></a>' : ''}
       </section>

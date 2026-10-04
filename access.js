@@ -1,8 +1,7 @@
 /* ============================================================================
    ACCESS GATE — Contemporary Horeca Scene
-   Individual password from a verified Tribute webhook (one per purchaser),
-   or master/admin password. Unlocks course-data.js and automatically signs the
-   visitor in so all modules and lessons are immediately accessible.
+   One shared registration page is available to all learners; registration is
+   limited server-side to Telegram accounts manually approved by the course admin.
    ========================================================================== */
 (() => {
   'use strict';
@@ -12,12 +11,14 @@
   const USER_KEY = 'chs-user';
   const USER_BACKUP_KEY = 'chs-user-backup';
   const CONTENT = 'course-data.js';
+  const SUPPORT_EMAIL = 'egor.tarasenko@him-mail.ch';
 
   const root = document.getElementById('app');
   const toastEl = document.getElementById('toast');
   let toastTimer;
   let booted = false;
   let currentUser = null;
+  let siteCopy = null;
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -72,6 +73,22 @@
     }
   };
 
+  const readRegistrationMode = () => {
+    try {
+      const url = new URL(window.location.href);
+      const value = url.searchParams.get('register');
+      const requested = value === '1' || value === 'true' || url.searchParams.has('invite');
+      url.searchParams.delete('register');
+      url.searchParams.delete('invite');
+      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+      return requested;
+    } catch {
+      return false;
+    }
+  };
+
+  let registrationMode = readRegistrationMode();
+
   /* --- server conversation ------------------------------------------------ */
   const apiStatus = async () => {
     try {
@@ -91,15 +108,12 @@
     }
   };
 
-  const apiUnlock = async password => {
+  const apiUnlock = async (email, password) => {
     try {
       const response = await fetch('/api/access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          password,
-          clientId: getClientId(),
-        }),
+        body: JSON.stringify({ email, password, clientId: getClientId() }),
       });
       if (response.status === 404 || response.status === 405 || response.status === 501) {
         return { state: 'unsupported' };
@@ -107,6 +121,31 @@
       const payload = await response.json().catch(() => ({}));
       if (response.ok && payload.unlocked) {
         saveSession(payload.token, payload.user);
+        return { state: 'granted', payload };
+      }
+      return { state: 'denied', error: payload.error || '' };
+    } catch {
+      return { state: 'unsupported' };
+    }
+  };
+
+  const apiRegister = async formData => {
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          telegramIdentity: formData.telegramIdentity,
+          clientId: getClientId(),
+        }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (response.ok && payload.unlocked) {
+        saveSession(payload.token, payload.user);
+        registrationMode = false;
         return { state: 'granted', payload };
       }
       return { state: 'denied', error: payload.error || '' };
@@ -131,7 +170,7 @@
   async function unlock(silent) {
     if (booted) return;
     if (!restoreSessionUser()) {
-      renderGate('YOUR ACCESS SESSION COULD NOT BE RESTORED. PLEASE ENTER YOUR PASSWORD AGAIN.');
+      renderGate('YOUR ACCESS SESSION COULD NOT BE RESTORED. PLEASE SIGN IN AGAIN.', 'login');
       return;
     }
     booted = true;
@@ -140,12 +179,12 @@
     } catch {
       booted = false;
       try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
-      renderGate('COURSE CONTENT IS LOCKED. PLEASE VERIFY YOUR PERSONAL PASSWORD.');
+      renderGate('COURSE CONTENT IS LOCKED. PLEASE SIGN IN AGAIN.', 'login');
       return;
     }
     if (!window.COURSE) {
       booted = false;
-      renderGate('COURSE CONTENT COULD NOT BE READ');
+      renderGate('COURSE CONTENT COULD NOT BE READ.', 'login');
       return;
     }
     if (!silent) toast('ACCESS GRANTED · ALL MODULES AND LESSONS ARE AVAILABLE');
@@ -153,9 +192,7 @@
     if (typeof window.bootCourse === 'function') window.bootCourse();
   }
 
-  /* --- gate view ---------------------------------------------------------- */
-  /* Editable public copy: defaults ship in site-copy.js; the server merges the
-     administrator's Russian admin-console overrides at GET /api/site. */
+  /* --- public page copy --------------------------------------------------- */
   const fetchSiteCopy = async () => {
     try {
       const response = await fetch('/api/site', { headers: { Accept: 'application/json' } });
@@ -166,48 +203,64 @@
     }
   };
 
-  function renderGate(message = '', site = null) {
+  function renderGate(message = '', mode = registrationMode ? 'register' : 'login') {
     booted = false;
     document.documentElement.classList.remove('telegram-webapp');
     const escG = escapeHtml;
-    const g = { ...(window.SITE?.gate || {}), ...((site && site.gate) || {}) };
+    const g = { ...(window.SITE?.gate || {}), ...((siteCopy && siteCopy.gate) || {}) };
+    const registering = mode === 'register';
+    const faqItems = (siteCopy?.faq || window.SITE?.faq || []).map(item => `<details class="gate-faq-item"><summary>${escG(item.question)}</summary><p>${escG(item.answer)}</p></details>`).join('');
+    const registrationPanel = `<form id="register-form" novalidate>
+          <span class="eyebrow">MANUAL ADMISSION · CREATE YOUR ACCOUNT</span>
+          <h2>Set your <em>password.</em></h2>
+          <p>This is the shared registration page. The course admin verifies payment and approves your Telegram account in the bot before registration is enabled.</p>
+          <div class="field"><label for="register-telegram">Telegram username or numeric ID</label><input class="form-control" id="register-telegram" name="telegramIdentity" type="text" autocomplete="off" maxlength="33" required placeholder="@username or 123456789"></div>
+          <p class="sign-in-hint">Enter the same Telegram account you used with the course bot. Send <code>/id</code> to the bot if you need your numeric ID.</p>
+          <div class="field"><label for="register-name">Full name</label><input class="form-control" id="register-name" name="name" type="text" autocomplete="name" maxlength="100" required placeholder="Your name"></div>
+          <div class="field"><label for="register-email">Email address</label><input class="form-control" id="register-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
+          <div class="field"><label for="register-password">Create a personal password</label><input class="form-control" id="register-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="At least 10 characters"></div>
+          <div class="field"><label for="register-confirm">Confirm password</label><input class="form-control" id="register-confirm" name="confirm" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="Enter the same password again"></div>
+          <p class="account-security-note">Your password is personal to your account and is used for future sign-ins. It cannot be retrieved automatically; if you lose it, contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
+          <p id="register-error" class="form-help" role="alert">${escG(message)}</p>
+          <button class="button" type="submit" style="width:100%">CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span></button>
+        </form>`;
+
     root.innerHTML = `
     <main class="gate-page">
       <div class="gate-stage">
-      <div class="gate-visual">
-        <img src="presentation/assets/studio-gate-still-life.jpg" alt="Generated studio still life in the course palette: candlelight, antique porcelain and glass with a narrow plane of focus">
-        <div class="gate-visual-copy">
-          <span class="eyebrow">${escG(g.eyebrow)}</span>
-          <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
-          <p>${escG(g.lead)}</p>
-          <button class="gate-more" type="button" data-scroll-info>${escG(g.aboutCourse)}</button>
-          <button class="gate-more" type="button" data-author-open>${escG(g.aboutAuthor)}</button>
-        </div>
-      </div>
-      <div class="gate-form-wrap">
-        <div class="gate-form">
-          <form id="gate-form" novalidate>
-            <div class="gate-lock"><i aria-hidden="true">✳</i><span>Individual course password<br>Delivered after Tribute payment</span></div>
-            <span class="eyebrow">${escG(g.formEyebrow)}</span>
-            <h2>${escG(g.formTitle)} <em>${escG(g.formAccent)}</em></h2>
-            <p>${escG(g.formLead)}</p>
-            <div class="field">
-              <label for="course-password">Individual password</label>
-              <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
-                     inputmode="text" spellcheck="false" required placeholder="Enter your personal course password" aria-describedby="gate-error">
-            </div>
-            <p id="gate-error" class="form-help" role="alert">${message}</p>
-            <button class="button" type="submit" style="width:100%">OPEN THE COURSE <span aria-hidden="true">↗</span></button>
-          </form>
-
-          <div class="gate-note" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
-            <span class="eyebrow" style="margin-bottom:10px">PAID ACCESS · DELIVERED IN TELEGRAM</span>
-            <b>Get your individual password through Tribute</b>
-            <p style="margin:6px 0 14px">Open the course bot and tap Start, then pay inside Telegram with Tribute. Your personal password is sent to that chat as soon as the payment is confirmed.</p>
-            <button class="button light small" type="button" data-tribute-open style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
+        <div class="gate-visual">
+          <img class="film-photo" src="presentation/assets/project-joi-bar.jpg" alt="Black-and-white close-up of paper cups and the espresso bar at Joi, softly focused and drawn from the author's own project archive">
+          <div class="gate-visual-copy">
+            <span class="eyebrow">${escG(g.eyebrow)}</span>
+            <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
+            <p>${escG(g.lead)}</p>
+            <button class="gate-more" type="button" data-scroll-info>${escG(g.aboutCourse)}</button>
+            <button class="gate-more" type="button" data-author-open>${escG(g.aboutAuthor)}</button>
           </div>
         </div>
-      </div>
+        <div class="gate-form-wrap">
+          <div class="gate-form">
+              <div class="gate-lock"><i aria-hidden="true">✳</i><span>PERSONAL COURSE ACCESS<br>Admission approved manually in Telegram</span></div>
+            <div class="gate-auth-tabs" role="group" aria-label="Account access">
+              <button type="button" data-gate-mode="login" class="${registering ? '' : 'active'}" aria-pressed="${!registering}">LOG IN</button>
+              <button type="button" data-gate-mode="register" class="${registering ? 'active' : ''}" aria-pressed="${registering}">REGISTER</button>
+            </div>
+            <section class="gate-auth-panel" ${registering ? 'hidden' : ''}>
+              <form id="login-form" novalidate>
+                <span class="eyebrow">RETURNING LEARNER</span>
+                <h2>Welcome <em>back.</em></h2>
+                <p>Sign in with the email and personal password you set during registration.</p>
+                <div class="field"><label for="login-email">Email address</label><input class="form-control" id="login-email" name="email" type="email" autocomplete="username" placeholder="you@example.com"></div>
+                <div class="field"><label for="login-password">Password</label><input class="form-control" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Your personal password"></div>
+                <p class="sign-in-hint">Administrator access and legacy access codes can be entered in the password field without an email address.</p>
+                <p id="gate-error" class="form-help" role="alert">${registering ? '' : escG(message)}</p>
+                <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
+                <p class="password-support">Forgot your password? It cannot be retrieved automatically. Contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
+              </form>
+            </section>
+            <section class="gate-auth-panel" ${registering ? '' : 'hidden'}>${registrationPanel}</section>
+          </div>
+        </div>
       </div>
 
       <section class="gate-info" id="gate-info">
@@ -219,14 +272,16 @@
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
               <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
-              <div class="gate-fact"><strong>01</strong><span>Password opens everything</span></div>
+              <div class="gate-fact"><strong>01</strong><span>Personal account</span></div>
             </div>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
-            <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
-            <p class="gate-note-line">Photography: the author’s archive and credited editorial sources — the full list with rights is published inside the course.</p>
+            <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>
+            <p class="gate-note-line">Author photographs from Joi and Pacific are shown in a black-and-white, close-detail film-inspired treatment. Other editorial photographs are sourced from public websites and press materials. Each image is credited; full source links and rights notes are published inside the course.</p>
           </article>
         </div>
       </section>
+
+      ${faqItems ? `<section class="gate-info gate-faq" aria-labelledby="gate-faq-title"><div class="gate-info-inner gate-info-slim"><article class="gate-card"><span class="eyebrow">HELP · STUDENT FAQ</span><h3 id="gate-faq-title">Registration, questions<br>and <em>support</em>.</h3>${faqItems}</article></div></section>` : ''}
 
       <footer class="gate-foot">
         <span>© 2026 Egor Tarasenko · Course content &amp; author IP</span>
@@ -235,166 +290,75 @@
         <button class="gate-author-link" type="button" data-author-open>About the author</button>
       </footer>
     </main>`;
+
     root.querySelector('[data-scroll-info]')?.addEventListener('click', () => document.getElementById('gate-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    const field = document.getElementById('course-password');
-    field?.focus({ preventScroll: true });
+    root.querySelectorAll('[data-gate-mode]').forEach(button => {
+      button.addEventListener('click', () => {
+        registrationMode = button.dataset.gateMode === 'register';
+        renderGate('', button.dataset.gateMode);
+      });
+    });
+    document.querySelector('.gate-auth-panel:not([hidden]) input')?.focus({ preventScroll: true });
   }
 
-  let tributeOverlay = null;
-  let tributeLastFocus = null;
-
-  const closeTributeModal = () => {
-    if (!tributeOverlay) return;
-    tributeOverlay.classList.remove('show');
-    document.body.classList.remove('tribute-open');
-    const el = tributeOverlay;
-    tributeOverlay = null;
-    setTimeout(() => el.remove(), 220);
-    tributeLastFocus?.focus?.({ preventScroll: true });
-  };
-
-  const openTributeModal = async () => {
-    if (tributeOverlay) return;
-    tributeLastFocus = document.activeElement;
-    let settings = {};
-    try {
-      const response = await fetch('/api/tribute/status', { headers: { Accept: 'application/json' } });
-      if (response.ok) settings = await response.json();
-    } catch { /* show a closed checkout state if the service is unavailable */ }
-
-    const productUrl = settings.productUrl || '';
-    const subscriptionUrl = settings.subscriptionUrl || '';
-    const botUrl = settings.botStartUrl || '';
-    const productTitle = settings.productTitle || 'Contemporary Horeca Scene · 2026 Edition';
-    const productOffer = Boolean(settings.deliveryReady && settings.productCheckoutReady && productUrl && botUrl);
-    const subscriptionOffer = Boolean(settings.deliveryReady && settings.subscriptionCheckoutReady && subscriptionUrl && botUrl);
-    const price = productOffer && subscriptionOffer
-      ? `Product: ${settings.productPrice || 'price in Tribute'} · Subscription: ${settings.subscriptionPrice || 'price in Tribute'}`
-      : subscriptionOffer ? (settings.subscriptionPrice || 'Price shown in Tribute')
-        : (settings.productPrice || 'Price shown in Tribute');
-    const canPay = productOffer || subscriptionOffer;
-    const offerLabel = productOffer && subscriptionOffer
-      ? 'LIFETIME PRODUCT OR RECURRING SUBSCRIPTION'
-      : subscriptionOffer ? 'RECURRING SUBSCRIPTION · EXPIRY SET BY TRIBUTE'
-        : productOffer ? 'ONE-TIME PRODUCT · LIFETIME ACCESS'
-          : 'TRIBUTE PAYMENT SETUP REQUIRED';
-    const entitlementNote = productOffer && subscriptionOffer
-      ? 'A one-time product purchase grants lasting access. Subscription renewals extend access to the expiry reported by Tribute; cancellation stops renewal, while access follows that verified expiry.'
-      : subscriptionOffer
-        ? 'Subscription renewals extend access to the expiry reported by Tribute. Cancellation stops renewal; course access ends on the verified expiry date.'
-        : 'A confirmed one-time product purchase grants lasting access. No renewal is required.';
-    const botStep = botUrl
-      ? `<a class="button light tribute-bot-start" href="${escapeHtml(botUrl)}" target="_blank" rel="noopener noreferrer">1 · OPEN THE COURSE BOT <span aria-hidden="true">↗</span></a>`
-      : '<div class="tribute-setup-note">The course bot link is not configured yet. Please contact the course team before paying.</div>';
-    const paymentSteps = [];
-    if (productOffer) paymentSteps.push(`<a class="button tribute-direct-pay" href="${escapeHtml(productUrl)}" target="_blank" rel="noopener noreferrer">2 · BUY LIFETIME PRODUCT ACCESS <span aria-hidden="true">↗</span></a>`);
-    if (subscriptionOffer) paymentSteps.push(`<a class="button tribute-direct-pay" href="${escapeHtml(subscriptionUrl)}" target="_blank" rel="noopener noreferrer">2 · START COURSE SUBSCRIPTION <span aria-hidden="true">↗</span></a>`);
-    const payStep = paymentSteps.length
-      ? paymentSteps.join('')
-      : '<button class="button tribute-direct-pay" type="button" disabled>TRIBUTE CHECKOUT IS NOT OPEN YET</button><p class="tribute-unavailable">Automatic password delivery is still being configured. Please try again later.</p>';
-
-    tributeOverlay = document.createElement('div');
-    tributeOverlay.className = 'tribute-overlay';
-    tributeOverlay.innerHTML = `
-      <div class="tribute-dialog" role="dialog" aria-modal="true" aria-labelledby="tribute-title" tabindex="-1">
-        <button class="tribute-close" type="button" data-tribute-close aria-label="Close Tribute payment dialog">✕</button>
-        <header class="tribute-head">
-          <span class="eyebrow">TRIBUTE · PERSONAL COURSE ACCESS</span>
-          <h2 id="tribute-title">Your own <em>key</em>.</h2>
-          <p class="tribute-price-badge">${escapeHtml(offerLabel)} · ONE INDIVIDUAL PASSWORD · ${escapeHtml(price)}</p>
-        </header>
-        <div class="tribute-body">
-          <p class="tribute-desc"><strong>${escapeHtml(productTitle)}</strong> opens the complete course: every module, lesson and assignment. Your individual password is delivered by our Telegram bot after Tribute confirms your payment.</p>
-          <div class="tribute-flow">
-            <div><span>01</span><p><strong>Start the course bot.</strong> Telegram only lets a bot message people who have opened it first.</p></div>
-            <div><span>02</span><p><strong>${subscriptionOffer && !productOffer ? 'Start your subscription inside Tribute.' : 'Pay inside Tribute.'}</strong> The transaction stays in Telegram.</p></div>
-            <div><span>03</span><p><strong>Receive your password.</strong> The bot sends it automatically after confirmation; use <code>/password</code> to retrieve it again. ${escapeHtml(entitlementNote)}</p></div>
-          </div>
-          <div class="tribute-direct-box">
-            <span class="eyebrow tight" style="color:var(--red)">SECURE, AUTOMATIC DELIVERY</span>
-            <div class="tribute-actions">${botStep}${payStep}</div>
-            <p class="tribute-help">Already paid? Open the course bot and send <code>/password</code>. If payment is still processing, the bot will deliver your code as soon as Tribute confirms it.</p>
-            <div class="tribute-transparency">
-              <span class="eyebrow tight">WHAT YOUR PAYMENT COVERS · FULL TRANSPARENCY</span>
-              <ul>
-                <li>The complete elective: all ${C.modules.length} modules, every lesson, human assignment review and the certificate — one individual password, no extra fees.</li>
-                <li>Price and currency are shown in the Tribute checkout; the course app never sees or stores card data.</li>
-                <li>One purchase = one personal password, delivered automatically by the course bot; retrieving it later with <code>/password</code> is free.</li>
-                <li>Receipts and refunds follow the Tribute (Telegram) policy; the course team answers any payment question at egor.tarasenko@him-mail.ch.</li>
-                <li>The administrator master password opens the admin panel only — it is never issued to students, who always receive individual Tribute passwords.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>`;
-
-    document.body.appendChild(tributeOverlay);
-    document.body.classList.add('tribute-open');
-    requestAnimationFrame(() => {
-      tributeOverlay?.classList.add('show');
-      tributeOverlay?.querySelector('.tribute-dialog')?.focus({ preventScroll: true });
-    });
-  };
-
-  window.openTributeModal = openTributeModal;
-
-  /* --- events ------------------------------------------------------------- */
-  document.addEventListener('click', event => {
-    if (event.target.closest('[data-tribute-open]')) {
-      event.preventDefault();
-      openTributeModal();
-      return;
-    }
-    if (event.target.closest('[data-tribute-close]') || (tributeOverlay && event.target === tributeOverlay)) {
-      event.preventDefault();
-      closeTributeModal();
-    }
-  });
-
-  document.addEventListener('keydown', event => {
-    if (!tributeOverlay) return;
-    if (event.key === 'Escape') {
-      event.stopImmediatePropagation();
-      closeTributeModal();
-      return;
-    }
-    if (event.key === 'Tab') {
-      const items = [...tributeOverlay.querySelectorAll('button:not([disabled]), a[href]')];
-      if (!items.length) return;
-      const first = items[0], last = items[items.length - 1];
-      if (event.shiftKey && (document.activeElement === first || document.activeElement === tributeOverlay.querySelector('.tribute-dialog'))) {
-        event.preventDefault(); last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault(); first.focus();
-      }
-    }
-  }, true);
-
+  /* --- forms --------------------------------------------------------------- */
   document.addEventListener('submit', async event => {
-    if (event.target.id !== 'gate-form') return;
-    event.preventDefault();
     const form = event.target;
-    const button = form.querySelector('button[type=submit]');
-    const error = document.getElementById('gate-error');
-    const password = String(new FormData(form).get('password') || '').trim();
-    if (!password) {
-      error.textContent = 'Enter the individual course password sent by the Telegram bot.';
+    if (form.id === 'login-form') {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]');
+      const error = document.getElementById('gate-error');
+      const email = String(new FormData(form).get('email') || '').trim();
+      const password = String(new FormData(form).get('password') ?? '');
+      if (!password) {
+        error.textContent = 'Enter your email and personal password.';
+        return;
+      }
+      if (button) { button.disabled = true; button.textContent = 'CHECKING ACCESS…'; }
+      error.textContent = '';
+      const result = await apiUnlock(email, password);
+      if (result.state === 'granted') { await unlock(); return; }
+      if (button) { button.disabled = false; button.innerHTML = 'SIGN IN <span aria-hidden="true">↗</span>'; }
+      error.textContent = result.state === 'unsupported'
+        ? 'The secure sign-in service is temporarily unavailable. Please try again shortly.'
+        : (result.error || 'Email or password is incorrect.');
       form.classList.remove('shake');
       void form.offsetWidth;
       form.classList.add('shake');
       return;
     }
-    if (button) { button.disabled = true; button.textContent = 'CHECKING ACCESS…'; }
-    error.textContent = '';
-    const result = await apiUnlock(password);
-    if (result.state === 'granted') { await unlock(); return; }
-    if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE <span aria-hidden="true">↗</span>'; }
-    error.textContent = result.state === 'unsupported'
-      ? 'The secure password service is temporarily unavailable. Please try again shortly.'
-      : (result.error || 'Incorrect password. Check the code sent by the course bot.');
-    form.classList.remove('shake');
-    void form.offsetWidth;
-    form.classList.add('shake');
+
+    if (form.id === 'register-form') {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]');
+      const error = document.getElementById('register-error');
+      const values = Object.fromEntries(new FormData(form).entries());
+      const password = String(values.password || '');
+      const confirm = String(values.confirm || '');
+      if (!String(values.telegramIdentity || '').trim()) {
+        error.textContent = 'Enter the Telegram username or numeric ID you used with the course bot.';
+        return;
+      }
+      if (password.length < 10) {
+        error.textContent = 'Choose a password with at least 10 characters.';
+        return;
+      }
+      if (password !== confirm) {
+        error.textContent = 'The passwords do not match.';
+        return;
+      }
+      if (button) { button.disabled = true; button.textContent = 'CREATING YOUR ACCOUNT…'; }
+      error.textContent = '';
+      const result = await apiRegister({ name: values.name, email: values.email, password, telegramIdentity: values.telegramIdentity });
+      if (result.state === 'granted') { await unlock(); return; }
+      if (button) { button.disabled = false; button.innerHTML = 'CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span>'; }
+      error.textContent = result.state === 'unsupported'
+        ? 'The secure registration service is temporarily unavailable. Please try again shortly.'
+        : (result.error || 'Your account could not be created. Please check the details and try again.');
+      form.classList.remove('shake');
+      void form.offsetWidth;
+      form.classList.add('shake');
+    }
   });
 
   /* --- boot --------------------------------------------------------------- */
@@ -408,9 +372,10 @@
       } catch { /* SDK not available */ }
     }
     const [status, site] = await Promise.all([apiStatus(), fetchSiteCopy()]);
+    siteCopy = site;
     if (status.state === 'granted') { await unlock(true); return; }
     renderGate(status.state === 'unsupported'
-      ? 'THE SECURE PASSWORD SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'
-      : '', site);
+      ? 'THE SECURE ACCESS SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'
+      : '', registrationMode ? 'register' : 'login');
   })();
 })();
