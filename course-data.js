@@ -481,7 +481,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
-      image: 'project-joi-bar.jpg',
+      image: 'web-insider-lab.webp',
       practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
@@ -890,7 +890,8 @@ window.COURSE = {
     contact: 'egor.tarasenko@him-mail.ch',
     files: [
       { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
-      { file: 'web-insider-station.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' }
+      { file: 'web-insider-station.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
+      { file: 'web-insider-lab.webp', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab cocktail laboratory (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph via the Cocktail Pilgrim feature · educational commentary · takedown on request', source: 'https://questamiamilano.com/cocktailpilgrim/insidermoscow' }
     ],
     illustrative: [
       { file: 'project-detail-nine-lives-bar.jpg', note: 'Illustrative bar-counter study from the author’s archive, used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
