@@ -185,7 +185,7 @@ window.COURSE = {
       number: '01',
       title: 'Hospitality Futures',
       description: 'Read the signals reshaping hospitality, from global rankings (MICHELIN, The 50 Best, GreatList) to the shokunin mastery of Jiro Ono and the independent scene-building of Igor Zernov.',
-      image: 'project-detail-street-press.jpg',
+      image: 'studio-m01-signals.jpg',
       practitioners: ['Jiro Ono (Sukiyabashi Jiro, Tokyo)', 'Igor Zernov (El Copitas / #FollowTheRabbits)'],
       lessons: [
         {
@@ -212,7 +212,7 @@ window.COURSE = {
       number: '02',
       title: 'Experience Design',
       description: 'Explore how space, service choreography, antique vessels, candlelight and sound keep the “sweet fairy tale” intact — with Simone Caporale, Alex Kratena and Denis Bobkov.',
-      image: 'project-coocoo-room.jpg',
+      image: 'studio-m02-atmosphere.jpg',
       practitioners: ['Simone Caporale (Sips Barcelona · №1 World’s 50 Best Bars 2023)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Denis Bobkov (Pub Life Group · Black Swan · Bambule)'],
       lessons: [
         {
@@ -239,7 +239,7 @@ window.COURSE = {
       number: '03',
       title: 'Neurogastronomy',
       description: 'Understand how perception, gastrophysics, vessel weight and multisensory design shape flavour — through Artem Talalay, Dave Arnold, Jiro Ono and Hiroyasu Kayama.',
-      image: 'project-tam-cubes.jpg',
+      image: 'studio-m03-senses.jpg',
       practitioners: ['Artem Talalay (World Class Russia Winner)', 'Dave Arnold (Liquid Intelligence)', 'Jiro Ono (Sukiyabashi Jiro)', 'Hiroyasu Kayama (Bar Benfiddich)'],
       lessons: [
         {
@@ -266,7 +266,7 @@ window.COURSE = {
       number: '04',
       title: 'Restaurant & Bar Concepts & 50 Best Menu Breakdown',
       description: 'Deconstruct how the World’s 50 Best Bars & Restaurants build concepts and physical menu artefacts — learning from Rémy Savage, Alex Kratena, Boris Zarkov, Igor Zernov, Bar Leone and Tuju.',
-      image: 'project-joi-brand.jpg',
+      image: 'studio-m04-menu.jpg',
       practitioners: ['Rémy Savage (Little Red Door · Shapes · Bar Nouveau)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Igor Zernov (El Copitas · Tagliatella Caffe · Paloma Cantina)'],
       lessons: [
         {
@@ -311,7 +311,7 @@ window.COURSE = {
       number: '05',
       title: 'Technology & Automation',
       description: 'Consider where technology, station ergonomics and operational standards improve speed and margins — with Bek Narzi and Artem Talalay.',
-      image: 'web-insider-station.jpg',
+      image: 'studio-m05-automation.jpg',
       practitioners: ['Bek Narzi (City Space Bar · The Horeca Code)', 'Artem Talalay (World Class Speed & Ergonomics)'],
       lessons: [
         {
@@ -337,7 +337,7 @@ window.COURSE = {
       number: '06',
       title: 'AI in Hospitality',
       description: 'Assess emerging AI workflows, creative briefs and operational forecasting — contrasting algorithmic tools with the human authorship of Rémy Savage and Simone Caporale.',
-      image: 'project-tam-tool.jpg',
+      image: 'studio-m06-ai.jpg',
       practitioners: ['Rémy Savage (Conceptual Authorship)', 'Simone Caporale (Bespoke Vessel Craft & Avant-Garde Mixology)'],
       lessons: [
         {
@@ -363,7 +363,7 @@ window.COURSE = {
       number: '07',
       title: 'Food & Beverage Futures',
       description: 'Explore farm-to-glass mixology, hyper-seasonal terroir, fermentation and beverage science through Hiroyasu Kayama, René Redzepi, Dave Arnold and Artem Talalay.',
-      image: 'project-passie-counter.jpg',
+      image: 'studio-m07-fnb.jpg',
       practitioners: ['Hiroyasu Kayama (Bar Benfiddich, Tokyo)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)', 'Artem Talalay (World Class)'],
       lessons: [
         {
@@ -392,7 +392,7 @@ window.COURSE = {
       number: '08',
       title: 'Entrepreneurship',
       description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov and Boris Zarkov.',
-      image: 'project-joi-facade.jpg',
+      image: 'studio-m08-venture.jpg',
       practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · Krasota · IKRA)'],
       lessons: [
         {
@@ -419,7 +419,7 @@ window.COURSE = {
       number: '09',
       title: 'Budget Realisation, Scenography & Found-Object Mockup',
       description: 'Prove that a venue with soul does not need a fortune: Denis Bobkov’s salvage-built theatrical pubs (Black Swan, Bambule), Egor Tarasenko’s street-sourced Joi Espresso Bar — and your real physical mockup assembled from found objects, antique tableware, candles and menu concepts.',
-      image: 'project-detail-chess-morning.jpg',
+      image: 'studio-m09-found.jpg',
       practitioners: ['Denis Bobkov (Pub Life Group · Black Swan · Bambule · Abbey Players)', 'Egor Tarasenko (Joi Espresso Bar)'],
       lessons: [
         {
@@ -481,7 +481,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
-      image: 'web-insider-lab.webp',
+      image: 'studio-m10-mockup.jpg',
       practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
@@ -893,7 +893,7 @@ window.COURSE = {
     }
   ],
   imageCredits: {
-    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. A few author-archive photographs carry subtle AI processing (exposure and shadow-detail recovery only, composition untouched); each processed file is labelled “AI-processed” both under the image and in this list. Third-party editorial photographs and venue photographs (including Insider Bar Lab) are never altered. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. A few author-archive photographs carry subtle AI processing (exposure and shadow-detail recovery only, composition untouched); each processed file is labelled “AI-processed” both under the image and in this list. Third-party editorial photographs and venue photographs (including Insider Bar Lab) are never altered. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly. Cover still lifes prefixed "studio-" (the password gate, the landing hero and the module cover series) are generated product photography in the course colour script — semi-abstract, with a deliberately narrow plane of focus — and depict no real venue.',
     contact: 'egor.tarasenko@him-mail.ch',
     files: [
       { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
@@ -908,6 +908,7 @@ window.COURSE = {
       { file: 'project-tam-flatlay.jpg', note: 'Illustrative R&D flat-lay from the author’s TAM / TYT object line, used in the Dave Arnold · Liquid Intelligence case file. It does not depict a laboratory.' }
     ],
     groups: [
+      { prefix: ['studio-'], short: 'GENERATED STUDIO PRODUCT PHOTOGRAPHY · COURSE COLOUR SCRIPT', credit: 'AI-generated studio product photography commissioned for the elective — signal red #e42313, deep maroon #410c0c, ink #0a0a0a and warm paper #f4f3f0; semi-abstract still lifes with a deliberately narrow plane of focus', license: 'Commissioned for the course · illustrative, depicts no real venue', source: 'Generated in-app from the author’s archive references (October 2026)' },
       { prefix: ['project-', 'author-'], short: 'PHOTO · EGOR TARASENKO ARCHIVE', credit: '© Egor Tarasenko — author’s personal archive', license: 'All rights reserved · published with the author’s permission', source: 'Original camera files kept in the course repository (repository root)' },
       { prefix: ['case-', 'figure-'], short: 'PHOTO · EDITORIAL REFERENCE · © RESPECTIVE PHOTOGRAPHER', credit: '© respective photographers and venues — editorial reference images', license: 'Educational commentary inside the password-protected elective · takedown requests honoured', source: 'Curated from public press and website materials, September 2026' },
       { prefix: ['him-logo-white.png'], short: '© SWISS EDUCATION GROUP / HIM', credit: 'HIM Business School logo · © Swiss Education Group', license: 'Trademark · used for identification only', source: 'swisseducation.com — HIM Business School page' }

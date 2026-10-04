@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const vm = require('node:vm');
+const { createAdminConsole } = require('./admin-bot.ru.js');
 
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
@@ -80,23 +81,46 @@ const ATTEMPT_WINDOW = 10 * 60 * 1000;
 const ATTEMPT_LIMIT = 20;
 
 /* The admin bot edits course content by block; resolve blocks from the shipped course data. */
-function loadCourseModules() {
+function loadCourseData() {
   try {
     const context = { window: {} };
     vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'course-data.js'), 'utf8'), context);
-    const modules = context.window?.COURSE?.modules || [];
-    return modules.map(m => ({
-      id: String(m.id || ''),
-      number: String(m.number || ''),
-      title: String(m.title || ''),
-      lessons: (m.lessons || []).map(l => ({ id: String(l.id || ''), title: String(l.title || '') })),
-    }));
+    return context.window?.COURSE || null;
   } catch (err) {
     console.warn('Could not read course-data.js for editor block resolution:', err.message);
-    return [];
+    return null;
   }
 }
-const COURSE_MODULES = loadCourseModules();
+const COURSE_DATA = loadCourseData();
+const COURSE_MODULES = (COURSE_DATA?.modules || []).map(m => ({
+  id: String(m.id || ''),
+  number: String(m.number || ''),
+  title: String(m.title || ''),
+  lessons: (m.lessons || []).map(l => ({ id: String(l.id || ''), title: String(l.title || '') })),
+}));
+
+/* Editable public site copy (password gate + landing hero + quote band). Defaults live in
+   site-copy.js; admin-bot overrides (scope "site") are merged server-side for /api/site. */
+function loadSiteDefaults() {
+  try {
+    const context = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'site-copy.js'), 'utf8'), context);
+    return context.window?.SITE || null;
+  } catch (err) {
+    console.warn('Could not read site-copy.js for site copy defaults:', err.message);
+    return null;
+  }
+}
+const SITE_DEFAULTS = loadSiteDefaults();
+function siteCopyWithOverrides() {
+  const base = JSON.parse(JSON.stringify(SITE_DEFAULTS || { gate: {}, landing: {} }));
+  for (const override of store.editor.overrides) {
+    if (override.scope !== 'site' || typeof override.text !== 'string') continue;
+    const group = base[override.targetId];
+    if (group && typeof group[override.field] === 'string') group[override.field] = override.text;
+  }
+  return base;
+}
 const EDITOR_MODULE_FIELDS = ['description', 'title'];
 const EDITOR_LESSON_FIELDS = ['intro', 'body', 'challenge', 'title'];
 
@@ -149,6 +173,7 @@ function defaultStore() {
     editor: { materials: [], posts: [], overrides: [] },
     adminBot: {
       adminChatIds: [...ADMIN_IDS],
+      pending: {},
       logs: [
         {
           id: 'log-boot',
@@ -219,6 +244,7 @@ function loadStore() {
           ...def.adminBot,
           ...(parsed.adminBot || {}),
           adminChatIds: [...new Set([...(parsed.adminBot?.adminChatIds || []), ...ADMIN_IDS])],
+          pending: (parsed.adminBot?.pending && typeof parsed.adminBot.pending === 'object' && !Array.isArray(parsed.adminBot.pending)) ? parsed.adminBot.pending : {},
           logs,
         },
       };
@@ -625,6 +651,42 @@ async function sendTelegramMessage(chatId, text, replyMarkup = undefined) {
   }
 }
 
+async function editTelegramMessage(chatId, messageId, text, replyMarkup = undefined) {
+  if (!process.env.BOT_TOKEN || !chatId || !messageId) return false;
+  try {
+    const body = { chat_id: chatId, message_id: messageId, text, parse_mode: 'HTML' };
+    if (replyMarkup) body.reply_markup = replyMarkup;
+    const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/editMessageText`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10_000),
+    });
+    const result = await response.json().catch(() => null);
+    /* "message is not modified" is a benign race when the admin taps twice */
+    return Boolean(response.ok && (result?.ok === true || result?.error_code === 400));
+  } catch {
+    return false;
+  }
+}
+
+async function answerCallbackQuery(callbackQueryId, text = undefined) {
+  if (!process.env.BOT_TOKEN || !callbackQueryId) return false;
+  try {
+    const body = { callback_query_id: callbackQueryId };
+    if (text) body.text = text;
+    const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/answerCallbackQuery`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(5_000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 function paymentKeyboard() {
   const status = getTributeStatus();
   if (!status.deliveryReady) return undefined;
@@ -789,10 +851,17 @@ async function handleAccessBotMessage(message) {
   await sendTelegramMessage(chatId, 'Use /start to purchase course access or /password to retrieve a password already issued to this Telegram account.');
 }
 
+/* Set once the Russian inline-button admin console is constructed (bottom of this file). */
+let adminConsoleRef = null;
+
 async function notifyAdminsOnSubmission(submission) {
   const fileNames = (submission.files || []).map(f => f.name).join(', ') || 'No files';
-  const summary = `📩 <b>New submission: ${submission.assignment}</b>\nStudent: ${submission.name} (${submission.student})\nFiles: ${fileNames}\nID: <code>${submission.id}</code>\n\nAnswer:\n${submission.answer.slice(0, 600)}`;
   addBotLog('submission', `New submission ${submission.id} from ${submission.name} (${submission.assignment}) · Files: ${fileNames}`);
+  if (adminConsoleRef) {
+    await adminConsoleRef.notifySubmission(submission);
+    return;
+  }
+  const summary = `📩 <b>New submission: ${submission.assignment}</b>\nStudent: ${submission.name} (${submission.student})\nFiles: ${fileNames}\nID: <code>${submission.id}</code>\n\nAnswer:\n${submission.answer.slice(0, 600)}`;
   for (const chatId of store.adminBot.adminChatIds) {
     await sendTelegramMessage(chatId, summary, {
       inline_keyboard: [
@@ -1098,6 +1167,27 @@ async function executeBotCommand(rawCommand) {
   return { ok: false, reply: `Unknown command: ${escapeHtml(command)}. Enter /help for the command list.` };
 }
 
+/* Russian inline-button admin console (admin-bot.ru.js): menus, block editor, reviews. */
+const adminConsole = createAdminConsole({
+  store: () => store,
+  saveStore,
+  addBotLog,
+  escapeHtml,
+  editorId,
+  validHttpsUrl,
+  sendTelegramMessage,
+  editTelegramMessage,
+  answerCallbackQuery,
+  executeBotCommand,
+  applyAdminReview,
+  isStudentAccessActive,
+  getTributeStatus,
+  courseData: () => COURSE_DATA,
+  courseModules: () => COURSE_MODULES,
+  siteDefaults: () => SITE_DEFAULTS,
+});
+adminConsoleRef = adminConsole;
+
 /* Telegram long polling handles both customer access and the private admin console. */
 if (process.env.BOT_TOKEN) {
   let offset = 0;
@@ -1120,11 +1210,10 @@ if (process.env.BOT_TOKEN) {
                 store.adminBot.adminChatIds.push(chatId);
                 saveStore();
               }
-              await sendTelegramMessage(chatId, '✅ You are authorised as an administrator for Contemporary Horeca Scene. Enter /help for the admin command list.');
+              await adminConsole.showAuthorized(chatId);
             }
           } else if (admin) {
-            const result = await executeBotCommand(message.text);
-            await sendTelegramMessage(chatId, result.reply);
+            await adminConsole.handleAdminMessage(message);
           } else {
             await handleAccessBotMessage(message);
           }
@@ -1134,18 +1223,7 @@ if (process.env.BOT_TOKEN) {
         if (callback?.data && callback?.message?.chat?.id) {
           const chatId = String(callback.message.chat.id);
           if (store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId)) {
-            const [action, submissionId] = callback.data.split(':');
-            if (action === 'approve') {
-              const result = applyAdminReview({
-                submissionId,
-                decision: 'APPROVED',
-                feedbackText: 'Great work! Your assignment has been approved through the Admin Bot.',
-                via: 'admin-bot',
-              });
-              if (!result.error) await sendTelegramMessage(chatId, `✅ Submission ${escapeHtml(submissionId)} approved! To add detailed feedback: <code>/approve ${escapeHtml(submissionId)} your feedback</code>`);
-            } else if (action === 'revise') {
-              await sendTelegramMessage(chatId, `✏️ Send a command with your feedback:\n<code>/revise ${escapeHtml(submissionId)} what needs to change</code>`);
-            }
+            await adminConsole.handleCallback(callback);
           }
         }
       }
@@ -1400,6 +1478,12 @@ const server = http.createServer(async (req, res) => {
     return respond(res, 400, 'Bad request');
   }
 
+  /* --- 0b. Public editable site copy (gate + landing defaults + admin overrides) --- */
+  if (pathname === '/api/site') {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return respond(res, 405, 'Method not allowed');
+    return json(res, 200, siteCopyWithOverrides());
+  }
+
   /* --- 1. Course Access API (/api/access) --- */
   if (pathname === '/api/access') {
     if (req.method === 'GET' || req.method === 'HEAD') {
@@ -1425,15 +1509,13 @@ const server = http.createServer(async (req, res) => {
     if (payload.action === 'revoke') {
       return json(res, 200, { unlocked: false }, { 'Set-Cookie': cookieHeader('', req, 0) });
     }
-    const retryAfter = throttle(ip);
-    if (retryAfter > 0) {
-      return json(res, 429, { error: 'Too many attempts', retryAfter }, { 'Retry-After': String(retryAfter) });
-    }
-
     const candidate = String(payload.password || '').trim();
     const clientId = String(payload.clientId || '').trim() || ip;
 
-    /* Check master/admin password first */
+    /* Check master/admin password BEFORE the attempt throttle: on shared-proxy
+       deployments (BotHost) student mistypes from the same proxy IP must never
+       lock the administrator out of the course. Wrong entries still consume
+       attempts below, before personal password lookups. */
     if (matchesMasterPassword(candidate)) {
       attempts.delete(ip);
       const token = issueToken('master');
@@ -1454,6 +1536,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     /* Personal access is granted only by an issued password. */
+    const retryAfter = throttle(ip);
+    if (retryAfter > 0) {
+      return json(res, 429, { error: 'Too many attempts', retryAfter }, { 'Retry-After': String(retryAfter) });
+    }
     const personal = store.students.find(
       student => String(student.password || '').toUpperCase() === candidate.toUpperCase()
     );
