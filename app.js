@@ -18,7 +18,10 @@ window.bootCourse = () => {
   });
   const getState = () => { try { return { ...seedState(), ...(JSON.parse(localStorage.getItem(stateKey)) || {}) }; } catch { return seedState(); } };
   const tokenHeaders = () => { const t = localStorage.getItem('chs-access-token'); return t ? { 'X-Access-Token': t } : {}; };
-  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; applyContentOverrides(state.editor.overrides); saveState(state); } catch { /* local/offline preview */ } };
+  const adoptServerData = data => { state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; applyContentOverrides(state.editor.overrides); saveState(state); };
+  const liveSignatureOf = data => JSON.stringify([data.editor || null, data.tribute || null, data.students || null]);
+  let liveSignature = '';
+  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); adoptServerData(data); liveSignature = liveSignatureOf(data); } catch { /* local/offline preview */ } };
   const saveState = s => localStorage.setItem(stateKey, JSON.stringify(s));
   const ensureEnrollment = profile => { if (profile.role !== 'STUDENT') return; const s = getState(); if (!s.enrollments.some(x => x.studentEmail === profile.email && x.courseId === C.id && x.edition === C.edition)) { s.enrollments.push({ id: `enrol-${Date.now()}`, studentEmail: profile.email, institutionId: profile.institutionId || 'him-001', courseId: C.id, edition: C.edition, status: 'ACTIVE', startedAt: new Date().toISOString() }); saveState(s); } };
 
@@ -1137,8 +1140,28 @@ window.bootCourse = () => {
     }
   }
 
+  /* Live updates: editor and payment changes arrive in the open app without a reload. */
+  function startLiveSync() {
+    const tick = async () => {
+      try {
+        const response = await fetch('/api/state', { headers: tokenHeaders() });
+        if (!response.ok) return;
+        const data = await response.json();
+        const signature = liveSignatureOf(data);
+        if (signature === liveSignature) return;
+        const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+        adoptServerData(data);
+        if (editing) return; // do not interrupt typing; the next tick renders
+        liveSignature = signature;
+        render();
+      } catch { /* offline preview */ }
+    };
+    setInterval(tick, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+  }
+
   window.addEventListener('hashchange', render);
-  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); });
-  else { syncServerState().finally(render); }
+  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); startLiveSync(); });
+  else { syncServerState().finally(() => { render(); startLiveSync(); }); }
   if (tg?.initData) authenticateTelegram();
 };

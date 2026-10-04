@@ -443,6 +443,8 @@ test('admin bot editor manages block materials, live updates and copy overrides'
   const app = read('app.js');
   assert.match(app, /ADDITIONAL MATERIALS · MODULE/);
   assert.match(app, /applyContentOverrides/);
+  assert.match(app, /startLiveSync/);
+  assert.match(app, /visibilitychange/);
   const access = read('access.js');
   assert.match(access, /gate-info-slim/);
   assert.doesNotMatch(access, /gate-points/);
