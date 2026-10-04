@@ -19,6 +19,7 @@
   let booted = false;
   let currentUser = null;
   let siteCopy = null;
+  let tributeInfo = null;
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -108,12 +109,12 @@
     }
   };
 
-  const apiUnlock = async (email, password) => {
+  const apiUnlock = async (identifier, password) => {
     try {
       const response = await fetch('/api/access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email, password, clientId: getClientId() }),
+        body: JSON.stringify({ login: identifier, email: identifier, password, clientId: getClientId() }),
       });
       if (response.status === 404 || response.status === 405 || response.status === 501) {
         return { state: 'unsupported' };
@@ -192,6 +193,16 @@
     if (typeof window.bootCourse === 'function') window.bootCourse();
   }
 
+  const fetchTributeInfo = async () => {
+    try {
+      const response = await fetch('/api/tribute/status', { headers: { Accept: 'application/json' } });
+      if (!response.ok) return null;
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
   /* --- public page copy --------------------------------------------------- */
   const fetchSiteCopy = async () => {
     try {
@@ -209,6 +220,11 @@
     const escG = escapeHtml;
     const g = { ...(window.SITE?.gate || {}), ...((siteCopy && siteCopy.gate) || {}) };
     const registering = mode === 'register';
+    const purchaseUrl = tributeInfo && tributeInfo.purchaseUrl ? tributeInfo.purchaseUrl : '';
+    const botUrl = tributeInfo && tributeInfo.botStartUrl ? tributeInfo.botStartUrl : '';
+    const purchaseHint = purchaseUrl ? `<p class="tribute-hint">No login yet? <a href="${escG(purchaseUrl)}" target="_blank" rel="noopener noreferrer">Get access on Tribute ↗</a> — after payment the bot will send your login and password automatically.</p>` : '';
+    const botHint = botUrl ? `<p class="tribute-hint tribute-hint-bot">Already paid? <a href="${escG(botUrl)}" target="_blank" rel="noopener noreferrer">Open the bot ↗</a> — it checks payment automatically.</p>` : '';
+    const combinedHint = purchaseHint + botHint;
     const faqItems = (siteCopy?.faq || window.SITE?.faq || []).map(item => `<details class="gate-faq-item"><summary>${escG(item.question)}</summary><p>${escG(item.answer)}</p></details>`).join('');
     const registrationPanel = `<form id="register-form" novalidate>
           <span class="eyebrow">MANUAL ADMISSION · CREATE YOUR ACCOUNT</span>
@@ -220,9 +236,9 @@
           <div class="field"><label for="register-email">Email address</label><input class="form-control" id="register-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
           <div class="field"><label for="register-password">Create a personal password</label><input class="form-control" id="register-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="At least 10 characters"></div>
           <div class="field"><label for="register-confirm">Confirm password</label><input class="form-control" id="register-confirm" name="confirm" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="Enter the same password again"></div>
-          <p class="account-security-note">Your password is personal to your account and is used for future sign-ins. It cannot be retrieved automatically; if you lose it, contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
+          <p class="account-security-note">Your password is personal to your account and is used for future sign-ins. You can also receive a login and password automatically from the bot after paying on Tribute. It cannot be retrieved automatically; if you lose it, contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
           <p id="register-error" class="form-help" role="alert">${escG(message)}</p>
-          <button class="button" type="submit" style="width:100%">CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span></button>
+          ${purchaseUrl ? purchaseHint : ""}<button class="button" type="submit" style="width:100%">CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span></button>
         </form>`;
 
     root.innerHTML = `
@@ -249,11 +265,11 @@
               <form id="login-form" novalidate>
                 <span class="eyebrow">RETURNING LEARNER</span>
                 <h2>Welcome <em>back.</em></h2>
-                <p>Sign in with the email and personal password you set during registration.</p>
-                <div class="field"><label for="login-email">Email address</label><input class="form-control" id="login-email" name="email" type="email" autocomplete="username" placeholder="you@example.com"></div>
+                <p>Sign in with the login or email and password sent by the bot after Tribute payment.</p>
+                <div class="field"><label for="login-email">Login or email</label><input class="form-control" id="login-email" name="email" type="text" autocomplete="username" placeholder="login or you@example.com"></div>
                 <div class="field"><label for="login-password">Password</label><input class="form-control" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Your personal password"></div>
-                <p class="sign-in-hint">Administrator access and legacy access codes can be entered in the password field without an email address.</p>
-                <p id="gate-error" class="form-help" role="alert">${registering ? '' : escG(message)}</p>
+                <p class="sign-in-hint">Administrator access and legacy codes can be entered in the password field without a login.</p>
+                ${combinedHint}<p id="gate-error" class="form-help" role="alert">${registering ? '' : escG(message)}</p>
                 <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
                 <p class="password-support">Forgot your password? It cannot be retrieved automatically. Contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
               </form>
@@ -308,15 +324,15 @@
       event.preventDefault();
       const button = form.querySelector('button[type="submit"]');
       const error = document.getElementById('gate-error');
-      const email = String(new FormData(form).get('email') || '').trim();
+      const identifier = String(new FormData(form).get('email') || '').trim();
       const password = String(new FormData(form).get('password') ?? '');
       if (!password) {
-        error.textContent = 'Enter your email and personal password.';
+        error.textContent = 'Enter your login (or email) and password.';
         return;
       }
       if (button) { button.disabled = true; button.textContent = 'CHECKING ACCESS…'; }
       error.textContent = '';
-      const result = await apiUnlock(email, password);
+      const result = await apiUnlock(identifier, password);
       if (result.state === 'granted') { await unlock(); return; }
       if (button) { button.disabled = false; button.innerHTML = 'SIGN IN <span aria-hidden="true">↗</span>'; }
       error.textContent = result.state === 'unsupported'
@@ -371,8 +387,9 @@
         tgApp.setHeaderColor?.('#0a0a0a'); tgApp.setBackgroundColor?.('#ffffff');
       } catch { /* SDK not available */ }
     }
-    const [status, site] = await Promise.all([apiStatus(), fetchSiteCopy()]);
+    const [status, site, tribute] = await Promise.all([apiStatus(), fetchSiteCopy(), fetchTributeInfo()]);
     siteCopy = site;
+    tributeInfo = tribute;
     if (status.state === 'granted') { await unlock(true); return; }
     renderGate(status.state === 'unsupported'
       ? 'THE SECURE ACCESS SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'

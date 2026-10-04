@@ -140,7 +140,8 @@ function createAdminConsole(deps) {
     const s = store();
     const waiting = s.submissions.filter(x => x.status === 'WAITING FOR REVIEW').length;
     const students = s.students.filter(x => String(x.source || '').startsWith('tribute-')).length;
-    const text = `${extra ? `${extra}\n\n` : ''}🎛 <b>Админ-панель</b> · Contemporary Horeca Scene\n📋 Заявок: ${waiting} · 👥 Студентов: ${students} · ↩️ Правок: ${s.editor.overrides.length}\n\nВыбирайте раздел кнопками.`;
+    const logins = s.students.filter(x => x.login).length;
+    const text = `${extra ? `${extra}\n\n` : ''}🎛 <b>Админ-панель</b> · Contemporary Horeca Scene\n📋 Заявок: ${waiting} · 👥 Студентов: ${students} · 🔑 Логинов: ${logins} · ↩️ Правок: ${s.editor.overrides.length}\n\nВыбирайте раздел кнопками.`;
     return {
       text,
       keyboard: kb([
@@ -148,7 +149,8 @@ function createAdminConsole(deps) {
         [btn('🧱 Блоки курса', 'B')],
         [btn('📚 Материалы', 'T:0'), btn('📣 Анонсы', 'N:0')],
         [btn('👥 Студенты', 'U'), btn('💳 Платежи', 'D')],
-        [btn('⚙️ Статус', 'K'), btn('ℹ️ Команды', 'H')],
+        [btn('🔑 Логины', 'W:0'), btn('⚙️ Статус', 'K')],
+        [btn('ℹ️ Команды', 'H')],
       ]),
     };
   }
@@ -284,6 +286,42 @@ function createAdminConsole(deps) {
     return { text: `💳 <b>Платежи Tribute</b> · ${orders.length}`, keyboard: kb(rows) };
   }
 
+  function credentialsScreen(page) {
+    const learners = store().students.filter(x => x.login);
+    if (!learners.length) {
+      const pending = store().students.filter(x => !x.login && String(x.source || '').startsWith('tribute-'));
+      const hint = pending.length ? `\n\nОжидают генерации: ${pending.length} (оплата есть, логин ещё не выдан). Используйте кнопки ниже или команду /issue <telegram_id>.` : '\n\nЛогины выдаются только после подтверждённой оплаты Tribute — команда /issue <telegram_id>.';
+      return {
+        text: `🔑 <b>Логины</b> · пока нет выданных${hint}`,
+        keyboard: kb([
+          [btn('➕ Выдать логин', 'CG')],
+          [btn('📋 Ожидающие оплату', 'WG:0')],
+          [btn('◀️ Назад', 'M')],
+        ]),
+      };
+    }
+    return paged('W', page, learners, s => {
+      const active = deps.isStudentAccessActive(s) ? '🟢' : '⚪️';
+      const label = `${active} ${trunc(s.login, 18)} · ${trunc(s.name, 14)}`;
+      return [btn(label, `WC:${s.id}`)];
+    }, 'M', '🔑 <b>Выданные логины</b> — нажмите для деталей и сброса пароля');
+  }
+
+  function credentialDetail(id) {
+    const s = store().students.find(x => x.id === id);
+    if (!s) return null;
+    const hasPaid = store().tribute.orders.some(o => o.studentId === s.id && o.status === 'PAID');
+    const active = deps.isStudentAccessActive(s) ? 'АКТИВЕН' : 'НЕАКТИВЕН';
+    const text = `🔑 <b>${esc(s.login)}</b>\nСтудент: ${esc(s.name)} (${esc(s.email)})\nTelegram: ${esc(s.telegramUsername ? '@' + s.telegramUsername : s.telegramId || 'не привязан')}\nСтатус: ${active} · ${esc(s.registrationStatus || '—')}\nОплата Tribute: ${hasPaid ? 'подтверждена' : 'не найдена'}\nID: <code>${esc(s.id)}</code>\n\nПароль не показывается (хранится как hash). Нажмите «Сбросить» чтобы выдать новый.`;
+    return {
+      text,
+      keyboard: kb([
+        [btn('🔄 Сбросить пароль', `RC:${s.id}`), btn('👁 Оплата', `WC:${s.id}`)],
+        [btn('◀️ К логинам', 'W:0')],
+      ]),
+    };
+  }
+
   function materialsScreen(page) {
     const items = store().editor.materials;
     const rows = [[btn('➕ Добавить материал', 'A')]];
@@ -349,6 +387,7 @@ function createAdminConsole(deps) {
     '',
     'Текстовые команды (англ.) тоже работают:',
     '/admissions · /admit <student_id> · /reject <student_id> · /students · /orders · /resend <telegram_id>',
+    '/issue <telegram_id> — выдать логин+пароль (только после оплаты Tribute) · /reset <telegram_id> — новый пароль · /credentials [id] — список логинов',
     '/pending · /approve <id> <текст> · /revise <id> <текст> · /chat — открыть Project Q&A в приложении',
     '/addmat <модуль> <https url> <описание> · /materials · /editmat · /delmat',
     '/post <заголовок> | <текст> · /posts · /delpost',
@@ -417,6 +456,13 @@ function createAdminConsole(deps) {
         clearPending(chatId);
         deps.addBotLog('editor', `[ru-panel] post published: ${pending.title}`);
         return send(`📣 Анонс опубликован: <b>${esc(pending.title)}</b>\nПоявится на странице Updates.`, kb([[btn('📣 К анонсам', 'N:0'), btn('🎛 В меню', 'M')]]));
+      }
+      case 'cred-issue': {
+        clearPending(chatId);
+        const identifier = text.trim();
+        if (!identifier) return send('⚠️ Укажите Telegram ID, @username или student_id.', kb([[btn('🎛 В меню', 'M')]]));
+        const result = await deps.executeBotCommand(`/issue ${identifier}`);
+        return send(result.reply, kb([[btn('🔑 К логинам', 'W:0'), btn('🎛 В меню', 'M')]]));
       }
       default:
         clearPending(chatId);
@@ -572,6 +618,26 @@ function createAdminConsole(deps) {
       deps.saveStore();
       deps.addBotLog('editor', `[ru-panel] post removed: ${removed.id}`);
       return go(postsScreen(0));
+    }
+    if (data === 'W:0' || head === 'W') return go(credentialsScreen(Number(arg1 || 0)));
+    if (head === 'WC') return go(credentialDetail(arg1));
+    if (head === 'RC') {
+      const s = store().students.find(x => x.id === arg1);
+      if (!s) return send('⚠️ Студент не найден.');
+      const result = await deps.executeBotCommand(`/reset ${s.telegramId || s.id}`);
+      await send(result.reply);
+      return go(credentialDetail(arg1));
+    }
+    if (data === 'CG') {
+      setPending(chatId, { kind: 'cred-issue' });
+      return send('🔑 <b>Выдача логина</b>\nПришлите Telegram ID, @username или student_id. Логин и пароль будут выданы только если есть подтверждённая оплата Tribute.\n/cancel — отмена.', kb([[btn('❌ Отмена', 'ZC')]]));
+    }
+    if (head === 'WG') {
+      const pending = store().students.filter(x => !x.login && String(x.source || '').startsWith('tribute-')).slice(0, 20);
+      if (!pending.length) return send('Нет ожидающих генерации логина.', kb([[btn('🔑 К логинам', 'W:0'), btn('◀️ Назад', 'M')]]));
+      const rows = pending.map(s => [btn(`${trunc(s.name, 20)} · ${s.telegramId || 'no telegram'}`, `WC:${s.id}`)]);
+      rows.push([btn('◀️ К логинам', 'W:0')]);
+      return go({ text: `📋 <b>Ожидают логин</b> — оплата подтверждена, логин ещё не выдан (или студент не найден):`, keyboard: kb(rows) });
     }
     return;
   }
