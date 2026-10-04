@@ -89,24 +89,50 @@ test('public and unlocked author dialogs contain only the author’s career and 
   }
 });
 
-test('Lyashuk and Nikolaev profiles list all five bars and distinguish Artender from a venue', () => {
+test('industry figures and cases reflect curatorial updates', () => {
   const course = courseData();
-  const bars = ['One and Half Room', 'Flowers Bar', 'Oy!', 'Ultramen!', 'Ruc’s Heaven'];
-  for (const [id, name] of [['ivan-lyashuk', 'Ivan Lyashuk'], ['vladimir-nikolaev', 'Vladimir Nikolaev']]) {
-    const figure = course.figures.find(item => item.id === id);
-    assert.equal(figure.name, name);
-    for (const bar of bars) {
-      assert.ok(figure.venues.includes(bar), `${name}: ${bar}`);
-      assert.ok(read('course/cases-EN.md').includes(bar));
-    }
-    assert.match(figure.venues, /Artender Project \(media & community\)/);
-    assert.doesNotMatch(figure.summary, /Egor|floortender/i);
-    assert.ok(figure.sources.length >= 2);
-    for (const source of figure.sources) {
-      const url = new URL(source.url);
-      assert.equal(url.protocol, 'https:');
-      assert.equal(url.hostname, 'perfectbarsteam.ru');
-    }
+  const figureIds = course.figures.map(f => f.id);
+  const caseTitles = course.cases.map(c => c.title);
+
+  // Vladimir Nikolaev and Ivan Lyashuk are removed
+  assert.equal(figureIds.includes('ivan-lyashuk'), false);
+  assert.equal(figureIds.includes('vladimir-nikolaev'), false);
+  assert.equal(caseTitles.some(t => /Lyashuk|Nikolaev|Perfect Bars/i.test(t)), false);
+  assert.doesNotMatch(read('course/cases-EN.md'), /Ivan Lyashuk|Vladimir Nikolaev/i);
+
+  // Simone Caporale is added / Erik Lorincz is replaced
+  assert.equal(figureIds.includes('erik-lorincz'), false);
+  assert.equal(figureIds.includes('simone-caporale'), true);
+  const sips = course.cases.find(c => /Sips/i.test(c.title));
+  assert.ok(sips);
+  assert.match(sips.title, /Simone Caporale/i);
+  assert.match(sips.location, /Barcelona/i);
+
+  // Boris Zarkov is added with Krasota
+  assert.equal(figureIds.includes('boris-zarkov'), true);
+  const krasota = course.cases.find(c => /Krasota/i.test(c.title));
+  assert.ok(krasota);
+  assert.match(krasota.title, /Boris Zarkov/i);
+
+  // 50 Best Menu Concepts: Bar Leone & Tuju is removed from cases
+  assert.equal(caseTitles.some(t => /Bar Leone|50 Best Menu Concepts/i.test(t)), false);
+
+  // Joi case is condensed to passion/desire over budget
+  const joi = course.cases.find(c => /Joi/i.test(c.title));
+  assert.ok(joi);
+  assert.match(joi.takeaway, /budget/i);
+
+  // Pacific is present as author's bar stations/equipment project
+  const pacific = course.projects.items.find(p => p.id === 'pacific');
+  assert.ok(pacific);
+  assert.match(pacific.name, /Pacific/);
+
+  // Exactly one compositional image per case study
+  for (const c of course.cases) {
+    assert.equal(typeof c.image, 'string');
+    assert.ok(c.image.length > 0);
+    assert.equal(Object.hasOwn(c, 'images'), false, `Case ${c.title} should only have 1 image`);
+    assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', c.image)), `Asset missing: ${c.image}`);
   }
 });
 
@@ -114,7 +140,8 @@ test('English-only conversion preserves the complete course and photographic arc
   const course = courseData();
   assert.equal(course.modules.length, 10);
   assert.equal(course.modules.flatMap(module => module.lessons).length, 13);
-  assert.equal(course.figures.length, 15);
+  assert.equal(course.figures.length, 13);
+  assert.equal(course.cases.length, 13);
   assert.equal(course.projects.items.length, 7);
   assert.equal(course.projects.items.flatMap(project => project.photos).length, 43);
   for (const project of course.projects.items) {
