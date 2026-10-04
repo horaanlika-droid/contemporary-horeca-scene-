@@ -55,6 +55,13 @@ const BOT_START_URL = /^[A-Za-z0-9_]{5,32}$/.test(BOT_USERNAME)
   ? `https://t.me/${BOT_USERNAME}?start=course`
   : '';
 const COURSE_URL = String(process.env.COURSE_URL || '').trim();
+/* The start link a buyer receives in the bot right after a verified Tribute payment.
+   Falls back to COURSE_URL when it is not set. */
+const COURSE_START_URL_RAW = String(
+  process.env.COURSE_START_URL || process.env.COURSE_APP_URL || process.env.START_URL || '',
+).trim();
+/* Set PAYMENT_START_MESSAGE=false to go back to sending the link only after approval. */
+const PAYMENT_START_MESSAGE = !/^(0|false|no|off)$/i.test(String(process.env.PAYMENT_START_MESSAGE || '').trim());
 const TRIBUTE_WEBHOOK_PATH = '/api/tribute/webhook';
 
 const ALL_LESSON_IDS = [
@@ -142,6 +149,140 @@ function resolveCourseLesson(token) {
 
 const editorId = prefix => `${prefix}-${Date.now().toString(36)}-${crypto.randomBytes(2).toString('hex')}`;
 
+/* --- media library: photos uploaded in the admin bot replace any image block --- */
+const MEDIA_MAX_BYTES = 8 * 1024 * 1024;
+const MEDIA_TYPES = {
+  jpg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+};
+const IMAGE_FILE_PATTERN = /^[A-Za-z0-9._-]+\.(jpe?g|png|webp)$/i;
+
+function detectImageExtension(buffer) {
+  if (!Buffer.isBuffer(buffer) || buffer.length < 12) return '';
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return 'jpg';
+  if (buffer.toString('latin1', 1, 4) === 'PNG') return 'png';
+  if (buffer.toString('latin1', 0, 4) === 'RIFF' && buffer.toString('latin1', 8, 12) === 'WEBP') return 'webp';
+  return '';
+}
+
+function mediaPublicUrl(file) {
+  const base = configuredHttpsUrl(COURSE_URL);
+  return base ? `${base.replace(/\/+$/, '')}/media/${file}` : '';
+}
+
+function mediaRecordForFile(file) {
+  return store.editor.media.find(item => item.file === file) || null;
+}
+
+function saveStoreMedia({ buffer, name, source, sourceId }) {
+  const ext = detectImageExtension(buffer);
+  if (!ext) return { error: 'The file is not a JPEG, PNG or WebP image.' };
+  if (buffer.length > MEDIA_MAX_BYTES) return { error: 'The image is larger than 8 MB.' };
+  ensureDirs();
+  const id = editorId('img');
+  const file = `${id}.${ext}`;
+  fs.writeFileSync(path.join(UPLOAD_DIR, file), buffer);
+  const record = {
+    id,
+    file,
+    url: `/media/${file}`,
+    name: String(name || file).slice(0, 160),
+    type: MEDIA_TYPES[ext],
+    size: buffer.length,
+    source: source || 'admin-bot',
+    sourceId: sourceId || null,
+    createdAt: new Date().toISOString(),
+  };
+  store.editor.media.unshift(record);
+  saveStore();
+  return { media: record };
+}
+
+function removeStoreMedia(id) {
+  const index = store.editor.media.findIndex(item => item.id === id);
+  if (index === -1) return { error: 'Photo not found.' };
+  const [removed] = store.editor.media.splice(index, 1);
+  try {
+    fs.rmSync(path.join(UPLOAD_DIR, path.basename(removed.file)), { force: true });
+  } catch { /* the file may already be gone */ }
+  const url = `/media/${removed.file}`;
+  const before = store.editor.overrides.length;
+  store.editor.overrides = store.editor.overrides.filter(override => override.text !== url);
+  saveStore();
+  return { media: removed, overridesCleared: before - store.editor.overrides.length };
+}
+
+/* Text input in the bot may still point at a shipped archive file, an https link
+   or a previously uploaded photo. */
+function validImageReference(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const url = validHttpsUrl(raw);
+  if (url) return url;
+  const mediaMatch = raw.match(/^\/media\/([A-Za-z0-9._-]+)$/);
+  if (mediaMatch && mediaRecordForFile(mediaMatch[1])) return raw;
+  if (IMAGE_FILE_PATTERN.test(raw)) return raw;
+  return '';
+}
+
+async function telegramApi(method, payload) {
+  if (!process.env.BOT_TOKEN) return null;
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json().catch(() => null);
+    return data && data.ok === false ? null : data;
+  } catch {
+    return null;
+  }
+}
+
+async function sendTelegramPhoto(chatId, photoUrl, caption, replyMarkup = undefined) {
+  if (!process.env.BOT_TOKEN || !chatId || !photoUrl) return false;
+  const payload = { chat_id: chatId, photo: photoUrl, caption: String(caption || '').slice(0, 1000), parse_mode: 'HTML' };
+  if (replyMarkup) payload.reply_markup = replyMarkup;
+  const data = await telegramApi('sendPhoto', payload);
+  return Boolean(data?.ok);
+}
+
+async function downloadTelegramImage(message) {
+  const document = message?.document && /^image\//i.test(String(message.document.mime_type || '')) ? message.document : null;
+  const sizes = Array.isArray(message?.photo) ? message.photo : [];
+  const largest = sizes.length ? sizes[sizes.length - 1] : null;
+  const fileId = document?.file_id || largest?.file_id;
+  if (!fileId) return { error: 'Send a photo (or an image file) to replace the block image.' };
+  const declaredSize = Number(document?.file_size || largest?.file_size || 0);
+  if (declaredSize > MEDIA_MAX_BYTES) return { error: 'The image is larger than 8 MB. Send a smaller one.' };
+  const meta = await telegramApi('getFile', { file_id: fileId });
+  const filePath = meta?.result?.file_path;
+  if (!filePath) return { error: 'Telegram did not return the image file. Send it again.' };
+  try {
+    const response = await fetch(`https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${filePath}`);
+    if (!response.ok) return { error: 'Telegram did not return the image file. Send it again.' };
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (!buffer.length) return { error: 'The received image is empty. Send it again.' };
+    if (buffer.length > MEDIA_MAX_BYTES) return { error: 'The image is larger than 8 MB. Send a smaller one.' };
+    return { buffer, name: document?.file_name || `telegram-${Date.now()}.jpg` };
+  } catch {
+    return { error: 'Could not download the image from Telegram. Send it again.' };
+  }
+}
+
+async function ingestTelegramPhoto(message) {
+  const downloaded = await downloadTelegramImage(message);
+  if (downloaded.error) return downloaded;
+  return saveStoreMedia({
+    buffer: downloaded.buffer,
+    name: downloaded.name,
+    source: 'telegram',
+    sourceId: String(message?.chat?.id || message?.from?.id || ''),
+  });
+}
+
 function validHttpsUrl(value) {
   try {
     const url = new URL(String(value || ''));
@@ -166,7 +307,7 @@ function defaultStore() {
     progress: {},
     quizzes: {},
     tribute: { orders: [] },
-    editor: { materials: [], posts: [], overrides: [] },
+    editor: { materials: [], posts: [], overrides: [], media: [] },
     adminBot: {
       adminChatIds: [...ADMIN_IDS],
       pending: {},
@@ -175,7 +316,7 @@ function defaultStore() {
           id: 'log-boot',
           at: new Date().toISOString(),
           type: 'system',
-          text: 'Access Bot ready. Admin commands: /admissions, /admit <student_id>, /reject <student_id>, /pending, /approve <id> <feedback>, /revise <id> <feedback>, /students, /orders, /resend <telegram_id>, /chat; editor: /addmat, /materials, /post, /editmodule, /editlesson, /overrides'
+          text: 'Access Bot ready. Admin commands: /admissions, /admit <student_id>, /reject <student_id>, /pending, /approve <id> <feedback>, /revise <id> <feedback>, /students, /orders, /resend <telegram_id>, /chat; editor: /addmat, /materials, /post, /editmodule, /editlesson, /overrides; inline panel: Photo & backgrounds replaces block images with photos sent in the chat'
         },
       ],
     },
@@ -292,6 +433,7 @@ function loadStore() {
           materials: Array.isArray(parsed.editor?.materials) ? parsed.editor.materials : [],
           posts: Array.isArray(parsed.editor?.posts) ? parsed.editor.posts : [],
           overrides: Array.isArray(parsed.editor?.overrides) ? parsed.editor.overrides : [],
+          media: Array.isArray(parsed.editor?.media) ? parsed.editor.media : [],
         },
         adminBot: {
           ...def.adminBot,
@@ -382,6 +524,8 @@ function getTributeStatus(includeOrders = false) {
     paidOrdersCount: store.tribute.orders.filter(order => order.status === 'PAID').length,
     pendingDeliveriesCount: store.tribute.orders.filter(order => order.status === 'PAID' && !['DELIVERED', 'REGISTERED', 'NOT_REQUIRED'].includes(order.deliveryStatus)).length,
     pendingAdmissionsCount: pendingAdmissions().length,
+    startUrlConfigured: Boolean(courseStartUrl()),
+    paymentStartMessage: PAYMENT_START_MESSAGE,
   };
   if (includeOrders) {
     status.orders = store.tribute.orders.slice(0, 20).map(order => ({
@@ -515,7 +659,7 @@ async function issueCredentialsForStudent(student, order = null, via = 'auto') {
   }
   saveStore();
   addBotLog('credentials', `[${via}] Credentials issued for ${student.name} (Telegram ${student.telegramId}) login ${login}.`);
-  const courseLink = configuredHttpsUrl(COURSE_URL) || tributePurchaseUrl() || '';
+  const courseLink = courseStartUrl() || tributePurchaseUrl() || '';
   const lines = [
     'Payment confirmed — your Contemporary Horeca Scene access is ready!',
     '',
@@ -540,7 +684,7 @@ async function issueCredentialsForStudent(student, order = null, via = 'auto') {
   ];
   const text = lines.join('\n');
   const html = htmlLines.join('\n');
-  const sent = await sendTelegramMessage(student.telegramId, html);
+  const sent = await sendTelegramMessage(student.telegramId, html, courseKeyboard());
   if (!sent) {
     student.registrationLinkDeliveryStatus = 'CREDENTIALS_PENDING_DELIVERY';
     saveStore();
@@ -562,7 +706,7 @@ async function resetCredentialsForStudent(student, via = 'admin') {
   student.registrationLinkDeliveryStatus = 'CREDENTIALS_SENT';
   saveStore();
   addBotLog('credentials', `[${via}] Credentials reset for ${student.name} (Telegram ${student.telegramId}) login ${student.login}.`);
-  const courseLink = configuredHttpsUrl(COURSE_URL) || tributePurchaseUrl() || '';
+  const courseLink = courseStartUrl() || tributePurchaseUrl() || '';
   const html = [
     '<b>Your Contemporary Horeca Scene access has been reset.</b>',
     '',
@@ -936,13 +1080,69 @@ function allowChatMessage(userId) {
   return record.count <= 20;
 }
 
+/* The start link a buyer receives in the bot right after a verified payment. */
+function courseStartUrl() {
+  return configuredHttpsUrl(COURSE_START_URL_RAW) || configuredHttpsUrl(COURSE_URL);
+}
+
 function courseKeyboard() {
-  const url = configuredHttpsUrl(COURSE_URL);
-  return url ? { inline_keyboard: [[{ text: 'Open the course', url }]] } : undefined;
+  const url = courseStartUrl();
+  return url ? { inline_keyboard: [[{ text: '▶️ Start the course', url }]] } : undefined;
+}
+
+function paymentStartKeyboard() {
+  const rows = [];
+  const startUrl = courseStartUrl();
+  const registerUrl = registrationUrl();
+  if (startUrl) rows.push([{ text: '▶️ Open the start page', url: startUrl }]);
+  if (registerUrl) rows.push([{ text: '📝 Create your password', url: registerUrl }]);
+  return rows.length ? { inline_keyboard: rows } : undefined;
+}
+
+function paymentStartMessage(student, order) {
+  const startUrl = courseStartUrl();
+  const orderLine = [
+    order?.id ? `Tribute event <code>${escapeHtml(order.id)}</code>` : '',
+    order?.amount ? escapeHtml(order.amount) : '',
+  ].filter(Boolean).join(' · ');
+  return [
+    '🎉 <b>Payment received — your start link is ready.</b>',
+    orderLine,
+    '',
+    'Save this chat: the link below is your entry point to <b>Contemporary Horeca Scene</b>, and the same link is re-sent after the course team confirms your payment.',
+    '',
+    '1️⃣ The course team checks the payment in Tribute — the elective stays private and admission is personal.',
+    '2️⃣ You open the start link and set your personal password, using the same Telegram account you used here.',
+    '3️⃣ The elective opens: 10 modules, industry cases, project files and the final found-object mockup brief.',
+    startUrl ? `\n▶️ Start: <a href="${escapeHtml(startUrl)}">open the course</a>` : '',
+    `\nQuestions at any time: send /register or write to ${AUTHOR_EMAIL}.`,
+    student?.telegramUsername || student?.telegramId
+      ? `\nTelegram account: ${escapeHtml(student.telegramUsername ? `@${student.telegramUsername}` : student.telegramId)}`
+      : '',
+  ].filter(line => line !== '').join('\n');
+}
+
+async function sendPaymentStartNotice(student, order) {
+  if (!PAYMENT_START_MESSAGE) return false;
+  if (!student?.telegramId || !process.env.BOT_TOKEN) return false;
+  /* Registered learners already receive their access notice with the same start button. */
+  if (student.passwordHash || student.legacyPasswordHash) return false;
+  if (!courseStartUrl() && !registrationUrl()) return false;
+  const sent = await sendTelegramMessage(student.telegramId, paymentStartMessage(student, order), paymentStartKeyboard());
+  if (sent) {
+    student.startLinkSentAt = new Date().toISOString();
+    saveStore();
+    addBotLog('admission', `Start link delivered right after payment to ${student.name} (Telegram ${student.telegramId}).`);
+  }
+  return sent;
 }
 
 function registrationKeyboard(url) {
-  return url ? { inline_keyboard: [[{ text: 'Open shared registration page', url }]] } : undefined;
+  const rows = [];
+  if (url) rows.push([{ text: '📝 Open shared registration page', url }]);
+  const startUrl = courseStartUrl();
+  if (startUrl && startUrl !== url) rows.push([{ text: '▶️ Start the course', url: startUrl }]);
+  return rows.length ? { inline_keyboard: rows } : undefined;
 }
 
 function admissionKeyboard(student) {
@@ -1213,7 +1413,10 @@ async function handleAccessBotMessage(message) {
     if (student?.registrationStatus === 'PENDING_APPROVAL') {
       const hasPaid = student && store.tribute.orders.some(o => o.studentId === student.id && o.status === 'PAID');
       if (hasPaid) {
-        await sendTelegramMessage(chatId, 'Your Tribute payment is verified but credentials have not been issued yet. Send /register to receive your login and password automatically, or wait for admin approval.');
+        const paidOrder = store.tribute.orders.find(o => o.studentId === student.id && o.status === 'PAID');
+        const started = await sendPaymentStartNotice(student, paidOrder);
+        if (started) return;
+        await sendTelegramMessage(chatId, 'Your Tribute payment is verified. The start link appears above as soon as the course link is configured; meanwhile send /register to receive your login and password automatically, or wait for admin approval.');
         return;
       }
       await sendTelegramMessage(chatId, 'Your access request is waiting for the course admin to verify the purchase and approve admission. I will send the access link here after approval.');
@@ -1273,9 +1476,12 @@ async function handleAccessBotMessage(message) {
       await sendTelegramMessage(chatId, `Your admission request was not approved. Contact support by email if you believe this is an error: ${AUTHOR_EMAIL}.`);
       return;
     }
-    // If payment is already verified but credentials not yet issued, hint about auto-issue
+    // If payment is already verified but access is not opened yet, resend the start link.
     const hasPaid = student && store.tribute.orders.some(o => o.studentId === student.id && o.status === 'PAID');
     if (hasPaid) {
+      const paidOrder = store.tribute.orders.find(o => o.studentId === student.id && o.status === 'PAID');
+      const started = await sendPaymentStartNotice(student, paidOrder);
+      if (started) return;
       await sendTelegramMessage(chatId, 'Your Tribute payment is verified. I am generating your login and password now — please wait a moment and send /register again if you do not receive them.');
       return;
     }
@@ -1293,7 +1499,7 @@ async function handleAccessBotMessage(message) {
   }
 
   if (command === '/help') {
-    await sendTelegramMessage(chatId, `Purchases happen in Tribute. Send /register to request admission or receive the shared registration page after approval. Use /id to see the Telegram ID to enter when registering. Project questions are sent from the live Project Q&A page after sign-in. Forgotten passwords can be recovered only through support by email: ${AUTHOR_EMAIL}.`);
+    await sendTelegramMessage(chatId, `Purchases happen in Tribute. After a verified payment the start link appears in this chat right away; send /register to receive it again, to request admission or to get the shared registration page after approval. Use /id to see the Telegram ID to enter when registering. Project questions are sent from the live Project Q&A page after sign-in. Forgotten passwords can be recovered only through support by email: ${AUTHOR_EMAIL}.`);
     return;
   }
 
@@ -1388,6 +1594,7 @@ async function executeBotCommand(rawCommand) {
       '• <code>/post &lt;title&gt; | &lt;text&gt;</code> · <code>/posts</code> · <code>/delpost &lt;id&gt;</code> — publish course updates',
       '• <code>/editmodule &lt;module&gt; [field] &lt;text&gt;</code> · <code>/editlesson &lt;lesson&gt; [field] &lt;text&gt;</code> — edit course copy',
       '• <code>/overrides</code> · <code>/revert &lt;id&gt;</code> — review or undo copy edits',
+      '• Inline panel: 🖼 <b>Photo &amp; backgrounds</b> — send a photo in the chat to replace any block image or background.',
     ].join('\n');
     addBotLog('command', `${cmdLine} → admin help displayed`);
     return { ok: true, reply };
@@ -1746,6 +1953,11 @@ const adminConsole = createAdminConsole({
   courseData: () => COURSE_DATA,
   courseModules: () => COURSE_MODULES,
   siteDefaults: () => SITE_DEFAULTS,
+  validImageReference,
+  ingestTelegramPhoto,
+  removeMedia: removeStoreMedia,
+  mediaPublicUrl,
+  sendTelegramPhoto,
 });
 adminConsoleRef = adminConsole;
 
@@ -1761,10 +1973,10 @@ if (process.env.BOT_TOKEN) {
       for (const update of data.result || []) {
         if (Number.isSafeInteger(update.update_id)) offset = update.update_id + 1;
         const message = update.message;
-        if (message?.text && message?.chat?.id) {
+        if ((message?.text || message?.photo || message?.document) && message?.chat?.id) {
           const chatId = String(message.chat.id);
           const admin = store.adminBot.adminChatIds.includes(chatId) || ADMIN_IDS.has(chatId);
-          const adminCommand = message.text.match(/^\/admin(?:@[A-Za-z0-9_]+)?\s+(.+)$/s);
+          const adminCommand = String(message.text || '').match(/^\/admin(?:@[A-Za-z0-9_]+)?\s+(.+)$/s);
           if (adminCommand) {
             if (matchesMasterPassword(adminCommand[1].trim())) {
               if (!store.adminBot.adminChatIds.includes(chatId)) {
@@ -2057,6 +2269,9 @@ async function processTributeEvent(event) {
     student.admissionRequestedAt = student.admissionRequestedAt || new Date().toISOString();
     saveStore();
     await notifyAdmissionAdmins(student, order);
+    /* The buyer gets a convenient start link immediately after the verified payment;
+       registration itself stays limited to the Telegram account the admin approves. */
+    await sendPaymentStartNotice(student, order);
   }
   return { status: 200, body: { ok: true, issued: true, deliveryStatus: order.deliveryStatus } };
 }
@@ -2467,6 +2682,7 @@ const server = http.createServer(async (req, res) => {
         materials: store.editor.materials,
         posts: store.editor.posts,
         overrides: store.editor.overrides,
+        media: session.isAdmin ? store.editor.media : [],
       },
       adminBot: session.isAdmin ? store.adminBot : {},
     });
@@ -2688,6 +2904,23 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/healthz') {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
     return res.end(req.method === 'HEAD' ? undefined : 'ok');
+  }
+
+  /* --- public media library: photos uploaded by the administrator in the bot --- */
+  const mediaMatch = pathname.match(/^\/media\/([A-Za-z0-9._-]+)$/);
+  if (mediaMatch) {
+    const record = mediaRecordForFile(mediaMatch[1]);
+    const diskPath = path.join(UPLOAD_DIR, path.basename(mediaMatch[1]));
+    if (!record || !fs.existsSync(diskPath)) return respond(res, 404, 'Image not found');
+    const stat = fs.statSync(diskPath);
+    res.writeHead(200, {
+      'Content-Type': record.type || MEDIA_TYPES[path.extname(diskPath).slice(1).toLowerCase()] || 'application/octet-stream',
+      'Content-Length': stat.size,
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'X-Content-Type-Options': 'nosniff',
+    });
+    if (req.method === 'HEAD') return res.end();
+    return fs.createReadStream(diskPath).pipe(res);
   }
 
   /* --- course content is password-protected --- */
