@@ -17,7 +17,7 @@ window.COURSE = {
       moduleId: 'future',
       moduleNumber: '01 & 03',
       block: 'Hospitality Futures · Rankings, Mastery & Counter Precision',
-      image: 'horeca-chefs-counter.jpg',
+      image: 'figure-jiro.jpg',
       summary: 'A 10-seat basement counter inside a Ginza subway station that held three MICHELIN stars for decades. No printed menu choices, no appetizers, no distractions — only a 20-piece nigiri progression timed to the guest’s breathing and hand movement.',
       lessonAngle: 'Proves that world-historical prestige does not depend on square metres or opulent real estate. Mastery (shokunin), radical focus on one format, and micro-adjustments (rice temperature at 37°C body heat, piece size adjusted to each guest) turn a 30-minute counter seating into a global benchmark.',
       takeaway: 'Radical subtraction and daily repetition of fundamentals create an authority no marketing budget can buy.'
@@ -30,23 +30,23 @@ window.COURSE = {
       moduleId: 'fnb',
       moduleNumber: '07 & 10',
       block: 'Food & Beverage Futures · Local Ingredients, Fermentation & Responsible Leadership',
-      image: 'horeca-sustainable-terroir.jpg',
+      image: 'figure-redzepi.jpg',
       summary: 'Co-founded Noma and helped make Nordic ingredients, foraging, hyper-seasonality and fermentation central to contemporary gastronomy. In 2026, following public abuse allegations from former employees, Redzepi acknowledged harmful past leadership, apologised and stepped away from Noma. The case pairs culinary influence with questions of workplace culture and accountability.',
       lessonAngle: 'Read Noma’s ingredient research alongside questions of power, worker dignity, safe conditions and accountability; creative excellence does not remove an employer’s duty of care.',
       takeaway: 'A local culinary point of view can become a global language; exceptional craft never excuses harm to the people doing the work.'
     },
     {
-      id: 'erik-lorincz',
-      name: 'Erik Lorincz',
-      role: 'World Class Global Winner · Master Bartender & Restaurateur',
-      venues: 'American Bar at The Savoy (№1 World’s 50 Best Bars) · Kwānt · Mayfair, London',
+      id: 'simone-caporale',
+      name: 'Simone Caporale',
+      role: 'Co-Founder of Sips · Award-Winning Innovator',
+      venues: 'Sips Drinkery House (Barcelona, №1 World’s 50 Best Bars 2023) · Artesian (former №1) · Amaro Santoni',
       moduleId: 'experience',
       moduleNumber: '02 & 06',
-      block: 'Experience Design · Five-Star Choreography, Vintage Glassware & 50 Best Menus',
-      image: 'horeca-interior-design.jpg',
-      summary: 'Diageo Reserve World Class Global Winner (2010), 10th Head Bartender of The Savoy’s American Bar (which he led to World №1), and founder of Kwānt in London.',
-      lessonAngle: 'Bridges grand European five-star hotel ritual with contemporary botanical science, antique crystal and museum-grade menu storytelling. At Kwānt, guests step off Mayfair pavement into a cinematic mid-century salon where posture, vintage glassware, candlelit brass and effortless table choreography keep the guest inside the dream.',
-      takeaway: 'Service choreography and tactile vessels are spatial design in motion: the way a bartender moves, pours and serves makes luxury believable.'
+      block: 'Experience Design · Counterless Hospitality, Island Ergonomics & Bespoke Vessels',
+      image: 'figure-caporale.jpg',
+      summary: 'Co-founder of Barcelona’s Sips with Marc Álvarez, leading it to №1 in The World’s 50 Best Bars 2023. Former creative leader at London’s Artesian (four consecutive years World №1). At Sips, he removed the traditional barrier between guest and bartender with a central open island workstation and museum-grade custom vessels.',
+      lessonAngle: 'Shows how removing the physical bar counter transforms guest connection: 360-degree visibility, bespoke tactile glassware (like cast-metal hands) and culinary cocktail techniques turn service into an intimate theatrical craft without five-star stiffness.',
+      takeaway: 'Atmosphere is created when you remove the physical and psychological distance between the maker and the guest.'
     },
     {
       id: 'alex-kratena',
@@ -56,7 +56,7 @@ window.COURSE = {
       moduleId: 'concepts',
       moduleNumber: '02 & 04',
       block: 'Experience Design & Concepts · Hotel-Bar Reinvention and Dual-Format R&D',
-      image: 'horeca-craft-bar.jpg',
+      image: 'figure-kratena.jpg',
       summary: 'Former head bartender of London’s Artesian, which topped The World’s 50 Best Bars for four consecutive years with his team; in 2019, he co-founded Tayēr + Elementary with Monica Berg, pairing an accessible neighbourhood bar with a produce-led cocktail R&D counter.',
       lessonAngle: 'Tayēr + Elementary shows how a clear idea can hold two complementary offers: an approachable everyday bar and a focused produce-led laboratory, each with a distinct role in the guest journey.',
       takeaway: 'Make innovation legible to guests: one bar can balance an easy everyday offer and a focused R&D counter when each has a clear promise.'
@@ -69,7 +69,7 @@ window.COURSE = {
       moduleId: 'neuro',
       moduleNumber: '03 & 05',
       block: 'Neurogastronomy & R&D · Multisensory Mixology & Speed Ergonomics',
-      image: 'horeca-neurogastronomy-serve.jpg',
+      image: 'figure-talalay.jpg',
       summary: 'Winner of Diageo Reserve World Class Russia (2020–2021), taking first place in both Signature Drink and Cocktail Against the Clock, and inductee of the Palm Branch "Bartender of the Year" Hall of Fame.',
       lessonAngle: 'Treats every cocktail through four deliberate coordinates — taste, aroma, tactile texture (enveloping mouthfeel) and visual colouristics — while proving in "Against the Clock" that high-concept gastrophysics only works when backed by razor-sharp station ergonomics and speed under pressure.',
       takeaway: 'Mixology is not blind trend-chasing; it is aligning flavour, aroma, texture and colour with the venue’s concept at operational speed.'
@@ -82,7 +82,7 @@ window.COURSE = {
       moduleId: 'neuro',
       moduleNumber: '03 & 07',
       block: 'Neurogastronomy & R&D · Science of the Perfect Cocktail',
-      image: 'horeca-neurogastronomy-serve.jpg',
+      image: 'figure-dave-arnold.jpg',
       summary: 'Author of Liquid Intelligence: The Art and Science of the Perfect Cocktail, an educator and drinks innovator known for applying controlled experiments to cocktail technique — temperature, dilution, carbonation, sugar-and-acid balance and clarification.',
       lessonAngle: 'Turns cocktail development into testable practice: change one variable at a time, record the result, taste critically and translate the discovery into a repeatable bar workflow.',
       takeaway: 'Measure and control variables to make craft repeatable; let guest pleasure — not equipment — be the point.'
@@ -91,7 +91,7 @@ window.COURSE = {
       id: 'egor-tarasenko',
       name: 'Egor Tarasenko',
       role: 'Course Author · Practitioner & Founder',
-      venues: 'Joi Espresso Bar (2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific · TAM',
+      venues: 'Joi Espresso Bar (2025, by OGONEK TEAM) · Passie Cakes Co. · CooCoo Coffee · Pacific',
       moduleId: 'budget',
       moduleNumber: '09 & 04',
       block: 'Budget Realisation & Scenography · Projects Built from Found Objects',
@@ -108,7 +108,7 @@ window.COURSE = {
       moduleId: 'concepts',
       moduleNumber: '04 & 06',
       block: 'Restaurant & Bar Concepts · 50 Best Menu Architecture & Art Manifestos',
-      image: 'horeca-ai-mixology-lab.jpg',
+      image: 'figure-savage.jpg',
       summary: 'World Class Bartender of the Year (2014) who revolutionised World’s 50 Best Bar menus — from wordless illustrated comic-book and architectural menus at Little Red Door to Bauhaus geometric manifestos at Shapes and Art Nouveau organic lines at Bar Nouveau.',
       lessonAngle: 'Demonstrates how a menu and a bar concept act as a single artistic manifesto: guests do not read a list of ingredients; they choose an emotion, a shape, a painting or a philosophical idea. Every vessel, chair, candle, ice block and uniform obeys that single rulebook.',
       takeaway: 'A great 50 Best menu is not a price list — it is a physical artefact that teaches the guest how to read your world.'
@@ -121,7 +121,7 @@ window.COURSE = {
       moduleId: 'technology',
       moduleNumber: '05 & 08',
       block: 'Operations, Systems & Entrepreneurship · The Horeca Code',
-      image: 'horeca-tech-operations.jpg',
+      image: 'figure-narzi.jpg',
       summary: 'British-Russian entrepreneur who put Moscow’s City Space Bar onto the world cocktail map, built London hospitality projects (Pachamama), mentored a generation of bar leaders, and codified operational discipline in "The Horeca Code".',
       lessonAngle: 'Insists that hospitality romance collapses without iron operational standards, cost control, station ergonomics, sales psychology and team discipline. His City Space school trained future founders (including Igor Zernov) and invented bar staples such as dehydrated fruit-chip garnishes alongside hotel pastry chefs.',
       takeaway: 'Creative charisma opens a venue once; standards, unit economics and a disciplined school of people keep it open for years.'
@@ -134,7 +134,7 @@ window.COURSE = {
       moduleId: 'fnb',
       moduleNumber: '07 & 03',
       block: 'Food & Beverage Futures · Farm-to-Counter Apothecary & Zero-Menu Craft',
-      image: 'horeca-sustainable-terroir.jpg',
+      image: 'figure-kayama.jpg',
       summary: 'Founder of the 16-seat Bar Benfiddich in Tokyo ("Ben" = mountain = Yama, "Fiddich" = deer = Ka → Kayama). Grows wormwood, fennel, juniper, chamomile, mint and yuzu on his family farm in Chichibu and distils his own absinthe and botanical elixirs.',
       lessonAngle: 'Works with no printed cocktail menu: the candlelit apothecary counter of antique jars, mortar and pestle, fresh herbs and vintage glassware IS the menu. Guests converse with Kayama while he crushes botanicals and builds bespoke drinks from soil to glass.',
       takeaway: 'Owning the raw ingredient from soil to glass — and serving it in antique apothecary vessels — creates an irreproducible signature.'
@@ -147,7 +147,7 @@ window.COURSE = {
       moduleId: 'entrepreneurship',
       moduleNumber: '08 & 04',
       block: 'Entrepreneurship & Living Menus · From Hidden Table to Global Ecosystem',
-      image: 'horeca-craft-bar.jpg',
+      image: 'figure-zernov.jpg',
       summary: 'Alumnus of Bek Narzi’s City Space school and co-founder of #FollowTheRabbits. Started El Copitas in a hidden St. Petersburg courtyard around one communal table, candles, antique Mexican artefacts, a hand-drawn weekly chalkboard menu and a tiny budget — rising to №8 in The World’s 50 Best Bars.',
       lessonAngle: 'Shows how a ritual-driven micro-concept (welcome taco and copita of mezcal in handmade ceramic vessels, living weekly menu, radical warmth) scales into an entire hospitality ecosystem: Tagliatella Caffe, Paloma Cantina, Sangre Fresca, Bartenders FAQtory and SPb Cocktail Week.',
       takeaway: 'Start with a communal ritual, real tactile objects and a tight team culture; scale by building distinct concepts and educating the market.'
@@ -156,49 +156,14 @@ window.COURSE = {
       id: 'boris-zarkov',
       name: 'Boris Zarkov',
       role: 'Restaurateur & Entrepreneur · Founder of White Rabbit Family',
-      venues: 'White Rabbit Family · White Rabbit · Selfie · IKRA gastronomic platform',
+      venues: 'White Rabbit Family · Krasota Gastro-Theatre (Moscow & Dubai) · White Rabbit · Selfie · IKRA',
       moduleId: 'entrepreneurship',
       moduleNumber: '04 & 08',
-      block: 'Restaurant Concepts & Entrepreneurship · Portfolio Strategy and Talent Ecosystems',
-      image: 'horeca-concept-pitch.jpg',
-      summary: 'Founder and CVO of White Rabbit Family and co-founder of the IKRA gastronomic platform. He develops restaurant concepts across a portfolio, showing how distinct venues and chef talent can form a recognisable hospitality group.',
-      lessonAngle: 'Compare a single-venue concept with a portfolio: decide what the group shares and what each venue must make unmistakably its own — its audience, offer and atmosphere.',
-      takeaway: 'Scale through distinct concepts and strong talent, not through making every venue feel the same.'
-    },
-    {
-      id: 'ivan-lyashuk',
-      name: 'Ivan Lyashuk',
-      role: 'Co-Founder & Bar Entrepreneur · Perfect Bars Team',
-      venues: 'One and Half Room · Flowers Bar · Oy! · Ultramen! · Ruc’s Heaven · Artender Project (media & community)',
-      moduleId: 'entrepreneurship',
-      moduleNumber: '03 & 08',
-      block: 'Entrepreneurship & Education · Bar Concepts and Creative Community',
-      image: 'horeca-craft-bar.jpg',
-      summary: 'Co-founder of Perfect Bars Team with Vladimir Nikolaev. Their St Petersburg portfolio brings together five distinct venues, from the Perfect Serve approach of One and Half Room to the Catalan cocktail bistro Ruc’s Heaven. The team also created Artender, a media and community project for bartenders with creative challenges, videos, collaborations and online intensives — not another bar.',
-      lessonAngle: 'Study how a group gives each venue a distinct promise, then uses Artender’s challenges and shared creative practice to build a community beyond its own bar teams.',
-      takeaway: 'Build a recognisable hospitality group through distinct concepts, guest connection and an active creative community.',
-      sources: [
-        { title: 'Perfect Bars Team', url: 'https://perfectbarsteam.ru/' },
-        { title: 'Artender Project', url: 'https://perfectbarsteam.ru/artender' }
-      ]
-    },
-    {
-      id: 'vladimir-nikolaev',
-      name: 'Vladimir Nikolaev',
-      role: 'Co-Founder & Bartender · Perfect Bars Team',
-      venues: 'One and Half Room · Flowers Bar · Oy! · Ultramen! · Ruc’s Heaven · Artender Project (media & community)',
-      moduleId: 'entrepreneurship',
-      moduleNumber: '03 & 08',
-      block: 'Entrepreneurship & Education · Perfect Serve and Sensory Mixology',
-      image: 'horeca-neurogastronomy-serve.jpg',
-      summary: 'Co-founder of Perfect Bars Team with Ivan Lyashuk. At One and Half Room, the team develops Perfect Serve: an individual presentation for each drink, with food pairing, neurogastronomy and multisensory experiments extending the guest’s experience. The wider portfolio includes Flowers Bar, Oy!, Ultramen! and Ruc’s Heaven; Artender shares the team’s creative practice through media, challenges and community learning.',
-      lessonAngle: 'Connect a drink to its vessel, presentation, sensory context and pairing, then turn the experiment into a repeatable service ritual the whole team can deliver.',
-      takeaway: 'Design the complete serve, not just the recipe; make sensory experimentation repeatable in service and useful to the wider community.',
-      sources: [
-        { title: 'Perfect Bars Team', url: 'https://perfectbarsteam.ru/' },
-        { title: 'One and Half Room', url: 'https://perfectbarsteam.ru/oneandhalfroombar' },
-        { title: 'Artender Project', url: 'https://perfectbarsteam.ru/artender' }
-      ]
+      block: 'Restaurant Concepts & Entrepreneurship · Portfolio Strategy and Gastro-Theatre',
+      image: 'figure-zarkov.jpg',
+      summary: 'Founder and CVO of White Rabbit Family and creator of Krasota immersive gastro-theatre. He develops groundbreaking restaurant concepts across a portfolio, showing how theatrical scenography, 360-degree projections, culinary R&D and distinct talent can create iconic hospitality.',
+      lessonAngle: 'Study how Krasota synthesizes visual arts, spatial projections, sound design and culinary timing around a single 20-seat interactive table — proving that dining can become immersive living theatre.',
+      takeaway: 'When scenography, visual arts and technology serve the culinary story, hospitality transcends food to become unforgettable theatre.'
     },
     {
       id: 'denis-bobkov',
@@ -208,7 +173,7 @@ window.COURSE = {
       moduleId: 'budget',
       moduleNumber: '09 & 02',
       block: 'Budget Realisation & Scenography · Antique Tableware, Candles & Found Worlds',
-      image: 'horeca-atmosphere-candle.jpg',
+      image: 'figure-bobkov.jpg',
       summary: 'Rose through every hospitality role — from dishwasher, waiter, cook and bartender to co-owner of Pub Life Group — creating some of the most theatrical, immersive multi-room bars and pubs in Europe.',
       lessonAngle: 'At Black Swan, Bambule and Abbey Players, Bobkov builds worlds not from designer catalogues, but from real found objects: antique silverware and porcelain, dripping wax candles, 19th-century church doors, Victorian confessionals, vintage brass taps and flea-market furniture. Every table feels like a living film set.',
       takeaway: 'Real found objects — antique tableware, candles, patina and salvage — create instant soul that no factory furniture can imitate.'
@@ -246,26 +211,26 @@ window.COURSE = {
       id: 'experience',
       number: '02',
       title: 'Experience Design',
-      description: 'Explore how space, service choreography, antique vessels, candlelight and sound keep the “sweet fairy tale” intact — with Erik Lorincz, Alex Kratena and Denis Bobkov.',
+      description: 'Explore how space, service choreography, antique vessels, candlelight and sound keep the “sweet fairy tale” intact — with Simone Caporale, Alex Kratena and Denis Bobkov.',
       image: 'horeca-interior-design.jpg',
-      practitioners: ['Erik Lorincz (American Bar at The Savoy · Kwānt)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Denis Bobkov (Pub Life Group · Black Swan · Bambule)'],
+      practitioners: ['Simone Caporale (Sips Barcelona · №1 World’s 50 Best Bars 2023)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Denis Bobkov (Pub Life Group · Black Swan · Bambule)'],
       lessons: [
         {
           id: 'atmosphere',
           title: 'Designing atmosphere & the sweet fairy tale',
           duration: '16 min',
           intro: 'Atmosphere is not decoration. It is the cumulative effect of hundreds of tactile choices — light, antique tableware, sound and posture — made legible to a guest through a single evening.',
-          body: 'Think of a bar or a restaurant as a sweet fairy tale: for two hours the guest agrees to believe in a world you have built, where the candle flame is warm, the noise of the street disappears and every plate, fork and glass on the table belongs to the story. The spell is fragile. One wrong detail — a harsh overhead LED, a cheap plastic tray, a dirty door handle, a ringtone from the service station, a visible POS printer — wakes the guest up instantly, and the rest of the evening is spent in a room rather than in a dream. Watch how two masters guard that spell. In London, Erik Lorincz (World Class Global Champion, former Head Bartender of The Savoy’s American Bar and founder of Kwānt) treats service choreography and vintage crystal as spatial design: the posture of the bartender, the acoustic snap of the tin, the weight of antique glassware and the transition from Mayfair street to mid-century tropical salon. In Moscow, Denis Bobkov (Pub Life Group — Black Swan, Bambule, The Bix, Abbey Players) constructs multi-room theatrical labyrinths filled with real antique silverware, dripping wax candles, vintage porcelain and reclaimed church doors where every object keeps the guest inside the narrative.',
+          body: 'Think of a bar or a restaurant as a sweet fairy tale: for two hours the guest agrees to believe in a world you have built, where the candle flame is warm, the noise of the street disappears and every plate, fork and glass on the table belongs to the story. The spell is fragile. One wrong detail — a harsh overhead LED, a cheap plastic tray, a dirty door handle, a ringtone from the service station, a visible POS printer — wakes the guest up instantly, and the rest of the evening is spent in a room rather than in a dream. Watch how two masters guard that spell. In Barcelona, Simone Caporale (co-founder of Sips, №1 in The World’s 50 Best Bars 2023) treats service choreography and custom vessels as spatial architecture: by dismantling the traditional bar counter in favour of an open central island workstation, Sips creates 360-degree visibility where the bartender’s craft is shared directly with guests, paired with bespoke vessels (such as cast metal hands) that make luxury immediate and unpretentious. In Moscow, Denis Bobkov (Pub Life Group — Black Swan, Bambule, The Bix, Abbey Players) constructs multi-room theatrical labyrinths filled with real antique silverware, dripping wax candles, vintage porcelain and reclaimed church doors where every object keeps the guest inside the narrative.',
           ideas: [
             'A venue is a sweet fairy tale: any small detail (a harsh light, a plastic tray, a visible printer) can instantly wake the guest from the dream.',
-            'Erik Lorincz (The Savoy / Kwānt): service choreography, posture and vintage glassware weight are part of spatial architecture.',
+            'Simone Caporale (Sips Barcelona): service choreography, central island ergonomics and bespoke vessel craft remove barriers between maker and guest.',
             'Denis Bobkov (Black Swan / Bambule): real candles, antique tableware and sequential hidden rooms immerse the guest deeper than any modern renovation.',
             'Alex Kratena (Artesian / Tayēr + Elementary): connect five-star ritual to contemporary, clearly differentiated bar formats.',
             'Back-of-house must never leak into the story; continuity across sight, sound, scent and touch is the craft.'
           ],
-          case: 'Kwānt & The Savoy (Erik Lorincz, London) · Black Swan & Bambule (Denis Bobkov) · Himkok (Oslo)',
-          practitioners: ['Erik Lorincz', 'Alex Kratena', 'Denis Bobkov'],
-          challenge: 'Practical Assignment 02: Map three scenes for your venue concept (arrival, peak moment, farewell). Specify lighting (candles/warm lamps), sound (BPM), scent, antique/custom tableware and service choreography inspired by Erik Lorincz, Alex Kratena or Denis Bobkov — and list three “fairy-tale breakers” you will eliminate. Submit your file/text inside the app for admin feedback.'
+          case: 'Sips Drinkery House (Simone Caporale, Barcelona) · Black Swan & Bambule (Denis Bobkov) · Himkok (Oslo)',
+          practitioners: ['Simone Caporale', 'Alex Kratena', 'Denis Bobkov'],
+          challenge: 'Practical Assignment 02: Map three scenes for your venue concept (arrival, peak moment, farewell). Specify lighting (candles/warm lamps), sound (BPM), scent, antique/custom tableware and service choreography inspired by Simone Caporale, Alex Kratena or Denis Bobkov — and list three “fairy-tale breakers” you will eliminate. Submit your file/text inside the app for admin feedback.'
         }
       ]
     },
@@ -327,15 +292,15 @@ window.COURSE = {
           title: 'Concept objects: the menu, the merchandise, the furniture',
           duration: '17 min',
           intro: 'A concept becomes real when it leaves the wall and lands in the guest’s hands — as a menu, a coaster, a cube, a stool, or a bar station drawn for the workshop.',
-          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The objects around the drinks: the TAM project treats a bar as a product line — engraved stainless-steel flavour cubes reading smoky · dirty · fruits · sweet · shake · umami · agave · brandy turn a drinks list into a hand-held menu; a mirror-polished bar-top tool case, a flick-style bar blade and a folding stool extend the venue into guest shifts and souvenirs. (3) The furniture that carries the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
+          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The furniture and stations that carry the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
           ideas: [
             'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
-            'TAM flavour cubes: merchandise can teach the drinks list instead of decorating the shelf.',
+            'Pacific bar solutions: design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
             'Pacific: the bar itself is a designed object — draw the ice well, the speed rail and the glass hanger, not just the countertop.',
             'CooCoo Coffee: a single alliterative product trio (coffee · croffles · cookies) makes naming, signage, packaging and menu structure fall into place.',
             'A concept object only counts when it can be produced, priced and replaced — prototypes are part of the business model.'
           ],
-          case: 'Concept Objects: TAM (flavour cubes, tool case, bar blade, stool) · CooCoo Coffee (coffee · croffles · cookies) · Pacific (bar stations & drawings)',
+          case: 'Concept Objects: Pacific (bar stations, mobile consoles & technical drawings) · CooCoo Coffee (coffee · croffles · cookies)',
           practitioners: ['Egor Tarasenko'],
           challenge: 'Practical Assignment 04B (Concept Objects): Design three physical objects for your venue — one menu artefact the guest keeps, one item of merchandise that teaches the concept, and one piece of working furniture or equipment (sketch with dimensions and materials). Explain the production route and the unit cost of each. Attach sketches/photos for admin review.'
         }
@@ -371,25 +336,25 @@ window.COURSE = {
       id: 'ai',
       number: '06',
       title: 'AI in Hospitality',
-      description: 'Assess emerging AI workflows, creative briefs and operational forecasting — contrasting algorithmic tools with the human authorship of Rémy Savage and Erik Lorincz.',
+      description: 'Assess emerging AI workflows, creative briefs and operational forecasting — contrasting algorithmic tools with the human authorship of Rémy Savage and Simone Caporale.',
       image: 'horeca-ai-mixology-lab.jpg',
-      practitioners: ['Rémy Savage (Conceptual Authorship)', 'Erik Lorincz (World Class Jury & Bespoke Craft)'],
+      practitioners: ['Rémy Savage (Conceptual Authorship)', 'Simone Caporale (Bespoke Vessel Craft & Avant-Garde Mixology)'],
       lessons: [
         {
           id: 'human-ai',
           title: 'AI as a creative and operational tool',
           duration: '17 min',
           intro: 'AI can help teams generate options, prototype menu visuals, forecast demand and structure R&D briefs. It cannot own the responsibility for what a hospitality business promises.',
-          body: 'From Diageo World Class challenges (where bartenders translated AI-generated visual art into Don Julio 1942 sensory serves) to demand forecasting, menu engineering and prep scheduling, AI expands a small team’s capacity. Yet as Rémy Savage and Erik Lorincz demonstrate in their laboratories in London and Paris, an algorithm can suggest flavour pairings or visual compositions, but only a human author can decide why a drink exists, how an antique glass feels in the hand, and how a host reads a tired guest at 11 p.m. Use AI to compress back-office analysis and widen creative exploration, then edit ruthlessly through your own taste and ethical rules.',
+          body: 'From Diageo World Class challenges (where bartenders translated AI-generated visual art into Don Julio 1942 sensory serves) to demand forecasting, menu engineering and prep scheduling, AI expands a small team’s capacity. Yet as Rémy Savage and Simone Caporale demonstrate in their laboratories in London, Paris and Barcelona, an algorithm can suggest flavour pairings or visual compositions, but only a human author can decide why a drink exists, how an antique glass feels in the hand, and how a host reads a tired guest at 11 p.m. Use AI to compress back-office analysis and widen creative exploration, then edit ruthlessly through your own taste and ethical rules.',
           ideas: [
             'Use AI to widen R&D exploration, menu prototyping and demand forecasting, then apply human taste and editorial judgement.',
-            'World Class AI Briefs & Erik Lorincz: AI can spark a visual or flavour hypothesis, but execution lives in glass, ice and hospitality.',
+            'World Class AI Briefs & Simone Caporale: AI can spark a visual or flavour hypothesis, but execution lives in glass, ice and hospitality.',
             'Rémy Savage: never mistake fluent algorithmic output for a real philosophical point of view.',
             'Commit to clear ethical boundaries around guest data, team scheduling and creative authorship.'
           ],
-          case: 'World Class AI Beverage Brief · Conceptual Laboratories of Rémy Savage & Erik Lorincz',
-          practitioners: ['Rémy Savage', 'Erik Lorincz'],
-          challenge: 'Practical Assignment 06: Define your venue’s AI & Ethics Charter: 3 workflows where AI saves time/money (forecasting, R&D flavour matrix, menu testing), 2 areas where AI is strictly banned to protect human hospitality, and 1 AI-assisted creative brief edited through Rémy Savage’s or Erik Lorincz’s lens. Submit for admin review.'
+          case: 'World Class AI Beverage Brief · Conceptual Laboratories of Rémy Savage & Simone Caporale',
+          practitioners: ['Rémy Savage', 'Simone Caporale'],
+          challenge: 'Practical Assignment 06: Define your venue’s AI & Ethics Charter: 3 workflows where AI saves time/money (forecasting, R&D flavour matrix, menu testing), 2 areas where AI is strictly banned to protect human hospitality, and 1 AI-assisted creative brief edited through Rémy Savage’s or Simone Caporale’s lens. Submit for admin review.'
         }
       ]
     },
@@ -397,16 +362,16 @@ window.COURSE = {
       id: 'fnb',
       number: '07',
       title: 'Food & Beverage Futures',
-      description: 'Explore farm-to-glass mixology, hyper-seasonal terroir, fermentation and creative bartender education through Hiroyasu Kayama, René Redzepi, Tuju and Artender.',
+      description: 'Explore farm-to-glass mixology, hyper-seasonal terroir, fermentation and beverage science through Hiroyasu Kayama, René Redzepi, Dave Arnold and Artem Talalay.',
       image: 'horeca-sustainable-terroir.jpg',
-      practitioners: ['Hiroyasu Kayama (Bar Benfiddich, Tokyo)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)', 'Ivan Lyashuk (Perfect Bars Team / Artender)', 'Vladimir Nikolaev (Perfect Bars Team / Artender)'],
+      practitioners: ['Hiroyasu Kayama (Bar Benfiddich, Tokyo)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)', 'Artem Talalay (World Class)'],
       lessons: [
         {
           id: 'new-formats',
           title: 'The next table & Hiroyasu Kayama’s farm-to-glass apothecary',
           duration: '15 min',
           intro: 'The future of food and beverage belongs to operators who control their raw narrative — from soil and botanical harvest to the final serve across the candlelit counter.',
-          body: 'When every bar in a city buys the same bottles from the same three distributors, differentiation dies. In Shinjuku, Tokyo, Hiroyasu Kayama built Bar Benfiddich (№18 World’s 50 Best Bars / №9 Asia’s 50 Best Bars) around a radical answer: he farms his own land in Chichibu (Saitama Prefecture), growing wormwood, fennel, anise, juniper, chamomile, mint, plums and yuzu. He distils and infuses his own absinthe, amari and botanical spirits. Even the name encodes his roots: "Ben" (mountain = yama) + "Fiddich" (deer = ka) = Kayama. Inside the 16-seat apothecary bar there is no printed menu — Kayama talks with each guest among antique jars and candlelight and composes from scratch. Pair this with São Paulo’s Tuju (Art of Hospitality 2026), where menus follow seasonal rain, wind and drought cycles. Dave Arnold’s Liquid Intelligence offers the complementary beverage-science lens: controlled temperature, dilution and carbonation make novel serves reliably repeatable. At Noma, René Redzepi and his teams brought foraging, local Nordic ingredients, fermentation and hyper-seasonality into the global conversation. This is also a leadership case: in 2026, following public allegations from former employees, Redzepi acknowledged harmful past leadership, apologised and stepped away from Noma. Artender, developed by Ivan Lyashuk and Vladimir Nikolaev with Perfect Bars Team, turns bartender creativity into continuing practice through prompts, challenges and education. Together, these cases show that the future of F&B is terroir-rooted and inventive — and must also be responsible to the people who make it.',
+          body: 'When every bar in a city buys the same bottles from the same three distributors, differentiation dies. In Shinjuku, Tokyo, Hiroyasu Kayama built Bar Benfiddich (№18 World’s 50 Best Bars / №9 Asia’s 50 Best Bars) around a radical answer: he farms his own land in Chichibu (Saitama Prefecture), growing wormwood, fennel, anise, juniper, chamomile, mint, plums and yuzu. He distils and infuses his own absinthe, amari and botanical spirits. Even the name encodes his roots: "Ben" (mountain = yama) + "Fiddich" (deer = ka) = Kayama. Inside the 16-seat apothecary bar there is no printed menu — Kayama talks with each guest among antique jars and candlelight and composes from scratch. Pair this with São Paulo’s Tuju (Art of Hospitality 2026), where menus follow seasonal rain, wind and drought cycles. Dave Arnold’s Liquid Intelligence offers the complementary beverage-science lens: controlled temperature, dilution and carbonation make novel serves reliably repeatable. At Noma, René Redzepi and his teams brought foraging, local Nordic ingredients, fermentation and hyper-seasonality into the global conversation. This is also a leadership case: in 2026, following public allegations from former employees, Redzepi acknowledged harmful past leadership, apologised and stepped away from Noma. Together, these cases show that the future of F&B is terroir-rooted and inventive — and must also be responsible to the people who make it.',
           ideas: [
             'Hiroyasu Kayama (Bar Benfiddich): grow or craft your own core ingredients so your flavour signature cannot be bought from a catalogue.',
             'Zero-menu apothecary dialogue turns ordering from a transaction into a bespoke consultation.',
@@ -417,7 +382,7 @@ window.COURSE = {
             'Ivan Lyashuk and Vladimir Nikolaev / Artender: build bartender creativity through accessible challenges, education and peer exchange.'
           ],
           case: 'Bar Benfiddich (Hiroyasu Kayama, Tokyo) · Tuju (São Paulo)',
-          practitioners: ['Hiroyasu Kayama', 'René Redzepi', 'Dave Arnold', 'Ivan Lyashuk', 'Vladimir Nikolaev'],
+          practitioners: ['Hiroyasu Kayama', 'René Redzepi', 'Dave Arnold', 'Artem Talalay'],
           challenge: 'Practical Assignment 07: Design the F&B & Menu core of your concept (5 key dishes/serves + pricing logic). Include at least two "house-grown / house-made" signature preparations inspired by Hiroyasu Kayama’s Bar Benfiddich that no competitor can buy ready-made. Submit your file/notes for admin confirmation.'
         }
       ]
@@ -426,26 +391,25 @@ window.COURSE = {
       id: 'entrepreneurship',
       number: '08',
       title: 'Entrepreneurship',
-      description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov, Boris Zarkov and the Artender team.',
+      description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov and Boris Zarkov.',
       image: 'horeca-concept-pitch.jpg',
-      practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Ivan Lyashuk (Perfect Bars Team / Artender)', 'Vladimir Nikolaev (Perfect Bars Team / Artender)'],
+      practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · Krasota · IKRA)'],
       lessons: [
         {
           id: 'from-idea',
           title: 'From idea to operating model & talent ecosystem',
           duration: '18 min',
           intro: 'A hospitality business is a promise delivered repeatedly by a team within real financial constraints. Great founders build not just a room, but a school of people.',
-          body: 'Look at one of the most instructive lineages in contemporary bar entrepreneurship: Bek Narzi and his former protégé Igor Zernov. At Moscow’s City Space Bar and later in London (Pachamama) and his books The Horeca Code and Seven Hours Before Take-off, Bek Narzi established the entrepreneurial fundamentals: P&L literacy, guest psychology, PR audacity, and treating the bar team as a first-league sports squad where discipline creates stars. Igor Zernov absorbed that school and, together with Artyom Peruk and Nikolay Kiselyov, launched El Copitas on a shoestring budget — turning a hidden Thursday-to-Saturday speakeasy into #FollowTheRabbits: a group encompassing El Copitas (№8 World’s 50 Best Bars), Paloma Cantina, Tagliatella Caffe, Sangre Fresca, the Bartenders FAQtory academy and Saint-Petersburg Cocktail Week. At restaurant-group scale, Boris Zarkov (White Rabbit Family, co-founder of IKRA) offers a model of building a portfolio of distinct concepts and talent. Ivan Lyashuk and Vladimir Nikolaev connect Perfect Bars Team’s bar concepts with Artender’s continuing creative challenges and education for bartenders. Across these models, test assumptions cheaply, build a strong team culture, and make education part of the growth engine.',
+          body: 'Look at one of the most instructive lineages in contemporary bar entrepreneurship: Bek Narzi and his former protégé Igor Zernov. At Moscow’s City Space Bar and later in London (Pachamama) and his books The Horeca Code and Seven Hours Before Take-off, Bek Narzi established the entrepreneurial fundamentals: P&L literacy, guest psychology, PR audacity, and treating the bar team as a first-league sports squad where discipline creates stars. Igor Zernov absorbed that school and, together with Artyom Peruk and Nikolay Kiselyov, launched El Copitas on a shoestring budget — turning a hidden Thursday-to-Saturday speakeasy into #FollowTheRabbits: a group encompassing El Copitas (№8 World’s 50 Best Bars), Paloma Cantina, Tagliatella Caffe, Sangre Fresca, the Bartenders FAQtory academy and Saint-Petersburg Cocktail Week. At restaurant-group scale, Boris Zarkov (White Rabbit Family, Krasota Gastro-Theatre, co-founder of IKRA) offers a model of building a portfolio of distinct concepts and immersive talent ecosystems. Across these models, test assumptions cheaply, build a strong team culture, and make education part of the growth engine.',
           ideas: [
             'Bek Narzi’s entrepreneurial rule: creative storytelling must sit on top of unit economics, sales training and iron discipline.',
             'Igor Zernov (#FollowTheRabbits): validate demand in a low-capex format first, then reinvest community trust into a multi-concept ecosystem.',
             'Build a school inside your business (City Space school, Bartenders FAQtory) so talent grows with you instead of leaving.',
             'Boris Zarkov (White Rabbit Family / IKRA): make each concept distinct while building a group with a clear point of view and a deep talent bench.',
-            'Ivan Lyashuk and Vladimir Nikolaev (Perfect Bars Team / Artender): turn education, creative prompts and peer feedback into an ongoing talent ecosystem.',
             'Map your unit economics early: average check, seat turns, rent-to-revenue ratio, labour percentage and payback horizon.'
           ],
           case: 'Bek Narzi (City Space & The Horeca Code) · Igor Zernov (#FollowTheRabbits & El Copitas)',
-          practitioners: ['Bek Narzi', 'Igor Zernov', 'Boris Zarkov', 'Ivan Lyashuk', 'Vladimir Nikolaev'],
+          practitioners: ['Bek Narzi', 'Igor Zernov', 'Boris Zarkov'],
           challenge: 'Practical Assignment 08: Present the Operating Model & Unit Economics for your venue (capacity, covers/day, average check, rent logic, staffing structure, 90-day launch & guest-shift plan) applying Bek Narzi’s Horeca Code and Igor Zernov’s ecosystem model. Upload your assignment for admin review.'
         }
       ]
@@ -506,7 +470,7 @@ window.COURSE = {
             'Chicken Connection: the finish pass, boxed delivery and open kitchen are the content of the room, not the back of house.',
             'Collect the details: chessboards, resin ashtrays, pasted posters, bric-a-brac glassware in red light — a research file is cheaper than a renovation.'
           ],
-          case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific · TAM',
+          case: 'Project Archive of the Author: Joi Espresso Bar · Passie Cakes Co. · CooCoo Coffee · Chicken Connection (Moscow) · Pacific',
           practitioners: ['Egor Tarasenko'],
           challenge: 'Practical Assignment 09C (Archive Reading): Choose four photographs from the author’s project archive and write a sourcing analysis for each: what was bought new, what was found second-hand, what was made or repaired by hand, and what it would cost to repeat in your own city. Then add one detail you would copy and one you would refuse. Attach your notes for admin confirmation.'
         }
@@ -518,24 +482,24 @@ window.COURSE = {
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
       image: 'horeca-concept-pitch.jpg',
-      practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Erik Lorincz', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Ivan Lyashuk', 'Vladimir Nikolaev', 'Dave Arnold', 'Alex Kratena'],
+      practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
           id: 'final-brief',
           title: 'Design the hospitality concept of tomorrow ("Open & Operate")',
           duration: '20 min',
           intro: 'Imagine you are opening a hospitality venue. Make the complete case for the experience, the 50 Best menu concept, the business model, and the real found-object mockup staged with antique tableware and candlelight.',
-          body: 'Your final submission brings together every milestone of the elective into one cohesive "Open & Operate" pitch deck, a physical Menu Concept (in the spirit of The World’s 50 Best Bars & Restaurants), and your live mockup assembled from found objects, antique tableware and candles. Connect your audience, one-sentence USP, space, atmosphere ("sweet fairy tale" continuity), neurogastronomy serves, technology/human matrix, unit economics, and salvage & budget realisation plan. Choose one or two principles from the featured figures: Kayama (farm-to-glass), Bobkov (salvage scenography), Savage (conceptual menus), Lorincz or Kratena (service and bar format), Zernov or the Artender team of Lyashuk and Nikolaev (community, creative practice and education), Talalay or Dave Arnold (sensory mixology and drink science), Narzi or Zarkov (operating discipline and restaurant-group strategy), Redzepi (terroir, fermentation and responsible leadership), and Jiro Ono (shokunin precision).',
+          body: 'Your final submission brings together every milestone of the elective into one cohesive "Open & Operate" pitch deck, a physical Menu Concept (in the spirit of The World’s 50 Best Bars & Restaurants), and your live mockup assembled from found objects, antique tableware and candles. Connect your audience, one-sentence USP, space, atmosphere ("sweet fairy tale" continuity), neurogastronomy serves, technology/human matrix, unit economics, and salvage & budget realisation plan. Choose one or two principles from the featured figures: Kayama (farm-to-glass), Bobkov (salvage scenography), Savage (conceptual menus), Caporale or Kratena (service and bar format), Zernov (community ritual and education), Talalay or Dave Arnold (sensory mixology and drink science), Narzi or Zarkov (operating discipline and restaurant-group strategy), Redzepi (terroir, fermentation and responsible leadership), and Jiro Ono (shokunin precision).',
           ideas: [
             'Make the guest, the occasion and the one-sentence USP unmistakable.',
             'Present your Menu Concept analysed through The World’s 50 Best lens (Rémy Savage, Bar Leone, El Copitas, Tuju, Bar Benfiddich).',
-            'Show how service choreography (Lorincz or Kratena), sensory serves (Talalay, Arnold, Kayama or Jiro), operational standards (Narzi or Zarkov) and community growth (Zernov or Artender) work together.',
+            'Show how service choreography (Caporale or Kratena), sensory serves (Talalay, Arnold, Kayama or Jiro), operational standards (Narzi or Zarkov) and community growth (Zernov) work together.',
             'Pair culinary innovation (Redzepi) with a credible plan for safe, fair working conditions.',
             'Present your salvage & scenography budget (Joi Espresso Bar, Denis Bobkov) alongside photographs of your real found-object mockup (antique tableware, candles, textures, menu artefact).',
             'Keep the fairy tale intact — name the details that could wake the guest up, and how you removed them.'
           ],
           case: 'Your own concept, 50 Best Menu & Found-Object Mockup benchmarked against selected figures from every course block',
-          practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Erik Lorincz', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Ivan Lyashuk', 'Vladimir Nikolaev', 'Dave Arnold', 'Alex Kratena'],
+          practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
           challenge: 'Practical Assignment 10 (Final Pitch "Open & Operate"): Submit your complete concept deck, 50 Best Menu Concept, sourcing & budget plan, and photographs of your live found-object mockup (antique tableware, candles, props) inside the app (and/or to egor.tarasenko@him-mail.ch) for final review and certificate approval by Egor Tarasenko.'
         }
       ]
@@ -545,9 +509,9 @@ window.COURSE = {
     {
       title: 'Bar Benfiddich · Hiroyasu Kayama',
       location: 'Tokyo, Japan',
-      year: '№18 World’s 50 Best Bars',
-      industry: 'Farm-to-glass apothecary · Hiroyasu Kayama',
-      image: 'horeca-sustainable-terroir.jpg',
+      year: '№18 World’s 50 Best Bars / №9 Asia’s 50 Best Bars',
+      industry: 'Farm-to-Glass Mixology · Botanical Apothecary Craft',
+      image: 'case-benfiddich-kayama.jpg',
       context: 'A 16-seat apothecary cocktail bar in Shinjuku where owner-bartender Hiroyasu Kayama serves botanicals grown on his family farm in Chichibu (Saitama).',
       what: 'No printed menu: Kayama talks with each guest across a candlelit counter of antique jars, crushes fresh wormwood, fennel, juniper and yuzu in a mortar, and pours homemade absinthe, amari and infusions.',
       why: 'Demonstrates that vertical ownership of raw ingredients (soil to glass) and antique apothecary staging create an irreproducible global benchmark.',
@@ -556,42 +520,42 @@ window.COURSE = {
     {
       title: 'Black Swan & Bambule · Denis Bobkov',
       location: 'Moscow · Pub Life Group',
-      year: 'Salvage, Antique Tableware & Scenography',
-      industry: 'Theatrical pubs & bars · Denis Bobkov',
-      image: 'horeca-atmosphere-candle.jpg',
+      year: 'Salvage Architecture & Theatrical Pubs',
+      industry: 'Pub Life Group · Theatrical Scenography & Found Objects',
+      image: 'case-black-swan-bobkov.jpg',
       context: 'Co-founder of Pub Life Group Denis Bobkov rose from dishwasher and bartender to building Europe’s most atmospheric theatrical pubs and bars (Black Swan, Bambule, Abbey Players, The Bix).',
       what: 'Labyrinthine multi-room spaces assembled from European salvage yards, antique porcelain and silverware, dripping wax candles, 19th-century church doors, Victorian confessionals and stage lighting.',
       why: 'Proves how found antique objects, real candlelight and theatrical scenography keep the "sweet fairy tale" intact across every room.',
       takeaway: 'Real found artefacts — antique tableware, candles and salvage — build deeper emotional worlds than turnkey luxury renovations.'
     },
     {
-      title: 'Shapes, Bar Nouveau & Little Red Door · Rémy Savage',
+      title: 'A Bar with Shapes for a Name · Rémy Savage',
       location: 'London & Paris',
-      year: '50 Best Menu Concepts & Manifestos',
-      industry: 'Concept architecture & 50 Best menus · Rémy Savage',
-      image: 'horeca-ai-mixology-lab.jpg',
-      context: 'World Class Bartender of the Year Rémy Savage builds bars and 50 Best menus as complete philosophical movements — wordless illustrated comic menus at Little Red Door, Bauhaus minimalism at Shapes (London) and Art Nouveau at Bar Nouveau (Paris).',
-      what: 'The menu is designed as a collectible art object where guests choose by visual form, mood or movement rather than a dry recipe list.',
+      year: 'World’s 50 Best Bars',
+      industry: '50 Best Conceptual Menus · Bauhaus Architecture & Art Manifestos',
+      image: 'case-shapes-savage.jpg',
+      context: 'World Class Bartender of the Year Rémy Savage builds bars and menus as complete philosophical movements — Bauhaus functionalism at Shapes (London) and Art Nouveau at Bar Nouveau (Paris).',
+      what: 'At Shapes (London) and Bar Nouveau (Paris), the menu is designed as an art manifesto where guests choose by visual form, mood or movement rather than a dry recipe list.',
       why: 'Turns the menu and interior into a single conceptual filter that makes every decision coherent.',
       takeaway: 'A World’s 50 Best menu is a tangible manifesto that teaches the guest how to experience the room.'
     },
     {
-      title: 'The Savoy & Kwānt · Erik Lorincz',
-      location: 'Mayfair, London',
-      year: '№1 World’s 50 Best Bars legacy',
-      industry: 'Five-star service choreography · Erik Lorincz',
-      image: 'horeca-interior-design.jpg',
-      context: 'World Class Global Champion (2010) Erik Lorincz led The Savoy’s American Bar to №1 in the world before opening his own Mayfair flagship, Kwānt.',
-      what: 'Combines classic hotel elegance, rare vintage spirits, antique crystal, tropical mid-century scenography and laboratory precision.',
-      why: 'Shows how physical choreography, posture, vintage glassware and menu storytelling create effortless luxury.',
-      takeaway: 'Hospitality excellence lives in the rhythm and grace of human movement behind the bar.'
+      title: 'Sips Drinkery House · Simone Caporale',
+      location: 'Barcelona, Spain',
+      year: '№1 World’s 50 Best Bars 2023',
+      industry: 'Modern Cocktail Lab · The Counterless Drinkery House & Bespoke Vessels',
+      image: 'case-sips-caporale.jpg',
+      context: 'Founded by Simone Caporale and Marc Álvarez in Barcelona’s Eixample, Sips eliminated the traditional bar counter to reinvent guest connection.',
+      what: 'Instead of sitting across a counter barrier, guests sit around a central island workstation where bartenders work in 360-degree view. Signature serves feature bespoke vessels — from cast metal hands to suspended crystal and temperature contrasts.',
+      why: 'Proves that world-leading avant-garde mixology thrives without formal stiffness or barriers separating staff from guests.',
+      takeaway: 'Remove the barrier between maker and guest; bespoke vessels and open ergonomics make the experience immediate, intimate and alive.'
     },
     {
       title: 'El Copitas & #FollowTheRabbits · Igor Zernov',
       location: 'St. Petersburg',
       year: '№8 World’s 50 Best Bars',
-      industry: 'Community speakeasy, living menu & ecosystem · Igor Zernov',
-      image: 'horeca-craft-bar.jpg',
+      industry: '#FollowTheRabbits · Speakeasy Rituals & Hospitality Ecosystem',
+      image: 'case-el-copitas-zernov.jpg',
       context: 'Co-founded by Igor Zernov (an alumnus of Bek Narzi’s City Space school), El Copitas began as a tiny hidden bar around one candlelit communal table.',
       what: 'Personal phone greeting, welcome taco and copita of mezcal in handmade clay/ceramic vessels, weekly hand-drawn chalkboard menu — scaling into #FollowTheRabbits (Paloma Cantina, Tagliatella Caffe, Sangre Fresca, Bartenders FAQtory, SPb Cocktail Week).',
       why: 'A masterclass in scaling intimacy: starting with found objects and a living weekly menu, then building an entire industry ecosystem.',
@@ -600,94 +564,90 @@ window.COURSE = {
     {
       title: 'City Space & The Horeca Code · Bek Narzi',
       location: 'Moscow & London',
-      year: 'Management & Standards',
-      industry: 'Bar entrepreneurship & education · Bek Narzi',
-      image: 'horeca-tech-operations.jpg',
-      context: 'British-Russian hospitality entrepreneur Bek Narzi put City Space Bar into the World’s 50 Best Bars, launched London’s Pachamama, and authored The Horeca Code and Seven Hours Before Take-off.',
+      year: 'World’s 50 Best Bars Pioneer',
+      industry: 'Bar Management, Standards & Unit Economics',
+      image: 'case-city-space-narzi.jpg',
+      context: 'British-Russian hospitality entrepreneur Bek Narzi put City Space Bar into the World’s 50 Best Bars, launched London’s Pachamama, and authored The Horeca Code.',
       what: 'Built a rigorous school of bar management combining five-star standards, station ergonomics, R&D garnishes (such as fruit chips) and unit economics.',
       why: 'Demonstrates that showmanship only survives when backed by iron operational standards and mentorship.',
       takeaway: 'Build a school of people and strict operational standards; the awards and revenue follow.'
     },
     {
-      title: 'Sensory Mixology & Speed · Artem Talalay',
+      title: 'Sensory Mixology · Artem Talalay',
       location: 'Sochi & Moscow',
-      year: 'World Class Winner',
-      industry: 'Neurogastronomy & competition R&D · Artem Talalay',
-      image: 'horeca-neurogastronomy-serve.jpg',
-      context: 'Diageo Reserve World Class Russia Winner (2020–2021, winning both Signature Drink and Cocktail Against the Clock) and Palm Branch "Bartender of the Year" Hall of Fame member.',
-      what: 'Constructs drinks across four coordinates — taste, aroma, enveloping texture and conceptual colouristics — executed at high-speed competition ergonomics.',
+      year: 'World Class Russia Winner · Palm Branch Hall of Fame',
+      industry: 'Multisensory Mixology · Speed Ergonomics & Gastrophysics',
+      image: 'case-sensory-talalay.jpg',
+      context: 'Diageo Reserve World Class Russia Winner (2020–2021, winning both Signature Drink and Cocktail Against the Clock) and Palm Branch Hall of Fame member.',
+      what: 'Constructs drinks across four deliberate coordinates — taste, aroma, enveloping tactile texture and conceptual colouristics — executed at high-speed competition ergonomics.',
       why: 'Connects sensory gastrophysics directly to real-world Friday-night bar speed.',
       takeaway: 'A masterpiece in a glass must work both as a sensory story and as an ergonomic 60-second build.'
     },
     {
       title: 'Sukiyabashi Jiro · Jiro Ono',
       location: 'Ginza, Tokyo',
-      year: '3★ MICHELIN legend',
-      industry: 'Shokunin mastery & omakase architecture · Jiro Ono',
-      image: 'horeca-chefs-counter.jpg',
+      year: '3★ MICHELIN Legend',
+      industry: 'Shokunin Mastery · Counter Precision & Pacing',
+      image: 'case-jiro-ono.jpg',
       context: 'A 10-seat counter in a Tokyo subway basement led by nonagenarian master Jiro Ono, holding three MICHELIN stars for decades.',
       what: 'A 20-piece nigiri omakase with zero menu distractions, rice kept at 37°C body temperature, and piece proportions subtly adjusted to each guest’s posture and pace.',
       why: 'Proves that absolute mastery of fundamentals and peak–end pacing transcend location and size.',
       takeaway: 'Perfection is not an act of luxury decor; it is relentless daily refinement of the core craft.'
     },
     {
+      title: 'Krasota Gastro-Theatre · Boris Zarkov',
+      location: 'Moscow & Dubai · White Rabbit Family',
+      year: 'Immersive Dining & Gastro-Theatre',
+      industry: 'Gastro-Theatre · 360° Scenography, Digital Art & Multisensory Dining',
+      image: 'case-krasota-zarkov.jpg',
+      context: 'Created by Boris Zarkov (White Rabbit Family), chef Vladimir Mukhin and visual director Anton Nenashev to merge haute cuisine with immersive digital scenography.',
+      what: 'A 20-seat circular interactive table surrounded by 360-degree projections, spatial audio and synchronized lighting. Each course is a choreographed scene where visuals on the table surface and walls illuminate the dish’s narrative, culture and ingredients.',
+      why: 'Proves that contemporary hospitality can become a total artwork (Gesamtkunstwerk), uniting culinary art, scenography, digital projection and theatrical pacing.',
+      takeaway: 'When technology, lighting and scenography serve the culinary story rather than distract from it, dining becomes unforgettable theatre.'
+    },
+    {
+      title: 'Liquid Intelligence · Dave Arnold',
+      location: 'New York City',
+      year: 'Beverage Science Pioneer',
+      industry: 'Beverage Science & Laboratory Cocktail Technique',
+      image: 'case-dave-arnold.jpg',
+      context: 'Author of Liquid Intelligence and founder of Booker & Dax, applying scientific rigor to the physics and chemistry of cocktails.',
+      what: 'Applies controlled experiments to temperature, dilution, clarification (agar, centrifuge), rapid nitro-infusion and carbonation to make complex beverage craft rigorously repeatable.',
+      why: 'Shifts drink-making from superstitious guesswork to measurable, repeatable science where every variable is understood.',
+      takeaway: 'Measure and control variables so craft becomes reliable; use science not for show, but to deliver pure guest pleasure.'
+    },
+    {
+      title: 'Noma · René Redzepi',
+      location: 'Copenhagen, Denmark',
+      year: 'Multiple №1 World’s 50 Best Restaurants',
+      industry: 'New Nordic Cuisine · Foraging, Fermentation & Seasonality',
+      image: 'case-rene-redzepi.jpg',
+      context: 'Pioneered New Nordic gastronomy through hyper-local wild foraging, koji fermentation and micro-seasonality at Noma.',
+      what: 'Redefined the global culinary language by championing native wild produce, game, coastal seaweeds and koji fermentation, building an R&D laboratory (Noma Projects) alongside seasonal menu iterations.',
+      why: 'Demonstrates that a regional terroir and deep curiosity can spark a worldwide culinary movement.',
+      takeaway: 'Your immediate local terroir contains boundless luxury if you approach it with radical curiosity, patience and fermentation craft.'
+    },
+    {
+      title: 'Tayēr + Elementary · Alex Kratena',
+      location: 'Old Street, London',
+      year: 'Top-5 World’s 50 Best Bars',
+      industry: 'Dual-Concept Hospitality · Casual Tap Bar & Produce-Led R&D Counter',
+      image: 'case-alex-kratena.jpg',
+      context: 'Created by Alex Kratena and Monica Berg, uniting an accessible everyday front bar with a progressive produce-driven backroom.',
+      what: 'Elementary serves draft highballs and quick snacks in an open daylight room, while Tayēr operates an industrial U-shaped counter serving daily changing, ingredient-first drinks numbered rather than named.',
+      why: 'Solves the dilemma of bar accessibility versus progressive laboratory R&D by creating two distinct stages under one roof.',
+      takeaway: 'Democratise great drinks: pair an effortless neighbourhood entrance with a focused R&D counter so both casual guests and connoisseurs feel at home.'
+    },
+    {
       title: 'Joi Espresso Bar · Egor Tarasenko',
       location: 'Author’s own project',
-      year: 'Opened 2025 · by OGONEK TEAM',
-      industry: 'Espresso bar · Found objects, vintage tableware & scenography',
+      year: 'Opened 2025 · OGONEK TEAM',
+      industry: 'Espresso bar · Found objects, street sourcing & low-budget scenography',
       image: 'project-joi-arcade.jpg',
-      context: 'A small espresso bar assembled by the author of this course almost entirely from what the street and the flea markets offered — furniture, fixtures, cups, lamps, equipment and objects other people had already discarded.',
-      what: 'Instead of ordering a fitted interior, the space was built piece by piece: a poster facade, café bulbs strung along the arcade, paper cups carrying the logo, a reconditioned brass lever machine, second-hand grinders and a counter that hides more inventory than seats. Everything was adjusted, repaired and re-finished by hand until the room held together as one story.',
-      why: 'Direct evidence that a venue with soul does not require a large investment: the constraint became the character, and the mess of a working bar became the visual identity.',
-      takeaway: 'Budget is not the opposite of atmosphere. Money buys speed and finish; intention buys soul.',
-      gallery: ['project-joi-arcade.jpg', 'project-joi-facade.jpg', 'project-joi-brand.jpg', 'project-joi-cups.jpg', 'project-joi-machine.jpg', 'project-joi-grinder.jpg', 'project-joi-bar.jpg', 'project-joi-arcade-lights.jpg', 'project-joi-arcade-arches.jpg']
-    },
-    {
-      title: 'Passie Cakes Co. & CooCoo Coffee · small-venue scenography',
-      location: 'Two street venues',
-      year: '2025–2026 · built on small budgets',
-      industry: 'Cake shop & croffle bar · Identity built from props, graphics and light',
-      image: 'project-passie-wall.jpg',
-      context: 'Two small venues from the author’s practice, documented from inside: a cake room in pastel pinks with a crystal chandelier and a hand-drawn bear logo, and a street coffee bar in turquoise where a cartoon cup with googly eyes sells three alliterative products — coffee, croffles, cookies.',
-      what: 'Neither room was designed with custom joinery. The identity is carried by paint, props, printed paper, pastel crockery, fairy lights and a chandelier bought second-hand, while the product itself is staged like a window display — a birthday cake with duck decorations, a croffle on a pink table, a slice on an old china plate.',
-      why: 'Shows how far a concept can travel on graphics and props alone: guests photograph the wall, the cup and the table vignette before they photograph the food.',
-      takeaway: 'When there is no budget for architecture, spend it on one colour story, one drawn character and one photographable table.',
-      gallery: ['project-passie-wall.jpg', 'project-passie-cake.jpg', 'project-passie-cheesecake.jpg', 'project-passie-sakura.jpg', 'project-passie-room.jpg', 'project-passie-counter.jpg', 'project-passie-window.jpg', 'project-coocoo-pour.jpg', 'project-coocoo-room.jpg', 'project-coocoo-bulbs.jpg', 'project-coocoo-team.jpg', 'project-coocoo-menu.jpg']
-    },
-    {
-      title: 'Pacific & TAM · bar objects',
-      location: 'Design & fabrication projects',
-      year: 'Product design for hospitality',
-      industry: 'Bar furniture, working equipment & merchandise · Pacific (bar solutions) · TAM / TYT',
-      image: 'project-pacific-station.jpg',
-      context: 'Two product-side projects of the author: Pacific designs and fabricates bar stations and consoles; TAM builds the objects that surround the drinks — flavour cubes, tool sets, bar blades, folding stools and textiles.',
-      what: 'Pacific draws the working parts of the bar — sintered-stone tops, recessed ice wells, speed rails, under-counter glass hangers, cantilevered consoles on castors — and delivers 3D visualisations plus technical drawings for the workshop. TAM engraves the vocabulary of a drinks list onto stainless-steel cubes (smoky · dirty · fruits · sweet · shake · umami · agave · brandy) and packages tools so they can be carried between venues.',
-      why: 'Proves that the atmosphere of a venue is often decided upstream — by whoever drew the furniture and by whoever chose which objects leave the building with the guest.',
-      takeaway: 'Design the ice well, the speed rail and the takeaway object with the same seriousness as the candlelit table.',
-      gallery: ['project-pacific-logo.png', 'project-pacific-station.jpg', 'project-pacific-console.jpg', 'project-pacific-render.jpg', 'project-pacific-drawing.jpg', 'project-tam-cubes.jpg', 'project-tam-mirror.jpg', 'project-tam-flatlay.jpg', 'project-tam-tool.jpg', 'project-tam-opener.jpg', 'project-tam-stool.jpg', 'project-tam-socks.jpg']
-    },
-    {
-      title: 'Chicken Connection · Moscow',
-      location: 'Moscow',
-      year: 'Pilot episode · venue visit',
-      industry: 'Chicken concept & food media · filmed with Dmitry Konnikov',
-      image: 'project-chicken-connection-kitchen.jpg',
-      context: 'A pilot episode shot inside a Moscow chicken concept with Dmitry Konnikov: the open finish pass, the rotisserie, the branded delivery boxes and a rooster mascot waiting on the shelf.',
-      what: 'The camera stands where the kitchen hands work, so the film shows what the guest never sees — heat, boxes, branded packaging and the physical comedy of a full pass at service speed.',
-      why: 'For a modern food venue the kitchen is not the back of house; it is the content, the queue entertainment and the proof of freshness at the same time.',
-      takeaway: 'Whatever a venue films — its kitchen, its prep, its crew — becomes part of its atmosphere long before the guest arrives.',
-      gallery: ['project-chicken-connection-kitchen.jpg', 'project-chicken-connection-pass.jpg']
-    },
-    {
-      title: '50 Best Menu Concepts · Bar Leone & Tuju',
-      location: 'Hong Kong & São Paulo',
-      year: '2025–2026',
-      industry: 'World’s 50 Best №1 Bar & Art of Hospitality Menu Breakdown',
-      image: 'horeca-craft-bar.jpg',
-      context: 'Bar Leone ("Cocktail Popolari", №1 World’s 50 Best Bars) and Tuju (São Paulo, 2026 Art of Hospitality Award) show how contemporary menus communicate identity.',
-      what: 'Bar Leone pairs nostalgic Italian neighbourhood cards with full recipe/ingredient transparency; Tuju turns its tasting menu into meteorological field notes structured around Rain, Wind and Drought.',
-      why: 'Both prove that a 50 Best menu is an editorial story and a physical souvenir that anchors the guest’s memory.',
-      takeaway: 'Design your menu as an object guests want to hold, photograph and remember.'
+      context: 'A small espresso bar assembled by the course author almost entirely from found objects, flea markets and second-hand equipment.',
+      what: 'Built from street finds and flea-market discoveries: a poster facade, café bulbs, hand-set branding, reconditioned equipment and second-hand furniture without a large budget.',
+      why: 'Direct proof that with great desire you do not need a super budget: a clear point of view and resourcefulness build real soul.',
+      takeaway: 'With strong vision and desire, you do not need a huge budget. Money buys speed and finish; intention and soul come from your vision.'
     }
   ],
   projects: {
@@ -899,7 +859,7 @@ window.COURSE = {
       tag: 'INDUSTRY LEADERS & 50 BEST MENUS',
       title: 'Fourteen industry figures & World’s 50 Best menu concepts',
       date: 'September 2026',
-      text: 'The featured practitioners now include Hiroyasu Kayama, Denis Bobkov, Rémy Savage, Erik Lorincz, Igor Zernov, Artem Talalay, Bek Narzi, Jiro Ono, Boris Zarkov, René Redzepi, Ivan Lyashuk, Vladimir Nikolaev, Dave Arnold (author of Liquid Intelligence) and Alex Kratena — mapped to concept design, sensory R&D, entrepreneurship, education and responsible leadership.'
+      text: 'The featured practitioners now include Hiroyasu Kayama, Denis Bobkov, Rémy Savage, Simone Caporale (Sips Barcelona), Igor Zernov, Artem Talalay, Bek Narzi, Jiro Ono, Boris Zarkov (White Rabbit Family & Krasota), René Redzepi, Dave Arnold (author of Liquid Intelligence) and Alex Kratena — mapped to concept design, sensory R&D, gastro-theatre, entrepreneurship, education and responsible leadership.'
     },
     {
       tag: 'LIVE FOUND-OBJECT MOCKUP',

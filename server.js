@@ -37,6 +37,13 @@ const ACCESS_COOKIE = 'chs_access';
 const ACCESS_TTL = 60 * 60 * 24 * 30; // 30 days
 const PROTECTED = ['/course-data.js', '/course/', '/presentation/dist/', '/presentation/build/'];
 
+const TRIBUTE_API_KEY = process.env.TRIBUTE_API_KEY || '';
+const TRIBUTE_API_URL = process.env.TRIBUTE_API_URL || 'https://api.tribute.tg';
+const TRIBUTE_PRODUCT_ID = process.env.TRIBUTE_PRODUCT_ID || 'chs-2026-digital-elective';
+const TRIBUTE_PRICE = process.env.TRIBUTE_PRICE || '49 EUR';
+const TRIBUTE_PRODUCT_URL = process.env.TRIBUTE_PRODUCT_URL || process.env.TRIBUTE_PAYMENT_URL || process.env.TRIBUTE_INTERNAL_PAYMENT_URL || '';
+const TRIBUTE_INTERNAL_PAYMENT_URL = process.env.TRIBUTE_INTERNAL_PAYMENT_URL || process.env.TRIBUTE_PAYMENT_URL || process.env.TRIBUTE_PRODUCT_URL || 'https://t.me/tribute/app?startapp=chs2026';
+
 const ALL_LESSON_IDS = [
   'signals',
   'atmosphere',
@@ -69,11 +76,15 @@ function defaultStore() {
     progress: {},
     quizzes: {},
     tribute: {
-      mode: 'stub',
-      productId: process.env.TRIBUTE_PRODUCT_ID || 'chs-2026-digital-elective',
+      mode: process.env.TRIBUTE_API_KEY ? 'live' : 'stub',
+      apiKey: TRIBUTE_API_KEY,
+      apiUrl: TRIBUTE_API_URL,
+      productId: TRIBUTE_PRODUCT_ID,
       productTitle: 'Contemporary Horeca Scene — 2026 Edition (Digital Product)',
-      productPrice: process.env.TRIBUTE_PRICE || '49 EUR',
-      productUrl: process.env.TRIBUTE_PRODUCT_URL || '',
+      productPrice: TRIBUTE_PRICE,
+      productUrl: TRIBUTE_PRODUCT_URL || TRIBUTE_INTERNAL_PAYMENT_URL,
+      paymentUrl: TRIBUTE_INTERNAL_PAYMENT_URL,
+      internalPaymentUrl: TRIBUTE_INTERNAL_PAYMENT_URL,
       orders: [],
     },
     adminBot: {
@@ -595,6 +606,8 @@ const server = http.createServer(async (req, res) => {
           productTitle: store.tribute.productTitle,
           productPrice: store.tribute.productPrice,
           productUrl: store.tribute.productUrl,
+          paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
+          internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
         },
       });
     }
@@ -704,6 +717,9 @@ const server = http.createServer(async (req, res) => {
       productTitle: store.tribute.productTitle,
       productPrice: store.tribute.productPrice,
       productUrl: store.tribute.productUrl,
+      paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
+      internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
+      apiUrl: TRIBUTE_API_URL,
       webhookEndpoint: '/api/tribute/webhook',
       issuedCount: store.students.length,
       ordersCount: store.tribute.orders.length,
@@ -880,7 +896,13 @@ const server = http.createServer(async (req, res) => {
       progress: session.isAdmin ? store.progress : Object.fromEntries(Object.entries(store.progress).filter(([key]) => key.startsWith(`${session.user.email}:`))),
       quizzes: {},
       students: session.isAdmin ? store.students : [],
-      tribute: session.isAdmin ? store.tribute : { productTitle: store.tribute.productTitle, productPrice: store.tribute.productPrice },
+      tribute: session.isAdmin ? store.tribute : {
+        productTitle: store.tribute.productTitle,
+        productPrice: store.tribute.productPrice,
+        productUrl: store.tribute.productUrl,
+        paymentUrl: store.tribute.paymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
+        internalPaymentUrl: store.tribute.internalPaymentUrl || TRIBUTE_INTERNAL_PAYMENT_URL,
+      },
       adminBot: session.isAdmin ? store.adminBot : {},
     });
   }

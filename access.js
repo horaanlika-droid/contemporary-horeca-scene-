@@ -220,7 +220,7 @@
             <span class="eyebrow" style="margin-bottom:10px">TRIBUTE DIGITAL PRODUCT</span>
             <b>No password? Get personal access through Tribute</b>
             <p style="margin:6px 0 14px">Your password is generated automatically after digital-product checkout through the <b>Tribute API</b>. Each password is assigned to one person.</p>
-            <button class="button light small" type="button" id="toggle-tribute-box" style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
+            <button class="button light small" type="button" id="toggle-tribute-box" data-tribute-open style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
 
             <form id="tribute-checkout-form" style="display:none;margin-top:16px;padding:18px;background:var(--paper-warm);border:1px solid var(--line-strong)" novalidate>
               <span class="meta" style="color:var(--red);display:block;margin-bottom:8px">TRIBUTE API DEMO · DIGITAL-PRODUCT CHECKOUT</span>
@@ -287,16 +287,96 @@
     field?.focus({ preventScroll: true });
   }
 
+  let tributeOverlay = null;
+  let tributeLastFocus = null;
+
+  const closeTributeModal = () => {
+    if (!tributeOverlay) return;
+    tributeOverlay.classList.remove('show');
+    document.body.classList.remove('tribute-open');
+    const el = tributeOverlay;
+    tributeOverlay = null;
+    setTimeout(() => el.remove(), 220);
+    tributeLastFocus?.focus?.({ preventScroll: true });
+  };
+
+  const openTributeModal = async () => {
+    if (tributeOverlay) return;
+    tributeLastFocus = document.activeElement;
+    let payUrl = 'https://t.me/tribute/app?startapp=chs2026';
+    let price = '49 EUR';
+    try {
+      const resp = await fetch('/api/tribute/status');
+      if (resp.ok) {
+        const data = await resp.json();
+        payUrl = data.internalPaymentUrl || data.paymentUrl || data.productUrl || payUrl;
+        price = data.productPrice || price;
+      }
+    } catch { /* use defaults */ }
+
+    tributeOverlay = document.createElement('div');
+    tributeOverlay.className = 'tribute-overlay';
+    tributeOverlay.innerHTML = `
+      <div class="tribute-dialog" role="dialog" aria-modal="true" aria-labelledby="tribute-title" tabindex="-1">
+        <button class="tribute-close" type="button" data-tribute-close aria-label="Close Tribute payment dialog">✕</button>
+        <header class="tribute-head">
+          <span class="eyebrow">TRIBUTE DIGITAL PRODUCT · PERSONAL ACCESS</span>
+          <h2 id="tribute-title">Get Personal <em>Access</em></h2>
+          <p class="tribute-price-badge">1 PASSWORD = 1 PERSON · DIGITAL PRODUCT (${esc(price)})</p>
+        </header>
+        <div class="tribute-body">
+          <p class="tribute-desc">Each personal password is generated for one student and opens the complete course — all 10 modules, 13 learning units, 13 industry case studies, and assignment review.</p>
+
+          <div class="tribute-direct-box">
+            <span class="eyebrow tight" style="color:var(--red)">INTERNAL TRIBUTE PAYMENT</span>
+            <p style="margin:6px 0 14px;font-size:13.5px">Complete the purchase directly through Tribute to obtain your personal access key:</p>
+            <a class="button tribute-direct-pay" href="${esc(payUrl)}" target="_blank" rel="noopener noreferrer">
+              PAY VIA TRIBUTE (INTERNAL PAYMENT) <span aria-hidden="true">↗</span>
+            </a>
+            <p class="tribute-link-url">
+              Direct Telegram Mini App link: <a href="${esc(payUrl)}" target="_blank" rel="noopener noreferrer"><strong>${esc(payUrl)}</strong></a>
+            </p>
+          </div>
+
+          <div class="tribute-demo-wrap" style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line)">
+            <span class="eyebrow tight">DEMO / TESTING FLOW</span>
+            <p style="margin:4px 0 12px;font-size:12.5px;color:var(--muted)">You can also test the instant password issue directly in demo mode:</p>
+            <form id="tribute-checkout-form" class="tribute-checkout-form" novalidate>
+              <div class="field" style="margin-bottom:10px">
+                <label for="tribute-name">Your name</label>
+                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Alex Morgan">
+              </div>
+              <div class="field" style="margin-bottom:12px">
+                <label for="tribute-email">Email or Telegram (@username)</label>
+                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com or @username">
+              </div>
+              <button class="button small light" type="submit" id="tribute-pay-btn" style="width:100%">GENERATE INSTANT PASSWORD <span aria-hidden="true">↗</span></button>
+              <div id="tribute-result" style="display:none;margin-top:14px;padding:14px;background:#fff;border-left:3px solid var(--red)"></div>
+            </form>
+          </div>
+        </div>
+      </div>`;
+
+    document.body.appendChild(tributeOverlay);
+    document.body.classList.add('tribute-open');
+    requestAnimationFrame(() => {
+      tributeOverlay?.classList.add('show');
+      tributeOverlay?.querySelector('.tribute-dialog')?.focus({ preventScroll: true });
+    });
+  };
+
+  window.openTributeModal = openTributeModal;
+
   /* --- events ------------------------------------------------------------- */
   document.addEventListener('click', event => {
-    const toggleBtn = event.target.closest('#toggle-tribute-box');
-    if (toggleBtn) {
-      const form = document.getElementById('tribute-checkout-form');
-      if (form) {
-        const show = form.style.display === 'none';
-        form.style.display = show ? 'block' : 'none';
-        if (show) document.getElementById('tribute-name')?.focus();
-      }
+    if (event.target.closest('#toggle-tribute-box, [data-tribute-open]')) {
+      event.preventDefault();
+      openTributeModal();
+      return;
+    }
+    if (event.target.closest('[data-tribute-close]') || (tributeOverlay && event.target === tributeOverlay)) {
+      event.preventDefault();
+      closeTributeModal();
       return;
     }
     const autoUseBtn = event.target.closest('[data-use-password]');
@@ -307,10 +387,30 @@
       if (input && gateForm) {
         input.type = 'text';
         input.value = code;
+        closeTributeModal();
         gateForm.requestSubmit();
       }
     }
   });
+
+  document.addEventListener('keydown', event => {
+    if (!tributeOverlay) return;
+    if (event.key === 'Escape') {
+      event.stopImmediatePropagation();
+      closeTributeModal();
+      return;
+    }
+    if (event.key === 'Tab') {
+      const items = [...tributeOverlay.querySelectorAll('button, a[href], input')];
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === tributeOverlay.querySelector('.tribute-dialog'))) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first.focus();
+      }
+    }
+  }, true);
 
   document.addEventListener('submit', async event => {
     if (event.target.id === 'tribute-checkout-form') {

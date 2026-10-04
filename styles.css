@@ -239,8 +239,8 @@ h1,.page-title{line-height:.94}
   display:grid;grid-template-columns:1.15fr .85fr;background:var(--ink);color:#fff;
   border:1px solid var(--ink);overflow:hidden;
 }
-.case-feature img{width:100%;height:100%;min-height:clamp(300px,42vw,520px);object-fit:cover;object-position:50% 42%;filter:brightness(.86) saturate(.95);transition:transform .9s var(--ease),filter .6s var(--ease)}
-.case-feature:hover img{transform:scale(1.035);filter:brightness(.94)}
+.case-feature img{width:100%;height:100%;min-height:clamp(300px,42vw,520px);object-fit:cover;object-position:center 25%;filter:brightness(.95) saturate(1);transition:transform .9s var(--ease),filter .6s var(--ease)}
+.case-feature:hover img{transform:scale(1.025);filter:brightness(1)}
 .case-feature-copy{padding:clamp(28px,4vw,60px);align-self:center}
 .case-feature-copy .eyebrow{color:rgba(255,255,255,.72)}
 .case-feature-copy .eyebrow:after{background:rgba(255,255,255,.22)}
@@ -251,11 +251,13 @@ h1,.page-title{line-height:.94}
 .case-feature-copy .button.text{color:#fff}
 .case-list{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px);align-items:start;margin-top:clamp(24px,3vw,40px)}
 .case-item{border-top:1px solid var(--ink);padding-top:18px;display:flex;flex-direction:column;gap:10px}
-.case-item .shot{overflow:hidden;background:var(--paper-warm);border:1px solid var(--line)}
-.case-item img{width:100%;height:auto;display:block;transition:transform .8s var(--ease),filter .5s var(--ease);filter:saturate(.95)}
-.case-item:hover img{transform:scale(1.05);filter:saturate(1.05)}
+.case-item .shot{overflow:hidden;background:var(--paper-warm);border:1px solid var(--line);aspect-ratio:16/10}
+.case-item img{width:100%;height:100%;object-fit:cover;object-position:center 25%;display:block;transition:transform .8s var(--ease),filter .5s var(--ease);filter:saturate(1)}
+.case-item:hover img{transform:scale(1.03);filter:saturate(1.05)}
 .case-item h3{font-family:var(--sans);font-weight:300;font-size:clamp(20px,2vw,26px);letter-spacing:-.02em;margin:4px 0 0}
 .case-item p{font-size:13px;color:var(--muted);margin:0;max-width:38ch}
+.figure-grid .case-item .shot{aspect-ratio:4/5;margin-bottom:8px}
+.figure-grid .case-item .shot img{object-position:center 20%}
 
 /* --- budget / scenography feature ----------------------------------------- */
 .budget-split{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line)}
@@ -834,3 +836,23 @@ body.author-open{overflow:hidden}
   .author-nav-link{font-size:0!important}
   .author-nav-link::before{content:'ABOUT';font-size:8px;letter-spacing:.05em}
 }
+
+/* --- tribute payment modal (opens on request) ---------------------------- */
+body.tribute-open{overflow:hidden}
+.tribute-overlay{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(10,10,10,.75);backdrop-filter:blur(4px);opacity:0;transition:opacity .22s var(--ease)}
+.tribute-overlay.show{opacity:1}
+.tribute-dialog{position:relative;width:min(580px,100%);max-height:92vh;overflow-y:auto;overscroll-behavior:contain;background:var(--white);padding:clamp(26px,4vw,44px);outline:0;border-bottom:3px solid var(--red);transform:translateY(14px);transition:transform .3s var(--ease)}
+.tribute-overlay.show .tribute-dialog{transform:none}
+.tribute-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border:1px solid var(--line-strong);background:#fff;cursor:pointer;font-size:14px;color:var(--ink);transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease)}
+.tribute-close:hover{background:var(--red);border-color:var(--red);color:#fff}
+.tribute-head .eyebrow{margin-bottom:12px}
+.tribute-head h2{font-family:var(--sans);font-weight:200;font-size:clamp(28px,4vw,44px);line-height:1;letter-spacing:-.035em;text-transform:uppercase;margin:0 0 12px}
+.tribute-head h2 em{font-family:var(--serif);font-style:italic;font-weight:300;text-transform:none;color:var(--red)}
+.tribute-price-badge{margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line);font-family:var(--ui);font-size:10.5px;font-weight:600;letter-spacing:var(--track);text-transform:uppercase;color:var(--red)}
+.tribute-desc{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 16px}
+.tribute-direct-box{background:var(--paper-warm);border:1px solid var(--line-strong);padding:20px;margin:18px 0}
+.tribute-direct-pay{display:block;width:100%;text-align:center;font-weight:500;padding:14px 20px;text-decoration:none}
+.tribute-link-url{margin-top:12px;font-size:12px;color:var(--muted);word-break:break-all}
+.tribute-link-url a{color:var(--ink);border-bottom:1px solid var(--red)}
+.tribute-link-url a:hover{color:var(--red)}
+
