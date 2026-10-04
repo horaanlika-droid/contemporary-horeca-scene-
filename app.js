@@ -27,6 +27,11 @@ window.bootCourse = () => {
 
   let state = getState();
   let toastTimer;
+  let chatAbortController = null;
+  let chatRetryTimer = null;
+  let chatPageGeneration = 0;
+  let chatMessages = [];
+  let activeChatStudentId = '';
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const user = () => { try { return JSON.parse(sessionStorage.getItem('chs-user')); } catch { return null; } };
@@ -91,7 +96,8 @@ window.bootCourse = () => {
       else if (page === 'module') go('course');
       else if (page === 'dashboard' || !page) tg.close?.();
       else if (page === 'project') go('projects');
-      else if (['course', 'cases', 'projects', 'progress', 'profile', 'updates', 'assignment', 'quiz', 'certificate', 'search'].includes(page)) go(user()?.role === 'INSTRUCTOR' ? 'instructor' : user()?.role === 'ADMIN' ? 'admin' : 'dashboard');
+      else if (page === 'chat') go(user()?.role === 'ADMIN' ? 'admin' : 'dashboard');
+      else if (['course', 'cases', 'projects', 'progress', 'profile', 'updates', 'faq', 'assignment', 'quiz', 'certificate', 'search'].includes(page)) go(user()?.role === 'INSTRUCTOR' ? 'instructor' : user()?.role === 'ADMIN' ? 'admin' : 'dashboard');
       else tg.close?.();
     });
   }
@@ -101,7 +107,8 @@ window.bootCourse = () => {
     const remote = /^https:\/\//i.test(String(name || ''));
     const src = remote ? esc(name) : `${ASSET}${esc(name)}`;
     const fallback = remote ? src : `${ASSET}${IMAGE_FALLBACK}`;
-    return `<img class="${cls}" src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
+    const classes = ['film-photo', cls].filter(Boolean).join(' ');
+    return `<img class="${classes}" src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
   };
   const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
   const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
@@ -115,7 +122,7 @@ window.bootCourse = () => {
     return photo?.caption || '';
   };
   const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${ASSET}${esc(file)}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
-        <img src="${ASSET}${esc(file)}" alt="${esc(alt)}" loading="lazy">
+        <img class="film-photo" src="${ASSET}${esc(file)}" alt="${esc(alt)}" loading="lazy">
         ${caption ? `<figcaption><span>${esc(caption)}</span></figcaption>` : ''}
       </figure>`;
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
@@ -138,16 +145,16 @@ window.bootCourse = () => {
     const role = u?.role;
     const home = role === 'INSTRUCTOR' ? 'instructor' : role === 'ADMIN' ? 'admin' : 'dashboard';
     const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor'], ['Submissions', 'instructor'], ['Cases & figures', 'cases']]
-      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Course', 'course'], ['Cases & figures', 'cases']]
-        : [['Home', 'dashboard'], ['Course', 'course'], ['Cases & figures', 'cases'], ['Progress', 'progress']];
+      : role === 'ADMIN' ? [['Admin Panel', 'admin'], ['Project Q&A', 'chat'], ['Course', 'course'], ['FAQ', 'faq']]
+        : [['Home', 'dashboard'], ['Course', 'course'], ['Project Q&A', 'chat'], ['Cases & figures', 'cases'], ['FAQ', 'faq'], ['Progress', 'progress']];
     return `<header class="app-header">${brandBlock(`#/${home}`)}<nav class="app-nav" aria-label="Application navigation">${links.map(([t, p]) => `<a href="#/${p}">${t}</a>`).join('')}<button data-action="search">SEARCH ⌕</button></nav><div class="user-chip"><span>${esc(u?.name || 'Guest')}</span><span class="avatar">${initials(u?.name)}</span><button class="nav-link author-nav-link" type="button" data-author-open aria-label="About the author" title="About the author">ABOUT THE AUTHOR</button><button class="nav-link" data-action="profile">PROFILE</button>${role !== 'STUDENT' ? '<button class="nav-link" data-action="logout">SIGN OUT</button>' : ''}</div></header>`;
   };
 
   const bottomNav = () => {
     const role = user()?.role;
     const links = role === 'INSTRUCTOR' ? [['Overview', 'instructor', '⌂'], ['Submissions', 'instructor', '▤'], ['Cases', 'cases', '▧'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Course', 'course', '▤'], ['Cases', 'cases', '▧'], ['Search', 'search', '⌕'], ['Profile', 'profile', '◯']]
-        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Cases', 'cases', '▧'], ['Progress', 'progress', '◌'], ['Search', 'search', '⌕']];
+      : role === 'ADMIN' ? [['Admin', 'admin', '⌂'], ['Project Q&A', 'chat', '✉'], ['Course', 'course', '▤'], ['Cases', 'cases', '▧'], ['FAQ', 'faq', '?'], ['Profile', 'profile', '◯']]
+        : [['Home', 'dashboard', '⌂'], ['Course', 'course', '▤'], ['Project Q&A', 'chat', '✉'], ['Cases', 'cases', '▧'], ['FAQ', 'faq', '?'], ['Progress', 'progress', '◌']];
     return `<nav class="mobile-bottom" aria-label="Mobile navigation">${links.map(([t, p, i]) => p === 'search' ? `<button data-action="search"><span>${i}</span>${t}</button>` : `<a href="#/${p}"${route()[0] === p ? ' class="active"' : ''}><span>${i}</span>${t}</a>`).join('')}</nav>`;
   };
 
@@ -174,7 +181,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img src="${ASSET}studio-hero-scene.jpg" alt="Generated studio still life in the course palette: a bar counter arrangement in signal red, maroon and warm paper light with a narrow plane of focus">
+          <img class="film-photo" src="${ASSET}project-joi-cups.jpg" alt="Black-and-white close-up of paper cups at Joi Espresso Bar, from the course author's own project archive">
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -256,11 +263,11 @@ window.bootCourse = () => {
             </ul>
             <div class="budget-frames">
               <figure class="budget-frame">
-                <img src="${ASSET}project-joi-machine.jpg" alt="A reconditioned brass lever espresso machine on a small counter" loading="lazy">
+                <img class="film-photo" src="${ASSET}project-joi-machine.jpg" alt="A reconditioned brass lever espresso machine on a small counter" loading="lazy">
                 <figcaption><span class="meta">Joi · 2025</span>The one object worth paying for: a reconditioned brass lever machine, bought second-hand.</figcaption>
               </figure>
               <figure class="budget-frame">
-                <img src="${ASSET}project-detail-street-press.jpg" alt="A lemon press left on the pavement among street finds" loading="lazy">
+                <img class="film-photo" src="${ASSET}project-detail-street-press.jpg" alt="A lemon press left on the pavement among street finds" loading="lazy">
                 <figcaption><span class="meta">Street find</span>A lemon press picked up on the pavement — cheap detail, real patina.</figcaption>
               </figure>
             </div>
@@ -696,6 +703,217 @@ window.bootCourse = () => {
     </main>`);
   }
 
+  function chatPage() {
+    const isAdmin = user()?.role === 'ADMIN';
+    const selectedId = isAdmin ? route()[1] || '' : '';
+    const chatForm = !isAdmin || selectedId
+      ? `<form id="chat-form" class="chat-compose" data-student-id="${esc(selectedId)}">
+          ${isAdmin ? '' : '<div class="field"><label for="chat-project">Project or concept (optional)</label><input class="form-control" id="chat-project" name="project" maxlength="120" placeholder="e.g. my café concept"></div>'}
+          <div class="field"><label for="chat-text">${isAdmin ? 'Reply to the student' : 'Your question'}</label><textarea class="form-control" id="chat-text" name="text" maxlength="3000" rows="4" required placeholder="${isAdmin ? 'Write a reply…' : 'What would you like to clarify about your project?'}"></textarea></div>
+          <div class="chat-compose-footer"><span class="meta">PRIVATE · ONLY VISIBLE TO THIS STUDENT AND THE COURSE TEAM</span><button class="button" type="submit">${isAdmin ? 'SEND REPLY' : 'SEND QUESTION'} <span aria-hidden="true">↗</span></button></div>
+          <p id="chat-error" class="form-help" role="alert"></p>
+        </form>`
+      : '<div class="empty chat-empty-select">Choose a student conversation to read and reply.</div>';
+    return layout(`<main class="app-main chat-page">
+      <div class="page-head">
+        <div><span class="eyebrow">LIVE · PRIVATE PROJECT CONVERSATION</span><h1 class="page-title">Project <em>Q&amp;A</em>.</h1><p>${isAdmin ? 'Reply to learner questions in their private chat.' : 'Ask the course team a question about your project. Messages stay private between you and the course team; replies appear here while the conversation is open.'}</p></div>
+        <span id="chat-connection-status" class="edition-tag meta">CONNECTING…</span>
+      </div>
+      ${isAdmin ? `<div class="chat-admin-grid"><aside class="institution-panel chat-thread-panel"><span class="eyebrow">STUDENT CONVERSATIONS</span><h2>Inbox</h2><div id="chat-threads" class="chat-thread-list"><div class="empty">Loading conversations…</div></div></aside>` : ''}
+      <section class="institution-panel chat-conversation ${isAdmin ? 'chat-admin-conversation' : ''}">
+        <div class="chat-conversation-head"><div><span class="eyebrow">${isAdmin && selectedId ? 'PRIVATE STUDENT THREAD' : isAdmin ? 'COURSE TEAM INBOX' : 'YOUR PRIVATE THREAD'}</span><h2 id="chat-thread-title">${isAdmin ? 'Select a conversation' : 'Ask about your project'}</h2></div><span class="meta" id="chat-thread-context">${isAdmin ? '' : 'Your messages are not visible to other learners.'}</span></div>
+        <div id="chat-messages" class="chat-messages" aria-live="polite"><div class="empty">${isAdmin ? 'Choose a learner to open the conversation.' : 'No messages yet. Start with a short description of your project and your question.'}</div></div>
+        ${chatForm}
+      </section>
+      ${isAdmin ? '</div>' : ''}
+    </main>`);
+  }
+
+  function stopChatRealtime() {
+    chatPageGeneration += 1;
+    chatAbortController?.abort();
+    chatAbortController = null;
+    if (chatRetryTimer) clearTimeout(chatRetryTimer);
+    chatRetryTimer = null;
+  }
+
+  function renderChatMessages() {
+    const container = document.getElementById('chat-messages');
+    if (!container) return;
+    if (!chatMessages.length) {
+      container.innerHTML = `<div class="empty">${user()?.role === 'ADMIN' ? 'No messages in this conversation yet.' : 'No messages yet. Start with a short description of your project and your question.'}</div>`;
+      return;
+    }
+    container.innerHTML = chatMessages.map(message => {
+      const own = user()?.role === 'ADMIN' ? message.senderRole === 'ADMIN' : message.senderRole === 'STUDENT';
+      const date = message.createdAt ? new Date(message.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+      return `<article class="chat-message ${own ? 'own' : 'incoming'}"><div class="chat-message-meta"><strong>${esc(message.senderName || (own ? 'You' : 'Course team'))}</strong><time>${esc(date)}</time></div>${message.project ? `<span class="chat-project-label">${esc(message.project)}</span>` : ''}<p>${esc(message.text).replace(/\n/g, '<br>')}</p></article>`;
+    }).join('');
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function appendChatMessage(message) {
+    if (!message || chatMessages.some(item => item.id === message.id)) return;
+    chatMessages.push(message);
+    renderChatMessages();
+  }
+
+  async function refreshChatThreads(selectedId, generation) {
+    const list = document.getElementById('chat-threads');
+    if (!list) return;
+    try {
+      const response = await fetch('/api/chat/threads', { headers: tokenHeaders() });
+      if (!response.ok) throw new Error('Inbox unavailable');
+      const data = await response.json();
+      if (generation !== chatPageGeneration || !document.getElementById('chat-threads')) return;
+      const threads = data.threads || [];
+      list.innerHTML = threads.length ? threads.map(thread => {
+        const student = thread.student || {};
+        const timestamp = thread.lastMessageAt ? new Date(thread.lastMessageAt).toLocaleDateString() : '';
+        return `<a class="chat-thread-row ${student.id === selectedId ? 'active' : ''}" href="#/chat/${encodeURIComponent(student.id)}"><span class="chat-thread-top"><strong>${esc(student.name || student.email || 'Learner')}</strong>${thread.unreadCount ? `<b class="chat-unread">${thread.unreadCount}</b>` : ''}</span><span class="chat-thread-preview">${esc(thread.lastMessage || 'No messages yet')}</span><span class="meta">${esc(student.email || '')} · ${esc(timestamp)}</span></a>`;
+      }).join('') : '<div class="empty">No active student accounts are available.</div>';
+    } catch {
+      if (generation === chatPageGeneration && list) list.innerHTML = '<div class="empty">Could not load the inbox. Refresh to try again.</div>';
+    }
+  }
+
+  async function loadChatHistory(studentId, isAdmin, generation) {
+    const query = isAdmin ? `?studentId=${encodeURIComponent(studentId)}` : '';
+    const response = await fetch(`/api/chat${query}`, { headers: tokenHeaders() });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Could not load the conversation.');
+    if (generation !== chatPageGeneration) return;
+    chatMessages = data.messages || [];
+    activeChatStudentId = data.student?.id || studentId;
+    const title = document.getElementById('chat-thread-title');
+    const context = document.getElementById('chat-thread-context');
+    if (title && isAdmin) title.textContent = data.student?.name || 'Student conversation';
+    if (context && isAdmin) context.textContent = data.student?.email || data.student?.telegramUsername || '';
+    const form = document.getElementById('chat-form');
+    if (form) form.dataset.studentId = activeChatStudentId;
+    renderChatMessages();
+  }
+
+  function connectChatStream(studentId, isAdmin, generation) {
+    if (generation !== chatPageGeneration || (!studentId && !isAdmin)) return;
+    const controller = new AbortController();
+    chatAbortController = controller;
+    const query = isAdmin && studentId ? `?studentId=${encodeURIComponent(studentId)}` : '';
+    const status = document.getElementById('chat-connection-status');
+    const setStatus = text => { if (status && generation === chatPageGeneration) status.textContent = text; };
+    (async () => {
+      try {
+        const response = await fetch(`/api/chat/stream${query}`, { headers: tokenHeaders(), signal: controller.signal });
+        if (!response.ok || !response.body) throw new Error('Live connection unavailable');
+        setStatus('LIVE · CONNECTED');
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        while (!controller.signal.aborted) {
+          const result = await reader.read();
+          if (result.done) throw new Error('Live connection closed');
+          buffer += decoder.decode(result.value, { stream: true }).replace(/\r\n/g, '\n');
+          let boundary = buffer.indexOf('\n\n');
+          while (boundary !== -1) {
+            const rawEvent = buffer.slice(0, boundary);
+            buffer = buffer.slice(boundary + 2);
+            let eventName = 'message';
+            const dataLines = [];
+            for (const line of rawEvent.split('\n')) {
+              if (line.startsWith('event:')) eventName = line.slice(6).trim();
+              else if (line.startsWith('data:')) dataLines.push(line.slice(5).trim());
+            }
+            if (dataLines.length) {
+              try {
+                const payload = JSON.parse(dataLines.join('\n'));
+                if (eventName === 'snapshot') {
+                  chatMessages = payload.messages || [];
+                  renderChatMessages();
+                } else if (eventName === 'message') {
+                  if (isAdmin && !studentId) {
+                    const inboxStatus = document.getElementById('chat-connection-status');
+                    if (inboxStatus) inboxStatus.textContent = 'NEW QUESTION · LIVE';
+                    void refreshChatThreads('', generation);
+                  } else {
+                    appendChatMessage(payload);
+                    const fromOther = user()?.role === 'ADMIN' ? payload.senderRole === 'STUDENT' : payload.senderRole === 'ADMIN';
+                    if (fromOther) {
+                      const readQuery = isAdmin ? `?studentId=${encodeURIComponent(studentId)}` : '';
+                      void fetch(`/api/chat${readQuery}`, { headers: tokenHeaders() });
+                    }
+                    if (isAdmin && payload.senderRole === 'STUDENT') void refreshChatThreads(studentId, generation);
+                  }
+                }
+              } catch { /* ignore malformed stream frame */ }
+            }
+            boundary = buffer.indexOf('\n\n');
+          }
+        }
+      } catch {
+        if (controller.signal.aborted || generation !== chatPageGeneration) return;
+        setStatus('RECONNECTING…');
+        chatRetryTimer = setTimeout(() => connectChatStream(studentId, isAdmin, generation), 2500);
+      }
+    })();
+  }
+
+  async function startChatPage(currentUser, requestedStudentId) {
+    stopChatRealtime();
+    const generation = chatPageGeneration;
+    const isAdmin = currentUser?.role === 'ADMIN';
+    const studentId = isAdmin ? requestedStudentId : currentUser?.id;
+    activeChatStudentId = studentId || '';
+    chatMessages = [];
+    const status = document.getElementById('chat-connection-status');
+    if (status) status.textContent = isAdmin && !studentId ? 'INBOX READY' : 'CONNECTING…';
+    if (isAdmin) await refreshChatThreads(studentId, generation);
+    if (!studentId) {
+      if (isAdmin && generation === chatPageGeneration) connectChatStream('', true, generation);
+      return;
+    }
+    try {
+      await loadChatHistory(studentId, isAdmin, generation);
+      if (generation !== chatPageGeneration) return;
+      connectChatStream(studentId, isAdmin, generation);
+    } catch (error) {
+      if (generation !== chatPageGeneration) return;
+      const messages = document.getElementById('chat-messages');
+      if (messages) messages.innerHTML = `<div class="empty">${esc(error.message)}</div>`;
+      if (status) status.textContent = 'OFFLINE';
+    }
+  }
+
+  async function submitChatMessage(form) {
+    const formData = new FormData(form);
+    const text = String(formData.get('text') || '').trim();
+    const project = String(formData.get('project') || '').trim();
+    const error = document.getElementById('chat-error');
+    const button = form.querySelector('button[type="submit"]');
+    if (!text) { if (error) error.textContent = 'Write a message before sending.'; return; }
+    if (button) { button.disabled = true; button.textContent = 'SENDING…'; }
+    if (error) error.textContent = '';
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { ...tokenHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: form.dataset.studentId, project, text }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'The message could not be sent.');
+      appendChatMessage(payload.message);
+      form.reset();
+      if (user()?.role === 'ADMIN') void refreshChatThreads(activeChatStudentId, chatPageGeneration);
+      toast(user()?.role === 'ADMIN' ? 'REPLY SENT' : 'QUESTION SENT TO THE COURSE TEAM');
+    } catch (sendError) {
+      if (error) error.textContent = sendError.message;
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.innerHTML = `${user()?.role === 'ADMIN' ? 'SEND REPLY' : 'SEND QUESTION'} <span aria-hidden="true">↗</span>`;
+      }
+    }
+  }
+
   function adminPage() {
     const tribute = state.tribute || {};
     const students = state.serverStudents || [];
@@ -707,36 +925,38 @@ window.bootCourse = () => {
       ...editor.overrides.slice(0, 6).map(x => `<div class="simple-row"><span><span class="meta">COPY EDIT · ${esc(x.scope)} ${esc(x.targetId)} · ${esc(x.field)}</span><br>${esc(String(x.text).slice(0, 90))}</span><code>${esc(x.id)}</code></div>`),
     ].join('') || '<div class="empty">No editor changes yet. The course reads exactly as published.</div>';
     const checks = [
-      ['One-time product link + product ID', tribute.productCheckoutReady],
-      ['Subscription link + subscription ID', tribute.subscriptionCheckoutReady],
+      ['Tribute digital-product ID', tribute.productConfigured],
+      ['Tribute subscription ID (optional)', tribute.subscriptionConfigured],
       ['Tribute webhook signature', tribute.webhookConfigured],
       ['Telegram bot token', tribute.botConfigured],
       ['Bot username and start link', tribute.botUsernameConfigured],
+      ['Course URL for registration links', tribute.registrationLinkConfigured],
     ];
     return layout(`<main class="app-main">
       <div class="welcome">
-        <div><span class="eyebrow">COURSE ADMINISTRATION</span><h1>Access &amp; <em>payments</em>.</h1><p>Tribute confirms the payment; the Access Bot creates one individual password and delivers it to the buyer’s Telegram chat.</p></div>
+        <div><span class="eyebrow">COURSE ADMINISTRATION</span><h1>Access &amp; <em>admissions</em>.</h1><p>Tribute processes payment outside the app. You verify the purchase and approve admission in the Telegram bot; the same reusable registration page is sent to every approved learner.</p></div>
         <span class="edition-tag meta">${tribute.deliveryReady ? 'TRIBUTE AUTOMATION READY' : 'TRIBUTE SETUP REQUIRED'}</span>
       </div>
       <div class="metric-grid">
-        <div class="metric"><span>Issued passwords</span><strong>${students.length}</strong></div>
+        <div class="metric"><span>Learner records</span><strong>${students.length}</strong></div>
         <div class="metric"><span>Confirmed Tribute payments</span><strong>${tribute.paidOrdersCount || 0}</strong></div>
-        <div class="metric"><span>Pending password deliveries</span><strong>${tribute.pendingDeliveriesCount || 0}</strong></div>
+        <div class="metric"><span>Awaiting manual approval</span><strong>${tribute.pendingAdmissionsCount || 0}</strong></div>
+        <div class="metric"><span>Pending link deliveries</span><strong>${tribute.pendingDeliveriesCount || 0}</strong></div>
         <div class="metric"><span>Active edition</span><strong>${C.edition}</strong></div>
       </div>
 
       <section class="institution-panel" id="tribute-setup">
-        <span class="eyebrow">TRIBUTE · AUTOMATIC PASSWORD DELIVERY</span>
-        <h2>${tribute.deliveryReady ? 'Payment flow is connected.' : 'Finish the payment setup.'}</h2>
-        <p>Set these values on the Node host. The webhook URL to enter in Tribute is <code>${esc(tribute.webhookEndpoint || '/api/tribute/webhook')}</code>. Tribute sends a signed server-to-server event; no password is issued by the public page.</p>
+        <span class="eyebrow">TRIBUTE · MANUAL ACCESS APPROVAL</span>
+        <h2>${tribute.deliveryReady ? 'Payment notifications are connected.' : 'Finish the payment setup.'}</h2>
+        <p>Set these values on the Node host. The webhook URL to enter in Tribute is <code>${esc(tribute.webhookEndpoint || '/api/tribute/webhook')}</code>. A signed payment event creates a pending admission; verify the purchase and approve the learner in the bot before the shared registration page is sent. The course app contains no purchase buttons or payment CTA.</p>
         <div class="simple-list">${checks.map(([label, ready]) => `<div class="simple-row"><span>${esc(label)}</span><strong class="status-pill">${ready ? 'READY' : 'MISSING'}</strong></div>`).join('')}</div>
-        <p style="margin-top:14px">A buyer must open the Access Bot once before payment so Telegram allows it to message them. If a message is missed, the buyer can send <code>/password</code>; an admin can use <code>/resend TELEGRAM_ID</code>.</p>
+        <p style="margin-top:14px">The learner should open the Access Bot before payment. Review requests with <code>/admissions</code>, confirm payment in Tribute, then use <code>/admit STUDENT_ID</code> or the approval button. The bot sends the same reusable page to approved learners; use <code>/resend TELEGRAM_ID</code> if needed. Forgotten passwords are handled only by email support.</p>
       </section>
 
       <section class="institution-panel" id="tribute-orders">
         <span class="eyebrow">RECENT PAYMENT EVENTS</span>
         <h2>Tribute orders</h2>
-        <div class="simple-list">${orders.length ? orders.slice(0, 12).map(order => `<div class="simple-row"><span><strong>${esc(order.buyerName || order.telegramUsername || 'Telegram buyer')}</strong><br><span class="meta">${esc(order.productTitle || order.kind || 'Tribute event')} · ${esc(order.amount || '')} · ${esc(order.id)}</span></span><span><span class="status-pill">${esc(order.status || '—')}</span><br><span class="meta">DELIVERY · ${esc(order.deliveryStatus || '—')}</span></span></div>`).join('') : '<div class="empty">No confirmed Tribute events yet. They will appear here after the first signed webhook.</div>'}</div>
+        <div class="simple-list">${orders.length ? orders.slice(0, 12).map(order => `<div class="simple-row"><span><strong>${esc(order.buyerName || order.telegramUsername || 'Telegram buyer')}</strong><br><span class="meta">${esc(order.productTitle || order.kind || 'Tribute event')} · ${esc(order.amount || '')} · ${esc(order.id)}</span></span><span><span class="status-pill">${esc(order.status || '—')}</span><br><span class="meta">ADMISSION · ${order.admissionApproved ? 'APPROVED' : 'WAITING'}<br>LINK · ${esc(order.deliveryStatus || '—')}</span></span></div>`).join('') : '<div class="empty">No confirmed Tribute events yet. They will appear here after the first signed webhook.</div>'}</div>
       </section>
 
       <section class="institution-panel" id="editor">
@@ -748,13 +968,13 @@ window.bootCourse = () => {
 
       <div class="dash-lower" style="margin:32px 0">
         <section class="institution-panel">
-          <span class="eyebrow">PAID LEARNERS · DELIVERY STATUS</span><h2>Issued access</h2>
-          <div class="simple-list">${students.length ? students.slice(0, 12).map(student => `<div class="simple-row"><span><strong>${esc(student.name)}</strong><br><span class="meta">${esc(student.email)} · ${esc(student.telegramUsername ? `@${student.telegramUsername}` : student.telegramId || 'Telegram not linked')}</span></span><span class="status-pill">${student.active ? esc(student.passwordDeliveryStatus || 'ISSUED') : 'INACTIVE'}</span></div>`).join('') : '<div class="empty">No paid learners yet.</div>'}</div>
-          <p style="margin-top:14px">Passwords are sent privately by the Access Bot after Tribute confirms payment. For a missed message, use <code>/resend TELEGRAM_ID</code>; the code is never shown in this dashboard.</p>
+          <span class="eyebrow">LEARNERS · ADMISSION STATUS</span><h2>Access and registration</h2>
+          <div class="simple-list">${students.length ? students.slice(0, 12).map(student => `<div class="simple-row"><span><strong>${esc(student.name)}</strong><br><span class="meta">${esc(student.email)} · ${esc(student.telegramUsername ? `@${student.telegramUsername}` : student.telegramId || 'Telegram not linked')}</span></span><span class="status-pill">${student.active ? esc(student.registrationStatus || 'REGISTERED') : 'INACTIVE'}</span></div>`).join('') : '<div class="empty">No paid learners yet.</div>'}</div>
+          <p style="margin-top:14px">Pending requests appear in Telegram under <code>/admissions</code>. Approve only after you verify payment in Tribute; the shared registration link can be resent with <code>/resend TELEGRAM_ID</code>. Passwords are stored only as scrypt hashes and cannot be retrieved.</p>
         </section>
         <section class="institution-panel">
           <span class="eyebrow">TELEGRAM ADMIN BOT</span><h2>Run a bot command</h2>
-          <p>Commands: <code>/orders</code>, <code>/resend TELEGRAM_ID</code>, <code>/students</code>, <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>.</p>
+          <p>Commands: <code>/admissions</code>, <code>/admit STUDENT_ID</code>, <code>/reject STUDENT_ID</code>, <code>/orders</code>, <code>/resend TELEGRAM_ID</code>, <code>/students</code>, <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>. Reply to student questions from <a href="#/chat">Project Q&amp;A</a>.</p>
           <form id="admin-bot-form"><div class="field"><label for="admin-bot-command">Command</label><input class="form-control" id="admin-bot-command" name="command" required placeholder="/orders"></div><button class="button">RUN COMMAND ↗</button></form>
           <pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0, 5).map(entry => entry.text).join('\n'))}</pre>
         </section>
@@ -767,7 +987,7 @@ window.bootCourse = () => {
         <div class="simple-list">
           <div class="simple-row"><span class="meta">LICENSE PERIOD</span><strong>01.09.2026 — 31.08.2027</strong></div>
           <div class="simple-row"><span class="meta">STATUS</span><span class="status-pill">${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}</span></div>
-          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Individual password · confirmed Tribute purchase</strong></div>
+          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Personal account · verified Tribute purchase</strong></div>
         </div>
       </section>
     </main>`);
@@ -866,9 +1086,10 @@ window.bootCourse = () => {
           <div class="simple-row"><span class="meta">PAID AT</span><strong>${esc(new Date(state.myPurchase.paidAt).toLocaleString())}</strong></div>
           <div class="simple-row"><span class="meta">PURCHASE ID</span><strong>${esc(state.myPurchase.purchaseId)}</strong></div>
           <div class="simple-row"><span class="meta">PROVIDER</span><strong>${esc(state.myPurchase.provider)} · the course never sees card data</strong></div>
-          <div class="simple-row"><span class="meta">PASSWORD DELIVERY</span><strong>${esc(state.myPurchase.deliveryStatus === 'DELIVERED' ? 'DELIVERED AUTOMATICALLY' : state.myPurchase.deliveryStatus)}</strong></div>
+          <div class="simple-row"><span class="meta">MANUAL ADMISSION</span><strong>${state.myPurchase.admissionApproved ? 'APPROVED' : 'AWAITING ADMIN REVIEW'}</strong></div>
+          <div class="simple-row"><span class="meta">SHARED REGISTRATION PAGE</span><strong>${esc(state.myPurchase.deliveryStatus === 'DELIVERED' ? 'SENT BY THE ACCESS BOT' : state.myPurchase.deliveryStatus)}</strong></div>
         </div>
-        <p style="margin-top:14px">One individual password per purchase. Refunds follow the Tribute policy inside Telegram; any question about your payment: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>.</p>
+        <p style="margin-top:14px">The shared registration page is reusable; the course admin approves access against your Telegram account. The password you create is personal to your account and cannot be retrieved automatically. If you forget it, contact support only by email: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>. Refunds follow the Tribute policy inside Telegram.</p>
       </section>` : u.role === 'STUDENT' ? '<section class="institution-panel" style="margin-top:22px"><span class="eyebrow">YOUR PURCHASE</span><p>No verified Tribute purchase is registered for this account yet. Write to the course team if you have paid — the record appears here automatically.</p></section>' : ''}
     </main>`);
   }
@@ -880,6 +1101,14 @@ window.bootCourse = () => {
         <div><span class="eyebrow">WHAT'S NEW · A LIVING ELECTIVE</span><h1 class="page-title">The industry<br>keeps <em>moving</em>.</h1><p>Course editions are designed to evolve with hospitality. New materials can be added while preserving past learning records.</p></div>
       </div>
       ${[...live, ...C.updates].map(x => `<article class="institution-panel"><span class="eyebrow">${esc(x.tag)} · ${esc(x.date)}</span><h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></article>`).join('')}
+    </main>`);
+  }
+
+  function faqPage() {
+    const items = (window.SITE?.faq || []).map(item => `<details class="gate-faq-item"><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`).join('');
+    return layout(`<main class="app-main">
+      <div class="page-head"><div><span class="eyebrow">HELP · COURSE ACCESS &amp; SUPPORT</span><h1 class="page-title">Frequently<br>asked <em>questions</em>.</h1><p>Registration, manual access approval, live Project Q&amp;A and account support.</p></div></div>
+      <section class="institution-panel faq-panel"><div class="faq-list">${items || '<div class="empty">No FAQ entries are available.</div>'}</div></section>
     </main>`);
   }
 
@@ -914,13 +1143,12 @@ window.bootCourse = () => {
     const ic = C.imageCredits || {};
     const used = new Set();
     const collect = name => name && used.add(name);
-    C.cases.forEach(x => collect(x.image));
+    C.cases.forEach(x => { collect(x.image); (x.photos || []).forEach(photo => collect(photo.file || photo.image)); });
     (C.figures || []).forEach(f => collect(f.image));
     C.modules.forEach(m => collect(m.image));
-    (projectList() || []).forEach(p => collect(p.image));
-    collect('web-insider-hall.jpg');
-    collect('studio-hero-scene.jpg');
-    collect('studio-gate-still-life.jpg');
+    (projectList() || []).forEach(p => { collect(p.image); (p.photos || []).forEach(photo => collect(photo.file || photo.image)); });
+    collect('project-joi-cups.jpg');
+    collect('project-joi-bar.jpg');
     const rows = [...used].sort().map(name => {
       const ill = (ic.illustrative || []).find(x => x.file === name);
       const g = creditGroup(name);
@@ -957,6 +1185,7 @@ window.bootCourse = () => {
     syncTelegramNavigation();
     const r = route();
     const u = user();
+    if (r[0] !== 'chat') stopChatRealtime();
     if (r[0] === 'login') { go('dashboard'); return; }
     if (!r[0]) { app.innerHTML = landing(); return; }
     if (!u) { location.hash = '/'; return; }
@@ -973,13 +1202,16 @@ window.bootCourse = () => {
     else if (r[0] === 'progress') app.innerHTML = progressPage();
     else if (r[0] === 'quiz') app.innerHTML = quizPage();
     else if (r[0] === 'certificate') app.innerHTML = certificatePage();
+    else if (r[0] === 'chat') app.innerHTML = chatPage();
     else if (r[0] === 'admin' && u.role === 'ADMIN') app.innerHTML = adminPage();
     else if (r[0] === 'updates') app.innerHTML = updatesPage();
+    else if (r[0] === 'faq') app.innerHTML = faqPage();
     else if (r[0] === 'credits') app.innerHTML = creditsPage();
     else if (r[0] === 'profile') app.innerHTML = profilePage();
     else if (r[0] === 'search') app.innerHTML = searchPage(new URLSearchParams(location.hash.split('?')[1] || '').get('q') || '');
     else if (r[0] === 'logout') { sessionStorage.removeItem('chs-user'); go(''); }
     else app.innerHTML = u.role === 'STUDENT' ? notFound() : `<main class="app-main"><div class="page-head"><div><span class="eyebrow">403 · ACCESS RESTRICTED</span><h1 class="page-title">This space<br>is <em>role-restricted</em>.</h1><p>Your current role does not have access to this area.</p></div><a class="button" href="#/${u.role === 'INSTRUCTOR' ? 'instructor' : u.role === 'ADMIN' ? 'admin' : 'dashboard'}">RETURN TO YOUR SPACE <span aria-hidden="true">↗</span></a></div></main>`;
+    if (r[0] === 'chat') void startChatPage(u, r[1] || '');
   }
 
   function toast(text) {
@@ -1019,7 +1251,7 @@ window.bootCourse = () => {
   }
 
   async function lockDevice() {
-    if (!confirm('Lock Contemporary Horeca Scene on this device? You will need the course password to reopen it.')) return;
+    if (!confirm('Lock Contemporary Horeca Scene on this device? You will need your email and personal password to sign in again.')) return;
     try { await fetch('/api/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'revoke' }) }); } catch { /* static hosting */ }
     try { localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
     location.hash = '';
@@ -1043,6 +1275,7 @@ window.bootCourse = () => {
     const el = lightboxEl();
     el.querySelector('img').src = src;
     el.querySelector('img').alt = alt || '';
+    el.querySelector('img').classList.add('film-photo');
     el.querySelector('figcaption').textContent = caption || '';
     el.classList.add('show');
     document.body.classList.add('lightbox-open');
@@ -1108,6 +1341,7 @@ window.bootCourse = () => {
 
   document.addEventListener('submit', async e => {
     e.preventDefault();
+    if (e.target.id === 'chat-form') { await submitChatMessage(e.target); return; }
     if (e.target.id === 'assignment-form') {
       const u = user(), fd = new FormData(e.target), files = [...document.getElementById('files').files];
       if (files.some(f => f.size > 15 * 1024 * 1024)) { toast('EACH FILE MUST BE UNDER 15 MB'); return; }
