@@ -1,10 +1,13 @@
-/* Public editable site copy for Contemporary Horeca Scene.
+/* Public editable site copy and imagery for Contemporary Horeca Scene.
    These are the defaults rendered on the sign-in/registration page and the course
    landing hero / quote band. The administrator edits them from the Russian Telegram
-   admin console; the server merges active overrides at GET /api/site. Keep English-only. */
+   admin console; the server merges active overrides at GET /api/site. Image values
+   may be a file name from presentation/assets/, an https link, or a photo uploaded
+   in the admin bot (/media/<file>). Keep English-only. */
 window.SITE = {
   gate: {
     eyebrow: 'DIGITAL PRODUCT · 2026 EDITION',
+    heroImage: 'project-joi-bar.jpg',
     titleTop: 'Contemporary',
     titleAccent: 'Horeca',
     titleBottom: 'Scene',
@@ -23,6 +26,10 @@ window.SITE = {
   },
   landing: {
     heroEyebrow: 'A LIVING DIGITAL ELECTIVE · 2026 EDITION',
+    heroImage: 'project-joi-cups.jpg',
+    mockupImage: 'project-detail-chess.jpg',
+    budgetImage1: 'project-joi-machine.jpg',
+    budgetImage2: 'project-detail-street-press.jpg',
     heroLead: '10 modules on the venues, ideas, techniques and budgets shaping the contemporary horeca scene — and a final challenge that ends with your own concept built by hand, as a mockup, like stage scenery.',
     whyBig: 'The next generation of hospitality will be shaped by the way we connect people, place and possibility — and by what we can afford to build.',
     whyBigAccent: 'people, place and possibility',

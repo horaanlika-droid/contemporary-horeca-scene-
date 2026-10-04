@@ -56,12 +56,26 @@ window.bootCourse = () => {
     if (scope === 'site') return (window.SITE && window.SITE[targetId]) || null;
     return null;
   }
+  /* Image fields can be introduced on a target that does not ship them yet
+     (for example a lesson thumbnail), and a project lead photo lives in photos[0]. */
+  const OVERRIDE_IMAGE_FIELDS = new Set(['image', 'thumbnail', 'leadPhoto', 'heroImage', 'mockupImage', 'budgetImage1', 'budgetImage2']);
   function applyContentOverrides(overrides = []) {
     for (const record of overrideOriginals.values()) record.target[record.field] = record.original;
     overrideOriginals.clear();
     for (const override of overrides || []) {
       const target = overrideTarget(override.scope, override.targetId);
-      if (!target || typeof override.text !== 'string' || !(override.field in target) || typeof target[override.field] !== 'string') continue;
+      if (!target || typeof override.text !== 'string') continue;
+      if (override.field === 'leadPhoto') {
+        const lead = Array.isArray(target.photos) && target.photos[0];
+        if (!lead) continue;
+        const key = `${override.scope}:${override.targetId}:leadPhoto`;
+        if (!overrideOriginals.has(key)) overrideOriginals.set(key, { target: lead, field: 'file', original: lead.file });
+        lead.file = override.text;
+        continue;
+      }
+      const known = override.field in target;
+      if (!known && !OVERRIDE_IMAGE_FIELDS.has(override.field)) continue;
+      if (known && typeof target[override.field] !== 'string') continue;
       const key = `${override.scope}:${override.targetId}:${override.field}`;
       if (!overrideOriginals.has(key)) overrideOriginals.set(key, { target, field: override.field, original: target[override.field] });
       target[override.field] = override.text;
@@ -103,16 +117,27 @@ window.bootCourse = () => {
   }
 
   const IMAGE_FALLBACK = 'project-detail-backbar.jpg';
-  const image = (name, alt = '', cls = '') => {
-    const remote = /^https:\/\//i.test(String(name || ''));
-    const src = remote ? esc(name) : `${ASSET}${esc(name)}`;
-    const fallback = remote ? src : `${ASSET}${IMAGE_FALLBACK}`;
-    const classes = ['film-photo', cls].filter(Boolean).join(' ');
-    return `<img class="${classes}" src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
+  /* Image values may be a file name from presentation/assets/, an https link, or a
+     photo uploaded in the admin bot and served from /media/<file>. */
+  const assetSrc = name => {
+    const value = String(name || '').trim();
+    if (/^https?:\/\//i.test(value) || value.startsWith('/') || value.startsWith('data:')) return value;
+    return `${ASSET}${value}`;
   };
+  const image = (name, alt = '', cls = '', opts = {}) => {
+    const src = esc(assetSrc(name));
+    const fallback = `${ASSET}${IMAGE_FALLBACK}`;
+    const classes = ['film-photo', cls].filter(Boolean).join(' ');
+    return `<img class="${classes}" src="${src}" alt="${esc(alt)}"${opts.eager ? '' : ' loading="lazy"'} decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
+  };
+  const isUploadedPhoto = name => /^(\/|https?:\/\/)/i.test(String(name || ''));
   const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
   const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
-  const creditFor = name => { const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES'; return `<span class="img-credit">${esc(isIllustrative(name) ? `ILLUSTRATIVE · ${base} · NOT THE VENUE` : base)}</span>`; };
+  const creditFor = name => {
+    if (isUploadedPhoto(name)) return '<span class="img-credit">PHOTO · UPDATED BY THE COURSE TEAM</span>';
+    const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES';
+    return `<span class="img-credit">${esc(isIllustrative(name) ? `ILLUSTRATIVE · ${base} · NOT THE VENUE` : base)}</span>`;
+  };
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
   const projectList = () => C.projects?.items || [];
   const projectById = id => projectList().find(x => x.id === id);
@@ -121,8 +146,8 @@ window.bootCourse = () => {
     const photo = projectList().flatMap(p => projectPhotos(p)).find(ph => ph.file === file);
     return photo?.caption || '';
   };
-  const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${ASSET}${esc(file)}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
-        <img class="film-photo" src="${ASSET}${esc(file)}" alt="${esc(alt)}" loading="lazy">
+  const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${esc(assetSrc(file))}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
+        <img class="film-photo" src="${esc(assetSrc(file))}" alt="${esc(alt)}" loading="lazy">
         ${caption ? `<figcaption><span>${esc(caption)}</span></figcaption>` : ''}
       </figure>`;
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
@@ -181,7 +206,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img class="film-photo" src="${ASSET}project-joi-cups.jpg" alt="Black-and-white close-up of paper cups at Joi Espresso Bar, from the course author's own project archive">
+          ${image(SL.heroImage || 'project-joi-cups.jpg', 'Black-and-white close-up of paper cups at Joi Espresso Bar, from the course author\'s own project archive', '', { eager: true })}
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -263,11 +288,11 @@ window.bootCourse = () => {
             </ul>
             <div class="budget-frames">
               <figure class="budget-frame">
-                <img class="film-photo" src="${ASSET}project-joi-machine.jpg" alt="A reconditioned brass lever espresso machine on a small counter" loading="lazy">
+                ${image(SL.budgetImage1 || 'project-joi-machine.jpg', 'A reconditioned brass lever espresso machine on a small counter')}
                 <figcaption><span class="meta">Joi · 2025</span>The one object worth paying for: a reconditioned brass lever machine, bought second-hand.</figcaption>
               </figure>
               <figure class="budget-frame">
-                <img class="film-photo" src="${ASSET}project-detail-street-press.jpg" alt="A lemon press left on the pavement among street finds" loading="lazy">
+                ${image(SL.budgetImage2 || 'project-detail-street-press.jpg', 'A lemon press left on the pavement among street finds')}
                 <figcaption><span class="meta">Street find</span>A lemon press picked up on the pavement — cheap detail, real patina.</figcaption>
               </figure>
             </div>
@@ -276,7 +301,7 @@ window.bootCourse = () => {
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
             <span class="eyebrow">THE LIVE FOUND-OBJECT MOCKUP</span>
-            <div class="shot">${image('project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor('project-detail-chess.jpg')}</div>
+            <div class="shot">${image(SL.mockupImage || 'project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor(SL.mockupImage || 'project-detail-chess.jpg')}</div>
             <h4>Build your venue as a set, not a plan.</h4>
             <p>Assemble it directly from what you find: antique tableware, candles, vintage glassware, fabric, wood, bottles, found textures and props, plus a physical menu concept. Work at 1:20 or 1:50; arrange the objects to show the entrance, first sightline, light and three details that carry the atmosphere. Photograph it at guest height.</p>
             <span class="meta">EVERY STUDENT · MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} → FINAL CHALLENGE</span>
@@ -1142,7 +1167,8 @@ window.bootCourse = () => {
   function creditsPage() {
     const ic = C.imageCredits || {};
     const used = new Set();
-    const collect = name => name && used.add(name);
+    /* Photos uploaded by the administrator in the bot have no archive credit line. */
+    const collect = name => { if (!name || isUploadedPhoto(name)) return; used.add(name); };
     C.cases.forEach(x => { collect(x.image); (x.photos || []).forEach(photo => collect(photo.file || photo.image)); });
     (C.figures || []).forEach(f => collect(f.image));
     C.modules.forEach(m => collect(m.image));

@@ -25,6 +25,14 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   }[char]));
 
+  /* Site imagery comes from the merged site copy: a presentation/assets file name,
+     an https link, or a photo uploaded by the administrator in the bot (/media/…). */
+  const siteAssetSrc = value => {
+    const raw = String(value || '').trim();
+    if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) return raw;
+    return `presentation/assets/${raw}`;
+  };
+
   const toast = text => {
     if (!toastEl) return;
     toastEl.textContent = text;
@@ -245,7 +253,7 @@
     <main class="gate-page">
       <div class="gate-stage">
         <div class="gate-visual">
-          <img class="film-photo" src="presentation/assets/project-joi-bar.jpg" alt="Black-and-white close-up of paper cups and the espresso bar at Joi, softly focused and drawn from the author's own project archive">
+          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Black-and-white close-up of paper cups and the espresso bar at Joi, softly focused and drawn from the author's own project archive">
           <div class="gate-visual-copy">
             <span class="eyebrow">${escG(g.eyebrow)}</span>
             <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>

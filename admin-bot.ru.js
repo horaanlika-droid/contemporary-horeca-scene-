@@ -16,16 +16,17 @@ function createAdminConsole(deps) {
 
   /* ---------- справочники полей ---------- */
   const FIELD_LABELS = {
-    title: 'Заголовок', description: 'Описание', image: 'Обложка',
-    intro: 'Вступление', body: 'Основной текст', challenge: 'Задание',
+    title: 'Заголовок', description: 'Описание', image: 'Обложка (фото)',
+    intro: 'Вступление', body: 'Основной текст', challenge: 'Задание', thumbnail: 'Кадр урока (фото)',
     name: 'Название', role: 'Роль', summary: 'Сводка', tagline: 'Подзаголовок',
     lessonAngle: 'Угол для урока', takeaway: 'Вывод', context: 'Контекст',
-    what: 'Что произошло', why: 'Почему важно',
+    what: 'Что произошло', why: 'Почему важно', leadPhoto: 'Главное фото проекта',
   };
   const SITE_LABELS = {
     gate: {
       eyebrow: 'Надпись-«бровь»', titleTop: 'Заголовок: строка 1', titleAccent: 'Заголовок: акцент',
       titleBottom: 'Заголовок: строка 3', lead: 'Лид-текст под заголовком',
+      heroImage: 'Фоновое фото (во весь экран)',
       aboutCourse: 'Кнопка «О курсе»', aboutAuthor: 'Кнопка «Об авторе»',
       formEyebrow: 'Надпись над формой', formTitle: 'Заголовок формы', formAccent: 'Акцент формы',
       formLead: 'Текст формы', infoEyebrow: 'Надпись «About the elective»',
@@ -34,17 +35,22 @@ function createAdminConsole(deps) {
     },
     landing: {
       heroEyebrow: '«Бровь» хиро', heroLead: 'Текст хиро', whyBig: 'Большое утверждение «why»',
+      heroImage: 'Фото в хиро (главное)', mockupImage: 'Фото карточки «мокап»',
+      budgetImage1: 'Фото бюджета: кадр 1', budgetImage2: 'Фото бюджета: кадр 2',
       whyBigAccent: 'Акцент в утверждении', quoteEyebrow: 'Надпись цитаты',
       quoteText: 'Цитата: текст', quoteAccent: 'Цитата: акцент', quoteLead: 'Цитата: начало', quoteTail: 'Цитата: «ends.»', quoteTail2: 'Цитата: вторая строка',
     },
   };
   const SCOPE_FIELDS = {
     module: ['title', 'description', 'image'],
-    lesson: ['title', 'intro', 'body', 'challenge'],
-    case: ['title', 'context', 'what', 'why', 'takeaway'],
-    figure: ['name', 'role', 'summary', 'lessonAngle', 'takeaway'],
-    project: ['name', 'role', 'tagline', 'summary'],
+    lesson: ['title', 'intro', 'body', 'challenge', 'thumbnail'],
+    case: ['title', 'context', 'what', 'why', 'takeaway', 'image'],
+    figure: ['name', 'role', 'summary', 'lessonAngle', 'takeaway', 'image'],
+    project: ['name', 'role', 'tagline', 'summary', 'image', 'leadPhoto'],
   };
+  /* Поля, значение которых — фотография: их можно заменить фото, присланным в бота. */
+  const IMAGE_FIELDS = new Set(['image', 'thumbnail', 'leadPhoto', 'heroImage', 'mockupImage', 'budgetImage1', 'budgetImage2']);
+  const isImageField = field => IMAGE_FIELDS.has(String(field || ''));
 
   /* ---------- помощники ---------- */
   const trunc = (value, n) => { const s = String(value ?? '').replace(/\s+/g, ' ').trim(); return s.length > n ? `${s.slice(0, n - 1)}…` : s; };
@@ -147,6 +153,7 @@ function createAdminConsole(deps) {
       keyboard: kb([
         [btn(`📋 Заявки${waiting ? ` (${waiting})` : ''}`, 'P'), btn(`↩️ Правки (${s.editor.overrides.length})`, 'O:0')],
         [btn('🧱 Блоки курса', 'B')],
+        [btn('🖼 Фото и фоны', 'F:0')],
         [btn('📚 Материалы', 'T:0'), btn('📣 Анонсы', 'N:0')],
         [btn('👥 Студенты', 'U'), btn('💳 Платежи', 'D')],
         [btn('🔑 Логины', 'W:0'), btn('⚙️ Статус', 'K')],
@@ -159,15 +166,71 @@ function createAdminConsole(deps) {
     const rows = [[btn('🏠 Стартовая страница', 'S:gate'), btn('📰 Лицевая', 'S:landing')]];
     for (const m of deps.courseModules()) rows.push([btn(`${m.number} · ${trunc(m.title, 26)}`, `m:${m.id}`)]);
     rows.push([btn('🧑‍ Персоны', 'FL:0'), btn('🗂 Кейсы', 'CL:0'), btn('🗃 Проекты', 'JL:0')]);
+    rows.push([btn('🖼 Фото и фоны', 'F:0')]);
     rows.push([btn('◀️ Назад', 'M')]);
-    return { text: '🧱 <b>Блоки курса</b>\nЧто редактируем: стартовая и лицевая страницы, модули и уроки, персоны, кейсы, проекты.', keyboard: kb(rows) };
+    return { text: '🧱 <b>Блоки курса</b>\nЧто редактируем: стартовая и лицевая страницы, модули и уроки, персоны, кейсы, проекты.\n🖼 «Фото и фоны» — быстрая замена фотографий, включая фоновые.', keyboard: kb(rows) };
   }
 
   function fieldButtons(scope, targetId) {
     return allowedFields(scope, targetId).map(field => {
-      const edited = currentText(scope, targetId, field) !== null ? '🟢' : '✏️';
-      return [btn(`${edited} ${fieldLabel(scope, targetId, field)}`, `E:${scope}:${targetId}:${field}`)];
+      const edited = currentText(scope, targetId, field) !== null;
+      const icon = isImageField(field) ? (edited ? '🟢📷' : '📷') : (edited ? '🟢' : '✏️');
+      return [btn(`${icon} ${fieldLabel(scope, targetId, field)}`, `E:${scope}:${targetId}:${field}`)];
     });
+  }
+
+  /* Экран «Фото и фоны»: быстрый доступ к крупным изображениям блоков. */
+  function photoMenu() {
+    return {
+      text: '🖼 <b>Фото и фоны</b>\nВыберите изображение — затем пришлите новое фото сообщением (обычное фото или файл) либо вставьте https-ссылку или имя файла из архива.\n\n🟢📷 — фото уже заменено.',
+      keyboard: kb([
+        [btn('🏠 Стартовая · фон', 'E:site:gate:heroImage')],
+        [btn('📰 Лицевая · хиро', 'E:site:landing:heroImage')],
+        [btn('📰 Лицевая · мокап', 'E:site:landing:mockupImage')],
+        [btn('📰 Лицевая · бюджет 1', 'E:site:landing:budgetImage1'), btn('📰 Лицевая · бюджет 2', 'E:site:landing:budgetImage2')],
+        [btn('🧩 Обложки модулей', 'PM:0'), btn('📖 Кадры уроков', 'PL:0')],
+        [btn('🗂 Кейсы', 'PX:0'), btn('🧑 Персоны', 'PF:0'), btn('🗃 Проекты', 'PJ:0')],
+        [btn('🖼 Медиатека', 'G:0'), btn('◀️ К блокам', 'B')],
+      ]),
+    };
+  }
+  const photoModuleList = page => paged('PM', page, deps.courseModules(), m => [btn(`📷 ${m.number} · ${trunc(m.title, 26)}`, `E:module:${m.id}:image`)], 'F:0', '📷 <b>Обложки модулей</b>');
+  const photoLessonList = page => paged(
+    'PL', page,
+    deps.courseData()?.modules.flatMap(m => m.lessons.map(l => ({ ...l, blockNumber: m.number }))) || [],
+    l => [btn(`📷 ${l.blockNumber} · ${trunc(l.title, 26)}`, `E:lesson:${l.id}:thumbnail`)],
+    'F:0', '📷 <b>Кадры уроков</b>',
+  );
+  const photoCaseList = page => paged('PX', page, deps.courseData()?.cases || [], (c, i) => [btn(`📷 ${trunc(c.title, 28)}`, `E:case:${i}:image`)], 'F:0', '📷 <b>Фото кейсов</b>');
+  const photoFigureList = page => paged('PF', page, deps.courseData()?.figures || [], f => [btn(`📷 ${trunc(f.name, 28)}`, `E:figure:${f.id}:image`)], 'F:0', '📷 <b>Портреты персон</b>');
+  const photoProjectList = page => paged(
+    'PJ', page, deps.courseData()?.projects?.items || [],
+    p => [btn(`📷 ${trunc(p.name, 18)} · обложка`, `E:project:${p.id}:image`), btn('↳ главное', `E:project:${p.id}:leadPhoto`)],
+    'F:0', '📷 <b>Фото проектов</b>',
+  );
+
+  /* Медиатека: все фото, загруженные в бота. */
+  function mediaScreen(page) {
+    const items = store().editor.media || [];
+    if (!items.length) {
+      return {
+        text: '🖼 <b>Медиатека</b>\nЗагруженных фото пока нет. Откройте «Фото и фоны», выберите блок и пришлите фото в чат.',
+        keyboard: kb([[btn('🖼 Фото и фоны', 'F:0')], [btn('◀️ В меню', 'M')]]),
+      };
+    }
+    const screen = paged('G', page, items, m => [btn(`🖼 ${trunc(m.name, 22)} · ${Math.round((m.size || 0) / 1024)} КБ`, `MC:${m.id}`)], 'M', '🖼 <b>Медиатека</b> — нажмите фото для деталей и удаления');
+    screen.keyboard.inline_keyboard.splice(1, 0, [btn('🖼 Фото и фоны', 'F:0')]);
+    return screen;
+  }
+  function mediaDetail(id) {
+    const media = (store().editor.media || []).find(item => item.id === id);
+    if (!media) return null;
+    const used = store().editor.overrides.filter(o => o.text === media.url);
+    const usage = used.length ? used.map(o => `${o.scope}:${o.targetId}.${o.field}`).join(', ') : 'нигде не используется';
+    return {
+      text: `🖼 <b>${esc(trunc(media.name, 60))}</b>\nФайл: <code>${esc(media.file)}</code>\nРазмер: ${Math.round((media.size || 0) / 1024)} КБ · ${esc(media.type || '')}\nЗагружено: ${esc(new Date(media.createdAt).toLocaleString('ru-RU'))}\nИсточник: ${esc(media.source || 'admin-bot')}\nИспользуется: ${esc(trunc(usage, 300))}\n\nУдаление вернёт все связанные блоки к прежним фото.`,
+      keyboard: kb([[btn('🗑 Удалить фото', `MX:${media.id}`)], [btn('◀️ К медиатеке', 'G:0')]]),
+    };
   }
 
   function moduleScreen(id) {
@@ -383,6 +446,8 @@ function createAdminConsole(deps) {
   const helpText = () => [
     'ℹ️ <b>Как пользоваться панелью</b>',
     'Все разделы — на inline-кнопках. Редактирование блока: раздел → блок → поле → пришлите новый текст сообщением → ✅ сохранено.',
+    '📷 Замена фото и фонов: «🖼 Фото и фоны» → изображение → пришлите фото в чат. Так же работают кнопки «📷 …» внутри любого блока курса.',
+    '🖼 Медиатека хранит все загруженные фото; оттуда можно удалить лишнее (связанные блоки вернутся к прежним фото).',
     '/cancel или /отмена — отменить ввод. /панель — главное меню.',
     '',
     'Текстовые команды (англ.) тоже работают:',
@@ -398,17 +463,19 @@ function createAdminConsole(deps) {
   async function processPending(chatId, pending, text) {
     const send = (t, k) => deps.sendTelegramMessage(chatId, t, k);
     switch (pending.kind) {
-      case 'text': {
+      case 'text':
+      case 'image': {
         if (!allowedFields(pending.scope, pending.targetId).includes(pending.field)) {
           clearPending(chatId);
           return send('⚠️ Поле больше недоступно. Ввод отменён.');
         }
         let value = text;
-        if (pending.field === 'image') {
-          const url = deps.validHttpsUrl(text);
-          const fileOk = /^[A-Za-z0-9._-]+\.(jpe?g|png|webp)$/i.test(text.trim());
-          if (!url && !fileOk) return send('⚠️ Для обложки нужно имя файла (jpg/png/webp) из presentation/assets/ или https-ссылка. Попробуйте ещё раз.');
-          value = url || text.trim();
+        if (isImageField(pending.field)) {
+          const imageValue = deps.validImageReference ? deps.validImageReference(text) : (deps.validHttpsUrl(text) || text.trim());
+          if (!imageValue) {
+            return send('⚠️ Нужно фото, https-ссылка или имя файла (jpg/png/webp) из архива. Пришлите фото сообщением или попробуйте ещё раз.');
+          }
+          value = imageValue;
         }
         if (value.length > 4000) return send('⚠️ Слишком длинно: максимум 4000 символов. Попробуйте ещё раз.');
         const override = upsertOverride(pending.scope, pending.targetId, pending.field, value);
@@ -470,12 +537,55 @@ function createAdminConsole(deps) {
     }
   }
 
+  /* ---------- фото из Telegram ---------- */
+  async function applyUploadedPhoto(chatId, pending, message) {
+    const send = (t, k) => deps.sendTelegramMessage(chatId, t, k);
+    const result = await deps.ingestTelegramPhoto(message);
+    if (!result || result.error || !result.media) {
+      return send(`⚠️ ${esc(result?.error || 'Не удалось сохранить фото.')}\nПришлите другое фото или /cancel.`, kb([[btn('❌ Отмена', 'ZC')]]));
+    }
+    const media = result.media;
+    const override = upsertOverride(pending.scope, pending.targetId, pending.field, media.url);
+    clearPending(chatId);
+    deps.addBotLog('editor', `[ru-panel] photo ${media.file} → ${pending.scope}:${pending.targetId}.${pending.field} (${override.id})`);
+    const caption = `✅ <b>Фото применено</b>\n${esc(targetLabel(pending.scope, pending.targetId))} · «${esc(fieldLabel(pending.scope, pending.targetId, pending.field))}»\nФайл: <code>${esc(media.file)}</code> · ${Math.round((media.size || 0) / 1024)} КБ\n\nОбновите приложение — замена появится сразу.`;
+    const keyboard = kb([
+      [btn('🔄 Заменить ещё раз', `E:${pending.scope}:${pending.targetId}:${pending.field}`), btn('↩️ Откатить', `o:${override.id}`)],
+      [btn(backLabelFor(pending.scope, pending.targetId), backDataFor(pending.scope, pending.targetId)), btn('🖼 Медиатека', 'G:0')],
+    ]);
+    const previewUrl = deps.mediaPublicUrl ? deps.mediaPublicUrl(media.file) : '';
+    const previewed = previewUrl && deps.sendTelegramPhoto
+      ? await deps.sendTelegramPhoto(chatId, previewUrl, caption, keyboard)
+      : false;
+    return previewed ? true : send(caption, keyboard);
+  }
+
   /* ---------- сообщения ---------- */
   async function handleAdminMessage(message) {
     const chatId = String(message.chat.id);
     const text = String(message.text || '').trim();
     const pending = getPending(chatId);
     const commandMatch = text.match(/^\/([A-Za-zА-Яа-яЁё_]+)/);
+    const isPhoto = (Array.isArray(message.photo) && message.photo.length > 0)
+      || (message.document && /^image\//i.test(String(message.document.mime_type || '')));
+
+    if (isPhoto) {
+      if (!pending) {
+        return deps.sendTelegramMessage(
+          chatId,
+          '📷 Фото получено, но поле не выбрано.\nОткройте «🖼 Фото и фоны» или блок курса, нажмите «📷 …» и пришлите фото ещё раз.',
+          kb([[btn('🖼 Фото и фоны', 'F:0'), btn('🎛 В меню', 'M')]]),
+        );
+      }
+      if (!isImageField(pending.field)) {
+        return deps.sendTelegramMessage(
+          chatId,
+          `⚠️ «${esc(fieldLabel(pending.scope, pending.targetId, pending.field))}» — текстовое поле. Пришлите текст сообщением или /cancel.`,
+          kb([[btn('❌ Отмена', 'ZC')]]),
+        );
+      }
+      return applyUploadedPhoto(chatId, pending, message);
+    }
 
     if (pending) {
       if (commandMatch && /^(cancel|отмена|стоп)$/i.test(commandMatch[1])) {
@@ -518,6 +628,16 @@ function createAdminConsole(deps) {
 
     if (data === 'M') return go(mainMenu());
     if (data === 'B') return go(blocksMenu());
+    if (data === 'F:0' || head === 'F') return go(photoMenu());
+    if (head === 'G') return go(mediaScreen(Number(arg1 || 0)));
+    if (head === 'MC') return go(mediaDetail(arg1));
+    if (head === 'MX') {
+      const result = deps.removeMedia ? deps.removeMedia(arg1) : { error: 'Медиатека недоступна.' };
+      if (result.error) return send(`⚠️ ${esc(result.error)}`);
+      deps.addBotLog('editor', `[ru-panel] media removed: ${result.media.file}; overrides cleared: ${result.overridesCleared}`);
+      await send(`🗑 Фото <code>${esc(result.media.file)}</code> удалено. Связанных правок сброшено: ${result.overridesCleared}.`);
+      return go(mediaScreen(0));
+    }
     if (data === 'P') return go(submissionsScreen(0));
     if (data === 'U') return go(studentsScreen());
     if (data === 'D') return go(ordersScreen());
@@ -535,6 +655,11 @@ function createAdminConsole(deps) {
     if (head === 'c') return go(caseScreen(arg1));
     if (head === 'f') return go(figureScreen(arg1));
     if (head === 'j') return go(projectScreen(arg1));
+    if (head === 'PM') return go(photoModuleList(Number(arg1 || 0)));
+    if (head === 'PL') return go(photoLessonList(Number(arg1 || 0)));
+    if (head === 'PX') return go(photoCaseList(Number(arg1 || 0)));
+    if (head === 'PF') return go(photoFigureList(Number(arg1 || 0)));
+    if (head === 'PJ') return go(photoProjectList(Number(arg1 || 0)));
     if (head === 'O') return go(overridesScreen(Number(arg1 || 0)));
     if (head === 'T') return go(materialsScreen(Number(arg1 || 0)));
     if (head === 'N') return go(postsScreen(Number(arg1 || 0)));
@@ -547,9 +672,13 @@ function createAdminConsole(deps) {
       }
       const original = resolveTarget(scope, targetId)[field];
       const current = currentText(scope, targetId, field) ?? (typeof original === 'string' ? original : '');
-      setPending(chatId, { kind: 'text', scope, targetId, field });
+      setPending(chatId, { kind: isImageField(field) ? 'image' : 'text', scope, targetId, field });
+      const header = isImageField(field) ? '📷 <b>Замена фото</b>' : '✏️ <b>Новое значение</b>';
+      const hint = isImageField(field)
+        ? 'Пришлите новое фото сообщением (обычное фото или файл). Можно также вставить https-ссылку или имя файла из presentation/assets/, например project-joi-bar.jpg.\nПосле загрузки фото применится к блоку сразу — обновите приложение.'
+        : 'Пришлите новый текст одним сообщением.';
       return send(
-        `✏️ <b>Новое значение</b>\nБлок: ${esc(targetLabel(scope, targetId))}\nПоле: «${esc(fieldLabel(scope, targetId, field))}»\nСейчас: ${esc(trunc(current, 200))}\n\nПришлите новый текст одним сообщением.${field === 'image' ? '\nДля обложки: имя файла из presentation/assets/ (например project-joi-bar.jpg) или https-ссылка.' : ''}\n/cancel — отмена.`,
+        `${header}\nБлок: ${esc(targetLabel(scope, targetId))}\nПоле: «${esc(fieldLabel(scope, targetId, field))}»\nСейчас: ${esc(trunc(current, 200))}\n\n${hint}\n/cancel — отмена.`,
         kb([[btn('❌ Отмена', 'ZC')]]),
       );
     }

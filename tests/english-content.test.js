@@ -171,6 +171,9 @@ test('English-only conversion preserves the complete course and photographic arc
   assert.doesNotMatch(read('app.js'), /captionRu|pr\.ru\b/);
 });
 
+/* A 1×1 JPEG, enough for the server's magic-byte check in the photo pipeline. */
+const TEST_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==';
+
 async function isolatedServer(t, envOverrides = {}, initialStore = null) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'chs-english-'));
   const serverFile = path.join(directory, 'server.js');
@@ -187,16 +190,33 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
   const bootstrap = `
     const http = require('node:http');
     const nativeFetch = global.fetch;
+    global.__tgUpdates = [];
+    process.on('message', message => {
+      if (message?.type === 'telegram-update' && message.update) global.__tgUpdates.push(message.update);
+    });
     global.fetch = async (input, init = {}) => {
       const url = String(input);
-      if (url.startsWith('https://api.telegram.org/bot')) {
+      if (url.startsWith('https://api.telegram.org/')) {
         if (url.includes('/getUpdates')) {
-          return { ok: true, status: 200, json: async () => ({ ok: true, result: [] }) };
+          const queued = global.__tgUpdates.splice(0);
+          return { ok: true, status: 200, json: async () => ({ ok: true, result: queued }) };
         }
         if (url.includes('/sendMessage')) {
           const payload = JSON.parse(init.body || '{}');
           if (process.send) process.send({ type: 'telegram-message', payload });
           return { ok: true, status: 200, json: async () => ({ ok: true, result: { message_id: 1 } }) };
+        }
+        if (url.includes('/sendPhoto')) {
+          const payload = JSON.parse(init.body || '{}');
+          if (process.send) process.send({ type: 'telegram-photo', payload });
+          return { ok: true, status: 200, json: async () => ({ ok: true, result: { message_id: 2 } }) };
+        }
+        if (url.includes('/getFile')) {
+          return { ok: true, status: 200, json: async () => ({ ok: true, result: { file_path: 'photos/admin-upload.jpg' } }) };
+        }
+        if (url.includes('/file/bot')) {
+          const bytes = Buffer.from(${JSON.stringify(TEST_JPEG_BASE64)}, 'base64');
+          return { ok: true, status: 200, arrayBuffer: async () => bytes };
         }
       }
       return nativeFetch(input, init);
@@ -232,11 +252,14 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
   });
   let logs = '';
   const messages = [];
+  const photos = [];
   child.stdout.on('data', data => { logs += data; });
   child.stderr.on('data', data => { logs += data; });
   child.on('message', message => {
     if (message?.type === 'telegram-message') messages.push(message.payload);
+    if (message?.type === 'telegram-photo') photos.push(message.payload);
   });
+  const pushTelegramUpdate = update => child.send({ type: 'telegram-update', update });
   t.after(async () => {
     if (child.exitCode === null && child.signalCode === null) {
       const exited = once(child, 'exit');
@@ -286,7 +309,14 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
     }
     assert.ok(messages.length >= count, `Expected ${count} Telegram messages; got ${messages.length}`);
   };
-  return { request, post, get, messages, waitForMessages, child, directory, port };
+  const waitForPhotos = async (count, timeout = 2000) => {
+    const deadline = Date.now() + timeout;
+    while (photos.length < count && Date.now() < deadline) {
+      await new Promise(resolve => setTimeout(resolve, 10));
+    }
+    assert.ok(photos.length >= count, `Expected ${count} Telegram photos; got ${photos.length}`);
+  };
+  return { request, post, get, messages, photos, waitForMessages, waitForPhotos, pushTelegramUpdate, child, directory, port };
 }
 
 function signedTributeRequest(server, event, apiKey = 'tribute-regression-secret') {
@@ -486,6 +516,17 @@ test('images carry provenance credits, fallbacks and an email submission channel
   // AI-processed author photographs are disclosed, not hidden
   assert.match(course, /AI-PROCESSED \(EXPOSURE ONLY\)/);
   assert.match(course, /project-joi-bar-ai\.jpg/);
+  // photos uploaded in the admin bot resolve to /media/… and keep a safe fallback
+  assert.match(app, /const assetSrc = name =>/);
+  assert.match(app, /const isUploadedPhoto = name =>/);
+  assert.match(app, /PHOTO · UPDATED BY THE COURSE TEAM/);
+  assert.match(app, /const OVERRIDE_IMAGE_FIELDS = new Set/);
+  assert.match(app, /SL\.heroImage/);
+  assert.match(app, /SL\.mockupImage/);
+  assert.match(read('access.js'), /const siteAssetSrc = value =>/);
+  assert.match(read('access.js'), /g\.heroImage/);
+  assert.match(read('site-copy.js'), /heroImage: 'project-joi-bar\.jpg'/);
+  assert.match(read('site-copy.js'), /mockupImage: 'project-detail-chess\.jpg'/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
   assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
@@ -653,12 +694,21 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   assert.equal(paid.status, 200);
   assert.equal(paid.body.issued, true);
   assert.equal(paid.body.deliveryStatus, 'AWAITING_APPROVAL');
-  assert.equal(server.messages.length, 0, 'Payment alone does not issue a registration page');
+  /* The buyer is handed a convenient start link immediately after the verified payment. */
+  assert.equal(server.messages.length, 1, 'A verified payment immediately sends the start link to the buyer');
+  const startMessage = server.messages[0];
+  assert.equal(String(startMessage.chat_id), '123456789');
+  assert.match(startMessage.text, /Tribute event/i);
+  assert.match(startMessage.text, /start link/i);
+  const startButtons = startMessage.reply_markup.inline_keyboard.flat();
+  assert.equal(startButtons[0].url, 'https://course.example.test/');
+  assert.equal(startButtons[1].text.includes('password'), true, 'the registration button is offered next to the start link');
+  assert.ok(new URL(startButtons[1].url).searchParams.get('register'), 'the second button opens the shared registration page');
 
   const duplicate = await signedTributeRequest(server, event, apiKey);
   assert.equal(duplicate.status, 200);
   assert.equal(duplicate.body.duplicate, true);
-  assert.equal(server.messages.length, 0, 'A duplicate payment event does not bypass manual approval');
+  assert.equal(server.messages.length, 1, 'A duplicate payment event is not sent twice');
 
   const stateBeforeApproval = await server.get('/api/state', token);
   assert.equal(stateBeforeApproval.body.students.length, 1);
@@ -683,8 +733,8 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   assert.equal(admitted.status, 200);
   assert.equal(admitted.body.ok, true);
   assert.match(admitted.body.reply, /admitted/i);
-  await server.waitForMessages(1);
-  const approvalMessage = server.messages[0];
+  await server.waitForMessages(2);
+  const approvalMessage = server.messages[1];
   assert.equal(String(approvalMessage.chat_id), '123456789');
   assert.match(approvalMessage.text, /shared registration link/i);
   assert.match(approvalMessage.text, /reusable/i);
@@ -758,7 +808,7 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   const review = await command(`/approve ${submitted.body.submission.id} The concept and budget are clear.`);
   assert.equal(review.body.submission.status, 'APPROVED');
   assert.match(review.body.reply, /Feedback sent to the student/);
-  await server.waitForMessages(2);
+  await server.waitForMessages(3);
 
   const listedLearners = await command('/students');
   assert.match(listedLearners.body.reply, /ACTIVE/);
@@ -767,9 +817,9 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   const resend = await command('/resend 123456789');
   assert.equal(resend.status, 200);
   assert.equal(resend.body.ok, true);
-  await server.waitForMessages(3);
-  assert.match(server.messages[2].text, /cannot be retrieved or resent/i);
-  assert.doesNotMatch(server.messages[2].text, /register=|CHS-/);
+  await server.waitForMessages(4);
+  assert.match(server.messages[3].text, /cannot be retrieved or resent/i);
+  assert.doesNotMatch(server.messages[3].text, /register=|CHS-/);
   assert.equal((await command('/orders')).body.reply.includes('digital:78901'), true);
 
   const refund = {
@@ -783,7 +833,7 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   assert.equal(refunded.body.refunded, true);
   assert.equal((await server.get('/api/access', studentSession.body.token)).body.unlocked, false);
   assert.equal((await server.post('/api/access', { email: 'alex@example.test', password: chosenPassword })).status, 403);
-  await server.waitForMessages(4);
+  await server.waitForMessages(5);
 });
 
 test('Tribute subscriptions require manual admission and preserve account access until expiry', async t => {
@@ -825,14 +875,15 @@ test('Tribute subscriptions require manual admission and preserve account access
   const purchase = await signedTributeRequest(server, firstPayment, apiKey);
   assert.equal(purchase.status, 200);
   assert.equal(purchase.body.deliveryStatus, 'AWAITING_APPROVAL');
-  assert.equal(server.messages.length, 0);
+  assert.equal(server.messages.length, 1, 'The subscription buyer gets the start link right after payment');
+  assert.match(server.messages[0].text, /start link/i);
   const stateBeforeApproval = await server.get('/api/state', token);
   const student = stateBeforeApproval.body.students[0];
   const command = text => server.post('/api/admin/bot-command', { command: text }, token);
   assert.match((await command('/admissions')).body.reply, /barlearner/);
   assert.equal((await command(`/admit ${student.id}`)).body.ok, true);
-  await server.waitForMessages(1);
-  const sharedUrl = registrationUrlFromMessage(server.messages[0]);
+  await server.waitForMessages(2);
+  const sharedUrl = registrationUrlFromMessage(server.messages[1]);
   const password = 'subscription-personal-password';
   const registered = await server.post('/api/register', {
     telegramIdentity: 'barlearner', name: 'Bar Learner', email: 'bar@example.test', password,
@@ -881,9 +932,9 @@ test('Tribute subscriptions require manual admission and preserve account access
   const renewed = await signedTributeRequest(server, renewal, apiKey);
   assert.equal(renewed.status, 200);
   assert.equal(renewed.body.deliveryStatus, 'DELIVERED');
-  await server.waitForMessages(4);
-  assert.match(server.messages[3].text, /access is active/i);
-  assert.doesNotMatch(server.messages[3].text, /register=|one-time|single-use/);
+  await server.waitForMessages(5);
+  assert.match(server.messages[4].text, /access is active/i);
+  assert.doesNotMatch(server.messages[4].text, /register=|one-time|single-use/);
   const restored = await server.post('/api/access', { email: 'bar@example.test', password });
   assert.equal(restored.status, 200);
 
@@ -893,6 +944,78 @@ test('Tribute subscriptions require manual admission and preserve account access
   assert.equal(state.body.students[0].registered, true);
   assert.equal(state.body.students[0].subscriptionStatus, 'ACTIVE');
   assert.equal(new URL(sharedUrl).searchParams.get('register'), '1');
+});
+
+test('a verified payment hands the buyer a start link immediately, with an opt-out switch', async t => {
+  const apiKey = 'tribute-start-link-secret';
+  const server = await isolatedServer(t, {
+    TRIBUTE_API_KEY: apiKey,
+    TRIBUTE_PRODUCT_ID: '777',
+    BOT_TOKEN: 'start-link-bot-token',
+    BOT_USERNAME: 'chs_access_bot',
+    COURSE_URL: 'https://course.example.test',
+    COURSE_START_URL: 'https://start.example.test/contemporary-horeca-scene',
+  });
+  const status = await server.get('/api/tribute/status');
+  assert.equal(status.body.startUrlConfigured, true);
+  assert.equal(status.body.paymentStartMessage, true);
+
+  const event = {
+    name: 'new_digital_product',
+    created_at: '2026-10-04T10:00:00.000Z',
+    sent_at: '2026-10-04T10:00:01.000Z',
+    payload: {
+      product_id: 777,
+      product_name: 'Contemporary Horeca Scene · 2026 Edition',
+      amount: 4900,
+      currency: 'eur',
+      trb_user_id: 'T-90909',
+      telegram_user_id: 555000111,
+      telegram_username: 'startbuyer',
+      purchase_id: 55501,
+      transaction_id: 55502,
+      purchase_created_at: '2026-10-04T10:00:00.000Z',
+    },
+  };
+  const paid = await signedTributeRequest(server, event, apiKey);
+  assert.equal(paid.status, 200);
+  await server.waitForMessages(1);
+  const message = server.messages[0];
+  assert.equal(String(message.chat_id), '555000111');
+  assert.match(message.text, /start link is ready/i);
+  assert.match(message.text, /startbuyer/);
+  const buttons = message.reply_markup.inline_keyboard.flat();
+  assert.equal(buttons[0].url, 'https://start.example.test/contemporary-horeca-scene', 'the configured start link is not shadowed by COURSE_URL');
+  assert.equal(new URL(buttons[1].url).searchParams.get('register'), '1');
+  assert.equal(new URL(buttons[1].url).origin, 'https://course.example.test');
+
+  /* The start link is a convenience, never an approval: registration stays locked. */
+  const blocked = await server.post('/api/register', {
+    telegramIdentity: 'startbuyer', name: 'Start Buyer', email: 'start@example.test', password: 'choose-a-secure-password-123',
+  });
+  assert.equal(blocked.status, 403, 'the start link does not approve the buyer');
+
+  const diskStore = JSON.parse(fs.readFileSync(path.join(server.directory, 'data', 'store.json'), 'utf8'));
+  assert.equal(diskStore.tribute.orders[0].deliveryStatus, 'AWAITING_APPROVAL');
+  assert.equal(diskStore.students[0].registrationStatus, 'PENDING_APPROVAL');
+  assert.equal(typeof diskStore.students[0].startLinkSentAt, 'string');
+
+  /* Administrators can switch the immediate message off and keep the approval-only flow. */
+  const quiet = await isolatedServer(t, {
+    TRIBUTE_API_KEY: 'tribute-quiet-secret',
+    TRIBUTE_PRODUCT_ID: '888',
+    BOT_TOKEN: 'quiet-bot-token',
+    COURSE_URL: 'https://course.example.test',
+    PAYMENT_START_MESSAGE: 'false',
+  });
+  assert.equal((await quiet.get('/api/tribute/status')).body.paymentStartMessage, false);
+  const quietEvent = structuredClone(event);
+  quietEvent.payload.product_id = 888;
+  quietEvent.payload.purchase_id = 55503;
+  const quietPaid = await signedTributeRequest(quiet, quietEvent, 'tribute-quiet-secret');
+  assert.equal(quietPaid.status, 200);
+  assert.equal(quietPaid.body.deliveryStatus, 'AWAITING_APPROVAL');
+  assert.equal(quiet.messages.length, 0, 'PAYMENT_START_MESSAGE=false keeps the link gated behind approval');
 });
 
 test('Project Q&A is private, persistent and streams messages live to the learner and admin', async t => {
@@ -977,6 +1100,54 @@ test('the administrator password is never locked out by the attempt throttle', a
   assert.equal(admin.body.user?.role, 'ADMIN');
 });
 
+test('the admin bot replaces block photos and background images with photos sent in Telegram', async t => {
+  const server = await isolatedServer(t, {
+    BOT_TOKEN: 'test-bot-token',
+    ADMIN_IDS: '1',
+    COURSE_URL: 'https://course.example.com',
+  });
+  /* The administrator taps the background-image button for the start page. */
+  server.pushTelegramUpdate({
+    update_id: 1,
+    callback_query: { id: 'cb-photo', data: 'E:site:gate:heroImage', message: { chat: { id: 1 }, message_id: 10 } },
+  });
+  await server.waitForMessages(1, 10_000);
+  assert.match(server.messages.at(-1).text, /project-joi-bar\.jpg/);
+  assert.match(server.messages.at(-1).text, /\/cancel/);
+
+  /* Then sends a photo in the chat, which becomes the new block image. */
+  server.pushTelegramUpdate({
+    update_id: 2,
+    message: { message_id: 11, chat: { id: 1 }, from: { id: 1 }, photo: [{ file_id: 'photo-1', file_size: 1024 }] },
+  });
+  await server.waitForPhotos(1, 10_000);
+  const preview = server.photos.at(-1);
+
+  const diskStore = JSON.parse(fs.readFileSync(path.join(server.directory, 'data', 'store.json'), 'utf8'));
+  const override = diskStore.editor.overrides.find(o => o.scope === 'site' && o.targetId === 'gate' && o.field === 'heroImage');
+  assert.ok(override, 'the photo becomes a saved override for the gate background');
+  assert.match(override.text, /^\/media\/img-/);
+  const media = diskStore.editor.media.find(item => item.url === override.text);
+  assert.ok(media, 'the uploaded photo is registered in the media library');
+  assert.equal(media.type, 'image/jpeg');
+  assert.ok(preview.caption.includes(media.file), 'the preview names the stored photo');
+  assert.ok(fs.existsSync(path.join(server.directory, 'data', 'uploads', media.file)));
+
+  /* The public media route serves the photo, and /api/site exposes it to the gate. */
+  const imageResponse = await fetch(`http://127.0.0.1:${server.port}${media.url}`);
+  assert.equal(imageResponse.status, 200);
+  assert.equal(imageResponse.headers.get('content-type'), 'image/jpeg');
+  const imageBytes = Buffer.from(await imageResponse.arrayBuffer());
+  assert.equal(imageBytes.toString('latin1', 0, 3), 'ÿØÿ');
+  assert.equal((await fetch(`http://127.0.0.1:${server.port}/media/img-missing.jpg`)).status, 404);
+  const site = await server.get('/api/site');
+  assert.equal(site.body.gate.heroImage, override.text);
+
+  /* The bot echoes a preview of the saved photo with a rollback button. */
+  assert.equal(preview.photo, `https://course.example.com${override.text}`);
+  assert.equal(preview.reply_markup.inline_keyboard[0][1].callback_data, `o:${override.id}`);
+});
+
 test('public site copy ships English defaults and merges administrator site overrides', async t => {
   const initialStore = {
     editor: {
@@ -1020,6 +1191,24 @@ test('the russian admin console builds inline menus and saves block edits', asyn
     courseData: () => courseData(),
     courseModules: () => courseData().modules.map(m => ({ id: m.id, number: m.number, title: m.title, lessons: m.lessons.map(l => ({ id: l.id, title: l.title })) })),
     siteDefaults: () => { const context = { window: {} }; vm.runInNewContext(read('site-copy.js'), context); return context.window.SITE; },
+    validImageReference: value => {
+      const raw = String(value || '').trim();
+      if (/^https:\/\/\S+$/.test(raw) || /^\/media\/[A-Za-z0-9._-]+$/.test(raw) || /^[A-Za-z0-9._-]+\.(jpe?g|png|webp)$/i.test(raw)) return raw;
+      return '';
+    },
+    ingestTelegramPhoto: async () => ({
+      media: { id: 'img-test', file: 'img-test.jpg', url: '/media/img-test.jpg', name: 'upload.jpg', type: 'image/jpeg', size: 2048, source: 'telegram', createdAt: new Date().toISOString() },
+    }),
+    removeMedia: id => {
+      const index = data.editor.media.findIndex(item => item.id === id);
+      if (index === -1) return { error: 'Photo not found.' };
+      const [removed] = data.editor.media.splice(index, 1);
+      const before = data.editor.overrides.length;
+      data.editor.overrides = data.editor.overrides.filter(o => o.text !== removed.url);
+      return { media: removed, overridesCleared: before - data.editor.overrides.length };
+    },
+    mediaPublicUrl: file => `https://course.example.com/media/${file}`,
+    sendTelegramPhoto: async (chatId, url, caption, keyboard) => { sent.push({ text: caption, keyboard, photo: url }); return true; },
   };
   const adminConsole = createAdminConsole(deps);
 
@@ -1048,4 +1237,40 @@ test('the russian admin console builds inline menus and saves block edits', asyn
   await adminConsole.handleCallback({ id: 'cb3', data: 'S:gate', message: { chat: { id: '1' } } });
   const gateButtons = sent[0].keyboard.inline_keyboard.flat().map(b => b.callback_data || '');
   assert.ok(gateButtons.includes('E:site:gate:lead'), 'site block editor exposes gate fields');
+  assert.ok(gateButtons.includes('E:site:gate:heroImage'), 'the gate screen exposes the full-screen background photo');
+
+  /* The photo screen lists background images and block photo groups. */
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb4', data: 'F:0', message: { chat: { id: '1' } } });
+  const photoButtons = sent[0].keyboard.inline_keyboard.flat().map(b => b.callback_data || '');
+  for (const expected of ['E:site:gate:heroImage', 'E:site:landing:heroImage', 'E:site:landing:budgetImage1', 'PM:0', 'PL:0', 'PJ:0', 'G:0']) {
+    assert.ok(photoButtons.includes(expected), `photo screen exposes ${expected}`);
+  }
+  const projectPhotoButtons = adminConsole.handleCallback({ id: 'cb5', data: 'PJ:0', message: { chat: { id: '1' } } });
+  await projectPhotoButtons;
+  const projectButtons = sent.at(-1).keyboard.inline_keyboard.flat().map(b => b.callback_data || '');
+  assert.ok(projectButtons.some(data => /^E:project:joi:image$/.test(data)), 'project covers are replaceable');
+  assert.ok(projectButtons.some(data => /^E:project:joi:leadPhoto$/.test(data)), 'the project lead photo is replaceable');
+
+  /* A photo sent while an image field is pending becomes a /media/ override. */
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb6', data: 'E:module:future:image', message: { chat: { id: '1' }, message_id: 10 } });
+  assert.equal(data.adminBot.pending['1'].kind, 'image', 'image fields wait for an uploaded photo');
+  sent.length = 0;
+  await adminConsole.handleAdminMessage({ chat: { id: '1' }, photo: [{ file_id: 'photo-1', file_size: 4096 }] });
+  const photoOverride = data.editor.overrides.find(o => o.scope === 'module' && o.field === 'image');
+  assert.equal(photoOverride.text, '/media/img-test.jpg');
+  assert.ok(sent.at(-1).text.includes('img-test.jpg'), 'the confirmation names the stored photo');
+  assert.match(sent.at(-1).photo, /course\.example\.com\/media\/img-test\.jpg/);
+  assert.ok(!data.adminBot.pending['1'], 'the pending photo request is cleared');
+
+  /* Media library lists the upload and can delete it together with its overrides. */
+  data.editor.media = [{ id: 'img-test', file: 'img-test.jpg', url: '/media/img-test.jpg', name: 'upload.jpg', type: 'image/jpeg', size: 2048, createdAt: '2026-10-04T00:00:00.000Z' }];
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb7', data: 'MC:img-test', message: { chat: { id: '1' } } });
+  assert.match(sent[0].text, /img-test\.jpg/);
+  sent.length = 0;
+  await adminConsole.handleCallback({ id: 'cb8', data: 'MX:img-test', message: { chat: { id: '1' }, message_id: 12 } });
+  assert.equal(data.editor.media.length, 0, 'the uploaded photo is removed from the library');
+  assert.equal(data.editor.overrides.some(o => o.text === '/media/img-test.jpg'), false, 'blocks using the photo return to their published image');
 });
