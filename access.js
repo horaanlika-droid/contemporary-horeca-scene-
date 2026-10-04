@@ -197,33 +197,16 @@
       </div>
 
       <section class="gate-info" id="gate-info">
-        <div class="gate-info-inner">
+        <div class="gate-info-inner gate-info-slim">
           <article class="gate-card">
             <span class="eyebrow">ABOUT THE ELECTIVE</span>
             <h3>Ten modules on what<br><em>shapes</em> the scene.</h3>
-            <p><b>Contemporary Horeca Scene</b> is a living digital elective for Hotel Institute Montreux (2026 edition). We read the industry as a scene: rankings and <b>World’s 50 Best</b>, menus as editorial artefacts, guest experience and neurogastronomy, glassware and light, technology and AI, F&amp;B futures and entrepreneurship — then bring those ideas to life on a small budget.</p>
-            <p>The final project is not an essay. Build your own venue by hand: a <b>1:20 / 1:50</b> mockup made from found objects, vintage tableware, candles, textiles and a paper menu, presented alongside a cost estimate and a guest-experience set.</p>
+            <p><b>Contemporary Horeca Scene</b> reads the industry as a living scene — and ends with a hospitality concept and a physical mockup you build and defend yourself.</p>
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
               <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
-              <div class="gate-fact"><strong>12<i>+</i></strong><span>Weeks · suggested pace</span></div>
-              <div class="gate-fact"><strong>01</strong><span>Physical mockup per student</span></div>
+              <div class="gate-fact"><strong>01</strong><span>Password opens everything</span></div>
             </div>
-            <ul class="gate-points">
-              <li><b>01</b><span>Study the venues and people moving the scene: 50 Best, MICHELIN, World Class and independent local projects.</span></li>
-              <li><b>02</b><span>Use atmosphere as a tool: light, glassware, touch and service choreography keep the guest inside the story, without small details breaking the spell.</span></li>
-              <li><b>03</b><span>Budget and scenography: flea markets, salvage, restoration, trompe-l'œil, gilding, a backdrop and one tight beam of light.</span></li>
-              <li><b>04</b><span>Technology, AI and operations: what to automate and what must remain human.</span></li>
-              <li><b>05</b><span>Practical assignments and a concept presentation, followed by a certificate after review.</span></li>
-              <li><b>06</b><span>One password opens the entire course: every module and lesson is available immediately.</span></li>
-            </ul>
-          </article>
-
-          <article class="gate-card gate-card-side">
-            <figure class="gate-frame gate-frame-wide">
-              <img src="presentation/assets/horeca-concept-pitch.jpg" alt="A concept pitch table with materials, sketches and models" loading="lazy">
-              <figcaption>Final exercise · a table where your venue takes shape before it is built</figcaption>
-            </figure>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
             <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
           </article>

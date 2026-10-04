@@ -18,7 +18,7 @@ window.bootCourse = () => {
   });
   const getState = () => { try { return { ...seedState(), ...(JSON.parse(localStorage.getItem(stateKey)) || {}) }; } catch { return seedState(); } };
   const tokenHeaders = () => { const t = localStorage.getItem('chs-access-token'); return t ? { 'X-Access-Token': t } : {}; };
-  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.adminBot = data.adminBot || {}; saveState(state); } catch { /* local/offline preview */ } };
+  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; applyContentOverrides(state.editor.overrides); saveState(state); } catch { /* local/offline preview */ } };
   const saveState = s => localStorage.setItem(stateKey, JSON.stringify(s));
   const ensureEnrollment = profile => { if (profile.role !== 'STUDENT') return; const s = getState(); if (!s.enrollments.some(x => x.studentEmail === profile.email && x.courseId === C.id && x.edition === C.edition)) { s.enrollments.push({ id: `enrol-${Date.now()}`, studentEmail: profile.email, institutionId: profile.institutionId || 'him-001', courseId: C.id, edition: C.edition, status: 'ACTIVE', startedAt: new Date().toISOString() }); saveState(s); } };
 
@@ -29,7 +29,32 @@ window.bootCourse = () => {
   const user = () => { try { return JSON.parse(sessionStorage.getItem('chs-user')); } catch { return null; } };
   const key = () => `${user()?.email || 'guest'}:${C.id}:${C.edition}`;
   const progressFor = () => state.progress[key()] || [];
-  const allLessons = C.modules.flatMap(m => m.lessons.map(l => ({ ...l, module: m, thumbnail: l.thumbnail || m.image, videoUrl: l.videoUrl || null })));
+  const buildAllLessons = () => C.modules.flatMap(m => m.lessons.map(l => ({ ...l, module: m, thumbnail: l.thumbnail || m.image, videoUrl: l.videoUrl || null })));
+  let allLessons = buildAllLessons();
+
+  /* The admin bot edits course copy server-side; overrides are applied on top of course-data.js. */
+  const overrideOriginals = new Map();
+  function applyContentOverrides(overrides = []) {
+    for (const record of overrideOriginals.values()) record.target[record.field] = record.original;
+    overrideOriginals.clear();
+    for (const override of overrides || []) {
+      const module = override.scope === 'module'
+        ? C.modules.find(m => m.id === override.targetId)
+        : C.modules.find(m => m.lessons.some(l => l.id === override.targetId));
+      const target = override.scope === 'module'
+        ? module
+        : module?.lessons.find(l => l.id === override.targetId);
+      if (!target || typeof override.text !== 'string' || !(override.field in target)) continue;
+      const key = `${override.scope}:${override.targetId}:${override.field}`;
+      if (!overrideOriginals.has(key)) overrideOriginals.set(key, { target, field: override.field, original: target[override.field] });
+      target[override.field] = override.text;
+    }
+    allLessons = buildAllLessons();
+  }
+  const editorState = () => state.editor || { materials: [], posts: [], overrides: [] };
+  const materialsFor = moduleId => editorState().materials.filter(item => item.moduleId === moduleId);
+  const linkHost = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
+  applyContentOverrides(editorState().overrides);
   const completeCount = () => progressFor().length;
   const pct = () => Math.round(completeCount() / allLessons.length * 100);
   const certificateReady = () => pct() === 100 && state.submissions.some(s => s.student === user()?.email && s.courseId === C.id && s.edition === C.edition && s.status === 'APPROVED');
@@ -344,6 +369,7 @@ window.bootCourse = () => {
     const m = C.modules.find(x => x.id === id);
     if (!m) return notFound();
     const l = m.lessons[0];
+    const materials = materialsFor(m.id);
     return layout(`<main class="app-main">
       <div class="crumb"><a href="#/course">THE ELECTIVE</a> <span>/</span> <span>MODULE ${m.number}</span></div>
       <div class="module-detail">
@@ -363,6 +389,10 @@ window.bootCourse = () => {
           <blockquote class="case-quote">“${esc(l.intro)}”</blockquote>
         </div>
       </div>
+      ${materials.length ? `<section class="materials-block" aria-label="Additional materials for module ${m.number}">
+        <span class="eyebrow">ADDITIONAL MATERIALS · MODULE ${m.number}</span>
+        <div class="lesson-list">${materials.map(x => `<a class="lesson-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer"><span class="meta">↗</span><strong>${esc(x.note)}</strong><span class="meta">${esc(linkHost(x.url))}</span></a>`).join('')}</div>
+      </section>` : ''}
       <div class="lesson-footer"><a class="button text" href="#/course">← ALL MODULES</a>${button('START MODULE', `lesson/${m.id}/${l.id}`)}</div>
     </main>`);
   }
@@ -648,6 +678,12 @@ window.bootCourse = () => {
     const tribute = state.tribute || {};
     const students = state.serverStudents || [];
     const orders = tribute.orders || [];
+    const editor = editorState();
+    const editorRows = [
+      ...editor.materials.slice(0, 6).map(x => `<div class="simple-row"><span><span class="meta">MODULE ${esc(x.moduleNumber)} · MATERIAL</span><br><strong>${esc(x.note)}</strong></span><span class="meta">${esc(linkHost(x.url))}</span></div>`),
+      ...editor.posts.slice(0, 4).map(x => `<div class="simple-row"><span><span class="meta">LIVE UPDATE</span><br><strong>${esc(x.title)}</strong></span><span class="meta">${esc(x.date)}</span></div>`),
+      ...editor.overrides.slice(0, 6).map(x => `<div class="simple-row"><span><span class="meta">COPY EDIT · ${esc(x.scope)} ${esc(x.targetId)} · ${esc(x.field)}</span><br>${esc(String(x.text).slice(0, 90))}</span><code>${esc(x.id)}</code></div>`),
+    ].join('') || '<div class="empty">No editor changes yet. The course reads exactly as published.</div>';
     const checks = [
       ['One-time product link + product ID', tribute.productCheckoutReady],
       ['Subscription link + subscription ID', tribute.subscriptionCheckoutReady],
@@ -679,6 +715,13 @@ window.bootCourse = () => {
         <span class="eyebrow">RECENT PAYMENT EVENTS</span>
         <h2>Tribute orders</h2>
         <div class="simple-list">${orders.length ? orders.slice(0, 12).map(order => `<div class="simple-row"><span><strong>${esc(order.buyerName || order.telegramUsername || 'Telegram buyer')}</strong><br><span class="meta">${esc(order.productTitle || order.kind || 'Tribute event')} · ${esc(order.amount || '')} · ${esc(order.id)}</span></span><span><span class="status-pill">${esc(order.status || '—')}</span><br><span class="meta">DELIVERY · ${esc(order.deliveryStatus || '—')}</span></span></div>`).join('') : '<div class="empty">No confirmed Tribute events yet. They will appear here after the first signed webhook.</div>'}</div>
+      </section>
+
+      <section class="institution-panel" id="editor">
+        <span class="eyebrow">CONTENT EDITOR · ADMIN BOT</span>
+        <h2>Edit the course from Telegram</h2>
+        <p>Materials land at the end of their module block, posts join the Updates page, and copy edits apply to modules and lessons until reverted. Commands: <code>/addmat MODULE URL DESCRIPTION</code>, <code>/materials</code>, <code>/editmat ID [URL] DESCRIPTION</code>, <code>/delmat ID</code>, <code>/post TITLE | TEXT</code>, <code>/posts</code>, <code>/delpost ID</code>, <code>/editmodule MODULE [FIELD] TEXT</code>, <code>/editlesson LESSON [FIELD] TEXT</code>, <code>/overrides</code>, <code>/revert ID</code>.</p>
+        <div class="simple-list">${editorRows}</div>
       </section>
 
       <div class="dash-lower" style="margin:32px 0">
@@ -797,11 +840,12 @@ window.bootCourse = () => {
   }
 
   function updatesPage() {
+    const live = editorState().posts;
     return layout(`<main class="app-main">
       <div class="page-head">
         <div><span class="eyebrow">WHAT'S NEW · A LIVING ELECTIVE</span><h1 class="page-title">The industry<br>keeps <em>moving</em>.</h1><p>Course editions are designed to evolve with hospitality. New materials can be added while preserving past learning records.</p></div>
       </div>
-      ${C.updates.map(x => `<article class="institution-panel"><span class="eyebrow">${esc(x.tag)} · ${esc(x.date)}</span><h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></article>`).join('')}
+      ${[...live, ...C.updates].map(x => `<article class="institution-panel"><span class="eyebrow">${esc(x.tag)} · ${esc(x.date)}</span><h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></article>`).join('')}
     </main>`);
   }
 

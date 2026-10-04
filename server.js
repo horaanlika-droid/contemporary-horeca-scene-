@@ -4,6 +4,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const vm = require('node:vm');
 
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
@@ -78,6 +79,59 @@ const attempts = new Map();
 const ATTEMPT_WINDOW = 10 * 60 * 1000;
 const ATTEMPT_LIMIT = 20;
 
+/* The admin bot edits course content by block; resolve blocks from the shipped course data. */
+function loadCourseModules() {
+  try {
+    const context = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'course-data.js'), 'utf8'), context);
+    const modules = context.window?.COURSE?.modules || [];
+    return modules.map(m => ({
+      id: String(m.id || ''),
+      number: String(m.number || ''),
+      title: String(m.title || ''),
+      lessons: (m.lessons || []).map(l => ({ id: String(l.id || ''), title: String(l.title || '') })),
+    }));
+  } catch (err) {
+    console.warn('Could not read course-data.js for editor block resolution:', err.message);
+    return [];
+  }
+}
+const COURSE_MODULES = loadCourseModules();
+const EDITOR_MODULE_FIELDS = ['description', 'title'];
+const EDITOR_LESSON_FIELDS = ['intro', 'body', 'challenge', 'title'];
+
+function resolveCourseBlock(token) {
+  const raw = String(token || '').trim().toLowerCase();
+  if (!raw) return null;
+  const bare = raw.replace(/^module[-\s]?/, '').replace(/^0+(?=\d)/, '');
+  return COURSE_MODULES.find(m => (
+    m.id.toLowerCase() === raw
+    || m.number.toLowerCase() === raw
+    || String(Number(m.number)) === bare
+  )) || COURSE_MODULES.find(m => m.lessons.some(l => l.id.toLowerCase() === raw)) || null;
+}
+
+function resolveCourseLesson(token) {
+  const raw = String(token || '').trim().toLowerCase();
+  if (!raw) return null;
+  for (const m of COURSE_MODULES) {
+    const lesson = m.lessons.find(l => l.id.toLowerCase() === raw);
+    if (lesson) return { module: m, lesson };
+  }
+  return null;
+}
+
+const editorId = prefix => `${prefix}-${Date.now().toString(36)}-${crypto.randomBytes(2).toString('hex')}`;
+
+function validHttpsUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return url.protocol === 'https:' ? url.toString() : '';
+  } catch {
+    return '';
+  }
+}
+
 /* --- persistent store (passwords, submissions, Tribute purchases, Admin Bot) --- */
 function ensureDirs() {
   try {
@@ -92,6 +146,7 @@ function defaultStore() {
     progress: {},
     quizzes: {},
     tribute: { orders: [] },
+    editor: { materials: [], posts: [], overrides: [] },
     adminBot: {
       adminChatIds: [...ADMIN_IDS],
       logs: [
@@ -99,7 +154,7 @@ function defaultStore() {
           id: 'log-boot',
           at: new Date().toISOString(),
           type: 'system',
-          text: 'Access Bot ready. Admin commands: /pending, /approve <id> <feedback>, /revise <id> <feedback>, /students, /orders, /resend <telegram_id>'
+          text: 'Access Bot ready. Admin commands: /pending, /approve <id> <feedback>, /revise <id> <feedback>, /students, /orders, /resend <telegram_id>; editor: /addmat, /materials, /post, /editmodule, /editlesson, /overrides'
         },
       ],
     },
@@ -155,6 +210,11 @@ function loadStore() {
         students,
         submissions,
         tribute: { orders },
+        editor: {
+          materials: Array.isArray(parsed.editor?.materials) ? parsed.editor.materials : [],
+          posts: Array.isArray(parsed.editor?.posts) ? parsed.editor.posts : [],
+          overrides: Array.isArray(parsed.editor?.overrides) ? parsed.editor.overrides : [],
+        },
         adminBot: {
           ...def.adminBot,
           ...(parsed.adminBot || {}),
@@ -784,6 +844,11 @@ async function executeBotCommand(rawCommand) {
       '• <code>/students</code> — list paid learners and password-delivery status',
       '• <code>/orders</code> — inspect recent Tribute payments and delivery status',
       '• <code>/resend &lt;telegram_id&gt;</code> — resend the paid learner’s password',
+      '• <code>/addmat &lt;module&gt; &lt;https url&gt; &lt;description&gt;</code> — add material to the end of a module block',
+      '• <code>/materials [module]</code> · <code>/editmat &lt;id&gt; [url] &lt;description&gt;</code> · <code>/delmat &lt;id&gt;</code> — manage the library',
+      '• <code>/post &lt;title&gt; | &lt;text&gt;</code> · <code>/posts</code> · <code>/delpost &lt;id&gt;</code> — publish course updates',
+      '• <code>/editmodule &lt;module&gt; [field] &lt;text&gt;</code> · <code>/editlesson &lt;lesson&gt; [field] &lt;text&gt;</code> — edit course copy',
+      '• <code>/overrides</code> · <code>/revert &lt;id&gt;</code> — review or undo copy edits',
     ].join('\n');
     addBotLog('command', `${cmdLine} → admin help displayed`);
     return { ok: true, reply };
@@ -829,6 +894,176 @@ async function executeBotCommand(rawCommand) {
     const sent = await sendStudentPassword(student, { force: true });
     addBotLog('command', `/resend → password delivery ${sent ? 'succeeded' : 'failed'} for Telegram user ${telegramId}`);
     return { ok: sent, reply: sent ? `✅ The individual password was sent to Telegram user ${telegramId}.` : `Delivery failed. Ask the learner to open the Access Bot and send /start, then try /resend ${telegramId}.` };
+  }
+
+  if (command === '/addmat') {
+    const [blockToken, urlToken, ...noteParts] = args;
+    const note = noteParts.join(' ').trim();
+    const block = resolveCourseBlock(blockToken);
+    const url = validHttpsUrl(urlToken);
+    if (!block || !url || !note) {
+      return { ok: false, reply: 'Usage: /addmat <module> <https url> <short description>. Module: id (budget), number (09) or any lesson id inside it.' };
+    }
+    if (store.editor.materials.some(item => item.moduleId === block.id && item.url === url)) {
+      return { ok: false, reply: 'This link already sits in the materials list of that module.' };
+    }
+    const material = {
+      id: editorId('mat'),
+      moduleId: block.id,
+      moduleNumber: block.number,
+      url,
+      note,
+      addedAt: new Date().toISOString(),
+      updatedAt: null,
+    };
+    store.editor.materials.unshift(material);
+    saveStore();
+    addBotLog('editor', `/addmat → Module ${block.number}: ${note} (${url})`);
+    return {
+      ok: true,
+      reply: `📚 Added to the end of Module ${block.number} (${escapeHtml(block.title)}):\n${escapeHtml(note)}\n${escapeHtml(url)}\nID: <code>${material.id}</code>`,
+      material,
+    };
+  }
+
+  if (command === '/editmat') {
+    const [id, ...rest] = args;
+    const material = store.editor.materials.find(item => item.id === id || item.id.startsWith(`${id}-`) || id === item.id.slice(4));
+    if (!material) return { ok: false, reply: 'Material not found. Use /materials to list IDs.' };
+    let url = material.url;
+    let noteParts = rest;
+    if (rest.length && validHttpsUrl(rest[0])) {
+      url = validHttpsUrl(rest[0]);
+      noteParts = rest.slice(1);
+    }
+    const note = noteParts.join(' ').trim();
+    if (!note) return { ok: false, reply: 'Usage: /editmat <id> [new https url] <new description>.' };
+    material.url = url;
+    material.note = note;
+    material.updatedAt = new Date().toISOString();
+    saveStore();
+    addBotLog('editor', `/editmat → ${material.id}: ${note}`);
+    return { ok: true, reply: `✏️ Material <code>${material.id}</code> updated (Module ${material.moduleNumber}):\n${escapeHtml(note)}\n${escapeHtml(url)}`, material };
+  }
+
+  if (command === '/delmat') {
+    const id = String(args[0] || '').trim();
+    const index = store.editor.materials.findIndex(item => item.id === id);
+    if (index === -1) return { ok: false, reply: 'Material not found. Use /materials to list IDs.' };
+    const [removed] = store.editor.materials.splice(index, 1);
+    saveStore();
+    addBotLog('editor', `/delmat → removed ${removed.id} from Module ${removed.moduleNumber}`);
+    return { ok: true, reply: `🗑 Removed from Module ${removed.moduleNumber}: ${escapeHtml(removed.note)}` };
+  }
+
+  if (command === '/materials') {
+    const block = args[0] ? resolveCourseBlock(args[0]) : null;
+    if (args[0] && !block) return { ok: false, reply: 'Unknown module. Use an id (budget), a number (09) or a lesson id.' };
+    const items = block
+      ? store.editor.materials.filter(item => item.moduleId === block.id)
+      : store.editor.materials;
+    if (!items.length) return { ok: true, reply: 'No additional materials yet. Add one: /addmat <module> <https url> <short description>.' };
+    const reply = items.slice(0, 25).map(item => (
+      `• <code>${item.id}</code> · M${item.moduleNumber} · ${escapeHtml(item.note)} · ${escapeHtml(item.url)}`
+    )).join('\n');
+    addBotLog('editor', `/materials → ${items.length} entries`);
+    return { ok: true, reply };
+  }
+
+  if (command === '/post') {
+    const rawText = args.join(' ');
+    const [title, ...textParts] = rawText.split('|');
+    const cleanTitle = String(title || '').trim();
+    const text = textParts.join('|').trim();
+    if (!cleanTitle || !text) return { ok: false, reply: 'Usage: /post <title> | <text>. The update appears on the course Updates page.' };
+    const post = {
+      id: editorId('post'),
+      tag: 'LIVE COURSE UPDATE',
+      title: cleanTitle,
+      text,
+      date: new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
+      createdAt: new Date().toISOString(),
+    };
+    store.editor.posts.unshift(post);
+    saveStore();
+    addBotLog('editor', `/post → ${cleanTitle}`);
+    return { ok: true, reply: `📣 Update published: <b>${escapeHtml(cleanTitle)}</b>\nID: <code>${post.id}</code>`, post };
+  }
+
+  if (command === '/posts') {
+    if (!store.editor.posts.length) return { ok: true, reply: 'No live updates yet. Publish one: /post <title> | <text>.' };
+    const reply = store.editor.posts.slice(0, 15).map(post => (
+      `• <code>${post.id}</code> · ${escapeHtml(post.date)} · ${escapeHtml(post.title)}`
+    )).join('\n');
+    return { ok: true, reply };
+  }
+
+  if (command === '/delpost') {
+    const id = String(args[0] || '').trim();
+    const index = store.editor.posts.findIndex(item => item.id === id);
+    if (index === -1) return { ok: false, reply: 'Update not found. Use /posts to list IDs.' };
+    const [removed] = store.editor.posts.splice(index, 1);
+    saveStore();
+    addBotLog('editor', `/delpost → removed ${removed.id}`);
+    return { ok: true, reply: `🗑 Update removed: ${escapeHtml(removed.title)}` };
+  }
+
+  if (command === '/editmodule' || command === '/editlesson') {
+    const isModule = command === '/editmodule';
+    const [targetToken, second, ...rest] = args;
+    const fields = isModule ? EDITOR_MODULE_FIELDS : EDITOR_LESSON_FIELDS;
+    const field = fields.includes(second) ? second : (isModule ? 'description' : 'body');
+    const text = (fields.includes(second) ? rest : args.slice(1)).join(' ').trim();
+    const target = isModule ? resolveCourseBlock(targetToken) : resolveCourseLesson(targetToken);
+    if (!target || !text) {
+      return {
+        ok: false,
+        reply: isModule
+          ? 'Usage: /editmodule <module> [title|description] <new text>.'
+          : 'Usage: /editlesson <lesson id> [title|intro|body|challenge] <new text>.',
+      };
+    }
+    const scope = isModule ? 'module' : 'lesson';
+    const targetId = isModule ? target.id : target.lesson.id;
+    const label = isModule ? `Module ${target.number}` : `Lesson ${target.lesson.id}`;
+    const previous = store.editor.overrides.find(item => item.scope === scope && item.targetId === targetId && item.field === field);
+    if (previous) {
+      previous.text = text;
+      previous.updatedAt = new Date().toISOString();
+      saveStore();
+      addBotLog('editor', `${command} → ${label}.${field} updated (${previous.id})`);
+      return { ok: true, reply: `✏️ ${label} · <b>${field}</b> updated.\nID: <code>${previous.id}</code> · undo with /revert ${previous.id}`, override: previous };
+    }
+    const override = {
+      id: editorId('ovr'),
+      scope,
+      targetId,
+      field,
+      text,
+      updatedAt: new Date().toISOString(),
+    };
+    store.editor.overrides.unshift(override);
+    saveStore();
+    addBotLog('editor', `${command} → ${label}.${field} edited (${override.id})`);
+    return { ok: true, reply: `✏️ ${label} · <b>${field}</b> now reads:\n${escapeHtml(text.slice(0, 400))}\nID: <code>${override.id}</code> · undo with /revert ${override.id}`, override };
+  }
+
+  if (command === '/overrides') {
+    if (!store.editor.overrides.length) return { ok: true, reply: 'No copy edits are active. The course reads exactly as published in course-data.js.' };
+    const reply = store.editor.overrides.slice(0, 20).map(item => (
+      `• <code>${item.id}</code> · ${item.scope} ${escapeHtml(item.targetId)} · ${escapeHtml(item.field)} · ${escapeHtml(item.text.slice(0, 80))}`
+    )).join('\n');
+    return { ok: true, reply };
+  }
+
+  if (command === '/revert') {
+    const id = String(args[0] || '').trim();
+    const index = store.editor.overrides.findIndex(item => item.id === id);
+    if (index === -1) return { ok: false, reply: 'Override not found. Use /overrides to list IDs.' };
+    const [removed] = store.editor.overrides.splice(index, 1);
+    saveStore();
+    addBotLog('editor', `/revert → ${removed.scope} ${removed.targetId}.${removed.field} back to published copy`);
+    return { ok: true, reply: `↩️ Reverted ${removed.scope} <code>${escapeHtml(removed.targetId)}</code> · ${escapeHtml(removed.field)}. The published course copy is live again.` };
   }
 
   if (command === '/approve' || command === '/revise') {
@@ -1322,6 +1557,11 @@ const server = http.createServer(async (req, res) => {
       quizzes: {},
       students: session.isAdmin ? store.students.map(adminStudentSummary) : [],
       tribute: getTributeStatus(session.isAdmin),
+      editor: {
+        materials: store.editor.materials,
+        posts: store.editor.posts,
+        overrides: store.editor.overrides,
+      },
       adminBot: session.isAdmin ? store.adminBot : {},
     });
   }

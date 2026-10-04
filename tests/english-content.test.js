@@ -164,6 +164,8 @@ async function isolatedServer(t, envOverrides = {}, initialStore = null) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'chs-english-'));
   const serverFile = path.join(directory, 'server.js');
   fs.copyFileSync(path.join(ROOT, 'server.js'), serverFile);
+  // The editor resolves module blocks from course-data.js next to the server, mirroring deployment.
+  fs.copyFileSync(path.join(ROOT, 'course-data.js'), path.join(directory, 'course-data.js'));
   if (initialStore) {
     fs.mkdirSync(path.join(directory, 'data'), { recursive: true });
     fs.writeFileSync(path.join(directory, 'data', 'store.json'), JSON.stringify(initialStore));
@@ -378,6 +380,72 @@ test('password access and admin controls cannot create a learner password withou
   assert.equal(removedCheckout.status, 410);
   const state = await server.get('/api/state', token);
   assert.deepEqual(state.body.students, []);
+});
+
+test('admin bot editor manages block materials, live updates and copy overrides', async t => {
+  const server = await isolatedServer(t);
+  const token = await adminToken(server);
+  const command = text => server.post('/api/admin/bot-command', { command: text }, token);
+
+  const added = await command('/addmat budget https://example.com/menu-perception A short field note on menu perception');
+  assert.equal(added.body.ok, true);
+  assert.match(added.body.reply, /Added to the end of Module 09/);
+  const materialId = added.body.material.id;
+  const second = await command('/addmat 09 https://example.com/scenography-haze Haze and one tight beam of light in small rooms');
+  assert.equal(second.body.ok, true);
+  assert.equal(second.body.material.moduleId, 'budget', 'A module number resolves to the same block');
+  const viaLesson = await command('/addmat atmosphere https://example.com/found-objects Flea-market sourcing checklist');
+  assert.equal(viaLesson.body.ok, true);
+  assert.equal(viaLesson.body.material.moduleId, 'experience', 'A lesson id resolves to its module block');
+  assert.equal((await command('/addmat budget notaurl note')).body.ok, false);
+  assert.equal((await command('/addmat nowhere https://example.com/x note')).body.ok, false);
+  assert.equal((await command(`/addmat budget ${'https://example.com/menu-perception'} duplicate`)).body.ok, false);
+
+  const listed = await command('/materials budget');
+  assert.match(listed.body.reply, /field note on menu perception/);
+  assert.doesNotMatch(listed.body.reply, /Flea-market sourcing/);
+  const edited = await command(`/editmat ${materialId} Rewritten note about perception`);
+  assert.equal(edited.body.ok, true);
+  const relinked = await command(`/editmat ${materialId} https://example.com/perception-v2 Final note with a fresh link`);
+  assert.equal(relinked.body.ok, true);
+  assert.equal(relinked.body.material.url, 'https://example.com/perception-v2');
+
+  const posted = await command('/post Launch week | The author opens the edition with a live sourcing Q&A.');
+  assert.equal(posted.body.ok, true);
+  assert.equal((await command('/post No separator here')).body.ok, false);
+
+  const lessonEdit = await command('/editlesson budget-builds intro A rewritten opening line for the budget unit.');
+  assert.equal(lessonEdit.body.ok, true);
+  const overrideId = lessonEdit.body.override.id;
+  const moduleEdit = await command('/editmodule budget A refreshed module description for the 2026 edition.');
+  assert.equal(moduleEdit.body.ok, true);
+  assert.equal((await command('/editlesson nowhere intro x')).body.ok, false);
+  const overrides = await command('/overrides');
+  assert.match(overrides.body.reply, /lesson budget-builds · intro/);
+
+  const state = await server.get('/api/state', token);
+  assert.equal(state.body.editor.materials.length, 3);
+  assert.equal(state.body.editor.materials.find(item => item.id === materialId).note, 'Final note with a fresh link');
+  assert.equal(state.body.editor.posts[0].title, 'Launch week');
+  assert.equal(state.body.editor.overrides.length, 2);
+
+  assert.equal((await command(`/revert ${overrideId}`)).body.ok, true);
+  const afterRevert = await server.get('/api/state', token);
+  assert.equal(afterRevert.body.editor.overrides.length, 1);
+  assert.equal(afterRevert.body.editor.overrides[0].id, moduleEdit.body.override.id);
+
+  assert.equal((await command(`/delmat ${materialId}`)).body.ok, true);
+  assert.equal((await command(`/delpost ${posted.body.post.id}`)).body.ok, true);
+  const emptied = await command('/materials budget');
+  assert.match(emptied.body.reply, /Haze and one tight beam of light/);
+  assert.equal((await command('/posts')).body.reply.match(/Launch week/), null);
+
+  const app = read('app.js');
+  assert.match(app, /ADDITIONAL MATERIALS · MODULE/);
+  assert.match(app, /applyContentOverrides/);
+  const access = read('access.js');
+  assert.match(access, /gate-info-slim/);
+  assert.doesNotMatch(access, /gate-points/);
 });
 
 test('Tribute signature, product matching, idempotency and automatic Telegram password delivery', async t => {
