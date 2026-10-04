@@ -18,7 +18,10 @@ window.bootCourse = () => {
   });
   const getState = () => { try { return { ...seedState(), ...(JSON.parse(localStorage.getItem(stateKey)) || {}) }; } catch { return seedState(); } };
   const tokenHeaders = () => { const t = localStorage.getItem('chs-access-token'); return t ? { 'X-Access-Token': t } : {}; };
-  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.adminBot = data.adminBot || {}; saveState(state); } catch { /* local/offline preview */ } };
+  const adoptServerData = data => { state = getState(); state.submissions = data.submissions || []; state.progress = { ...state.progress, ...(data.progress || {}) }; state.serverStudents = data.students || []; state.tribute = data.tribute || {}; state.editor = data.editor || { materials: [], posts: [], overrides: [] }; state.adminBot = data.adminBot || {}; state.myPurchase = data.myPurchase || null; applyContentOverrides(state.editor.overrides); saveState(state); };
+  const liveSignatureOf = data => JSON.stringify([data.editor || null, data.tribute || null, data.students || null]);
+  let liveSignature = '';
+  const syncServerState = async () => { try { const response = await fetch('/api/state', { headers: tokenHeaders() }); if (!response.ok) return; const data = await response.json(); adoptServerData(data); liveSignature = liveSignatureOf(data); } catch { /* local/offline preview */ } };
   const saveState = s => localStorage.setItem(stateKey, JSON.stringify(s));
   const ensureEnrollment = profile => { if (profile.role !== 'STUDENT') return; const s = getState(); if (!s.enrollments.some(x => x.studentEmail === profile.email && x.courseId === C.id && x.edition === C.edition)) { s.enrollments.push({ id: `enrol-${Date.now()}`, studentEmail: profile.email, institutionId: profile.institutionId || 'him-001', courseId: C.id, edition: C.edition, status: 'ACTIVE', startedAt: new Date().toISOString() }); saveState(s); } };
 
@@ -29,7 +32,32 @@ window.bootCourse = () => {
   const user = () => { try { return JSON.parse(sessionStorage.getItem('chs-user')); } catch { return null; } };
   const key = () => `${user()?.email || 'guest'}:${C.id}:${C.edition}`;
   const progressFor = () => state.progress[key()] || [];
-  const allLessons = C.modules.flatMap(m => m.lessons.map(l => ({ ...l, module: m, thumbnail: l.thumbnail || m.image, videoUrl: l.videoUrl || null })));
+  const buildAllLessons = () => C.modules.flatMap(m => m.lessons.map(l => ({ ...l, module: m, thumbnail: l.thumbnail || m.image, videoUrl: l.videoUrl || null })));
+  let allLessons = buildAllLessons();
+
+  /* The admin bot edits course copy server-side; overrides are applied on top of course-data.js. */
+  const overrideOriginals = new Map();
+  function applyContentOverrides(overrides = []) {
+    for (const record of overrideOriginals.values()) record.target[record.field] = record.original;
+    overrideOriginals.clear();
+    for (const override of overrides || []) {
+      const module = override.scope === 'module'
+        ? C.modules.find(m => m.id === override.targetId)
+        : C.modules.find(m => m.lessons.some(l => l.id === override.targetId));
+      const target = override.scope === 'module'
+        ? module
+        : module?.lessons.find(l => l.id === override.targetId);
+      if (!target || typeof override.text !== 'string' || !(override.field in target)) continue;
+      const key = `${override.scope}:${override.targetId}:${override.field}`;
+      if (!overrideOriginals.has(key)) overrideOriginals.set(key, { target, field: override.field, original: target[override.field] });
+      target[override.field] = override.text;
+    }
+    allLessons = buildAllLessons();
+  }
+  const editorState = () => state.editor || { materials: [], posts: [], overrides: [] };
+  const materialsFor = moduleId => editorState().materials.filter(item => item.moduleId === moduleId);
+  const linkHost = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
+  applyContentOverrides(editorState().overrides);
   const completeCount = () => progressFor().length;
   const pct = () => Math.round(completeCount() / allLessons.length * 100);
   const certificateReady = () => pct() === 100 && state.submissions.some(s => s.student === user()?.email && s.courseId === C.id && s.edition === C.edition && s.status === 'APPROVED');
@@ -59,7 +87,11 @@ window.bootCourse = () => {
     });
   }
 
-  const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy">`;
+  const IMAGE_FALLBACK = 'project-detail-backbar.jpg';
+  const image = (name, alt = '', cls = '') => `<img class="${cls}" src="${ASSET}${esc(name)}" alt="${esc(alt)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${ASSET}${IMAGE_FALLBACK}';this.classList.add('image-fallback')">`;
+  const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
+  const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
+  const creditFor = name => { const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES'; return `<span class="img-credit">${esc(isIllustrative(name) ? `ILLUSTRATIVE · ${base} · NOT THE VENUE` : base)}</span>`; };
   const button = (label, path, cls = '') => `<a class="button ${cls}" href="#/${path}">${label}<span aria-hidden="true">↗</span></a>`;
   const projectList = () => C.projects?.items || [];
   const projectById = id => projectList().find(x => x.id === id);
@@ -75,29 +107,18 @@ window.bootCourse = () => {
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
   const nextLesson = () => allLessons.find(x => !progressFor().includes(x.id)) || allLessons[0];
 
-  const demoUser = (role = 'student') => {
-    const presets = {
-      student: { name: 'Alex Morgan', email: 'student@him.edu', role: 'STUDENT' },
-      instructor: { name: 'Egor Tarasenko', email: 'instructor@him.edu', role: 'INSTRUCTOR' },
-      admin: { name: 'HIM Administrator', email: 'admin@him.edu', role: 'ADMIN' },
-    };
-    const profile = { ...presets[role], institutionId: 'him-001' };
-    sessionStorage.setItem('chs-user', JSON.stringify(profile));
-    ensureEnrollment(profile);
-    go(role === 'student' ? 'dashboard' : role === 'instructor' ? 'instructor' : 'admin');
-  };
-
   const brandBlock = href => `<a class="brand" href="${href}"><span class="brand-mark" aria-hidden="true">CHS</span><span class="brand-text"><strong>Contemporary Horeca Scene</strong><small>${C.edition} Edition · Digital elective</small></span></a>`;
 
   const header = (publicPage = false) => {
     const u = user();
     if (publicPage) {
+      const home = u?.role === 'INSTRUCTOR' ? 'instructor' : u?.role === 'ADMIN' ? 'admin' : 'dashboard';
       return `<header class="site-header">${brandBlock('#/')}<nav class="nav" aria-label="Main navigation">
         <a class="nav-link" href="#/" data-scroll="explore">THE ELECTIVE</a>
         <a class="nav-link" href="#/" data-scroll="cases">CASES</a>
         <a class="nav-link" href="#/" data-scroll="budget">BUDGET &amp; SCENOGRAPHY</a>
         <button class="nav-link" type="button" data-author-open>ABOUT THE AUTHOR</button>
-        <a class="button small" href="#/login">STUDENT LOGIN <span aria-hidden="true">↗</span></a>
+        <a class="button small" href="#/${home}">YOUR LEARNING SPACE <span aria-hidden="true">↗</span></a>
       </nav></header>`;
     }
     const role = u?.role;
@@ -117,12 +138,12 @@ window.bootCourse = () => {
   };
 
   const layout = (content, publicPage = false) => `${publicPage ? header(true) : header()}${content}${publicPage
-    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span><button class="footer-link" type="button" data-author-open>About the author</button></footer>`
+    ? `<footer class="footer"><span>© ${new Date().getFullYear()} Egor Tarasenko · Course content &amp; author IP</span><span>Contemporary Horeca Scene · ${C.edition} Edition</span><span>${esc(C.institution)}</span><a class="footer-link" href="#/credits">Image sources &amp; rights</a><button class="footer-link" type="button" data-author-open>About the author</button></footer>`
     : bottomNav()}`;
 
   /* ---------------------------------------------------------------- landing */
   function landing() {
-    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific · bar solutions', 'Sips · Barcelona', 'Himkok · Oslo', 'Krasota · gastro-theatre', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
+    const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific Mirain · prep in seconds', 'Sips · Barcelona', 'Himkok · Oslo', 'Krasota · gastro-theatre', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
       <section class="hero">
         <span class="hero-index">${C.edition} EDITION · 01 / ${String(C.modules.length).padStart(2, '0')}</span>
@@ -132,12 +153,12 @@ window.bootCourse = () => {
           <p>${C.modules.length} modules on the venues, ideas, techniques and budgets shaping the contemporary horeca scene — and a final challenge that ends with your own concept built by hand, as a mockup, like stage scenery.</p>
           <div class="hero-actions">
             <a class="button" href="#/course">EXPLORE THE COURSE <span aria-hidden="true">↗</span></a>
-            <a class="button text" href="#/login">STUDENT LOGIN <span aria-hidden="true">→</span></a>
+            <a class="button text" href="#/dashboard">YOUR LEARNING SPACE <span aria-hidden="true">→</span></a>
           </div>
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          <img src="${ASSET}horeca-interior-design.jpg" alt="A bar seen through a brick archway: lit shelves, hanging glassware and a green banquette in warm low light">
+          <img src="${ASSET}web-insider-hall.jpg" alt="A contemporary bar hall: rammed-earth walls, a sculpted ceiling and a central laboratory bar station">
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -190,8 +211,8 @@ window.bootCourse = () => {
           <div><span class="eyebrow">04 — REAL INDUSTRY CASES</span><h2>Look closer.<br>Learn from <em>practice</em>.</h2></div>
           <p>Editorial case files turn current hospitality practice into material for discussion, analysis and action.</p>
         </div>
-        <div class="case-feature">${image(C.cases[0].image, 'A considered bar interior with a warm, tactile atmosphere')}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a></div></div>
-        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(x.image, x.title)}</div><span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
+        <div class="case-feature">${image(C.cases[0].image, 'A considered bar interior with a warm, tactile atmosphere')}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(C.cases[0].image)}</div></div>
+        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(x.image, x.title)}</div>${creditFor(x.image)}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
       </section>
 
       <div class="quote-band">
@@ -232,7 +253,7 @@ window.bootCourse = () => {
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
             <span class="eyebrow">THE LIVE FOUND-OBJECT MOCKUP</span>
-            <div class="shot">${image('horeca-concept-pitch.jpg', 'A concept pitch table with materials, sketches and models')}</div>
+            <div class="shot">${image('project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor('project-detail-chess.jpg')}</div>
             <h4>Build your venue as a set, not a plan.</h4>
             <p>Assemble it directly from what you find: antique tableware, candles, vintage glassware, fabric, wood, bottles, found textures and props, plus a physical menu concept. Work at 1:20 or 1:50; arrange the objects to show the entrance, first sightline, light and three details that carry the atmosphere. Photograph it at guest height.</p>
             <span class="meta">EVERY STUDENT · MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} → FINAL CHALLENGE</span>
@@ -260,41 +281,9 @@ window.bootCourse = () => {
 
       <section class="cta-band">
         <h2>Stay curious about what comes next.</h2>
-        <a class="button" href="#/login">START THE ELECTIVE <span aria-hidden="true">↗</span></a>
+        <a class="button" href="#/dashboard">GO TO YOUR LEARNING SPACE <span aria-hidden="true">↗</span></a>
       </section>
     </main>`, true);
-  }
-
-  /* ------------------------------------------------------------------ login */
-  function login() {
-    if (user()) { go('dashboard'); return ''; }
-    return `<main class="login-page">
-      <div class="login-visual">${image('horeca-chefs-counter.jpg', 'A chef at work in an open kitchen')}
-        <div class="login-visual-copy">
-          <span class="eyebrow">CONTEMPORARY HORECA SCENE · ${C.edition} EDITION</span>
-          <h1>Contemporary<br><em>Horeca</em> Scene</h1>
-          <p>${esc(C.descriptor)}</p>
-        </div>
-      </div>
-      <div class="login-form-wrap">
-        <form class="login-form" id="login-form">
-          <span class="eyebrow">STUDENT ACCESS · ${C.edition} EDITION</span>
-          <h2>Welcome <em>back</em>.</h2>
-          <p>Course access is already unlocked on this device. Choose a profile to continue your learning journey.</p>
-          <div class="field"><label for="email">Email address</label><input class="form-control" id="email" name="email" type="email" autocomplete="username" required placeholder="name@institution.edu"></div>
-          <div class="field"><label for="password">Password</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password"></div>
-          <p id="login-error" class="form-help" role="alert"></p>
-          <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
-          <div class="demo-access">
-            <span class="eyebrow">DEMO ACCESS</span>
-            <p>Explore the working product flows with a local demo profile. No account setup required.</p>
-            <div class="demo-buttons"><button type="button" data-role="student">DEMO STUDENT</button><button type="button" data-role="instructor">INSTRUCTOR</button><button type="button" data-role="admin">ADMIN</button></div>
-            <p>Demo identities: student@him.edu · instructor@him.edu · admin@him.edu</p>
-          </div>
-          <a href="#/" class="button text" style="margin-top:18px">← BACK TO THE ELECTIVE</a>
-        </form>
-      </div>
-    </main>`;
   }
 
   /* -------------------------------------------------------------- dashboard */
@@ -374,7 +363,6 @@ window.bootCourse = () => {
         </div>
         ${button('CONTINUE', `lesson/${next.module.id}/${next.id}`)}
       </div>
-      ${image('horeca-interior-sconces.jpg', 'Atmospheric contemporary hospitality interior', 'course-hero-image')}
       <div class="section-head">
         <div><span class="eyebrow">YOUR LEARNING JOURNEY</span><h2 style="font-size:clamp(30px,4vw,50px)">Explore the <em>modules</em>.</h2></div>
         <p>Move at your own pace. Each module brings together a focused lesson, an industry case and a challenge to apply your thinking.</p>
@@ -387,6 +375,7 @@ window.bootCourse = () => {
     const m = C.modules.find(x => x.id === id);
     if (!m) return notFound();
     const l = m.lessons[0];
+    const materials = materialsFor(m.id);
     return layout(`<main class="app-main">
       <div class="crumb"><a href="#/course">THE ELECTIVE</a> <span>/</span> <span>MODULE ${m.number}</span></div>
       <div class="module-detail">
@@ -400,12 +389,15 @@ window.bootCourse = () => {
           <div class="case-inline"><span class="meta">INDUSTRY CASE</span><h3>${esc(l.case)}</h3><p>Examine the choices behind the experience, and what they reveal about contemporary hospitality.</p><a class="button text" href="#/cases">OPEN CASE FILES →</a></div>
         </div>
         <div>
-          ${image(m.image, `${m.title} editorial feature image`, 'module-photo')}
-          <span class="eyebrow" style="margin-top:22px">LEARNING OBJECTIVES</span>
+          <span class="eyebrow">LEARNING OBJECTIVES</span>
           <ul class="objective-list">${l.ideas.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>
           <blockquote class="case-quote">“${esc(l.intro)}”</blockquote>
         </div>
       </div>
+      ${materials.length ? `<section class="materials-block" aria-label="Additional materials for module ${m.number}">
+        <span class="eyebrow">ADDITIONAL MATERIALS · MODULE ${m.number}</span>
+        <div class="lesson-list">${materials.map(x => `<a class="lesson-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer"><span class="meta">↗</span><strong>${esc(x.note)}</strong><span class="meta">${esc(linkHost(x.url))}</span></a>`).join('')}</div>
+      </section>` : ''}
       <div class="lesson-footer"><a class="button text" href="#/course">← ALL MODULES</a>${button('START MODULE', `lesson/${m.id}/${l.id}`)}</div>
     </main>`);
   }
@@ -422,7 +414,7 @@ window.bootCourse = () => {
         <div class="lesson-number"><span class="meta">LESSON ${String(i + 1).padStart(2, '0')}</span><br><span class="meta">${l.duration.toUpperCase()}</span></div>
       </div>
       <section class="video-frame" aria-label="Lesson media">
-        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${ASSET}${esc(l.thumbnail)}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}</div>
+        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${ASSET}${esc(l.thumbnail)}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}${creditFor(l.thumbnail)}</div>
         <div class="video-info">
           <span class="eyebrow">${l.videoUrl ? 'LESSON FILM' : 'EDITORIAL LESSON'} · ${l.duration.toUpperCase()}</span>
           <h2>${esc(l.title)}</h2>
@@ -468,7 +460,7 @@ window.bootCourse = () => {
         <span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span>
         <div class="figure-grid">${(C.figures || []).map(f => `
           <article class="case-item">
-            ${f.image ? `<div class="shot">${image(f.image, f.name)}</div>` : ''}
+            ${f.image ? `<div class="shot">${image(f.image, f.name)}</div>${creditFor(f.image)}` : ''}
             <span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span>
             <h3>${esc(f.name)}</h3>
             <p>${esc(f.role)} · ${esc(f.venues)}</p>
@@ -480,8 +472,8 @@ window.bootCourse = () => {
       </section>
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Sips Drinkery House · Simone Caporale</h3><p>Drinkery House counterless bar: bespoke tactile vessels and 360-degree guest connection.</p></article><article class="case-item"><h3>Krasota Gastro-Theatre · Boris Zarkov</h3><p>Multisensory immersion: 360-degree projections and synchronized sound matching the culinary narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
-        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>${image(x.image, `${x.title} case image`)}`
-        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p></div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
+        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>${image(x.image, `${x.title} case image`)}`
+        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
     </main>`);
   }
 
@@ -506,7 +498,7 @@ window.bootCourse = () => {
       </div>
       <div class="project-grid">
         ${items.map(pr => `<a class="project-card" href="#/project/${esc(pr.id)}">
-          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>
+          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>${creditFor(pr.image)}
           <div class="project-card-copy">
             <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
             <h2>${esc(pr.name)}</h2>
@@ -544,7 +536,7 @@ window.bootCourse = () => {
         </div>
       </div>
       <div class="project-gallery project-gallery-lead">
-        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}
+        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}${creditFor(photos[0]?.file || pr.image)}
       </div>
       <div class="project-body">
         <p>${esc(pr.summary)}</p>
@@ -602,7 +594,7 @@ window.bootCourse = () => {
           <span class="meta">THE PHYSICAL MOCKUP</span>
           <p>For the physical concept, build a live found-object set (1:20 or 1:50), not a paper model: use antique tableware, candles, vintage glassware, found textures/props and a physical menu concept. Decide the entrance, sightline, light source and three atmosphere-carrying details. Photograph it at guest height and attach the images.</p>
           <span class="meta">SUBMISSION FORMAT</span>
-          <p>Write your concept here and attach a PDF, images of your mockup or a presentation. You may also include a link to your work.</p>
+          <p>Write your concept here and attach a PDF, images of your mockup or a presentation — or send the same package by email (see the email option above the form). You may also include a link to your work.</p>
           <span class="meta">REVIEW</span>
           <p>Your instructor will provide human, editorial feedback. Work may be approved or returned for revision.</p>
         </section>
@@ -616,7 +608,8 @@ window.bootCourse = () => {
             <div class="review-work" style="margin:20px 0">${esc(mine.answer)}</div>
             ${mine.feedback ? `<div class="case-inline"><span class="meta">INSTRUCTOR FEEDBACK · SCORE ${esc(mine.feedback.score ?? '—')}</span><p>${esc(mine.feedback.text)}</p></div>` : ''}
             ${mine.status === 'REVISION REQUESTED' ? '<button class="button light" data-action="revise" style="margin-top:18px">RESUBMIT REVISION <span aria-hidden="true">↗</span></button>' : ''}`
-          : `<form id="assignment-form" data-lesson="${esc(assignmentId)}" data-module="${esc(current.module.id)}">
+          : `<div class="case-inline" style="margin:0 0 20px"><span class="meta">PREFER EMAIL? BOTH CHANNELS ARE EQUAL</span><p>Send your concept note, mockup photographs and attachments to <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a> with the subject “${esc(C.edition)} · ${esc(current.title)} · your name”. The in-app form and the email inbox reach the same instructor review.</p><a class="button light" href="mailto:egor.tarasenko@him-mail.ch?subject=${encodeURIComponent(`${C.edition} · ${current.title} · assignment`)}">SEND BY EMAIL <span aria-hidden="true">↗</span></a></div>
+            <form id="assignment-form" data-lesson="${esc(assignmentId)}" data-module="${esc(current.module.id)}">
               <div class="field"><label for="answer">Concept note</label><textarea class="form-control" id="answer" name="answer" rows="10" required placeholder="What are you building, for whom, and why does it matter? Include sourcing, budget, menu concept and your found-object mockup: entrance, first sightline, light and the three details that carry the atmosphere.">${esc(revising ? mine?.answer || '' : '')}</textarea></div>
               <div class="field"><label for="link">Link to your presentation (optional)</label><input class="form-control" id="link" name="link" type="url" value="${esc(revising ? mine?.link || '' : '')}" placeholder="https://"></div>
               <div class="field"><label>Attach supporting files &amp; mockup photographs</label><div class="file-drop"><label class="meta" for="files">PDF · IMAGE · PRESENTATION · UP TO 15 MB EACH</label><br><input type="file" name="files" id="files" accept=".pdf,.png,.jpg,.jpeg,.ppt,.pptx,.key" multiple><p class="form-help">Files are uploaded securely to the course app (maximum 15 MB per file). Feedback and help: egor.tarasenko@him-mail.ch</p></div></div>
@@ -636,7 +629,7 @@ window.bootCourse = () => {
         <div><span class="eyebrow">INSTRUCTOR SPACE · ${esc(C.institution.toUpperCase())}</span><h1>Course<br><em>overview</em>.</h1><p>Review student work and return feedback that moves ideas forward.</p></div>
         <span class="edition-tag meta">${C.edition} EDITION · ACTIVE</span>
       </div>
-      <p class="form-help">Sample cohort snapshot for product demonstration; connect live analytics before institutional use.</p>
+      <p class="form-help">Illustrative cohort snapshot; connect live analytics before institutional use.</p>
       <div class="metric-grid">
         <div class="metric"><span>Total students</span><strong>24</strong></div>
         <div class="metric"><span>Active this week</span><strong>18</strong></div>
@@ -648,19 +641,15 @@ window.bootCourse = () => {
           <div><span class="eyebrow">STUDENT WORK</span><h2 class="page-title" style="font-size:clamp(30px,4vw,50px)">Submissions</h2><p>Review work for the ${C.edition} edition — concept notes, sourcing plans and mockup photographs. Student submissions remain edition-scoped.</p></div>
         </div>
         ${list.length ? `<div class="submission-row" style="border-bottom:1px solid var(--ink)"><span class="meta">STUDENT</span><span class="meta">ASSIGNMENT</span><span class="meta">SUBMITTED</span><span class="meta">STATUS</span></div>${list.map(s => `<a class="submission-row" href="#/review/${s._index}"><strong>${esc(s.name)}</strong><span>${esc(s.assignment)}</span><span class="meta">${new Date(s.date).toLocaleDateString()}</span><span class="status-pill">${esc(s.status)}</span></a>`).join('')}`
-          : `<div class="empty"><span class="eyebrow">NO SUBMISSIONS YET</span><p>Student work will appear here when it is submitted for review.</p><p>To test the complete flow, sign in as the demo student, submit the final challenge, then return here as the instructor.</p></div>`}
+          : `<div class="empty"><span class="eyebrow">NO SUBMISSIONS YET</span><p>Student work will appear here when it is submitted for review.</p></div>`}
       </section>
       <section class="section" style="padding:42px 0 18px" id="admin-review">
         <span class="eyebrow">ADMIN PANEL · ASSIGNMENT REVIEW</span><h2 class="page-title" style="font-size:clamp(30px,4vw,48px)">Student work &amp; <em>feedback</em>.</h2>
         <p>Accept or return each assignment. Written feedback is required; students keep immediate access to every lesson regardless of review.</p>
         <div class="admin-submissions">${state.submissions.length ? state.submissions.slice().reverse().map(s => `<article class="institution-panel" style="margin:18px 0"><div class="simple-row"><span><span class="meta">${esc(s.assignment)} · ${esc(s.lessonId || '')}</span><br><strong>${esc(s.name)} · ${esc(s.student)}</strong></span><span class="status-pill">${esc(s.status)}</span></div><p class="review-work">${esc(s.answer || '')}${s.link ? `<br><a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.link)}</a>` : ''}</p><div>${(s.files || []).map((f, i) => `<a class="button text" href="${esc(f.url || '#')}" data-action="download-file" data-url="${esc(f.url || '')}" data-name="${esc(f.name || f)}">${esc(f.name || f)} ↓</a>`).join(' ')}</div><form id="review-form" data-id="${esc(s.id)}" class="review-actions" style="margin-top:18px"><div class="field"><label>Required feedback to student</label><textarea class="form-control" name="feedback" rows="3" required placeholder="Specific, useful feedback from Egor Tarasenko">${esc(s.feedback?.text || '')}</textarea></div><div class="field"><label>Score (optional)</label><input class="form-control" type="number" name="score" min="0" max="100" value="${esc(s.feedback?.score ?? '')}"></div><button class="button" name="decision" value="APPROVED">APPROVE &amp; SEND FEEDBACK ✓</button> <button class="button light" name="decision" value="REVISION REQUESTED">REQUEST REVISION ↗</button></form></article>`).join('') : '<div class="empty">No student assignments submitted yet.</div>'}</div>
       </section>
-      <section class="dash-lower" style="margin:32px 0">
-        <div class="institution-panel"><span class="eyebrow">PERSONAL PASSWORDS · ONE PER PERSON</span><h2>Generate a course password</h2><form id="student-password-form"><div class="field"><label>Name</label><input class="form-control" name="name" required></div><div class="field"><label>Email (optional)</label><input class="form-control" name="email" type="email"></div><button class="button">GENERATE PASSWORD ↗</button></form><div id="generated-password"></div><div class="simple-list" style="margin-top:16px">${(state.serverStudents || []).slice(0,12).map(st => `<div class="simple-row"><span>${esc(st.name)} · ${esc(st.email)}</span><code>${esc(st.password)}</code></div>`).join('')}</div></div>
-        <div class="institution-panel"><span class="eyebrow">TELEGRAM ADMIN BOT CONSOLE</span><h2>Run a bot command</h2><p>Commands: <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>, <code>/genpass Name email</code>, <code>/students</code></p><form id="admin-bot-form"><div class="field"><label>Command</label><input class="form-control" name="command" required placeholder="/pending"></div><button class="button">RUN COMMAND ↗</button></form><pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0,5).map(x => x.text).join('\n'))}</pre></div>
-      </section>
       <div class="dash-lower" id="analytics">
-        <section><h2 class="serif" style="font-size:26px">Module performance</h2><p class="form-help">Illustrative overview for this demo edition.</p><div class="chart-bars">${[76, 62, 54, 68, 45, 36, 51, 29, 44, 8].map((n, i) => `<div style="height:${n}%"><span>${String(i + 1).padStart(2, '0')}</span></div>`).join('')}</div></section>
+        <section><h2 class="serif" style="font-size:26px">Module performance</h2><p class="form-help">Illustrative overview for this edition.</p><div class="chart-bars">${[76, 62, 54, 68, 45, 36, 51, 29, 44, 8].map((n, i) => `<div style="height:${n}%"><span>${String(i + 1).padStart(2, '0')}</span></div>`).join('')}</div></section>
         <section><h2 class="serif" style="font-size:26px">Recent activity</h2><div class="empty">${list.length ? `${list.length} submission${list.length > 1 ? 's' : ''} in this edition.` : 'Course activity will appear as learners progress through the edition.'}</div></section>
       </div>
     </main>`);
@@ -692,34 +681,79 @@ window.bootCourse = () => {
   }
 
   function adminPage() {
+    const tribute = state.tribute || {};
+    const students = state.serverStudents || [];
+    const orders = tribute.orders || [];
+    const editor = editorState();
+    const editorRows = [
+      ...editor.materials.slice(0, 6).map(x => `<div class="simple-row"><span><span class="meta">MODULE ${esc(x.moduleNumber)} · MATERIAL</span><br><strong>${esc(x.note)}</strong></span><span class="meta">${esc(linkHost(x.url))}</span></div>`),
+      ...editor.posts.slice(0, 4).map(x => `<div class="simple-row"><span><span class="meta">LIVE UPDATE</span><br><strong>${esc(x.title)}</strong></span><span class="meta">${esc(x.date)}</span></div>`),
+      ...editor.overrides.slice(0, 6).map(x => `<div class="simple-row"><span><span class="meta">COPY EDIT · ${esc(x.scope)} ${esc(x.targetId)} · ${esc(x.field)}</span><br>${esc(String(x.text).slice(0, 90))}</span><code>${esc(x.id)}</code></div>`),
+    ].join('') || '<div class="empty">No editor changes yet. The course reads exactly as published.</div>';
+    const checks = [
+      ['One-time product link + product ID', tribute.productCheckoutReady],
+      ['Subscription link + subscription ID', tribute.subscriptionCheckoutReady],
+      ['Tribute webhook signature', tribute.webhookConfigured],
+      ['Telegram bot token', tribute.botConfigured],
+      ['Bot username and start link', tribute.botUsernameConfigured],
+    ];
     return layout(`<main class="app-main">
       <div class="welcome">
-        <div><span class="eyebrow">PLATFORM ADMINISTRATION · MULTI-INSTITUTION</span><h1>Institutions<br>&amp; <em>editions</em>.</h1><p>Manage access across institutions without tying the course to a single school.</p></div>
-        <span class="edition-tag meta">ADMINISTRATOR</span>
+        <div><span class="eyebrow">COURSE ADMINISTRATION</span><h1>Access &amp; <em>payments</em>.</h1><p>Tribute confirms the payment; the Access Bot creates one individual password and delivers it to the buyer’s Telegram chat.</p></div>
+        <span class="edition-tag meta">${tribute.deliveryReady ? 'TRIBUTE AUTOMATION READY' : 'TRIBUTE SETUP REQUIRED'}</span>
       </div>
       <div class="metric-grid">
-        <div class="metric"><span>Institutions</span><strong>01</strong></div>
-        <div class="metric"><span>Active licenses</span><strong>${state.licenseActive ? '01' : '00'}</strong></div>
-        <div class="metric"><span>Licensed students</span><strong>24 / 100</strong></div>
+        <div class="metric"><span>Issued passwords</span><strong>${students.length}</strong></div>
+        <div class="metric"><span>Confirmed Tribute payments</span><strong>${tribute.paidOrdersCount || 0}</strong></div>
+        <div class="metric"><span>Pending password deliveries</span><strong>${tribute.pendingDeliveriesCount || 0}</strong></div>
         <div class="metric"><span>Active edition</span><strong>${C.edition}</strong></div>
       </div>
-      <section id="institutions" class="institution-panel">
+
+      <section class="institution-panel" id="tribute-setup">
+        <span class="eyebrow">TRIBUTE · AUTOMATIC PASSWORD DELIVERY</span>
+        <h2>${tribute.deliveryReady ? 'Payment flow is connected.' : 'Finish the payment setup.'}</h2>
+        <p>Set these values on the Node host. The webhook URL to enter in Tribute is <code>${esc(tribute.webhookEndpoint || '/api/tribute/webhook')}</code>. Tribute sends a signed server-to-server event; no password is issued by the public page.</p>
+        <div class="simple-list">${checks.map(([label, ready]) => `<div class="simple-row"><span>${esc(label)}</span><strong class="status-pill">${ready ? 'READY' : 'MISSING'}</strong></div>`).join('')}</div>
+        <p style="margin-top:14px">A buyer must open the Access Bot once before payment so Telegram allows it to message them. If a message is missed, the buyer can send <code>/password</code>; an admin can use <code>/resend TELEGRAM_ID</code>.</p>
+      </section>
+
+      <section class="institution-panel" id="tribute-orders">
+        <span class="eyebrow">RECENT PAYMENT EVENTS</span>
+        <h2>Tribute orders</h2>
+        <div class="simple-list">${orders.length ? orders.slice(0, 12).map(order => `<div class="simple-row"><span><strong>${esc(order.buyerName || order.telegramUsername || 'Telegram buyer')}</strong><br><span class="meta">${esc(order.productTitle || order.kind || 'Tribute event')} · ${esc(order.amount || '')} · ${esc(order.id)}</span></span><span><span class="status-pill">${esc(order.status || '—')}</span><br><span class="meta">DELIVERY · ${esc(order.deliveryStatus || '—')}</span></span></div>`).join('') : '<div class="empty">No confirmed Tribute events yet. They will appear here after the first signed webhook.</div>'}</div>
+      </section>
+
+      <section class="institution-panel" id="editor">
+        <span class="eyebrow">CONTENT EDITOR · ADMIN BOT</span>
+        <h2>Edit the course from Telegram</h2>
+        <p>Materials land at the end of their module block, posts join the Updates page, and copy edits apply to modules and lessons until reverted. Commands: <code>/addmat MODULE URL DESCRIPTION</code>, <code>/materials</code>, <code>/editmat ID [URL] DESCRIPTION</code>, <code>/delmat ID</code>, <code>/post TITLE | TEXT</code>, <code>/posts</code>, <code>/delpost ID</code>, <code>/editmodule MODULE [FIELD] TEXT</code>, <code>/editlesson LESSON [FIELD] TEXT</code>, <code>/overrides</code>, <code>/revert ID</code>.</p>
+        <div class="simple-list">${editorRows}</div>
+      </section>
+
+      <div class="dash-lower" style="margin:32px 0">
+        <section class="institution-panel">
+          <span class="eyebrow">PAID LEARNERS · DELIVERY STATUS</span><h2>Issued access</h2>
+          <div class="simple-list">${students.length ? students.slice(0, 12).map(student => `<div class="simple-row"><span><strong>${esc(student.name)}</strong><br><span class="meta">${esc(student.email)} · ${esc(student.telegramUsername ? `@${student.telegramUsername}` : student.telegramId || 'Telegram not linked')}</span></span><span class="status-pill">${student.active ? esc(student.passwordDeliveryStatus || 'ISSUED') : 'INACTIVE'}</span></div>`).join('') : '<div class="empty">No paid learners yet.</div>'}</div>
+          <p style="margin-top:14px">Passwords are sent privately by the Access Bot after Tribute confirms payment. For a missed message, use <code>/resend TELEGRAM_ID</code>; the code is never shown in this dashboard.</p>
+        </section>
+        <section class="institution-panel">
+          <span class="eyebrow">TELEGRAM ADMIN BOT</span><h2>Run a bot command</h2>
+          <p>Commands: <code>/orders</code>, <code>/resend TELEGRAM_ID</code>, <code>/students</code>, <code>/pending</code>, <code>/approve ID feedback</code>, <code>/revise ID feedback</code>.</p>
+          <form id="admin-bot-form"><div class="field"><label for="admin-bot-command">Command</label><input class="form-control" id="admin-bot-command" name="command" required placeholder="/orders"></div><button class="button">RUN COMMAND ↗</button></form>
+          <pre id="bot-response" class="review-work" style="white-space:pre-wrap">${esc((state.adminBot?.logs || []).slice(0, 5).map(entry => entry.text).join('\n'))}</pre>
+        </section>
+      </div>
+
+      <section class="institution-panel" id="institutions">
         <span class="eyebrow">INSTITUTION · HIM-001</span>
         <h2>${esc(C.institution)}</h2>
         <p>${esc(C.title)} · ${C.edition} Edition</p>
         <div class="simple-list">
           <div class="simple-row"><span class="meta">LICENSE PERIOD</span><strong>01.09.2026 — 31.08.2027</strong></div>
-          <div class="simple-row"><span class="meta">STUDENT LIMIT</span><strong>24 / 100</strong></div>
           <div class="simple-row"><span class="meta">STATUS</span><span class="status-pill">${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}</span></div>
-          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Personal password · all lessons available immediately</strong></div>
-          <div class="simple-row"><span class="meta">CONTENT OWNERSHIP</span><strong>Author-owned · institution access by license</strong></div>
+          <div class="simple-row"><span class="meta">COURSE ACCESS</span><strong>Individual password · confirmed Tribute purchase</strong></div>
         </div>
-        <button class="button light" data-action="toggle-license" style="margin-top:22px">${state.licenseActive ? 'SUSPEND DEMO LICENSE' : 'REACTIVATE DEMO LICENSE'} <span aria-hidden="true">↻</span></button>
       </section>
-      <div class="dash-lower" id="analytics">
-        <section><h2 class="serif" style="font-size:26px">Course editions</h2><div class="simple-list"><div class="simple-row"><span><strong>${C.edition} Edition</strong><br><span class="meta">ACTIVE · HIM</span></span><span class="status-pill">CURRENT</span></div><div class="simple-row"><span><strong>2027 Edition</strong><br><span class="meta">CONTENT PLANNING</span></span><span class="meta">FUTURE</span></div><div class="simple-row"><span><strong>2028 Edition</strong><br><span class="meta">NOT STARTED</span></span><span class="meta">FUTURE</span></div></div></section>
-        <section><h2 class="serif" style="font-size:26px">Platform architecture</h2><p class="form-help">Institution · User · Course · Edition · Module · Lesson · Submission · Feedback · Progress · License · Enrollment · Certificate</p><div class="empty">Edition-scoped progress and assessment records preserve student work when course content evolves.</div></section>
-      </div>
     </main>`);
   }
 
@@ -808,15 +842,28 @@ window.bootCourse = () => {
           <button class="button text" data-action="lock">LOCK THE COURSE ON THIS DEVICE →</button>
         </div>
       </section>
+      ${state.myPurchase ? `<section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">YOUR PURCHASE · PAYMENT TRANSPARENCY</span>
+        <div class="simple-list">
+          <div class="simple-row"><span class="meta">PRODUCT</span><strong>${esc(state.myPurchase.productTitle)}</strong></div>
+          <div class="simple-row"><span class="meta">AMOUNT PAID</span><strong>${esc(state.myPurchase.amount)}</strong></div>
+          <div class="simple-row"><span class="meta">PAID AT</span><strong>${esc(new Date(state.myPurchase.paidAt).toLocaleString())}</strong></div>
+          <div class="simple-row"><span class="meta">PURCHASE ID</span><strong>${esc(state.myPurchase.purchaseId)}</strong></div>
+          <div class="simple-row"><span class="meta">PROVIDER</span><strong>${esc(state.myPurchase.provider)} · the course never sees card data</strong></div>
+          <div class="simple-row"><span class="meta">PASSWORD DELIVERY</span><strong>${esc(state.myPurchase.deliveryStatus === 'DELIVERED' ? 'DELIVERED AUTOMATICALLY' : state.myPurchase.deliveryStatus)}</strong></div>
+        </div>
+        <p style="margin-top:14px">One individual password per purchase. Refunds follow the Tribute policy inside Telegram; any question about your payment: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>.</p>
+      </section>` : u.role === 'STUDENT' ? '<section class="institution-panel" style="margin-top:22px"><span class="eyebrow">YOUR PURCHASE</span><p>No verified Tribute purchase is registered for this account yet. Write to the course team if you have paid — the record appears here automatically.</p></section>' : ''}
     </main>`);
   }
 
   function updatesPage() {
+    const live = editorState().posts;
     return layout(`<main class="app-main">
       <div class="page-head">
         <div><span class="eyebrow">WHAT'S NEW · A LIVING ELECTIVE</span><h1 class="page-title">The industry<br>keeps <em>moving</em>.</h1><p>Course editions are designed to evolve with hospitality. New materials can be added while preserving past learning records.</p></div>
       </div>
-      ${C.updates.map(x => `<article class="institution-panel"><span class="eyebrow">${esc(x.tag)} · ${esc(x.date)}</span><h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></article>`).join('')}
+      ${[...live, ...C.updates].map(x => `<article class="institution-panel"><span class="eyebrow">${esc(x.tag)} · ${esc(x.date)}</span><h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></article>`).join('')}
     </main>`);
   }
 
@@ -846,6 +893,45 @@ window.bootCourse = () => {
     return layout(`<main class="app-main"><div class="page-head"><div><span class="eyebrow">404 · PAGE NOT FOUND</span><h1 class="page-title">Not this <em>way</em>.</h1><p>The page may have moved or may not be part of this edition.</p></div>${button('RETURN TO THE ELECTIVE', user() ? 'dashboard' : '')}</div></main>`);
   }
 
+  /* ----------------------------------------------------------------- credits */
+  function creditsPage() {
+    const ic = C.imageCredits || {};
+    const used = new Set();
+    const collect = name => name && used.add(name);
+    C.cases.forEach(x => collect(x.image));
+    (C.figures || []).forEach(f => collect(f.image));
+    C.modules.forEach(m => collect(m.image));
+    (projectList() || []).forEach(p => collect(p.image));
+    collect('web-insider-hall.jpg');
+    const rows = [...used].sort().map(name => {
+      const ill = (ic.illustrative || []).find(x => x.file === name);
+      const g = creditGroup(name);
+      const source = g?.source ? `<br><a href="${esc(g.source)}" target="_blank" rel="noopener noreferrer">${esc(g.source.replace(/^https?:\/\//, ''))} ↗</a>` : '';
+      return `<div class="simple-row"><span><strong>${esc(name)}</strong><br><span class="meta">${esc(ill ? 'ILLUSTRATIVE · AUTHOR’S ARCHIVE · NOT THE VENUE PICTURED' : g?.credit || 'SOURCE ON REQUEST')}</span></span><span class="meta">${esc(g?.license || '')}${source}</span></div>`;
+    }).join('');
+    return layout(`<main class="app-main">
+      <div class="page-head">
+        <div>
+          <span class="eyebrow">TRANSPARENCY FOR STUDENTS &amp; INSTITUTION</span>
+          <h1 class="page-title">Image sources<br>&amp; <em>rights</em>.</h1>
+          <p>${esc(ic.statement || '')}</p>
+        </div>
+      </div>
+      <section class="institution-panel" id="image-sources">
+        <span class="eyebrow">EVERY IMAGE USED IN THE ELECTIVE</span>
+        <div class="simple-list">${rows}</div>
+      </section>
+      <section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">ILLUSTRATIVE PHOTOGRAPHS</span>
+        <div class="simple-list">${(ic.illustrative || []).map(x => `<div class="simple-row"><span><strong>${esc(x.file)}</strong><br>${esc(x.note)}</span></div>`).join('')}</div>
+      </section>
+      <section class="institution-panel" style="margin-top:22px">
+        <span class="eyebrow">RIGHTS HOLDERS &amp; TAKEDOWN</span>
+        <p>Write to <a href="mailto:${esc(ic.contact || '')}">${esc(ic.contact || '')}</a> — credited images are listed above, and any rights-holder request is honoured promptly without discussion.</p>
+      </section>
+    </main>`);
+  }
+
   /* ----------------------------------------------------------------- router */
   function render() {
     state = getState();
@@ -853,7 +939,7 @@ window.bootCourse = () => {
     syncTelegramNavigation();
     const r = route();
     const u = user();
-    if (r[0] === 'login') { app.innerHTML = login(); return; }
+    if (r[0] === 'login') { go('dashboard'); return; }
     if (!r[0]) { app.innerHTML = landing(); return; }
     if (!u) { location.hash = '/'; return; }
     if (r[0] === 'dashboard' && u.role === 'STUDENT') app.innerHTML = dashboard();
@@ -871,6 +957,7 @@ window.bootCourse = () => {
     else if (r[0] === 'certificate') app.innerHTML = certificatePage();
     else if (r[0] === 'admin' && u.role === 'ADMIN') app.innerHTML = adminPage();
     else if (r[0] === 'updates') app.innerHTML = updatesPage();
+    else if (r[0] === 'credits') app.innerHTML = creditsPage();
     else if (r[0] === 'profile') app.innerHTML = profilePage();
     else if (r[0] === 'search') app.innerHTML = searchPage(new URLSearchParams(location.hash.split('?')[1] || '').get('q') || '');
     else if (r[0] === 'logout') { sessionStorage.removeItem('chs-user'); go(''); }
@@ -916,7 +1003,7 @@ window.bootCourse = () => {
   async function lockDevice() {
     if (!confirm('Lock Contemporary Horeca Scene on this device? You will need the course password to reopen it.')) return;
     try { await fetch('/api/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'revoke' }) }); } catch { /* static hosting */ }
-    try { localStorage.removeItem('chs-access-v1'); localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
+    try { localStorage.removeItem('chs-access-token'); localStorage.removeItem('chs-user-backup'); sessionStorage.removeItem('chs-user'); } catch { /* ignore */ }
     location.hash = '';
     location.reload();
   }
@@ -953,8 +1040,6 @@ window.bootCourse = () => {
 
   /* --------------------------------------------------------------- events */
   document.addEventListener('click', async e => {
-    const role = e.target.closest('[data-role]');
-    if (role) { demoUser(role.dataset.role); return; }
     const actionEl = e.target.closest('[data-action]');
     const action = actionEl?.dataset.action;
     if (action === 'lightbox') { openLightbox(actionEl.dataset.src, actionEl.querySelector('img')?.alt, actionEl.dataset.caption); return; }
@@ -962,11 +1047,11 @@ window.bootCourse = () => {
     if (action === 'complete') { updateProgress(actionEl.dataset.lesson); return; }
     if (action === 'search') { e.preventDefault(); openSearch(); return; }
     if (action === 'profile') { go('profile'); return; }
-    if (action === 'logout') { if (confirm('Sign out of this demo profile?')) go('logout'); return; }
+    if (action === 'logout') { if (confirm('Sign out of this course session?')) go('logout'); return; }
     if (action === 'lock') { await lockDevice(); return; }
     if (action === 'retake-quiz') { state = getState(); delete state.quizzes[`${key()}:quiz01`]; saveState(state); render(); return; }
     if (action === 'print') { window.print(); return; }
-    if (action === 'toggle-license') { state = getState(); state.licenseActive = !state.licenseActive; state.licenses[0].status = state.licenseActive ? 'ACTIVE' : 'SUSPENDED'; saveState(state); render(); toast(`DEMO LICENSE ${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}`); return; }
+    if (action === 'toggle-license') { state = getState(); state.licenseActive = !state.licenseActive; state.licenses[0].status = state.licenseActive ? 'ACTIVE' : 'SUSPENDED'; saveState(state); render(); toast(`LICENSE ${state.licenseActive ? 'ACTIVE' : 'SUSPENDED'}`); return; }
     if (action === 'revise') { state = getState(); const prior = state.submissions.filter(s => s.student === user().email && s.courseId === C.id && s.edition === C.edition).at(-1); if (prior) prior.status = 'SUPERSEDED'; sessionStorage.setItem('chs-revising', '1'); saveState(state); render(); return; }
     if (action === 'download-file') {
       e.preventDefault();
@@ -1005,11 +1090,6 @@ window.bootCourse = () => {
 
   document.addEventListener('submit', async e => {
     e.preventDefault();
-    if (e.target.id === 'login-form') {
-      const d = new FormData(e.target), email = String(d.get('email')).trim().toLowerCase(), pass = String(d.get('password'));
-      if (!email || pass.length < 1) { document.getElementById('login-error').textContent = 'Enter your email and password.'; return; }
-      document.getElementById('login-error').textContent = 'Use your course password on the access screen; all lessons open immediately after access is granted.'; return;
-    }
     if (e.target.id === 'assignment-form') {
       const u = user(), fd = new FormData(e.target), files = [...document.getElementById('files').files];
       if (files.some(f => f.size > 15 * 1024 * 1024)) { toast('EACH FILE MUST BE UNDER 15 MB'); return; }
@@ -1018,7 +1098,7 @@ window.bootCourse = () => {
         courseId: C.id, edition: C.edition,
         assignment: `${allLessons.find(l => l.id === e.target.dataset.lesson)?.title || 'Final Challenge'} · Practical Assignment`,
         moduleId: e.target.dataset.module || 'final', lessonId: e.target.dataset.lesson || 'final-brief',
-        studentId: u.id, passwordCode: u.passwordCode, telegramId: u.telegramId || null,
+        studentId: u.id, telegramId: u.telegramId || null,
         answer: String(fd.get('answer') || ''), link: String(fd.get('link') || ''),
         files: files.map(f => f.name), date: new Date().toISOString(), status: 'WAITING FOR REVIEW', feedback: null,
       };
@@ -1089,17 +1169,6 @@ window.bootCourse = () => {
       } catch (error) { toast(error.message); }
       return;
     }
-    if (e.target.id === 'student-password-form') {
-      const fd = new FormData(e.target);
-      try {
-        const response = await fetch('/api/admin/students', { method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() }, body: JSON.stringify({ action: 'generate', name: fd.get('name'), email: fd.get('email') }) });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Password generation failed');
-        document.getElementById('generated-password').innerHTML = `<div class="simple-row"><span>New personal password (1 person)</span><code>${esc(data.student.password)}</code></div>`;
-        await syncServerState(); render();
-      } catch (error) { toast(error.message); }
-      return;
-    }
     if (e.target.id === 'quiz-form') {
       const val = new FormData(e.target).get('answer');
       state = getState();
@@ -1126,8 +1195,28 @@ window.bootCourse = () => {
     }
   }
 
+  /* Live updates: editor and payment changes arrive in the open app without a reload. */
+  function startLiveSync() {
+    const tick = async () => {
+      try {
+        const response = await fetch('/api/state', { headers: tokenHeaders() });
+        if (!response.ok) return;
+        const data = await response.json();
+        const signature = liveSignatureOf(data);
+        if (signature === liveSignature) return;
+        const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+        adoptServerData(data);
+        if (editing) return; // do not interrupt typing; the next tick renders
+        liveSignature = signature;
+        render();
+      } catch { /* offline preview */ }
+    };
+    setInterval(tick, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+  }
+
   window.addEventListener('hashchange', render);
-  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); });
-  else { syncServerState().finally(render); }
+  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); startLiveSync(); });
+  else { syncServerState().finally(() => { render(); startLiveSync(); }); }
   if (tg?.initData) authenticateTelegram();
 };

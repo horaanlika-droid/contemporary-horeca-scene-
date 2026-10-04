@@ -1,27 +1,27 @@
 /* ============================================================================
    ACCESS GATE — Contemporary Horeca Scene
-   Personal password via Tribute Digital Product API (1 password per 1 person)
+   Individual password from a verified Tribute webhook (one per purchaser),
    or master/admin password. Unlocks course-data.js and automatically signs the
    visitor in so all modules and lessons are immediately accessible.
    ========================================================================== */
 (() => {
   'use strict';
 
-  const FLAG = 'chs-access-v1';
   const TOKEN_KEY = 'chs-access-token';
   const CLIENT_KEY = 'chs-client-id';
   const USER_KEY = 'chs-user';
   const USER_BACKUP_KEY = 'chs-user-backup';
   const CONTENT = 'course-data.js';
 
-  /* SHA-256 and a non-crypto fallback digest of the master password for static hosting */
-  const SHA256 = '2b7a5e29ea101c8eb3839d18ba52cdcc34f5660845662b5721c4f72bf5d52200';
-  const LEGACY = 797496869;
-
   const root = document.getElementById('app');
   const toastEl = document.getElementById('toast');
   let toastTimer;
   let booted = false;
+  let currentUser = null;
+
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[char]));
 
   const toast = text => {
     if (!toastEl) return;
@@ -49,8 +49,8 @@
   };
 
   const saveSession = (token, userProfile) => {
+    if (userProfile) currentUser = userProfile;
     try {
-      localStorage.setItem(FLAG, '1');
       if (token) localStorage.setItem(TOKEN_KEY, token);
       if (userProfile) {
         sessionStorage.setItem(USER_KEY, JSON.stringify(userProfile));
@@ -59,48 +59,17 @@
     } catch { /* private mode */ }
   };
 
-  const ensureDefaultUser = () => {
+  const restoreSessionUser = () => {
+    if (currentUser) return currentUser;
     try {
       const existing = sessionStorage.getItem(USER_KEY) || localStorage.getItem(USER_BACKUP_KEY);
-      if (existing) {
-        sessionStorage.setItem(USER_KEY, existing);
-        return;
-      }
-      const fallbackUser = {
-        id: 'student-local',
-        name: 'Student',
-        email: 'student@him.edu',
-        role: 'STUDENT',
-        isMaster: true,
-        institutionId: 'him-001',
-        passwordCode: 'COHORT',
-      };
-      sessionStorage.setItem(USER_KEY, JSON.stringify(fallbackUser));
-      localStorage.setItem(USER_BACKUP_KEY, JSON.stringify(fallbackUser));
-    } catch { /* ignore */ }
-  };
-
-  const legacyDigest = value => {
-    let h = 5381;
-    for (const ch of value) h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0;
-    return h;
-  };
-
-  const localDigest = async value => {
-    try {
-      const subtle = globalThis.crypto?.subtle;
-      if (!subtle) return String(legacyDigest(value));
-      const buffer = await subtle.digest('SHA-256', new TextEncoder().encode(value));
-      return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+      if (!existing) return null;
+      currentUser = JSON.parse(existing);
+      sessionStorage.setItem(USER_KEY, existing);
+      return currentUser;
     } catch {
-      return String(legacyDigest(value));
+      return null;
     }
-  };
-
-  const verifyLocal = async value => {
-    const clean = String(value || '').trim();
-    const digest = await localDigest(clean);
-    return digest === SHA256 || (digest === String(LEGACY) && legacyDigest(clean) === LEGACY);
   };
 
   /* --- server conversation ------------------------------------------------ */
@@ -130,7 +99,6 @@
         body: JSON.stringify({
           password,
           clientId: getClientId(),
-          telegramId: window.Telegram?.WebApp?.initDataUnsafe?.user?.id ? String(window.Telegram.WebApp.initDataUnsafe.user.id) : null,
         }),
       });
       if (response.status === 404 || response.status === 405 || response.status === 501) {
@@ -151,9 +119,8 @@
     const existing = document.querySelector('script[data-content="course-data"]');
     if (existing && window.COURSE) { resolve(); return; }
     if (existing) existing.remove();
-    const token = getSavedToken();
     const script = document.createElement('script');
-    script.src = token ? `${src}?token=${encodeURIComponent(token)}` : src;
+    script.src = src;
     script.dataset.content = 'course-data';
     script.onload = () => resolve();
     script.onerror = () => reject(new Error(`Unable to load ${src}`));
@@ -163,14 +130,17 @@
   /* --- unlock ------------------------------------------------------------- */
   async function unlock(silent) {
     if (booted) return;
+    if (!restoreSessionUser()) {
+      renderGate('YOUR ACCESS SESSION COULD NOT BE RESTORED. PLEASE ENTER YOUR PASSWORD AGAIN.');
+      return;
+    }
     booted = true;
-    ensureDefaultUser();
     try {
       await loadScript(CONTENT);
     } catch {
       booted = false;
-      try { localStorage.removeItem(FLAG); localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
-      renderGate('CONTENT LOCKED · ENTER YOUR PERSONAL PASSWORD FROM TRIBUTE');
+      try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
+      renderGate('COURSE CONTENT IS LOCKED. PLEASE VERIFY YOUR PERSONAL PASSWORD.');
       return;
     }
     if (!window.COURSE) {
@@ -191,7 +161,7 @@
     <main class="gate-page">
       <div class="gate-stage">
       <div class="gate-visual">
-        <img src="presentation/assets/horeca-atmosphere-candle.jpg" alt="A candle-lit contemporary bar interior">
+        <img src="presentation/assets/project-coocoo-room.jpg" alt="The author’s own café room: cloud ceiling, pastel counter and a signature serve on a tray">
         <div class="gate-visual-copy">
           <span class="eyebrow">DIGITAL PRODUCT · 2026 EDITION</span>
           <h1>Contemporary<br><em>Horeca</em> Scene</h1>
@@ -203,74 +173,43 @@
       <div class="gate-form-wrap">
         <div class="gate-form">
           <form id="gate-form" novalidate>
-            <div class="gate-lock"><i aria-hidden="true">✳</i><span>Personal access via Tribute<br>1 password = 1 person</span></div>
+            <div class="gate-lock"><i aria-hidden="true">✳</i><span>Individual course password<br>Delivered after Tribute payment</span></div>
             <span class="eyebrow">ENTER THE COURSE</span>
             <h2>Password <em>required.</em></h2>
-            <p>Enter your personal password, issued automatically to one person after purchasing the digital product through <b>Tribute</b>. All modules, lessons, 50 Best menu studies and assignments open immediately.</p>
+            <p>Enter the individual password sent by the course bot after your payment is confirmed by <b>Tribute</b>. One password opens every module, lesson and assignment.</p>
             <div class="field">
-              <label for="course-password">Personal or Admin password</label>
+              <label for="course-password">Individual password</label>
               <input class="form-control" id="course-password" name="password" type="password" autocomplete="current-password"
-                     inputmode="text" spellcheck="false" required placeholder="CHS-XXXX-XXXX or admin password" aria-describedby="gate-error">
+                     inputmode="text" spellcheck="false" required placeholder="Enter your personal course password" aria-describedby="gate-error">
             </div>
             <p id="gate-error" class="form-help" role="alert">${message}</p>
             <button class="button" type="submit" style="width:100%">OPEN THE COURSE <span aria-hidden="true">↗</span></button>
           </form>
 
           <div class="gate-note" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
-            <span class="eyebrow" style="margin-bottom:10px">TRIBUTE DIGITAL PRODUCT</span>
-            <b>No password? Get personal access through Tribute</b>
-            <p style="margin:6px 0 14px">Your password is generated automatically after digital-product checkout through the <b>Tribute API</b>. Each password is assigned to one person.</p>
-            <button class="button light small" type="button" id="toggle-tribute-box" data-tribute-open style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
-
-            <form id="tribute-checkout-form" style="display:none;margin-top:16px;padding:18px;background:var(--paper-warm);border:1px solid var(--line-strong)" novalidate>
-              <span class="meta" style="color:var(--red);display:block;margin-bottom:8px">TRIBUTE API DEMO · DIGITAL-PRODUCT CHECKOUT</span>
-              <p style="margin:0 0 12px;font-size:12.5px;color:var(--ink)">Product: <strong>Contemporary Horeca Scene · 2026 Edition</strong><br>This is a demo checkout: no real charge is made. In a connected Tribute integration, payment generates a unique password for one person.</p>
-              <div class="field" style="margin-bottom:12px">
-                <label for="tribute-name">Your name</label>
-                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Alex Morgan">
-              </div>
-              <div class="field" style="margin-bottom:12px">
-                <label for="tribute-email">Email or Telegram (@username)</label>
-                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com or @username">
-              </div>
-              <button class="button small" type="submit" id="tribute-pay-btn" style="width:100%">DEMO CHECKOUT · GENERATE PASSWORD <span aria-hidden="true">↗</span></button>
-              <div id="tribute-result" style="display:none;margin-top:14px;padding:14px;background:#fff;border-left:3px solid var(--red)"></div>
-            </form>
+            <span class="eyebrow" style="margin-bottom:10px">PAID ACCESS · DELIVERED IN TELEGRAM</span>
+            <b>Get your individual password through Tribute</b>
+            <p style="margin:6px 0 14px">Open the course bot and tap Start, then pay inside Telegram with Tribute. Your personal password is sent to that chat as soon as the payment is confirmed.</p>
+            <button class="button light small" type="button" data-tribute-open style="width:100%">GET ACCESS VIA TRIBUTE <span aria-hidden="true">↗</span></button>
           </div>
         </div>
       </div>
       </div>
 
       <section class="gate-info" id="gate-info">
-        <div class="gate-info-inner">
+        <div class="gate-info-inner gate-info-slim">
           <article class="gate-card">
             <span class="eyebrow">ABOUT THE ELECTIVE</span>
             <h3>Ten modules on what<br><em>shapes</em> the scene.</h3>
-            <p><b>Contemporary Horeca Scene</b> is a living digital elective for Hotel Institute Montreux (2026 edition). We read the industry as a scene: rankings and <b>World’s 50 Best</b>, menus as editorial artefacts, guest experience and neurogastronomy, glassware and light, technology and AI, F&amp;B futures and entrepreneurship — then bring those ideas to life on a small budget.</p>
-            <p>The final project is not an essay. Build your own venue by hand: a <b>1:20 / 1:50</b> mockup made from found objects, vintage tableware, candles, textiles and a paper menu, presented alongside a cost estimate and a guest-experience set.</p>
+            <p><b>Contemporary Horeca Scene</b> reads the industry as a living scene — and ends with a hospitality concept and a physical mockup you build and defend yourself.</p>
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
               <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
-              <div class="gate-fact"><strong>12<i>+</i></strong><span>Weeks · suggested pace</span></div>
-              <div class="gate-fact"><strong>01</strong><span>Physical mockup per student</span></div>
+              <div class="gate-fact"><strong>01</strong><span>Password opens everything</span></div>
             </div>
-            <ul class="gate-points">
-              <li><b>01</b><span>Study the venues and people moving the scene: 50 Best, MICHELIN, World Class and independent local projects.</span></li>
-              <li><b>02</b><span>Use atmosphere as a tool: light, glassware, touch and service choreography keep the guest inside the story, without small details breaking the spell.</span></li>
-              <li><b>03</b><span>Budget and scenography: flea markets, salvage, restoration, trompe-l'œil, gilding, a backdrop and one tight beam of light.</span></li>
-              <li><b>04</b><span>Technology, AI and operations: what to automate and what must remain human.</span></li>
-              <li><b>05</b><span>Practical assignments and a concept presentation, followed by a certificate after review.</span></li>
-              <li><b>06</b><span>One password opens the entire course: every module and lesson is available immediately.</span></li>
-            </ul>
-          </article>
-
-          <article class="gate-card gate-card-side">
-            <figure class="gate-frame gate-frame-wide">
-              <img src="presentation/assets/horeca-concept-pitch.jpg" alt="A concept pitch table with materials, sketches and models" loading="lazy">
-              <figcaption>Final exercise · a table where your venue takes shape before it is built</figcaption>
-            </figure>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
             <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a></p>
+            <p class="gate-note-line">Photography: the author’s archive and credited editorial sources — the full list with rights is published inside the course.</p>
           </article>
         </div>
       </section>
@@ -303,16 +242,42 @@
   const openTributeModal = async () => {
     if (tributeOverlay) return;
     tributeLastFocus = document.activeElement;
-    let payUrl = 'https://t.me/tribute/app?startapp=chs2026';
-    let price = '49 EUR';
+    let settings = {};
     try {
-      const resp = await fetch('/api/tribute/status');
-      if (resp.ok) {
-        const data = await resp.json();
-        payUrl = data.internalPaymentUrl || data.paymentUrl || data.productUrl || payUrl;
-        price = data.productPrice || price;
-      }
-    } catch { /* use defaults */ }
+      const response = await fetch('/api/tribute/status', { headers: { Accept: 'application/json' } });
+      if (response.ok) settings = await response.json();
+    } catch { /* show a closed checkout state if the service is unavailable */ }
+
+    const productUrl = settings.productUrl || '';
+    const subscriptionUrl = settings.subscriptionUrl || '';
+    const botUrl = settings.botStartUrl || '';
+    const productTitle = settings.productTitle || 'Contemporary Horeca Scene · 2026 Edition';
+    const productOffer = Boolean(settings.deliveryReady && settings.productCheckoutReady && productUrl && botUrl);
+    const subscriptionOffer = Boolean(settings.deliveryReady && settings.subscriptionCheckoutReady && subscriptionUrl && botUrl);
+    const price = productOffer && subscriptionOffer
+      ? `Product: ${settings.productPrice || 'price in Tribute'} · Subscription: ${settings.subscriptionPrice || 'price in Tribute'}`
+      : subscriptionOffer ? (settings.subscriptionPrice || 'Price shown in Tribute')
+        : (settings.productPrice || 'Price shown in Tribute');
+    const canPay = productOffer || subscriptionOffer;
+    const offerLabel = productOffer && subscriptionOffer
+      ? 'LIFETIME PRODUCT OR RECURRING SUBSCRIPTION'
+      : subscriptionOffer ? 'RECURRING SUBSCRIPTION · EXPIRY SET BY TRIBUTE'
+        : productOffer ? 'ONE-TIME PRODUCT · LIFETIME ACCESS'
+          : 'TRIBUTE PAYMENT SETUP REQUIRED';
+    const entitlementNote = productOffer && subscriptionOffer
+      ? 'A one-time product purchase grants lasting access. Subscription renewals extend access to the expiry reported by Tribute; cancellation stops renewal, while access follows that verified expiry.'
+      : subscriptionOffer
+        ? 'Subscription renewals extend access to the expiry reported by Tribute. Cancellation stops renewal; course access ends on the verified expiry date.'
+        : 'A confirmed one-time product purchase grants lasting access. No renewal is required.';
+    const botStep = botUrl
+      ? `<a class="button light tribute-bot-start" href="${escapeHtml(botUrl)}" target="_blank" rel="noopener noreferrer">1 · OPEN THE COURSE BOT <span aria-hidden="true">↗</span></a>`
+      : '<div class="tribute-setup-note">The course bot link is not configured yet. Please contact the course team before paying.</div>';
+    const paymentSteps = [];
+    if (productOffer) paymentSteps.push(`<a class="button tribute-direct-pay" href="${escapeHtml(productUrl)}" target="_blank" rel="noopener noreferrer">2 · BUY LIFETIME PRODUCT ACCESS <span aria-hidden="true">↗</span></a>`);
+    if (subscriptionOffer) paymentSteps.push(`<a class="button tribute-direct-pay" href="${escapeHtml(subscriptionUrl)}" target="_blank" rel="noopener noreferrer">2 · START COURSE SUBSCRIPTION <span aria-hidden="true">↗</span></a>`);
+    const payStep = paymentSteps.length
+      ? paymentSteps.join('')
+      : '<button class="button tribute-direct-pay" type="button" disabled>TRIBUTE CHECKOUT IS NOT OPEN YET</button><p class="tribute-unavailable">Automatic password delivery is still being configured. Please try again later.</p>';
 
     tributeOverlay = document.createElement('div');
     tributeOverlay.className = 'tribute-overlay';
@@ -320,39 +285,31 @@
       <div class="tribute-dialog" role="dialog" aria-modal="true" aria-labelledby="tribute-title" tabindex="-1">
         <button class="tribute-close" type="button" data-tribute-close aria-label="Close Tribute payment dialog">✕</button>
         <header class="tribute-head">
-          <span class="eyebrow">TRIBUTE DIGITAL PRODUCT · PERSONAL ACCESS</span>
-          <h2 id="tribute-title">Get Personal <em>Access</em></h2>
-          <p class="tribute-price-badge">1 PASSWORD = 1 PERSON · DIGITAL PRODUCT (${esc(price)})</p>
+          <span class="eyebrow">TRIBUTE · PERSONAL COURSE ACCESS</span>
+          <h2 id="tribute-title">Your own <em>key</em>.</h2>
+          <p class="tribute-price-badge">${escapeHtml(offerLabel)} · ONE INDIVIDUAL PASSWORD · ${escapeHtml(price)}</p>
         </header>
         <div class="tribute-body">
-          <p class="tribute-desc">Each personal password is generated for one student and opens the complete course — all 10 modules, 13 learning units, 13 industry case studies, and assignment review.</p>
-
-          <div class="tribute-direct-box">
-            <span class="eyebrow tight" style="color:var(--red)">INTERNAL TRIBUTE PAYMENT</span>
-            <p style="margin:6px 0 14px;font-size:13.5px">Complete the purchase directly through Tribute to obtain your personal access key:</p>
-            <a class="button tribute-direct-pay" href="${esc(payUrl)}" target="_blank" rel="noopener noreferrer">
-              PAY VIA TRIBUTE (INTERNAL PAYMENT) <span aria-hidden="true">↗</span>
-            </a>
-            <p class="tribute-link-url">
-              Direct Telegram Mini App link: <a href="${esc(payUrl)}" target="_blank" rel="noopener noreferrer"><strong>${esc(payUrl)}</strong></a>
-            </p>
+          <p class="tribute-desc"><strong>${escapeHtml(productTitle)}</strong> opens the complete course: every module, lesson and assignment. Your individual password is delivered by our Telegram bot after Tribute confirms your payment.</p>
+          <div class="tribute-flow">
+            <div><span>01</span><p><strong>Start the course bot.</strong> Telegram only lets a bot message people who have opened it first.</p></div>
+            <div><span>02</span><p><strong>${subscriptionOffer && !productOffer ? 'Start your subscription inside Tribute.' : 'Pay inside Tribute.'}</strong> The transaction stays in Telegram.</p></div>
+            <div><span>03</span><p><strong>Receive your password.</strong> The bot sends it automatically after confirmation; use <code>/password</code> to retrieve it again. ${escapeHtml(entitlementNote)}</p></div>
           </div>
-
-          <div class="tribute-demo-wrap" style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line)">
-            <span class="eyebrow tight">DEMO / TESTING FLOW</span>
-            <p style="margin:4px 0 12px;font-size:12.5px;color:var(--muted)">You can also test the instant password issue directly in demo mode:</p>
-            <form id="tribute-checkout-form" class="tribute-checkout-form" novalidate>
-              <div class="field" style="margin-bottom:10px">
-                <label for="tribute-name">Your name</label>
-                <input class="form-control" id="tribute-name" name="name" type="text" required placeholder="Alex Morgan">
-              </div>
-              <div class="field" style="margin-bottom:12px">
-                <label for="tribute-email">Email or Telegram (@username)</label>
-                <input class="form-control" id="tribute-email" name="email" type="text" required placeholder="student@example.com or @username">
-              </div>
-              <button class="button small light" type="submit" id="tribute-pay-btn" style="width:100%">GENERATE INSTANT PASSWORD <span aria-hidden="true">↗</span></button>
-              <div id="tribute-result" style="display:none;margin-top:14px;padding:14px;background:#fff;border-left:3px solid var(--red)"></div>
-            </form>
+          <div class="tribute-direct-box">
+            <span class="eyebrow tight" style="color:var(--red)">SECURE, AUTOMATIC DELIVERY</span>
+            <div class="tribute-actions">${botStep}${payStep}</div>
+            <p class="tribute-help">Already paid? Open the course bot and send <code>/password</code>. If payment is still processing, the bot will deliver your code as soon as Tribute confirms it.</p>
+            <div class="tribute-transparency">
+              <span class="eyebrow tight">WHAT YOUR PAYMENT COVERS · FULL TRANSPARENCY</span>
+              <ul>
+                <li>The complete elective: all ${C.modules.length} modules, every lesson, human assignment review and the certificate — one individual password, no extra fees.</li>
+                <li>Price and currency are shown in the Tribute checkout; the course app never sees or stores card data.</li>
+                <li>One purchase = one personal password, delivered automatically by the course bot; retrieving it later with <code>/password</code> is free.</li>
+                <li>Receipts and refunds follow the Tribute (Telegram) policy; the course team answers any payment question at egor.tarasenko@him-mail.ch.</li>
+                <li>The administrator master password opens the admin panel only — it is never issued to students, who always receive individual Tribute passwords.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>`;
@@ -369,7 +326,7 @@
 
   /* --- events ------------------------------------------------------------- */
   document.addEventListener('click', event => {
-    if (event.target.closest('#toggle-tribute-box, [data-tribute-open]')) {
+    if (event.target.closest('[data-tribute-open]')) {
       event.preventDefault();
       openTributeModal();
       return;
@@ -377,19 +334,6 @@
     if (event.target.closest('[data-tribute-close]') || (tributeOverlay && event.target === tributeOverlay)) {
       event.preventDefault();
       closeTributeModal();
-      return;
-    }
-    const autoUseBtn = event.target.closest('[data-use-password]');
-    if (autoUseBtn) {
-      const code = autoUseBtn.dataset.usePassword;
-      const input = document.getElementById('course-password');
-      const gateForm = document.getElementById('gate-form');
-      if (input && gateForm) {
-        input.type = 'text';
-        input.value = code;
-        closeTributeModal();
-        gateForm.requestSubmit();
-      }
     }
   });
 
@@ -401,7 +345,7 @@
       return;
     }
     if (event.key === 'Tab') {
-      const items = [...tributeOverlay.querySelectorAll('button, a[href], input')];
+      const items = [...tributeOverlay.querySelectorAll('button:not([disabled]), a[href]')];
       if (!items.length) return;
       const first = items[0], last = items[items.length - 1];
       if (event.shiftKey && (document.activeElement === first || document.activeElement === tributeOverlay.querySelector('.tribute-dialog'))) {
@@ -413,60 +357,6 @@
   }, true);
 
   document.addEventListener('submit', async event => {
-    if (event.target.id === 'tribute-checkout-form') {
-      event.preventDefault();
-      const form = event.target;
-      const btn = document.getElementById('tribute-pay-btn');
-      const resBox = document.getElementById('tribute-result');
-      const fd = new FormData(form);
-      const name = String(fd.get('name') || '').trim() || 'Student';
-      const rawContact = String(fd.get('email') || '').trim();
-      const email = rawContact.includes('@') && !rawContact.startsWith('@')
-        ? rawContact
-        : `${rawContact.replace(/^@/, '') || 'student'}@tribute.user`;
-      const telegram = rawContact.startsWith('@') ? rawContact : '';
-
-      if (btn) { btn.disabled = true; btn.textContent = 'PROCESSING TRIBUTE CHECKOUT…'; }
-      try {
-        const resp = await fetch('/api/tribute/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            name,
-            email,
-            telegram,
-            clientId: getClientId(),
-            telegramId: window.Telegram?.WebApp?.initDataUnsafe?.user?.id ? String(window.Telegram.WebApp.initDataUnsafe.user.id) : null,
-          }),
-        });
-        const data = await resp.json();
-        if (resp.ok && data.password) {
-          if (resBox) {
-            resBox.style.display = 'block';
-            resBox.innerHTML = `
-              <span class="meta" style="color:var(--red)">DEMO CHECKOUT COMPLETE · YOUR PERSONAL PASSWORD (ONE PERSON)</span>
-              <div style="font:600 20px var(--mono);margin:8px 0;letter-spacing:.08em">${data.password}</div>
-              <p style="margin:0 0 10px;font-size:12px;color:var(--muted)">This password is assigned to your profile (${name}). Keep it safe.</p>
-              <button type="button" class="button small" data-use-password="${data.password}" style="width:100%">OPEN THE COURSE WITH THIS PASSWORD ↗</button>
-            `;
-          }
-          const passInput = document.getElementById('course-password');
-          if (passInput) { passInput.type = 'text'; passInput.value = data.password; }
-          toast(`PASSWORD GENERATED: ${data.password}`);
-        } else {
-          throw new Error(data.error || 'Tribute stub error');
-        }
-      } catch (error) {
-        if (resBox) {
-          resBox.style.display = 'block';
-          resBox.textContent = error.message || 'Tribute is temporarily unavailable. Contact egor.tarasenko@him-mail.ch.';
-        }
-      } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = 'DEMO CHECKOUT · GENERATE PASSWORD <span aria-hidden="true">↗</span>'; }
-      }
-      return;
-    }
-
     if (event.target.id !== 'gate-form') return;
     event.preventDefault();
     const form = event.target;
@@ -474,7 +364,7 @@
     const error = document.getElementById('gate-error');
     const password = String(new FormData(form).get('password') || '').trim();
     if (!password) {
-      error.textContent = 'Enter your personal Tribute password or the administrator password.';
+      error.textContent = 'Enter the individual course password sent by the Telegram bot.';
       form.classList.remove('shake');
       void form.offsetWidth;
       form.classList.add('shake');
@@ -484,15 +374,10 @@
     error.textContent = '';
     const result = await apiUnlock(password);
     if (result.state === 'granted') { await unlock(); return; }
-    if (result.state === 'unsupported' && await verifyLocal(password)) {
-      ensureDefaultUser();
-      await unlock();
-      return;
-    }
     if (button) { button.disabled = false; button.innerHTML = 'OPEN THE COURSE <span aria-hidden="true">↗</span>'; }
-    error.textContent = result.error || (result.state === 'denied' || result.state === 'unsupported'
-      ? 'Incorrect password. Check the characters or get a personal password through Tribute below.'
-      : 'Access could not be verified. Please try again.');
+    error.textContent = result.state === 'unsupported'
+      ? 'The secure password service is temporarily unavailable. Please try again shortly.'
+      : (result.error || 'Incorrect password. Check the code sent by the course bot.');
     form.classList.remove('shake');
     void form.offsetWidth;
     form.classList.add('shake');
@@ -510,11 +395,8 @@
     }
     const status = await apiStatus();
     if (status.state === 'granted') { await unlock(true); return; }
-    if (status.state === 'unsupported') {
-      let remembered = false;
-      try { remembered = localStorage.getItem(FLAG) === '1'; } catch { remembered = false; }
-      if (remembered) { await unlock(true); return; }
-    }
-    renderGate();
+    renderGate(status.state === 'unsupported'
+      ? 'THE SECURE PASSWORD SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'
+      : '');
   })();
 })();

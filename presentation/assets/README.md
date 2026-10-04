@@ -41,4 +41,17 @@ These files are generated from the original camera files kept in the repository 
 
 The photography set combines purpose-created imagery and curated editorial references, optimised to a maximum dimension of 1400 px for compact, reproducible PDFs. No institute photographs are included.
 
-Asset set reviewed on 30 September 2026. The HIM logo remains the property of its respective rights holder. Project photography remains the property of Egor Tarasenko.
+## Provenance and in-app credits
+
+| Files | Provenance | App usage |
+| --- | --- | --- |
+| `project-*`, `author-*` | © Egor Tarasenko — author’s personal archive (derived from the camera files in the repository root) | Primary imagery of the course app: modules, lessons, cases about the author’s own venues, projects, gate and landing visuals |
+| `case-*`, `figure-*` | Editorial reference photographs of industry figures and venues, © the respective photographers and venues, curated from public press materials | Person cards and case files only; each rendered image carries a micro-credit and appears on the in-app `#/credits` page with a takedown contact |
+| `him-logo-white.png` | © Swiss Education Group / HIM Business School | Identification only |
+| `web-insider-hall.jpg`, `web-insider-station.jpg`, `web-insider-lab.webp` | Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab; public venue photographs via the venue’s TripAdvisor page and the Cocktail Pilgrim feature | “Bar of the future” atmosphere: landing hero, Module 05 and Module 10; credited in-app with source link and takedown contact |
+| `project-joi-bar-ai.jpg`, `project-detail-nine-lives-bar-ai.jpg` | Subtle AI exposure/shadow-detail recovery from the author’s own originals (`project-joi-bar.jpg`, `project-detail-nine-lives-bar.jpg`); composition, subjects and text unchanged | Rendered in place of the under-exposed originals; disclosed in-app as “AI-processed” under the image and on `#/credits` |
+| `horeca-*` | Curated thematic references for the proposal deck | Deck only — **not rendered by the course app** since the October 2026 provenance review |
+
+Three author-archive photographs (`project-detail-nine-lives-bar.jpg`, `project-chicken-connection-kitchen.jpg`, `project-tam-flatlay.jpg`) are used as **illustrative** images inside third-party case files and are labelled “illustrative · author’s archive · not the venue” both under the image and on the credits page.
+
+Asset set reviewed on 30 September 2026; provenance policy revised on 4 October 2026. The HIM logo remains the property of its respective rights holder. Project photography remains the property of Egor Tarasenko.

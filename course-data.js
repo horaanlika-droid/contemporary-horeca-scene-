@@ -95,7 +95,7 @@ window.COURSE = {
       moduleId: 'budget',
       moduleNumber: '09 & 04',
       block: 'Budget Realisation & Scenography · Projects Built from Found Objects',
-      image: 'project-joi-arcade.jpg',
+      image: 'author-joi-2025.jpg',
       summary: 'The author of this elective builds the venues, identities and bar objects the course teaches from: an espresso bar assembled from the street, a pastel cake room, a croffle bar with a cartoon cup on the window, and a bar-furniture studio drawing stations in blackened steel and stone.',
       lessonAngle: 'Every project in the archive is a working answer to one question: what can you make when the budget is small and the point of view is clear? The photos are the primary sources — sourcing, patina, signage, crockery, lighting, merchandise — and students are asked to read them the way they will later read their own flea-market finds.',
       takeaway: 'A consistent point of view, applied to cheap objects with patience, reads as luxury to a guest who never sees the invoice.'
@@ -185,7 +185,7 @@ window.COURSE = {
       number: '01',
       title: 'Hospitality Futures',
       description: 'Read the signals reshaping hospitality, from global rankings (MICHELIN, The 50 Best, GreatList) to the shokunin mastery of Jiro Ono and the independent scene-building of Igor Zernov.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'project-detail-street-press.jpg',
       practitioners: ['Jiro Ono (Sukiyabashi Jiro, Tokyo)', 'Igor Zernov (El Copitas / #FollowTheRabbits)'],
       lessons: [
         {
@@ -212,7 +212,7 @@ window.COURSE = {
       number: '02',
       title: 'Experience Design',
       description: 'Explore how space, service choreography, antique vessels, candlelight and sound keep the “sweet fairy tale” intact — with Simone Caporale, Alex Kratena and Denis Bobkov.',
-      image: 'horeca-interior-design.jpg',
+      image: 'project-coocoo-room.jpg',
       practitioners: ['Simone Caporale (Sips Barcelona · №1 World’s 50 Best Bars 2023)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Denis Bobkov (Pub Life Group · Black Swan · Bambule)'],
       lessons: [
         {
@@ -239,7 +239,7 @@ window.COURSE = {
       number: '03',
       title: 'Neurogastronomy',
       description: 'Understand how perception, gastrophysics, vessel weight and multisensory design shape flavour — through Artem Talalay, Dave Arnold, Jiro Ono and Hiroyasu Kayama.',
-      image: 'horeca-neurogastronomy-serve.jpg',
+      image: 'project-tam-cubes.jpg',
       practitioners: ['Artem Talalay (World Class Russia Winner)', 'Dave Arnold (Liquid Intelligence)', 'Jiro Ono (Sukiyabashi Jiro)', 'Hiroyasu Kayama (Bar Benfiddich)'],
       lessons: [
         {
@@ -266,7 +266,7 @@ window.COURSE = {
       number: '04',
       title: 'Restaurant & Bar Concepts & 50 Best Menu Breakdown',
       description: 'Deconstruct how the World’s 50 Best Bars & Restaurants build concepts and physical menu artefacts — learning from Rémy Savage, Alex Kratena, Boris Zarkov, Igor Zernov, Bar Leone and Tuju.',
-      image: 'horeca-craft-bar.jpg',
+      image: 'project-joi-brand.jpg',
       practitioners: ['Rémy Savage (Little Red Door · Shapes · Bar Nouveau)', 'Alex Kratena (Artesian · Tayēr + Elementary)', 'Boris Zarkov (White Rabbit Family · IKRA)', 'Igor Zernov (El Copitas · Tagliatella Caffe · Paloma Cantina)'],
       lessons: [
         {
@@ -292,7 +292,7 @@ window.COURSE = {
           title: 'Concept objects: the menu, the merchandise, the furniture',
           duration: '17 min',
           intro: 'A concept becomes real when it leaves the wall and lands in the guest’s hands — as a menu, a coaster, a cube, a stool, or a bar station drawn for the workshop.',
-          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The furniture and stations that carry the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
+          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The furniture and stations that carry the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors, and in the Mirain station line dedicated pumps that cut preparation to seconds — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
           ideas: [
             'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
             'Pacific bar solutions: design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
@@ -311,7 +311,7 @@ window.COURSE = {
       number: '05',
       title: 'Technology & Automation',
       description: 'Consider where technology, station ergonomics and operational standards improve speed and margins — with Bek Narzi and Artem Talalay.',
-      image: 'horeca-tech-operations.jpg',
+      image: 'web-insider-station.jpg',
       practitioners: ['Bek Narzi (City Space Bar · The Horeca Code)', 'Artem Talalay (World Class Speed & Ergonomics)'],
       lessons: [
         {
@@ -337,7 +337,7 @@ window.COURSE = {
       number: '06',
       title: 'AI in Hospitality',
       description: 'Assess emerging AI workflows, creative briefs and operational forecasting — contrasting algorithmic tools with the human authorship of Rémy Savage and Simone Caporale.',
-      image: 'horeca-ai-mixology-lab.jpg',
+      image: 'project-tam-tool.jpg',
       practitioners: ['Rémy Savage (Conceptual Authorship)', 'Simone Caporale (Bespoke Vessel Craft & Avant-Garde Mixology)'],
       lessons: [
         {
@@ -363,7 +363,7 @@ window.COURSE = {
       number: '07',
       title: 'Food & Beverage Futures',
       description: 'Explore farm-to-glass mixology, hyper-seasonal terroir, fermentation and beverage science through Hiroyasu Kayama, René Redzepi, Dave Arnold and Artem Talalay.',
-      image: 'horeca-sustainable-terroir.jpg',
+      image: 'project-passie-counter.jpg',
       practitioners: ['Hiroyasu Kayama (Bar Benfiddich, Tokyo)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)', 'Artem Talalay (World Class)'],
       lessons: [
         {
@@ -392,7 +392,7 @@ window.COURSE = {
       number: '08',
       title: 'Entrepreneurship',
       description: 'Move from a strong idea to an operationally grounded hospitality business and school of talent — learning from Bek Narzi, Igor Zernov and Boris Zarkov.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'project-joi-facade.jpg',
       practitioners: ['Bek Narzi (City Space · Pachamama · The Horeca Code)', 'Igor Zernov (#FollowTheRabbits · El Copitas · Bartenders FAQtory)', 'Boris Zarkov (White Rabbit Family · Krasota · IKRA)'],
       lessons: [
         {
@@ -419,7 +419,7 @@ window.COURSE = {
       number: '09',
       title: 'Budget Realisation, Scenography & Found-Object Mockup',
       description: 'Prove that a venue with soul does not need a fortune: Denis Bobkov’s salvage-built theatrical pubs (Black Swan, Bambule), Egor Tarasenko’s street-sourced Joi Espresso Bar — and your real physical mockup assembled from found objects, antique tableware, candles and menu concepts.',
-      image: 'horeca-atmosphere-candle.jpg',
+      image: 'project-detail-chess-morning.jpg',
       practitioners: ['Denis Bobkov (Pub Life Group · Black Swan · Bambule · Abbey Players)', 'Egor Tarasenko (Joi Espresso Bar)'],
       lessons: [
         {
@@ -461,7 +461,7 @@ window.COURSE = {
           title: 'Small venues, real budgets: the author’s project archive',
           duration: '18 min',
           intro: 'Four built venues, one cake room, one bar-furniture studio: what a small budget actually buys, photographed on the day the rooms were finished.',
-          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
+          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — the Mirain line even builds dedicated pumps into the station, cutting preparation to seconds — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
           ideas: [
             'Joi Espresso Bar (2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
             'Passie Cakes Co.: props do the branding — a chandelier, a pastel banquette, a hand-drawn logo and flowers, all replaceable at flea-market prices.',
@@ -481,7 +481,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Bring your thinking together. Defend the hospitality concept of tomorrow — drawing on selected industry benchmarks, a 50 Best menu concept and your live found-object mockup.',
-      image: 'horeca-concept-pitch.jpg',
+      image: 'web-insider-lab.webp',
       practitioners: ['Hiroyasu Kayama', 'Denis Bobkov', 'Rémy Savage', 'Simone Caporale', 'Igor Zernov', 'Artem Talalay', 'Bek Narzi', 'Jiro Ono', 'Boris Zarkov', 'René Redzepi', 'Dave Arnold', 'Alex Kratena'],
       lessons: [
         {
@@ -610,7 +610,7 @@ window.COURSE = {
       location: 'New York City',
       year: 'Beverage Science Pioneer',
       industry: 'Beverage Science & Laboratory Cocktail Technique',
-      image: 'case-dave-arnold.jpg',
+      image: 'project-tam-flatlay.jpg',
       context: 'Author of Liquid Intelligence and founder of Booker & Dax, applying scientific rigor to the physics and chemistry of cocktails.',
       what: 'Applies controlled experiments to temperature, dilution, clarification (agar, centrifuge), rapid nitro-infusion and carbonation to make complex beverage craft rigorously repeatable.',
       why: 'Shifts drink-making from superstitious guesswork to measurable, repeatable science where every variable is understood.',
@@ -621,7 +621,7 @@ window.COURSE = {
       location: 'Copenhagen, Denmark',
       year: 'Multiple №1 World’s 50 Best Restaurants',
       industry: 'New Nordic Cuisine · Foraging, Fermentation & Seasonality',
-      image: 'case-rene-redzepi.jpg',
+      image: 'project-chicken-connection-kitchen.jpg',
       context: 'Pioneered New Nordic gastronomy through hyper-local wild foraging, koji fermentation and micro-seasonality at Noma.',
       what: 'Redefined the global culinary language by championing native wild produce, game, coastal seaweeds and koji fermentation, building an R&D laboratory (Noma Projects) alongside seasonal menu iterations.',
       why: 'Demonstrates that a regional terroir and deep curiosity can spark a worldwide culinary movement.',
@@ -632,7 +632,7 @@ window.COURSE = {
       location: 'Old Street, London',
       year: 'Top-5 World’s 50 Best Bars',
       industry: 'Dual-Concept Hospitality · Casual Tap Bar & Produce-Led R&D Counter',
-      image: 'case-alex-kratena.jpg',
+      image: 'project-detail-nine-lives-bar-ai.jpg',
       context: 'Created by Alex Kratena and Monica Berg, uniting an accessible everyday front bar with a progressive produce-driven backroom.',
       what: 'Elementary serves draft highballs and quick snacks in an open daylight room, while Tayēr operates an industrial U-shaped counter serving daily changing, ingredient-first drinks numbered rather than named.',
       why: 'Solves the dilemma of bar accessibility versus progressive laboratory R&D by creating two distinct stages under one roof.',
@@ -643,11 +643,22 @@ window.COURSE = {
       location: 'Author’s own project',
       year: 'Opened 2025 · OGONEK TEAM',
       industry: 'Espresso bar · Found objects, street sourcing & low-budget scenography',
-      image: 'project-joi-arcade.jpg',
+      image: 'project-joi-bar-ai.jpg',
       context: 'A small espresso bar assembled by the course author almost entirely from found objects, flea markets and second-hand equipment.',
       what: 'Built from street finds and flea-market discoveries: a poster facade, café bulbs, hand-set branding, reconditioned equipment and second-hand furniture without a large budget.',
       why: 'Direct proof that with great desire you do not need a super budget: a clear point of view and resourcefulness build real soul.',
       takeaway: 'With strong vision and desire, you do not need a huge budget. Money buys speed and finish; intention and soul come from your vision.'
+    },
+    {
+      title: 'Pacific · Bar Stations & Equipment Design',
+      location: 'Bar equipment design & fabrication studio',
+      year: 'Author’s own project',
+      industry: 'Bar ergonomics · Technical drawings · Made-to-measure fabrication',
+      image: 'project-pacific-station.jpg',
+      context: 'Pacific is the course author’s bar-equipment design and fabrication studio: a project that shapes the working environment before a guest ever sees the room.',
+      what: 'Designs modular stations and consoles around real service choreography: a sintered-stone top, recessed ice well, speed rails, under-counter glass hanger and mobile castor-mounted furniture, developed through 3D visualisations and workshop-ready technical drawings. The Mirain station line goes further: dedicated pumps built into the station cut serve preparation to seconds.',
+      why: 'Shows how operations, ergonomics and scenography meet in one designed object. The team works faster and more comfortably while the guest experiences a room that feels resolved.',
+      takeaway: 'Design the bar around movement and service sequence. Draw every tool, reach and working surface before the workshop builds it.'
     }
   ],
   projects: {
@@ -665,7 +676,7 @@ window.COURSE = {
         team: 'By OGONEK TEAM',
         moduleId: 'budget',
         moduleNumber: '09',
-        image: 'project-joi-arcade.jpg',
+        image: 'project-joi-bar.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
         facts: [
@@ -774,9 +785,10 @@ window.COURSE = {
         moduleNumber: '05 & 04',
         image: 'project-pacific-station.jpg',
         tagline: 'Bar solutions drawn to be fabricated: blackened steel, sintered stone and glass, specified to the last millimetre.',
-        summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
+        summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. The Mirain station line adds dedicated pumps built into the station, cutting preparation to seconds. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
         facts: [
           ['ROLE', 'Bar furniture & equipment design'],
+          ['MIRAIN LINE', 'Dedicated pumps built into the station cut preparation to seconds'],
           ['OUTPUT', '3D visualisations · technical drawings · fabrication'],
           ['MATERIALS', 'Blackened steel · sintered stone · glass · castors'],
           ['IN THE COURSE', 'Modules 05 & 04 · ergonomics as scenography, objects as concept']
@@ -850,6 +862,12 @@ window.COURSE = {
   },
   updates: [
     {
+      tag: 'PROJECTS OF THE AUTHOR · PACIFIC',
+      title: 'Pacific Mirain: dedicated pumps cut preparation to seconds',
+      date: 'October 2026',
+      text: 'The Pacific Mirain station line is equipped with dedicated pumps built into the station: pours and service sequences that used to take minutes now resolve in seconds. The specification joins the Module 05 reading and the Pacific case file as working evidence of ergonomics-as-scenography — speed the guest feels, machinery the guest never sees.'
+    },
+    {
       tag: 'PROJECTS OF THE AUTHOR · PHOTO ARCHIVE',
       title: 'Forty-three new photographs: the author’s own venues, objects and studio work',
       date: 'September 2026',
@@ -873,5 +891,26 @@ window.COURSE = {
       date: 'September 2026',
       text: 'Each student receives an automatically generated 1-per-person password through Tribute Digital Product checkout, unlocking immediate access to all modules and lessons. Practical assignments and files can be submitted inside the app (or sent to egor.tarasenko@him-mail.ch) and receive feedback via the Admin Panel or Admin Bot.'
     }
-  ]
+  ],
+  imageCredits: {
+    statement: 'Every photograph in the elective is listed with its source and rights status. Photographs of the author’s own venues, objects and portraits are © Egor Tarasenko and are published from his personal archive. A few author-archive photographs carry subtle AI processing (exposure and shadow-detail recovery only, composition untouched); each processed file is labelled “AI-processed” both under the image and in this list. Third-party editorial photographs and venue photographs (including Insider Bar Lab) are never altered. Photographs of third-party industry figures and venues are editorial reference images © their respective photographers and venues, used only for educational commentary inside this password-protected course; where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    contact: 'egor.tarasenko@him-mail.ch',
+    files: [
+      { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
+      { file: 'web-insider-station.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
+      { file: 'web-insider-lab.webp', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab cocktail laboratory (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph via the Cocktail Pilgrim feature · educational commentary · takedown on request', source: 'https://questamiamilano.com/cocktailpilgrim/insidermoscow' },
+      { file: 'project-joi-bar-ai.jpg', short: 'PHOTO · AUTHOR’S ARCHIVE · AI-PROCESSED (EXPOSURE ONLY)', credit: '© Egor Tarasenko — author’s archive; subtle AI exposure and shadow-detail recovery, composition unchanged', license: 'All rights reserved · AI processing disclosed', source: 'Derived in-app from project-joi-bar.jpg (original camera file in the repository)' },
+      { file: 'project-detail-nine-lives-bar-ai.jpg', short: 'PHOTO · AUTHOR’S ARCHIVE · AI-PROCESSED (EXPOSURE ONLY)', credit: '© Egor Tarasenko — author’s archive; subtle AI exposure and shadow-detail recovery, composition unchanged', license: 'All rights reserved · AI processing disclosed', source: 'Derived in-app from project-detail-nine-lives-bar.jpg (original in presentation/assets)' }
+    ],
+    illustrative: [
+      { file: 'project-detail-nine-lives-bar-ai.jpg', note: 'Illustrative bar-counter study from the author’s archive (subtle AI exposure recovery), used in the Alex Kratena · Tayier + Elementary case file. It does not depict the venue.' },
+      { file: 'project-chicken-connection-kitchen.jpg', note: 'Illustrative kitchen photograph from the author’s archive (Chicken Connection shoot, Moscow), used in the René Redzepi · Noma case file. It does not depict the venue.' },
+      { file: 'project-tam-flatlay.jpg', note: 'Illustrative R&D flat-lay from the author’s TAM / TYT object line, used in the Dave Arnold · Liquid Intelligence case file. It does not depict a laboratory.' }
+    ],
+    groups: [
+      { prefix: ['project-', 'author-'], short: 'PHOTO · EGOR TARASENKO ARCHIVE', credit: '© Egor Tarasenko — author’s personal archive', license: 'All rights reserved · published with the author’s permission', source: 'Original camera files kept in the course repository (repository root)' },
+      { prefix: ['case-', 'figure-'], short: 'PHOTO · EDITORIAL REFERENCE · © RESPECTIVE PHOTOGRAPHER', credit: '© respective photographers and venues — editorial reference images', license: 'Educational commentary inside the password-protected elective · takedown requests honoured', source: 'Curated from public press and website materials, September 2026' },
+      { prefix: ['him-logo-white.png'], short: '© SWISS EDUCATION GROUP / HIM', credit: 'HIM Business School logo · © Swiss Education Group', license: 'Trademark · used for identification only', source: 'swisseducation.com — HIM Business School page' }
+    ]
+  }
 };
