@@ -292,7 +292,7 @@ window.COURSE = {
           title: 'Concept objects: the menu, the merchandise, the furniture',
           duration: '17 min',
           intro: 'A concept becomes real when it leaves the wall and lands in the guest’s hands — as a menu, a coaster, a cube, a stool, or a bar station drawn for the workshop.',
-          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The furniture and stations that carry the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
+          body: 'The projects in this archive show three ways a concept turns into a physical object. (1) The menu as a keepsake: at CooCoo Coffee the entire promise is three alliterative words — coffee, croffles, cookies — printed on cups, window art and a paper board, so the brand travels home in the guest’s hand. (2) The furniture and stations that carry the room: Pacific designs bar stations the way a menu is designed — a sintered-stone top, a recessed ice well, speed rails, an under-counter glass hanger, a cantilevered console on castors, and in the Mirain station line dedicated pumps that cut preparation to seconds — and delivers them as 3D visualisations and technical drawings a workshop can actually build. The exercise is always the same three questions: what does the guest touch first, what do they take away, and what does the team work behind?',
           ideas: [
             'Every concept needs one takeaway object: a menu card, a cup, a coaster, a box — something the guest carries out of the room.',
             'Pacific bar solutions: design the working furniture — ice well, speed rail, glass hanger, castors — because ergonomics is scenography the guest never notices.',
@@ -461,7 +461,7 @@ window.COURSE = {
           title: 'Small venues, real budgets: the author’s project archive',
           duration: '18 min',
           intro: 'Four built venues, one cake room, one bar-furniture studio: what a small budget actually buys, photographed on the day the rooms were finished.',
-          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
+          body: 'This unit opens the photo archive behind the course — the author’s own projects, documented as working evidence rather than portfolio images. Joi Espresso Bar (opened 2025 by OGONEK TEAM) is the espresso bar assembled from the street: a poster facade, café bulbs, paper cups stamped with the logo, a brass lever machine and second-hand grinders on a small counter. Passie Cakes Co. is the opposite lesson in the same method: a one-room cake shop where pink banquettes, a crystal chandelier, china jugs used as vases and a hand-drawn bear with a birthday cake do all the branding, so the cheapest props in the room are the most photographed. CooCoo Coffee (coffee · croffles · cookies) shows a street concept built on one alliterative promise: a turquoise facade, a cartoon cup with googly eyes on the window, café bulbs over a paper menu and a croffle served on a pink table. Pacific moves one step upstream from the venue: bar stations, consoles and glass hangers designed, drawn and fabricated as products — the Mirain line even builds dedicated pumps into the station, cutting preparation to seconds — because half of the atmosphere of a good bar was decided by whoever drew the furniture. Read the photos in the archive and write down what was bought, what was found and what was made. That list is your own sourcing plan.',
           ideas: [
             'Joi Espresso Bar (2025 · OGONEK TEAM): logo, cup, poster facade and a second-hand bar — the brand costs nothing, the equipment costs everything.',
             'Passie Cakes Co.: props do the branding — a chandelier, a pastel banquette, a hand-drawn logo and flowers, all replaceable at flea-market prices.',
@@ -656,7 +656,7 @@ window.COURSE = {
       industry: 'Bar ergonomics · Technical drawings · Made-to-measure fabrication',
       image: 'project-pacific-station.jpg',
       context: 'Pacific is the course author’s bar-equipment design and fabrication studio: a project that shapes the working environment before a guest ever sees the room.',
-      what: 'Designs modular stations and consoles around real service choreography: a sintered-stone top, recessed ice well, speed rails, under-counter glass hanger and mobile castor-mounted furniture, developed through 3D visualisations and workshop-ready technical drawings.',
+      what: 'Designs modular stations and consoles around real service choreography: a sintered-stone top, recessed ice well, speed rails, under-counter glass hanger and mobile castor-mounted furniture, developed through 3D visualisations and workshop-ready technical drawings. The Mirain station line goes further: dedicated pumps built into the station cut serve preparation to seconds.',
       why: 'Shows how operations, ergonomics and scenography meet in one designed object. The team works faster and more comfortably while the guest experiences a room that feels resolved.',
       takeaway: 'Design the bar around movement and service sequence. Draw every tool, reach and working surface before the workshop builds it.'
     }
@@ -785,9 +785,10 @@ window.COURSE = {
         moduleNumber: '05 & 04',
         image: 'project-pacific-station.jpg',
         tagline: 'Bar solutions drawn to be fabricated: blackened steel, sintered stone and glass, specified to the last millimetre.',
-        summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
+        summary: 'A design-and-fabrication project rather than a venue: modular stations and consoles for bars, developed as a set — a working station with a stone top, recessed ice well, speed rails and a glass hanger; a cantilevered console on castors; a wall-mounted server; and a compact bar-top tool cabinet. The Mirain station line adds dedicated pumps built into the station, cutting preparation to seconds. Everything is delivered as 3D visualisations plus technical drawings a workshop can read, because ergonomics decided behind the bar is atmosphere the guest never notices — until it is missing.',
         facts: [
           ['ROLE', 'Bar furniture & equipment design'],
+          ['MIRAIN LINE', 'Dedicated pumps built into the station cut preparation to seconds'],
           ['OUTPUT', '3D visualisations · technical drawings · fabrication'],
           ['MATERIALS', 'Blackened steel · sintered stone · glass · castors'],
           ['IN THE COURSE', 'Modules 05 & 04 · ergonomics as scenography, objects as concept']
@@ -860,6 +861,12 @@ window.COURSE = {
     ]
   },
   updates: [
+    {
+      tag: 'PROJECTS OF THE AUTHOR · PACIFIC',
+      title: 'Pacific Mirain: dedicated pumps cut preparation to seconds',
+      date: 'October 2026',
+      text: 'The Pacific Mirain station line is equipped with dedicated pumps built into the station: pours and service sequences that used to take minutes now resolve in seconds. The specification joins the Module 05 reading and the Pacific case file as working evidence of ergonomics-as-scenography — speed the guest feels, machinery the guest never sees.'
+    },
     {
       tag: 'PROJECTS OF THE AUTHOR · PHOTO ARCHIVE',
       title: 'Forty-three new photographs: the author’s own venues, objects and studio work',

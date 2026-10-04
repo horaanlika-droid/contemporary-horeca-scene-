@@ -408,6 +408,9 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.match(course, /insider\.bar\.lab/);
   assert.match(course, /web-insider-station\.jpg/);
   assert.match(course, /web-insider-lab\.webp/);
+  // Pacific Mirain specification is part of the shipped content
+  assert.match(course, /Mirain station line/);
+  assert.match(course, /dedicated pumps/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
   assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
