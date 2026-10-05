@@ -633,9 +633,10 @@ function generateUniqueLogin(student) {
 }
 
 async function issueCredentialsForStudent(student, order = null, via = 'auto') {
-  if (!student || !student.telegramId) return { error: 'Telegram account is required to issue credentials. Ask the learner to start the bot and send /start.' };
+  if (!student) return { error: 'Student record is missing.' };
   const hasPaid = Boolean(order) || store.tribute.orders.some(o => o.studentId === student.id && o.status === 'PAID');
-  if (!hasPaid) return { error: 'No confirmed Tribute payment is linked to this account. Verify the payment in Tribute first.' };
+  const isAdminManual = via === 'admin-issue' || via === 'manual-admin' || via === 'admin-bot' || student.source === 'manual-admin';
+  if (!hasPaid && !isAdminManual) return { error: 'No confirmed Tribute payment is linked to this account. Verify the payment in Tribute first or issue access manually.' };
   if (student.passwordHash && student.login) {
     return { error: 'Credentials have already been issued for this account. Use /reset to generate a new password.' };
   }
@@ -658,10 +659,10 @@ async function issueCredentialsForStudent(student, order = null, via = 'auto') {
     }
   }
   saveStore();
-  addBotLog('credentials', `[${via}] Credentials issued for ${student.name} (Telegram ${student.telegramId}) login ${login}.`);
+  addBotLog('credentials', `[${via}] Credentials issued for ${student.name} (Telegram ${student.telegramId || student.telegramUsername || 'unknown'}) login ${login}.`);
   const courseLink = courseStartUrl() || tributePurchaseUrl() || '';
   const lines = [
-    'Payment confirmed — your Contemporary Horeca Scene access is ready!',
+    'Course access is ready!',
     '',
     `Login: ${login}`,
     `Password: ${plainPassword}`,
@@ -672,7 +673,7 @@ async function issueCredentialsForStudent(student, order = null, via = 'auto') {
     `Save your password — the bot does not show it again. If lost, contact ${AUTHOR_EMAIL} or ask an admin to reset it.`,
   ];
   const htmlLines = [
-    '<b>Payment confirmed — your Contemporary Horeca Scene access is ready!</b>',
+    '<b>Course access is ready!</b>',
     '',
     `Login: <code>${escapeHtml(login)}</code>`,
     `Password: <code>${escapeHtml(plainPassword)}</code>`,
@@ -1217,19 +1218,33 @@ async function sendSharedRegistrationLink(student) {
 
 async function admitStudent(identifier, via = 'admin-bot') {
   const raw = String(identifier || '').trim().replace(/^@/, '');
-  const student = store.students.find(item => (
+  let student = store.students.find(item => (
     item.id === raw
     || String(item.telegramId || '') === raw
     || String(item.telegramUsername || '').toLowerCase() === raw.toLowerCase()
   ));
-  if (!student) return { error: 'Student admission request not found.' };
-  if (student.active && student.admissionApprovedAt) return { ok: true, alreadyApproved: true, student, linkSent: false };
-
-  const hasPaidOrder = store.tribute.orders.some(order => order.studentId === student.id && order.status === 'PAID');
-  const hasActiveSubscription = Boolean(student.subscriptionExpiresAt && Date.parse(student.subscriptionExpiresAt) > Date.now());
-  if (student.source?.startsWith('tribute-') && !hasPaidOrder && !hasActiveSubscription && !student.passwordHash && !student.legacyPasswordHash) {
-    return { error: 'No active confirmed Tribute payment is linked to this student. Check the payment or use a manual access request.' };
+  if (!student) {
+    if (/^\d{1,20}$/.test(raw) || /^[A-Za-z0-9_]{3,32}$/.test(raw)) {
+      const isId = /^\d{1,20}$/.test(raw);
+      student = {
+        id: `stu-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        name: isId ? `Telegram User ${raw}` : `@${raw}`,
+        email: '',
+        telegramId: isId ? raw : '',
+        telegramUsername: isId ? '' : raw,
+        source: 'manual-admin',
+        active: true,
+        admissionRequestedAt: new Date().toISOString(),
+        admissionApprovedAt: new Date().toISOString(),
+        registrationStatus: 'APPROVED_PENDING_REGISTRATION',
+        createdAt: new Date().toISOString(),
+      };
+      store.students.push(student);
+    } else {
+      return { error: 'Student admission request not found.' };
+    }
   }
+  if (student.active && student.admissionApprovedAt) return { ok: true, alreadyApproved: true, student, linkSent: false };
 
   const now = new Date().toISOString();
   student.active = true;
@@ -1241,7 +1256,7 @@ async function admitStudent(identifier, via = 'admin-bot') {
     order.deliveryStatus = 'APPROVED_LINK_PENDING';
   }
   saveStore();
-  addBotLog('admission', `[${via}] ${student.name} admitted (Telegram ${student.telegramId || 'unknown'}).`);
+  addBotLog('admission', `[${via}] ${student.name} admitted (Telegram ${student.telegramId || student.telegramUsername || 'unknown'}).`);
 
   let linkSent = false;
   if (student.passwordHash) {
@@ -1256,7 +1271,7 @@ async function admitStudent(identifier, via = 'admin-bot') {
       `✅ Your course admission is active. Use your existing access code to sign in; contact support if you need to move to a personal password.`,
       courseKeyboard(),
     );
-  } else {
+  } else if (student.telegramId) {
     linkSent = await sendSharedRegistrationLink(student);
   }
 
@@ -1696,7 +1711,7 @@ async function executeBotCommand(rawCommand) {
 
   if (command === '/issue' || command === '/give' || command === '/createaccess') {
     const identifier = String(args[0] || '').trim().replace(/^@/, '');
-    if (!identifier) return { ok: false, reply: 'Usage: /issue <telegram_id|@username|student_id> — generates a login and password, but only if a confirmed Tribute payment exists.' };
+    if (!identifier) return { ok: false, reply: 'Usage: /issue <telegram_id|@username|student_id> — generates a login and password for this learner.' };
     let student = store.students.find(item => (
       item.id === identifier
       || String(item.telegramId || '') === identifier
@@ -1706,12 +1721,32 @@ async function executeBotCommand(rawCommand) {
       const order = store.tribute.orders.find(o => String(o.telegramId || '') === identifier || String(o.telegramUsername || '').toLowerCase() === identifier.toLowerCase());
       if (order) student = store.students.find(s => s.id === order.studentId) || null;
     }
-    if (!student) return { ok: false, reply: `No learner found for "${escapeHtml(identifier)}". Check /admissions or /orders for the correct Telegram ID.` };
+    if (!student) {
+      if (/^\d{1,20}$/.test(identifier) || /^[A-Za-z0-9_]{3,32}$/.test(identifier)) {
+        const isId = /^\d{1,20}$/.test(identifier);
+        student = {
+          id: `stu-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          name: isId ? `Telegram User ${identifier}` : `@${identifier}`,
+          email: '',
+          telegramId: isId ? identifier : '',
+          telegramUsername: isId ? '' : identifier,
+          source: 'manual-admin',
+          active: true,
+          admissionRequestedAt: new Date().toISOString(),
+          admissionApprovedAt: new Date().toISOString(),
+          registrationStatus: 'APPROVED_PENDING_REGISTRATION',
+          createdAt: new Date().toISOString(),
+        };
+        store.students.push(student);
+      } else {
+        return { ok: false, reply: `No learner found for "${escapeHtml(identifier)}". Check /admissions or /orders for the correct Telegram ID.` };
+      }
+    }
     const order = store.tribute.orders.find(o => o.studentId === student.id && o.status === 'PAID') || null;
     const result = await issueCredentialsForStudent(student, order, 'admin-issue');
     if (result.error) return { ok: false, reply: `Cannot issue credentials: ${escapeHtml(result.error)}` };
     const note = result.sent ? 'Credentials sent via Telegram.' : `Credentials generated but not delivered: ${escapeHtml(result.warning || 'check BOT_TOKEN')}`;
-    return { ok: true, reply: `Credentials issued for <b>${escapeHtml(student.name)}</b> (Telegram ${escapeHtml(student.telegramId || 'unknown')})\nLogin: <code>${escapeHtml(result.login)}</code>\nPassword: <code>${escapeHtml(result.password)}</code>\n${note}\nSave this password — it will not be shown again. The learner can now sign in at ${escapeHtml(configuredHttpsUrl(COURSE_URL) || 'the course app')} with login and password.` };
+    return { ok: true, reply: `Credentials issued for <b>${escapeHtml(student.name)}</b> (Telegram ${escapeHtml(student.telegramId || student.telegramUsername || 'unknown')})\nLogin: <code>${escapeHtml(result.login)}</code>\nPassword: <code>${escapeHtml(result.password)}</code>\n${note}\nSave this password — it will not be shown again. The learner can now sign in at ${escapeHtml(configuredHttpsUrl(COURSE_URL) || 'the course app')} with login and password.` };
   }
 
   if (command === '/reset' || command === '/resetpass' || command === '/resetpassword') {
