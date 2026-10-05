@@ -346,19 +346,16 @@ async function adminToken(server) {
 test('course entry offers shared registration only after manual approval, with no in-app Tribute checkout', async t => {
   const access = read('access.js');
   const app = read('app.js');
-  assert.match(access, /data-gate-mode=\"login\"/);
-  assert.match(access, /data-gate-mode=\"register\"/);
-  assert.match(access, /id=\"login-form\"/);
-  assert.match(access, /id=\"register-form\"/);
-  assert.match(access, /\/api\/register/);
-  assert.match(access, /shared registration page/i);
+  assert.match(access, /id="login-form"/);
+  assert.match(access, /GET ACCESS ON TRIBUTE/);
+  assert.match(access, /safeHttps\(tribute.purchaseUrl\)/);
+  assert.match(access, /The Tribute purchase link is currently unavailable/);
   assert.match(access, /manually approved by the course admin/i);
-  assert.match(access, /used for future sign-ins/i);
   assert.doesNotMatch(access, /registrationToken|single-use registration link/i);
   assert.match(app, /\/api\/chat\/stream/);
   assert.match(app, /Project Q&amp;A/);
   assert.match(access, /egor\.tarasenko@him-mail\.ch/);
-  assert.doesNotMatch(access + app, /data-tribute-open|data-tribute-close|GET ACCESS VIA TRIBUTE|TRIBUTE PAYMENT SETUP REQUIRED|tribute-overlay/i);
+  assert.doesNotMatch(access, /data-tribute-open|data-tribute-close|tribute-overlay/i);
   assert.doesNotMatch(access, /\/api\/tribute\/checkout/);
   assert.doesNotMatch(access, /DEMO \/ TESTING FLOW|verifyLocal|SHA256|data-use-password/i);
 
@@ -638,7 +635,7 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   const server = await isolatedServer(t, {
     TRIBUTE_API_KEY: apiKey,
     TRIBUTE_PRODUCT_ID: '456',
-    TRIBUTE_PRODUCT_URL: 'https://t.me/tribute/app?startapp=p456', // ignored by the course app
+    TRIBUTE_PRODUCT_URL: 'https://t.me/tribute/app?startapp=p456', // public purchase link
     TRIBUTE_PRICE: '49 EUR',
     BOT_TOKEN: 'fake-bot-token',
     BOT_USERNAME: 'chs_access_bot',
@@ -650,7 +647,7 @@ test('Tribute webhooks create pending admissions; one shared page works after Te
   assert.equal(status.body.productConfigured, true);
   assert.equal(status.body.subscriptionConfigured, false);
   assert.equal(status.body.botUsernameConfigured, true);
-  assert.equal(Object.hasOwn(status.body, 'productUrl'), false, 'Tribute checkout URLs are never exposed by the app');
+  assert.equal(status.body.purchaseUrl, 'https://t.me/tribute/app?startapp=p456');
   assert.equal(JSON.stringify(status.body).includes(apiKey), false);
 
   const event = {

@@ -1026,7 +1026,8 @@ async function editTelegramMessage(chatId, messageId, text, replyMarkup = undefi
     });
     const result = await response.json().catch(() => null);
     /* "message is not modified" is a benign race when the admin taps twice */
-    return Boolean(response.ok && (result?.ok === true || result?.error_code === 400));
+    return Boolean((response.ok && result?.ok === true) ||
+      (result?.error_code === 400 && /message is not modified/i.test(result?.description || '')));
   } catch {
     return false;
   }
