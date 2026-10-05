@@ -58,6 +58,12 @@ When launched inside Telegram, the client initializes the Web App SDK. After cou
 
 There are no public demo profiles, manual password-generation tools or payment links in the course app. The registration page is shared and reusable, but the server creates an account only for a Telegram identity manually approved by the course admin after payment verification. The learner sets a personal password during registration; passwords are stored as scrypt hashes. The configured master password is reserved for administrators. Learning progress and quiz state are saved in the browser (`localStorage`). Confirmed payment, admission, chat and order records are stored server-side in `data/store.json`; uploaded assignment files are kept in `data/uploads/`.
 
+### Opening modules and learning units in restrictive browsers
+
+Course content is protected server-side, and not every client keeps the session cookie: Telegram on iOS, in-app WebViews and third-party iframes routinely drop it, so a `<script src="course-data.js">` request was answered `403` after a successful sign-in and the learner stayed on the sign-in screen with no module or learning unit to open. The content file is therefore loaded with the `X-Access-Token` header first and the signed cookie only as a fallback; when neither is available the gate reports that the content could not be read instead of showing an empty course.
+
+Navigation no longer depends on a single browser event either. Every click on an internal `#/…` link is confirmed by the router: if the browser does not move the address (WebViews that do not deliver `hashchange`), the app navigates and paints the screen itself. `popstate` is handled as well, so back and forward keep working. The address `#/dashboard` that the gate opens after sign-in now renders the space that matches the session — student dashboard, administrator panel or instructor overview — instead of the access-restricted screen. A screen that still fails to build shows the display-error notice with a route back, and a course app that cannot start at all reports it on the gate.
+
 ## Course structure (2026 edition)
 
 Ten modules / thirteen learning units:

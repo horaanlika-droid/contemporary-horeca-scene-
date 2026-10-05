@@ -52,8 +52,9 @@ function fakeStorage() {
 
 /* Boots window.bootCourse() from app.js against the same content files the browser
    loads, then lets the tests drive the hash router exactly like a learner would. */
-function bootCourse() {
+function bootCourse(profile = STUDENT) {
   const listeners = new Map();
+  const timers = [];
   const app = fakeElement();
   const toast = fakeElement();
   const on = (target, type, handler) => listeners.set(`${target}:${type}`, [...(listeners.get(`${target}:${type}`) || []), handler]);
@@ -88,7 +89,7 @@ function bootCourse() {
     window, document, location,
     localStorage: window.localStorage, sessionStorage: window.sessionStorage,
     console, fetch: () => Promise.reject(new Error('offline preview in tests')),
-    setTimeout: () => 0, clearTimeout() {}, setInterval: () => 0, clearInterval() {},
+    setTimeout: handler => { timers.push(handler); return timers.length; }, clearTimeout() {}, setInterval: () => 0, clearInterval() {},
     alert() {}, confirm: () => true, prompt: () => null,
     navigator: { userAgent: 'node' }, FormData: class { get() { return null; } },
     URLSearchParams, URL,
@@ -98,9 +99,24 @@ function bootCourse() {
   vm.runInContext(read('course-data.js'), sandbox);
   vm.runInContext(read('site-copy.js'), sandbox);
   vm.runInContext(read('app.js'), sandbox);
-  sandbox.window.sessionStorage.setItem('chs-user', JSON.stringify(STUDENT));
+  sandbox.window.sessionStorage.setItem('chs-user', JSON.stringify(profile));
   sandbox.window.bootCourse();
-  return { sandbox, app, toast, location, window, settle: () => new Promise(resolve => setImmediate(resolve)) };
+  return {
+    sandbox, app, toast, location, window,
+    settle: () => new Promise(resolve => setImmediate(resolve)),
+    /* The renderer schedules the route confirmation with setTimeout; the stand-in
+       keeps that callback queued until the test asks for it. */
+    runTimers: () => { for (const handler of timers.splice(0)) handler(); },
+    /* A click on an internal link in a browser that never acts on the link
+       itself: the address does not move, so the router has to take over. */
+    clickRoute: href => {
+      const event = {
+        defaultPrevented: false, button: 0, metaKey: false, ctrlKey: false, shiftKey: false, altKey: false,
+        target: { closest: selector => (selector.startsWith('a[href') ? { getAttribute: () => href } : null) },
+      };
+      for (const handler of listeners.get('document:click') || []) handler(event);
+    },
+  };
 }
 
 function routeList(course) {
@@ -159,6 +175,42 @@ test('the module start action opens the lesson it points at, including lessons w
      module image and still print a provenance credit, not crash on a missing name. */
   assert.match(app.innerHTML, /img-credit/, 'the lesson media keeps its credit line');
   assert.doesNotMatch(app.innerHTML, /src="presentation\/assets\/"/, 'media never points at an empty asset path');
+});
+
+test('a learning unit opens even when the browser never acts on the link itself', async () => {
+  const { sandbox, app, location, settle, clickRoute, runTimers } = bootCourse();
+  await settle();
+
+  const unit = sandbox.window.COURSE.modules.find(module => module.id === 'budget');
+  location.hash = `#/module/${unit.id}`;
+  await settle();
+  assert.match(app.innerHTML, /lesson-list/, 'the module screen lists its learning units');
+
+  const target = `#/lesson/${unit.id}/${unit.lessons[0].id}`;
+  const before = location.hash;
+  clickRoute(target);          // the browser swallows the link: no hashchange event
+  runTimers();                 // the router confirms the route itself
+  await settle();
+
+  assert.equal(location.hash, target, 'the router moves the address to the learning unit');
+  assert.match(app.innerHTML, /lesson-layout/, 'the learning unit screen is painted');
+  assert.doesNotMatch(app.innerHTML, DISPLAY_ERROR);
+  assert.notEqual(location.hash, before);
+});
+
+test('the gate address opens the administrator space instead of an access-restricted screen', async () => {
+  const ADMIN = {
+    id: 'master-admin', name: 'Egor Tarasenko', email: 'author@example.test', role: 'ADMIN',
+    isMaster: true, institutionId: 'him-001', unlockedLessons: [],
+  };
+  const { app, location, settle } = bootCourse(ADMIN);
+  await settle();
+
+  location.hash = '#/dashboard';
+  await settle();
+  assert.match(app.innerHTML, /COURSE ADMINISTRATION/, 'the administrator lands on the admin panel');
+  assert.doesNotMatch(app.innerHTML, /role-restricted/);
+  assert.doesNotMatch(app.innerHTML, DISPLAY_ERROR);
 });
 
 test('landing shortcuts open the module they name instead of the module list', async () => {
