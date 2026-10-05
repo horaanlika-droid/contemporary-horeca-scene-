@@ -361,7 +361,7 @@ function createAdminConsole(deps) {
     const learners = store().students.filter(x => x.login);
     if (!learners.length) {
       const pending = pendingCredentials();
-      const hint = pending.length ? `\n\nОжидают генерации: ${pending.length} (оплата есть, логин ещё не выдан). Используйте кнопки ниже или команду /issue <telegram_id>.` : '\n\nЛогины выдаются только после подтверждённой оплаты Tribute — команда /issue <telegram_id>.';
+      const hint = pending.length ? `\n\nОжидают генерации: ${pending.length} (оплата есть, логин ещё не выдан). Используйте кнопки ниже или команду /issue <telegram_id>.` : '\n\nВыдать доступ (вручную или по оплате) — кнопка «Выдать логин» или команда /issue <telegram_id>.';
       return {
         text: `🔑 <b>Логины</b> · пока нет выданных${hint}`,
         keyboard: kb([
@@ -385,7 +385,8 @@ function createAdminConsole(deps) {
     if (!s) return null;
     const hasPaid = store().tribute.orders.some(o => o.studentId === s.id && o.status === 'PAID');
     const active = deps.isStudentAccessActive(s) ? 'АКТИВЕН' : 'НЕАКТИВЕН';
-    const text = `🔑 <b>${esc(s.login || 'Логин ещё не выдан')}</b>\nСтудент: ${esc(s.name)} (${esc(s.email)})\nTelegram: ${esc(s.telegramUsername ? '@' + s.telegramUsername : s.telegramId || 'не привязан')}\nСтатус: ${active} · ${esc(s.registrationStatus || '—')}\nОплата Tribute: ${hasPaid ? 'подтверждена' : 'не найдена'}\nID: <code>${esc(s.id)}</code>\n\nПароль не показывается (хранится как hash). Нажмите «Сбросить» чтобы выдать новый.`;
+    const paymentStatus = hasPaid ? 'подтверждена' : (s.source === 'manual-admin' ? 'ручной доступ (без оплаты)' : 'не найдена');
+    const text = `🔑 <b>${esc(s.login || 'Логин ещё не выдан')}</b>\nСтудент: ${esc(s.name)} (${esc(s.email)})\nTelegram: ${esc(s.telegramUsername ? '@' + s.telegramUsername : s.telegramId || 'не привязан')}\nСтатус: ${active} · ${esc(s.registrationStatus || '—')}\nОплата Tribute: ${paymentStatus}\nID: <code>${esc(s.id)}</code>\n\nПароль не показывается (хранится как hash). Нажмите «Сбросить» чтобы выдать новый.`;
     return {
       text,
       keyboard: kb([
@@ -462,7 +463,7 @@ function createAdminConsole(deps) {
     '',
     'Текстовые команды (англ.) тоже работают:',
     '/admissions · /admit <student_id> · /reject <student_id> · /students · /orders · /resend <telegram_id>',
-    '/issue <telegram_id> — выдать логин+пароль (только после оплаты Tribute) · /reset <telegram_id> — новый пароль · /credentials [id] — список логинов',
+    '/issue <telegram_id> — выдать логин+пароль (вручную или по оплате) · /reset <telegram_id> — новый пароль · /credentials [id] — список логинов',
     '/pending · /approve <id> <текст> · /revise <id> <текст> · /chat — открыть Project Q&A в приложении',
     '/addmat <модуль> <https url> <описание> · /materials · /editmat · /delmat',
     '/post <заголовок> | <текст> · /posts · /delpost',
@@ -782,7 +783,7 @@ function createAdminConsole(deps) {
     }
     if (data === 'CG') {
       setPending(chatId, { kind: 'cred-issue' });
-      return send('🔑 <b>Выдача логина</b>\nПришлите Telegram ID, @username или student_id. Логин и пароль будут выданы только если есть подтверждённая оплата Tribute.\n/cancel — отмена.', kb([[btn('❌ Отмена', 'ZC')]]));
+      return send('🔑 <b>Выдача логина</b>\nПришлите Telegram ID, @username или student_id. Доступ будет создан и выдан сразу.\n/cancel — отмена.', kb([[btn('❌ Отмена', 'ZC')]]));
     }
     if (head === 'WG') {
       const pending = pendingCredentials().slice(0, 20);

@@ -439,10 +439,14 @@ window.bootCourse = () => {
   }
 
   function modulePage(id) {
-    const m = C.modules.find(x => x.id === id);
+    const m = C.modules.find(x => x.id === id || x.number === id || String(Number(x.number)) === id);
     if (!m) return notFound();
-    const l = m.lessons[0];
+    const targetLesson = (m.lessons || []).find(x => !progressFor().includes(x.id)) || (m.lessons || [])[0];
+    const l = targetLesson || (m.lessons || [])[0] || { id: '', duration: '', case: '', intro: '', ideas: [] };
     const materials = materialsFor(m.id);
+    const completedInModule = (m.lessons || []).filter(x => progressFor().includes(x.id)).length;
+    const allDone = (m.lessons || []).length > 0 && completedInModule === (m.lessons || []).length;
+    const btnLabel = allDone ? 'REVISIT MODULE' : (completedInModule > 0 ? 'CONTINUE MODULE' : 'START MODULE');
     return layout(`<main class="app-main">
       <div class="crumb"><a href="#/course">THE ELECTIVE</a> <span>/</span> <span>MODULE ${m.number}</span></div>
       <div class="module-detail">
@@ -451,26 +455,26 @@ window.bootCourse = () => {
           <h2>${esc(m.title)}</h2>
           <p>${esc(m.description)}</p>
           <div class="bar" style="max-width:360px;margin:20px 0"><span style="width:${moduleProgress(m)}%"></span></div>
-          <span class="meta">${word(m.lessons.length)} · ${l.duration}</span>
-          <div class="lesson-list">${m.lessons.map(x => `<a class="lesson-link" href="#/lesson/${m.id}/${x.id}"><span class="meta">${progressFor().includes(x.id) ? '<span class="done">✓</span>' : '→'}</span><strong>${esc(x.title)}</strong><span class="meta">${x.duration}</span></a>`).join('')}</div>
-          <div class="case-inline"><span class="meta">INDUSTRY CASE</span><h3>${esc(l.case)}</h3><p>Examine the choices behind the experience, and what they reveal about contemporary hospitality.</p><a class="button text" href="#/cases">OPEN CASE FILES →</a></div>
+          <span class="meta">${word((m.lessons || []).length)} · ${l.duration || ''}</span>
+          <div class="lesson-list">${(m.lessons || []).map(x => `<a class="lesson-link" href="#/lesson/${m.id}/${x.id}"><span class="meta">${progressFor().includes(x.id) ? '<span class="done">✓</span>' : '→'}</span><strong>${esc(x.title)}</strong><span class="meta">${x.duration}</span></a>`).join('')}</div>
+          ${l.case ? `<div class="case-inline"><span class="meta">INDUSTRY CASE</span><h3>${esc(l.case)}</h3><p>Examine the choices behind the experience, and what they reveal about contemporary hospitality.</p><a class="button text" href="#/cases">OPEN CASE FILES →</a></div>` : ''}
         </div>
         <div>
           <span class="eyebrow">LEARNING OBJECTIVES</span>
-          <ul class="objective-list">${l.ideas.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>
-          <blockquote class="case-quote">“${esc(l.intro)}”</blockquote>
+          <ul class="objective-list">${(l.ideas || []).map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>
+          ${l.intro ? `<blockquote class="case-quote">“${esc(l.intro)}”</blockquote>` : ''}
         </div>
       </div>
       ${materials.length ? `<section class="materials-block" aria-label="Additional materials for module ${m.number}">
         <span class="eyebrow">ADDITIONAL MATERIALS · MODULE ${m.number}</span>
         <div class="lesson-list">${materials.map(x => `<a class="lesson-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer"><span class="meta">↗</span><strong>${esc(x.note)}</strong><span class="meta">${esc(linkHost(x.url))}</span></a>`).join('')}</div>
       </section>` : ''}
-      <div class="lesson-footer"><a class="button text" href="#/course">← ALL MODULES</a>${button('START MODULE', `lesson/${m.id}/${l.id}`)}</div>
+      <div class="lesson-footer"><a class="button text" href="#/course">← ALL MODULES</a>${l.id ? button(btnLabel, `lesson/${m.id}/${l.id}`) : ''}</div>
     </main>`);
   }
 
   function lessonPage(mid, lid) {
-    const m = C.modules.find(x => x.id === mid), l = m?.lessons.find(x => x.id === lid);
+    const m = C.modules.find(x => x.id === mid || x.number === mid || String(Number(x.number)) === mid), l = m?.lessons.find(x => x.id === lid);
     if (!l) return notFound();
     const i = allLessons.findIndex(x => x.id === lid), next = allLessons[i + 1];
     const done = progressFor().includes(l.id);
@@ -1241,10 +1245,16 @@ window.bootCourse = () => {
   }
 
   /* ----------------------------------------------------------------- router */
+  let lastRenderedRoute = null;
   function render() {
     state = getState();
     closeLightbox();
     syncTelegramNavigation();
+    const currentHash = location.hash;
+    if (lastRenderedRoute !== currentHash) {
+      window.scrollTo(0, 0);
+      lastRenderedRoute = currentHash;
+    }
     const r = route();
     const u = user();
     if (r[0] !== 'chat') stopChatRealtime();

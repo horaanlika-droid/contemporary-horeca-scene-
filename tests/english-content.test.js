@@ -1271,3 +1271,43 @@ test('the russian admin console builds inline menus and saves block edits', asyn
   assert.equal(data.editor.media.length, 0, 'the uploaded photo is removed from the library');
   assert.equal(data.editor.overrides.some(o => o.text === '/media/img-test.jpg'), false, 'blocks using the photo return to their published image');
 });
+
+test('admin can grant course access manually without requiring Tribute payment', async t => {
+  const server = await isolatedServer(t);
+  const token = await adminToken(server);
+  const command = text => server.post('/api/admin/bot-command', { command: text }, token);
+
+  /* 1. Admin admits a friend by telegram username who has not paid through Tribute */
+  const admitFriend = await command('/admit @friendofauthor');
+  assert.equal(admitFriend.status, 200);
+  assert.equal(admitFriend.body.ok, true);
+  assert.match(admitFriend.body.reply, /admitted/i);
+
+  /* The friend can now register on the shared registration page without payment */
+  const registered = await server.post('/api/register', {
+    telegramIdentity: 'friendofauthor',
+    name: 'Friend User',
+    email: 'friend@example.test',
+    password: 'secure-friend-password-123',
+  });
+  assert.equal(registered.status, 201);
+  assert.equal(registered.body.unlocked, true);
+  assert.equal(registered.body.user.email, 'friend@example.test');
+
+  /* 2. Admin issues direct login credentials for another friend without payment */
+  const issueDirect = await command('/issue @colleague123');
+  assert.equal(issueDirect.status, 200);
+  assert.equal(issueDirect.body.ok, true);
+  assert.match(issueDirect.body.reply, /Credentials issued/i);
+  const loginMatch = issueDirect.body.reply.match(/Login:\s*<code>([^<]+)<\/code>/i);
+  const passMatch = issueDirect.body.reply.match(/Password:\s*<code>([^<]+)<\/code>/i);
+  assert.ok(loginMatch && passMatch, 'Login and password are generated');
+
+  /* Colleague can sign in directly with the issued login and password */
+  const colleagueSignIn = await server.post('/api/access', {
+    login: loginMatch[1],
+    password: passMatch[1],
+  });
+  assert.equal(colleagueSignIn.status, 200);
+  assert.equal(colleagueSignIn.body.unlocked, true);
+});

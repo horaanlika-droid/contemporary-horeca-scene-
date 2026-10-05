@@ -444,7 +444,7 @@ a.simple-row:hover strong{color:var(--red)}
 .case-inline p{margin:0;color:#3d3d3a;font-size:14px}
 .challenge-panel{margin-top:clamp(30px,4vw,48px);padding:clamp(22px,2.6vw,32px);border:1px solid var(--line-strong);display:grid;grid-template-columns:1fr 190px;gap:28px;align-items:center;background:var(--paper-soft)}
 .challenge-panel p{margin:0;color:#3d3d3a}
-.lesson-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px;margin-top:clamp(28px,3.6vw,40px)}
+.lesson-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px;margin-top:clamp(28px,3.6vw,40px);position:relative;z-index:5}
 
 /* --- forms ---------------------------------------------------------------- */
 .form-control{display:block;width:100%;border:1px solid var(--line-strong);background:var(--white);padding:14px 15px;color:var(--ink);outline:none;border-radius:0;transition:border-color .25s var(--ease),box-shadow .25s var(--ease);font-size:14.5px}
@@ -731,7 +731,34 @@ body.lightbox-open{overflow:hidden}
   .course-meta div{min-width:88px}
   .module-detail{gap:26px}
 
-  .lesson-layout{padding-bottom:96px}
+  .app-main{padding-bottom:calc(104px + max(env(safe-area-inset-bottom,0px),var(--tg-safe-area-inset-bottom,0px)))}
+  .lesson-layout{padding-bottom:16px}
+  .lesson-footer{
+    flex-direction:column-reverse;
+    align-items:stretch;
+    gap:14px;
+    padding-top:20px;
+    margin-top:28px;
+  }
+  .lesson-footer .button:not(.text){
+    width:100%;
+    justify-content:center;
+    text-align:center;
+  }
+  .lesson-footer .button.text{
+    align-self:center;
+    text-align:center;
+  }
+  .lesson-footer>div{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .lesson-footer>div .button{
+    width:100%;
+    justify-content:center;
+  }
   .challenge-panel{grid-template-columns:1fr;gap:18px}
   .submission-row{grid-template-columns:1fr auto;gap:8px}
   .submission-row>*:nth-child(3){display:none}
@@ -775,6 +802,7 @@ body.lightbox-open{overflow:hidden}
 body{min-height:var(--tg-viewport-height,100vh)}
 .telegram-webapp .site-header,.telegram-webapp .app-header{padding-top:max(env(safe-area-inset-top,0px),var(--tg-safe-area-inset-top,0px));min-height:70px}
 .telegram-webapp .mobile-bottom{height:calc(68px + max(env(safe-area-inset-bottom,0px),var(--tg-safe-area-inset-bottom,0px)));padding-bottom:max(env(safe-area-inset-bottom,0px),var(--tg-safe-area-inset-bottom,0px))}
+.telegram-webapp .app-main{padding-bottom:calc(110px + max(env(safe-area-inset-bottom,0px),var(--tg-safe-area-inset-bottom,0px)))}
 
 /* Leading-practitioner showcase and course administration */
 .figure-grid {
