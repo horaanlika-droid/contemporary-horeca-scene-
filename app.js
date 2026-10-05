@@ -122,7 +122,7 @@ window.bootCourse = () => {
   const assetSrc = name => {
     const value = String(name || '').trim();
     if (/^https?:\/\//i.test(value) || value.startsWith('/') || value.startsWith('data:')) return value;
-    return `${ASSET}${value}`;
+    return `${ASSET}${value || IMAGE_FALLBACK}`;
   };
   const image = (name, alt = '', cls = '', opts = {}) => {
     const src = esc(assetSrc(name));
@@ -131,8 +131,17 @@ window.bootCourse = () => {
     return `<img class="${classes}" src="${src}" alt="${esc(alt)}"${opts.eager ? '' : ' loading="lazy"'} decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
   };
   const isUploadedPhoto = name => /^(\/|https?:\/\/)/i.test(String(name || ''));
-  const creditGroup = name => (C.imageCredits?.files || []).find(x => x.file === name) || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (p.endsWith('-') ? name.startsWith(p) : name === p)));
-  const isIllustrative = name => (C.imageCredits?.illustrative || []).some(x => x.file === name);
+  /* Image names can be missing (a lesson without its own thumbnail falls back to
+     the module image, an emptied copy field, an awaiting upload): never assume a
+     string, or the whole page render throws and navigation appears to do nothing. */
+  const creditKey = value => (typeof value === 'string' ? value.trim() : '');
+  const creditGroup = name => {
+    const key = creditKey(name);
+    if (!key) return null;
+    return (C.imageCredits?.files || []).find(x => x.file === key)
+      || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (typeof p === 'string' && p.endsWith('-') ? key.startsWith(p) : key === p)));
+  };
+  const isIllustrative = name => { const key = creditKey(name); return Boolean(key) && (C.imageCredits?.illustrative || []).some(x => x.file === key); };
   const creditFor = name => {
     if (isUploadedPhoto(name)) return '<span class="img-credit">PHOTO · UPDATED BY THE COURSE TEAM</span>';
     const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES';
@@ -297,7 +306,7 @@ window.bootCourse = () => {
                 <figcaption><span class="meta">Street find</span>A lemon press picked up on the pavement — cheap detail, real patina.</figcaption>
               </figure>
             </div>
-            <a class="button text" href="#/course" style="margin-top:24px">OPEN MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} <span aria-hidden="true">→</span></a>
+            <a class="button text" href="#/module/${C.modules.find(m => m.id === 'budget')?.id || 'budget'}" style="margin-top:24px">OPEN MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} <span aria-hidden="true">→</span></a>
           </div>
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
@@ -474,9 +483,12 @@ window.bootCourse = () => {
   }
 
   function lessonPage(mid, lid) {
-    const m = C.modules.find(x => x.id === mid || x.number === mid || String(Number(x.number)) === mid), l = m?.lessons.find(x => x.id === lid);
+    const m = C.modules.find(x => x.id === mid || x.number === mid || String(Number(x.number)) === mid);
+    /* Read the lesson through the merged course list so a lesson without its own
+       media falls back to the module image exactly like the rest of the app. */
+    const i = allLessons.findIndex(x => x.id === lid && (!m || x.module.id === m.id)), l = allLessons[i] || m?.lessons.find(x => x.id === lid);
     if (!l) return notFound();
-    const i = allLessons.findIndex(x => x.id === lid), next = allLessons[i + 1];
+    const next = allLessons[i + 1];
     const done = progressFor().includes(l.id);
     return layout(`<main class="app-main"><article class="lesson-layout">
       <div class="crumb"><a href="#/course">THE ELECTIVE</a> <span>/</span> <a href="#/module/${m.id}">MODULE ${m.number}</a> <span>/</span> <span>LESSON ${String(i + 1).padStart(2, '0')}</span></div>
@@ -485,7 +497,7 @@ window.bootCourse = () => {
         <div class="lesson-number"><span class="meta">LESSON ${String(i + 1).padStart(2, '0')}</span><br><span class="meta">${l.duration.toUpperCase()}</span></div>
       </div>
       <section class="video-frame" aria-label="Lesson media">
-        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${ASSET}${esc(l.thumbnail)}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}${creditFor(l.thumbnail)}</div>
+        <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${esc(assetSrc(l.thumbnail))}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}${creditFor(l.thumbnail)}</div>
         <div class="video-info">
           <span class="eyebrow">${l.videoUrl ? 'LESSON FILM' : 'EDITORIAL LESSON'} · ${l.duration.toUpperCase()}</span>
           <h2>${esc(l.title)}</h2>
@@ -1261,29 +1273,48 @@ window.bootCourse = () => {
     if (r[0] === 'login') { go('dashboard'); return; }
     if (!r[0]) { app.innerHTML = landing(); return; }
     if (!u) { location.hash = '/'; return; }
-    if (r[0] === 'dashboard' && u.role === 'STUDENT') app.innerHTML = dashboard();
-    else if (r[0] === 'course') app.innerHTML = coursePage();
-    else if (r[0] === 'module') app.innerHTML = modulePage(r[1]);
-    else if (r[0] === 'lesson') app.innerHTML = lessonPage(r[1], r[2]);
-    else if (r[0] === 'cases') app.innerHTML = casesPage();
-    else if (r[0] === 'projects') app.innerHTML = projectsPage();
-    else if (r[0] === 'project') app.innerHTML = projectPage(r[1]);
-    else if (r[0] === 'assignment') app.innerHTML = assignmentPage(r[1], r[2]);
-    else if (r[0] === 'instructor' && u.role === 'INSTRUCTOR') app.innerHTML = instructorPage();
-    else if (r[0] === 'review' && u.role === 'INSTRUCTOR') app.innerHTML = reviewPage(r[1]);
-    else if (r[0] === 'progress') app.innerHTML = progressPage();
-    else if (r[0] === 'quiz') app.innerHTML = quizPage();
-    else if (r[0] === 'certificate') app.innerHTML = certificatePage();
-    else if (r[0] === 'chat') app.innerHTML = chatPage();
-    else if (r[0] === 'admin' && u.role === 'ADMIN') app.innerHTML = adminPage();
-    else if (r[0] === 'updates') app.innerHTML = updatesPage();
-    else if (r[0] === 'faq') app.innerHTML = faqPage();
-    else if (r[0] === 'credits') app.innerHTML = creditsPage();
-    else if (r[0] === 'profile') app.innerHTML = profilePage();
-    else if (r[0] === 'search') app.innerHTML = searchPage(new URLSearchParams(location.hash.split('?')[1] || '').get('q') || '');
-    else if (r[0] === 'logout') { sessionStorage.removeItem('chs-user'); go(''); }
-    else app.innerHTML = u.role === 'STUDENT' ? notFound() : `<main class="app-main"><div class="page-head"><div><span class="eyebrow">403 · ACCESS RESTRICTED</span><h1 class="page-title">This space<br>is <em>role-restricted</em>.</h1><p>Your current role does not have access to this area.</p></div><a class="button" href="#/${u.role === 'INSTRUCTOR' ? 'instructor' : u.role === 'ADMIN' ? 'admin' : 'dashboard'}">RETURN TO YOUR SPACE <span aria-hidden="true">↗</span></a></div></main>`;
+    /* A screen that fails to build must never leave the previous view in place:
+       the learner would tap a button, see the address change and nothing happen. */
+    try {
+      const view = pageView(r, u);
+      if (view) app.innerHTML = view;
+    } catch (error) {
+      console.error('Contemporary Horeca Scene · this screen failed to render:', r[0], error);
+      app.innerHTML = renderFallback();
+      toast('THIS SCREEN COULD NOT BE DISPLAYED · PLEASE TRY AGAIN');
+    }
     if (r[0] === 'chat') void startChatPage(u, r[1] || '');
+  }
+
+  function pageView(r, u) {
+    if (r[0] === 'dashboard' && u.role === 'STUDENT') return dashboard();
+    if (r[0] === 'course') return coursePage();
+    if (r[0] === 'module') return modulePage(r[1]);
+    if (r[0] === 'lesson') return lessonPage(r[1], r[2]);
+    if (r[0] === 'cases') return casesPage();
+    if (r[0] === 'projects') return projectsPage();
+    if (r[0] === 'project') return projectPage(r[1]);
+    if (r[0] === 'assignment') return assignmentPage(r[1], r[2]);
+    if (r[0] === 'instructor' && u.role === 'INSTRUCTOR') return instructorPage();
+    if (r[0] === 'review' && u.role === 'INSTRUCTOR') return reviewPage(r[1]);
+    if (r[0] === 'progress') return progressPage();
+    if (r[0] === 'quiz') return quizPage();
+    if (r[0] === 'certificate') return certificatePage();
+    if (r[0] === 'chat') return chatPage();
+    if (r[0] === 'admin' && u.role === 'ADMIN') return adminPage();
+    if (r[0] === 'updates') return updatesPage();
+    if (r[0] === 'faq') return faqPage();
+    if (r[0] === 'credits') return creditsPage();
+    if (r[0] === 'profile') return profilePage();
+    if (r[0] === 'search') return searchPage(new URLSearchParams(location.hash.split('?')[1] || '').get('q') || '');
+    if (r[0] === 'logout') { sessionStorage.removeItem('chs-user'); go(''); return null; }
+    if (u.role === 'STUDENT') return notFound();
+    return `<main class="app-main"><div class="page-head"><div><span class="eyebrow">403 · ACCESS RESTRICTED</span><h1 class="page-title">This space<br>is <em>role-restricted</em>.</h1><p>Your current role does not have access to this area.</p></div><a class="button" href="#/${u.role === 'INSTRUCTOR' ? 'instructor' : u.role === 'ADMIN' ? 'admin' : 'dashboard'}">RETURN TO YOUR SPACE <span aria-hidden="true">↗</span></a></div></main>`;
+  }
+
+  function renderFallback() {
+    const home = user()?.role === 'INSTRUCTOR' ? 'instructor' : user()?.role === 'ADMIN' ? 'admin' : 'dashboard';
+    return layout(`<main class="app-main"><div class="page-head"><div><span class="eyebrow">DISPLAY ERROR</span><h1 class="page-title">This screen could not be <em>displayed</em>.</h1><p>Something interrupted this page. Return to your learning space, or reload the page to continue where you left off.</p></div><a class="button" href="#/${home}">RETURN TO YOUR SPACE <span aria-hidden="true">↗</span></a></div></main>`);
   }
 
   function toast(text) {
