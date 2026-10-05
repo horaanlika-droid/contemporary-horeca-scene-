@@ -134,6 +134,32 @@
     document.body.appendChild(script);
   });
 
+  /* The course content is protected server-side. A <script src> tag cannot carry
+     the access token, so it depends on the session cookie — and in-app WebViews,
+     Telegram on iOS and third-party iframes routinely refuse that cookie. The
+     learner then signed in successfully and still stayed on "course content is
+     locked", with no module or learning unit to open. Load the content with the
+     token header first, and keep the script tag only as a fallback. */
+  const loadContent = async src => {
+    if (window.COURSE) return;
+    const token = getSavedToken();
+    try {
+      const response = await fetch(src, {
+        headers: { Accept: 'text/javascript', ...(token ? { 'X-Access-Token': token } : {}) },
+        cache: 'no-store',
+      });
+      if (response.ok) {
+        const code = await response.text();
+        const script = document.createElement('script');
+        script.dataset.content = 'course-data';
+        script.textContent = code;
+        document.body.appendChild(script);
+        if (window.COURSE) return;
+      }
+    } catch { /* offline or blocked: fall through to the script tag */ }
+    await loadScript(src);
+  };
+
   /* --- unlock ------------------------------------------------------------- */
   async function unlock(silent) {
     if (booted) return;
@@ -143,7 +169,7 @@
     }
     booted = true;
     try {
-      await loadScript(CONTENT);
+      await loadContent(CONTENT);
     } catch {
       booted = false;
       try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
@@ -157,7 +183,14 @@
     }
     if (!silent) toast('ACCESS GRANTED · ALL MODULES AND LESSONS ARE AVAILABLE');
     if (!location.hash || location.hash === '#/' || location.hash === '#') location.hash = '/dashboard';
-    if (typeof window.bootCourse === 'function') window.bootCourse();
+    if (typeof window.bootCourse === 'function') {
+      try {
+        window.bootCourse();
+      } catch (error) {
+        console.error('Contemporary Horeca Scene · the course app could not start:', error);
+        renderGate('THE COURSE COULD NOT START IN THIS BROWSER. PLEASE RELOAD THE PAGE, AND CONTACT SUPPORT IF THIS REPEATS.', 'login');
+      }
+    }
   }
 
   const fetchTributeInfo = async () => {

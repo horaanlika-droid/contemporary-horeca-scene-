@@ -1287,7 +1287,13 @@ window.bootCourse = () => {
   }
 
   function pageView(r, u) {
-    if (r[0] === 'dashboard' && u.role === 'STUDENT') return dashboard();
+    /* The sign-in gate lands everyone on #/dashboard, so that address has to open
+       the right space for the role instead of an access-restricted dead end. */
+    if (r[0] === 'dashboard') {
+      if (u.role === 'STUDENT') return dashboard();
+      if (u.role === 'ADMIN') return adminPage();
+      if (u.role === 'INSTRUCTOR') return instructorPage();
+    }
     if (r[0] === 'course') return coursePage();
     if (r[0] === 'module') return modulePage(r[1]);
     if (r[0] === 'lesson') return lessonPage(r[1], r[2]);
@@ -1601,7 +1607,26 @@ window.bootCourse = () => {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
   }
 
+  /* Some in-app browsers — Telegram WebViews on older devices, embedded previews —
+     do not deliver hashchange for in-page links. The address then stays the same,
+     the screen never repaints and every module or learning unit looks dead. Route
+     clicks are confirmed here, and popstate covers back/forward navigation. */
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest?.('a[href^="#/"]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    const before = location.hash;
+    setTimeout(() => {
+      /* A later click may already have moved the address — leave it alone then. */
+      if (location.hash !== before && location.hash !== href) return;
+      if (location.hash !== href) location.hash = href;
+      if (lastRenderedRoute !== href) render();
+    }, 120);
+  });
+
   window.addEventListener('hashchange', render);
+  window.addEventListener('popstate', render);
   if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', async () => { await syncServerState(); render(); startLiveSync(); });
   else { syncServerState().finally(() => { render(); startLiveSync(); }); }
   if (tg?.initData) authenticateTelegram();
