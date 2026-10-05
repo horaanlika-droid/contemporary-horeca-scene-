@@ -202,6 +202,7 @@ window.bootCourse = () => {
           <div class="hero-actions">
             <a class="button" href="#/course">EXPLORE THE COURSE <span aria-hidden="true">↗</span></a>
             <a class="button text" href="#/dashboard">YOUR LEARNING SPACE <span aria-hidden="true">→</span></a>
+            <button class="button text hero-tribute-btn" type="button" data-tribute-open>GET ACCESS <span aria-hidden="true">↗</span></button>
           </div>
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
@@ -331,6 +332,24 @@ window.bootCourse = () => {
         <h2>Stay curious about what comes next.</h2>
         <a class="button" href="#/dashboard">GO TO YOUR LEARNING SPACE <span aria-hidden="true">↗</span></a>
       </section>
+
+      <div id="tribute-popup" class="tribute-popup" aria-hidden="true">
+        <div class="tribute-backdrop" data-tribute-close></div>
+        <div class="tribute-dialog" role="dialog" aria-modal="true" aria-label="Tribute access">
+          <button class="tribute-close" data-tribute-close aria-label="Close">CLOSE</button>
+          <div class="tribute-head">
+            <span class="eyebrow">TRIBUTE · DIGITAL PRODUCT</span>
+            <h2>Get access<br><em>via Tribute.</em></h2>
+            <p>Payment is processed in Tribute, outside this app. The course never sees card data.</p>
+          </div>
+          <div class="tribute-body">
+            ${window.__chsTributeInfo?.purchaseUrl ? `<a class="tribute-link" href="${esc(window.__chsTributeInfo.purchaseUrl)}" target="_blank" rel="noopener noreferrer">PAY ON TRIBUTE <span aria-hidden="true">↗</span></a>
+            <p class="tribute-note">After payment, the bot sends your login and password automatically — no registration form needed.</p>` : '<p class="tribute-note">Tribute payment link is not configured yet. Contact the course team.</p>'}
+            ${window.__chsTributeInfo?.botStartUrl ? `<a class="tribute-link tribute-link-bot" href="${esc(window.__chsTributeInfo.botStartUrl)}" target="_blank" rel="noopener noreferrer">OPEN THE ACCESS BOT <span aria-hidden="true">↗</span></a>
+            <p class="tribute-note">Already paid? Open the bot — it checks payment and sends credentials automatically.</p>` : ''}
+          </div>
+        </div>
+      </div>
     </main>`, true);
   }
 
@@ -1081,13 +1100,29 @@ window.bootCourse = () => {
   /* ---------------------------------------------------- profile & utilities */
   function profilePage() {
     const u = user();
+    const editing = sessionStorage.getItem('chs-profile-editing') === '1';
+    const editForm = editing ? `<form id="profile-edit-form" class="profile-edit-form">
+          <span class="eyebrow">EDIT PROFILE</span>
+          <h2>Update your details.</h2>
+          <p>Your Telegram account was approved by the course admin. Supplement your name and email so your instructor can address you properly.</p>
+          <div class="field"><label for="profile-edit-name">Full name</label><input class="form-control" id="profile-edit-name" name="name" type="text" autocomplete="name" maxlength="100" required placeholder="${esc(u.name)}" value="${esc(u.name)}"></div>
+          <div class="field"><label for="profile-edit-email">Email address</label><input class="form-control" id="profile-edit-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="${esc(u.email)}" value="${esc(u.email)}"></div>
+          <p id="profile-edit-error" class="form-help" role="alert"></p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+            <button class="button" type="submit">SAVE CHANGES <span aria-hidden="true">↗</span></button>
+            <button class="button light" type="button" data-action="profile-cancel">CANCEL</button>
+          </div>
+        </form>` : '';
     return layout(`<main class="app-main">
       <div class="page-head">
         <div><span class="eyebrow">YOUR ACCOUNT · ${esc(u.role)} PROFILE</span><h1 class="page-title">${esc(u.name).toUpperCase()}</h1><p>Your learning profile for this institution and edition.</p></div>
         <span class="avatar" style="width:58px;height:58px;font-size:16px">${initials(u.name)}</span>
       </div>
       <section class="institution-panel">
-        <span class="eyebrow">PROFILE DETAILS</span>
+        <div class="profile-head-row">
+          <span class="eyebrow">PROFILE DETAILS</span>
+          ${u.role === 'STUDENT' ? `<button class="button light" type="button" data-action="profile-edit">EDIT PROFILE <span aria-hidden="true">↗</span></button>` : ''}
+        </div>
         <div class="simple-list">
           <div class="simple-row"><span class="meta">NAME</span><strong>${esc(u.name)}</strong></div>
           <div class="simple-row"><span class="meta">EMAIL</span><strong>${esc(u.email)}</strong></div>
@@ -1098,6 +1133,7 @@ window.bootCourse = () => {
           <div class="simple-row"><span class="meta">ENROLLED EDITION</span><strong>${C.edition} · ${esc(C.title)}</strong></div>
           <div class="simple-row"><span class="meta">DEVICE ACCESS</span><strong>UNLOCKED · 30 DAYS</strong></div>
         </div>
+        ${editForm}
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
           <button class="button light" data-action="logout">SIGN OUT <span aria-hidden="true">↗</span></button>
           <button class="button text" data-action="lock">LOCK THE COURSE ON THIS DEVICE →</button>
@@ -1114,7 +1150,7 @@ window.bootCourse = () => {
           <div class="simple-row"><span class="meta">MANUAL ADMISSION</span><strong>${state.myPurchase.admissionApproved ? 'APPROVED' : 'AWAITING ADMIN REVIEW'}</strong></div>
           <div class="simple-row"><span class="meta">SHARED REGISTRATION PAGE</span><strong>${esc(state.myPurchase.deliveryStatus === 'DELIVERED' ? 'SENT BY THE ACCESS BOT' : state.myPurchase.deliveryStatus)}</strong></div>
         </div>
-        <p style="margin-top:14px">The shared registration page is reusable; the course admin approves access against your Telegram account. The password you create is personal to your account and cannot be retrieved automatically. If you forget it, contact support only by email: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>. Refunds follow the Tribute policy inside Telegram.</p>
+        <p style="margin-top:14px">Your login and password were sent automatically by the bot after your Tribute payment. The password is personal to your account and cannot be retrieved automatically; if you forget it, contact support only by email: <a href="mailto:egor.tarasenko@him-mail.ch">egor.tarasenko@him-mail.ch</a>.</p>
       </section>` : u.role === 'STUDENT' ? '<section class="institution-panel" style="margin-top:22px"><span class="eyebrow">YOUR PURCHASE</span><p>No verified Tribute purchase is registered for this account yet. Write to the course team if you have paid — the record appears here automatically.</p></section>' : ''}
     </main>`);
   }
@@ -1355,12 +1391,28 @@ window.bootCourse = () => {
       const dest = e.target.closest('[data-scroll]').dataset.scroll;
       setTimeout(() => document.getElementById(dest)?.scrollIntoView({ behavior: 'smooth' }), 50);
     }
+    if (e.target.closest('[data-tribute-open]')) {
+      const popup = document.getElementById('tribute-popup');
+      if (popup) { popup.classList.add('show'); popup.setAttribute('aria-hidden', 'false'); document.body.classList.add('tribute-popup-open'); }
+      return;
+    }
+    if (e.target.closest('[data-tribute-close]')) {
+      const popup = document.getElementById('tribute-popup');
+      if (popup) { popup.classList.remove('show'); popup.setAttribute('aria-hidden', 'true'); document.body.classList.remove('tribute-popup-open'); }
+      return;
+    }
+    if (e.target.closest('[data-action="profile-edit"]')) { sessionStorage.setItem('chs-profile-editing', '1'); render(); return; }
+    if (e.target.closest('[data-action="profile-cancel"]')) { sessionStorage.removeItem('chs-profile-editing'); render(); return; }
   });
 
   document.addEventListener('ended', e => { if (e.target.matches('video[data-video-lesson]')) updateProgress(e.target.dataset.videoLesson); }, true);
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeLightbox(); return; }
+    if (e.key === 'Escape') { closeLightbox();
+      const popup = document.getElementById('tribute-popup');
+      if (popup?.classList.contains('show')) { popup.classList.remove('show'); popup.setAttribute('aria-hidden', 'true'); document.body.classList.remove('tribute-popup-open'); }
+      return;
+    }
     const figure = e.target.closest?.('.gallery-item[data-action="lightbox"]');
     if (figure && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openLightbox(figure.dataset.src, figure.querySelector('img')?.alt, figure.dataset.caption); }
   });
@@ -1456,6 +1508,21 @@ window.bootCourse = () => {
       return;
     }
     if (e.target.id === 'search-form') { const q = new FormData(e.target).get('q'); go(`search?q=${encodeURIComponent(q)}`); return; }
+    if (e.target.id === 'profile-edit-form') {
+      const fd = new FormData(e.target), name = String(fd.get('name') || '').trim(), email = String(fd.get('email') || '').trim();
+      const error = document.getElementById('profile-edit-error');
+      if (!name || !email) { if (error) error.textContent = 'Name and email are required.'; return; }
+      if (error) error.textContent = '';
+      try {
+        const response = await fetch('/api/profile', { method: 'POST', headers: { 'Content-Type': 'application/json', ...tokenHeaders() }, body: JSON.stringify({ name, email }) });
+        if (!response.ok) throw new Error((await response.json()).error || 'Profile update failed');
+        sessionStorage.removeItem('chs-profile-editing');
+        const profile = user(); if (profile) { profile.name = name; profile.email = email; sessionStorage.setItem('chs-user', JSON.stringify(profile)); localStorage.setItem('chs-user-backup', JSON.stringify(profile)); }
+        toast('PROFILE UPDATED');
+        render();
+      } catch (err) { if (error) error.textContent = err.message; }
+      return;
+    }
   });
 
   async function authenticateTelegram() {
