@@ -186,7 +186,13 @@
     document.documentElement.classList.remove('telegram-webapp');
     const escG = escapeHtml;
     const g = { ...(window.SITE?.gate || {}), ...((siteCopy && siteCopy.gate) || {}) };
-    const registering = false;
+    const tribute = window.__chsTributeInfo || {};
+    const safeHttps = value => {
+      try { const url = new URL(value); return url.protocol === 'https:' ? url.href : ''; }
+      catch { return ''; }
+    };
+    const purchaseUrl = safeHttps(tribute.purchaseUrl);
+    const botUrl = safeHttps(tribute.botStartUrl);
     const faqItems = (siteCopy?.faq || window.SITE?.faq || []).map(item => `<details class="gate-faq-item"><summary>${escG(item.question)}</summary><p>${escG(item.answer)}</p></details>`).join('');
 
     root.innerHTML = `
@@ -209,7 +215,7 @@
               <form id="login-form" novalidate>
                 <span class="eyebrow">RETURNING LEARNER</span>
                 <h2>Welcome <em>back.</em></h2>
-                <p>Sign in with the login or email and password sent by the bot after Tribute payment.</p>
+                <p>Sign in with your personal login or email and password.</p>
                 <div class="field"><label for="login-email">Login or email</label><input class="form-control" id="login-email" name="email" type="text" autocomplete="username" placeholder="login or you@example.com"></div>
                 <div class="field"><label for="login-password">Password</label><input class="form-control" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Your personal password"></div>
                 <p class="sign-in-hint">Administrator access and legacy codes can be entered in the password field without a login.</p>
@@ -217,6 +223,16 @@
                 <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
                 <p class="password-support">Forgot your password? It cannot be retrieved automatically. Contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
               </form>
+            </section>
+            <section class="gate-purchase" aria-labelledby="gate-purchase-title">
+              <span class="eyebrow">NEW HERE?</span>
+              <h3 id="gate-purchase-title">No access or password yet?</h3>
+              <p>Get course access through Tribute. Open the course bot and tap Start before paying so it can send you access instructions.</p>
+              ${botUrl ? `<a class="gate-bot-link" href="${escG(botUrl)}" target="_blank" rel="noopener noreferrer">1. Open the course bot <span aria-hidden="true">↗</span></a>` : ''}
+              ${purchaseUrl ? `<a class="button gate-purchase-button" href="${escG(purchaseUrl)}" target="_blank" rel="noopener noreferrer">GET ACCESS ON TRIBUTE <span aria-hidden="true">↗</span></a>` : `<p class="gate-purchase-unavailable">The Tribute purchase link is currently unavailable. <a href="mailto:${SUPPORT_EMAIL}">Contact support to get access</a>.</p>`}
+              <p class="gate-purchase-note">${tribute.autoCredentials
+                ? 'After confirmed payment, the bot sends your login and password. Return here to sign in.'
+                : 'After payment, the administrator verifies your admission. The bot then sends your credentials or registration instructions to set your personal password. Return here to sign in.'}</p>
             </section>
           </div>
         </div>
