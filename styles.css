@@ -932,3 +932,47 @@ body.author-open{overflow:hidden}
 .gate-faq-item[open] summary::after{content:'−'}
 .gate-faq-item p{margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.7}
 .gate-faq-item a{color:var(--ink);border-bottom:1px solid var(--red)}
+
+/* --- tribute pop-up (opens on the public landing page; never part of page flow) --- */
+body.tribute-popup-open{overflow:hidden}
+.tribute-popup{position:fixed;inset:0;z-index:75;display:none}
+.tribute-popup.show{display:block}
+.tribute-backdrop{position:absolute;inset:0;background:rgba(10,10,10,.72);backdrop-filter:blur(3px)}
+.tribute-dialog{position:relative;width:min(460px,calc(100vw - 48px));margin:auto;top:50%;transform:translateY(-50%) translateY(14px);background:var(--white);padding:clamp(26px,4vw,44px);border-bottom:3px solid var(--red);opacity:0;transition:opacity .22s var(--ease),transform .3s var(--ease);overflow-y:auto;max-height:calc(100vh - 80px)}
+.tribute-popup.show .tribute-dialog{opacity:1;transform:none}
+.tribute-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border:1px solid var(--line-strong);background:#fff;cursor:pointer;font-size:13px;color:var(--ink);transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease)}
+.tribute-close:hover{background:var(--red);border-color:var(--red);color:#fff}
+.tribute-head{margin-bottom:clamp(18px,3vw,28px)}
+.tribute-head .eyebrow{margin-bottom:14px}
+.tribute-head h2{font-family:var(--sans);font-weight:200;font-size:clamp(28px,3.4vw,38px);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 12px}
+.tribute-head h2 em{font-family:var(--serif);font-style:italic;font-weight:300;text-transform:none;color:var(--red)}
+.tribute-head p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0;max-width:38ch}
+.tribute-body{display:flex;flex-direction:column;gap:14px}
+.tribute-link{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:16px 24px;min-height:52px;background:var(--ink);color:#fff;border:1px solid var(--ink);text-decoration:none;font-family:var(--ui);font-weight:500;font-size:11px;letter-spacing:var(--track);text-transform:uppercase;transition:color .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease)}
+.tribute-link:before{content:'';position:absolute;inset:0;background:var(--red);transform:translateY(101%);transition:transform .42s var(--ease)}
+.tribute-link>*{position:relative;z-index:1}
+.tribute-link:hover{color:#fff;border-color:var(--red);transform:translateY(-2px)}
+.tribute-link:hover:before{transform:translateY(0)}
+.tribute-link span{transition:transform .35s var(--ease);display:inline-block}
+.tribute-link:hover span{transform:translate(3px,-3px)}
+.tribute-link-bot{background:var(--paper-warm);color:var(--ink);border-color:var(--line-strong)}
+.tribute-link-bot:before{background:var(--paper-soft)}
+.tribute-link-bot:hover{color:#fff;border-color:var(--red)}
+.tribute-note{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+.tribute-note strong{color:var(--ink);font-weight:500}
+
+@media(max-width:520px){
+  .tribute-dialog{padding:22px 16px 26px}
+  .tribute-close{top:8px;right:8px;width:32px;height:32px}
+}
+
+/* --- profile edit (supplement name + email after bot-issued credentials) --- */
+.profile-head-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+.profile-edit-form{border-top:1px solid var(--line);padding-top:22px;margin-top:18px}
+.profile-edit-form .eyebrow{margin-bottom:14px}
+.profile-edit-form h2{font-family:var(--sans);font-weight:200;font-size:clamp(26px,3vw,34px);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 12px}
+.profile-edit-form h2 em{font-family:var(--serif);font-style:italic;font-weight:300;text-transform:none;color:var(--red)}
+.profile-edit-form>p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0 0 22px;max-width:50ch}
+@media(max-width:760px){
+  .profile-head-row{flex-direction:column;align-items:flex-start}
+}

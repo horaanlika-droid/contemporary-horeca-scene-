@@ -19,7 +19,7 @@
   let booted = false;
   let currentUser = null;
   let siteCopy = null;
-  let tributeInfo = null;
+  window.__chsTributeInfo = null;
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -82,22 +82,6 @@
     }
   };
 
-  const readRegistrationMode = () => {
-    try {
-      const url = new URL(window.location.href);
-      const value = url.searchParams.get('register');
-      const requested = value === '1' || value === 'true' || url.searchParams.has('invite');
-      url.searchParams.delete('register');
-      url.searchParams.delete('invite');
-      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
-      return requested;
-    } catch {
-      return false;
-    }
-  };
-
-  let registrationMode = readRegistrationMode();
-
   /* --- server conversation ------------------------------------------------ */
   const apiStatus = async () => {
     try {
@@ -130,31 +114,6 @@
       const payload = await response.json().catch(() => ({}));
       if (response.ok && payload.unlocked) {
         saveSession(payload.token, payload.user);
-        return { state: 'granted', payload };
-      }
-      return { state: 'denied', error: payload.error || '' };
-    } catch {
-      return { state: 'unsupported' };
-    }
-  };
-
-  const apiRegister = async formData => {
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          telegramIdentity: formData.telegramIdentity,
-          clientId: getClientId(),
-        }),
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (response.ok && payload.unlocked) {
-        saveSession(payload.token, payload.user);
-        registrationMode = false;
         return { state: 'granted', payload };
       }
       return { state: 'denied', error: payload.error || '' };
@@ -222,32 +181,13 @@
     }
   };
 
-  function renderGate(message = '', mode = registrationMode ? 'register' : 'login') {
+  function renderGate(message = '', mode = 'login') {
     booted = false;
     document.documentElement.classList.remove('telegram-webapp');
     const escG = escapeHtml;
     const g = { ...(window.SITE?.gate || {}), ...((siteCopy && siteCopy.gate) || {}) };
-    const registering = mode === 'register';
-    const purchaseUrl = tributeInfo && tributeInfo.purchaseUrl ? tributeInfo.purchaseUrl : '';
-    const botUrl = tributeInfo && tributeInfo.botStartUrl ? tributeInfo.botStartUrl : '';
-    const purchaseHint = purchaseUrl ? `<p class="tribute-hint">No login yet? <a href="${escG(purchaseUrl)}" target="_blank" rel="noopener noreferrer">Get access on Tribute ↗</a> — after payment the bot will send your login and password automatically.</p>` : '';
-    const botHint = botUrl ? `<p class="tribute-hint tribute-hint-bot">Already paid? <a href="${escG(botUrl)}" target="_blank" rel="noopener noreferrer">Open the bot ↗</a> — it checks payment automatically.</p>` : '';
-    const combinedHint = purchaseHint + botHint;
+    const registering = false;
     const faqItems = (siteCopy?.faq || window.SITE?.faq || []).map(item => `<details class="gate-faq-item"><summary>${escG(item.question)}</summary><p>${escG(item.answer)}</p></details>`).join('');
-    const registrationPanel = `<form id="register-form" novalidate>
-          <span class="eyebrow">MANUAL ADMISSION · CREATE YOUR ACCOUNT</span>
-          <h2>Set your <em>password.</em></h2>
-          <p>This is the shared registration page. The course admin verifies payment and approves your Telegram account in the bot before registration is enabled.</p>
-          <div class="field"><label for="register-telegram">Telegram username or numeric ID</label><input class="form-control" id="register-telegram" name="telegramIdentity" type="text" autocomplete="off" maxlength="33" required placeholder="@username or 123456789"></div>
-          <p class="sign-in-hint">Enter the same Telegram account you used with the course bot. Send <code>/id</code> to the bot if you need your numeric ID.</p>
-          <div class="field"><label for="register-name">Full name</label><input class="form-control" id="register-name" name="name" type="text" autocomplete="name" maxlength="100" required placeholder="Your name"></div>
-          <div class="field"><label for="register-email">Email address</label><input class="form-control" id="register-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
-          <div class="field"><label for="register-password">Create a personal password</label><input class="form-control" id="register-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="At least 10 characters"></div>
-          <div class="field"><label for="register-confirm">Confirm password</label><input class="form-control" id="register-confirm" name="confirm" type="password" autocomplete="new-password" minlength="10" maxlength="128" required placeholder="Enter the same password again"></div>
-          <p class="account-security-note">Your password is personal to your account and is used for future sign-ins. You can also receive a login and password automatically from the bot after paying on Tribute. It cannot be retrieved automatically; if you lose it, contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
-          <p id="register-error" class="form-help" role="alert">${escG(message)}</p>
-          ${purchaseUrl ? purchaseHint : ""}<button class="button" type="submit" style="width:100%">CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span></button>
-        </form>`;
 
     root.innerHTML = `
     <main class="gate-page">
@@ -265,11 +205,7 @@
         <div class="gate-form-wrap">
           <div class="gate-form">
               <div class="gate-lock"><i aria-hidden="true">✳</i><span>PERSONAL COURSE ACCESS<br>Admission approved manually in Telegram</span></div>
-            <div class="gate-auth-tabs" role="group" aria-label="Account access">
-              <button type="button" data-gate-mode="login" class="${registering ? '' : 'active'}" aria-pressed="${!registering}">LOG IN</button>
-              <button type="button" data-gate-mode="register" class="${registering ? 'active' : ''}" aria-pressed="${registering}">REGISTER</button>
-            </div>
-            <section class="gate-auth-panel" ${registering ? 'hidden' : ''}>
+            <section class="gate-auth-panel">
               <form id="login-form" novalidate>
                 <span class="eyebrow">RETURNING LEARNER</span>
                 <h2>Welcome <em>back.</em></h2>
@@ -277,12 +213,11 @@
                 <div class="field"><label for="login-email">Login or email</label><input class="form-control" id="login-email" name="email" type="text" autocomplete="username" placeholder="login or you@example.com"></div>
                 <div class="field"><label for="login-password">Password</label><input class="form-control" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Your personal password"></div>
                 <p class="sign-in-hint">Administrator access and legacy codes can be entered in the password field without a login.</p>
-                ${combinedHint}<p id="gate-error" class="form-help" role="alert">${registering ? '' : escG(message)}</p>
+                <p id="gate-error" class="form-help" role="alert">${escG(message)}</p>
                 <button class="button" type="submit" style="width:100%">SIGN IN <span aria-hidden="true">↗</span></button>
                 <p class="password-support">Forgot your password? It cannot be retrieved automatically. Contact support only by email: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
               </form>
             </section>
-            <section class="gate-auth-panel" ${registering ? '' : 'hidden'}>${registrationPanel}</section>
           </div>
         </div>
       </div>
@@ -316,13 +251,7 @@
     </main>`;
 
     root.querySelector('[data-scroll-info]')?.addEventListener('click', () => document.getElementById('gate-info')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    root.querySelectorAll('[data-gate-mode]').forEach(button => {
-      button.addEventListener('click', () => {
-        registrationMode = button.dataset.gateMode === 'register';
-        renderGate('', button.dataset.gateMode);
-      });
-    });
-    document.querySelector('.gate-auth-panel:not([hidden]) input')?.focus({ preventScroll: true });
+    document.querySelector('.gate-auth-panel input')?.focus({ preventScroll: true });
   }
 
   /* --- forms --------------------------------------------------------------- */
@@ -351,38 +280,6 @@
       form.classList.add('shake');
       return;
     }
-
-    if (form.id === 'register-form') {
-      event.preventDefault();
-      const button = form.querySelector('button[type="submit"]');
-      const error = document.getElementById('register-error');
-      const values = Object.fromEntries(new FormData(form).entries());
-      const password = String(values.password || '');
-      const confirm = String(values.confirm || '');
-      if (!String(values.telegramIdentity || '').trim()) {
-        error.textContent = 'Enter the Telegram username or numeric ID you used with the course bot.';
-        return;
-      }
-      if (password.length < 10) {
-        error.textContent = 'Choose a password with at least 10 characters.';
-        return;
-      }
-      if (password !== confirm) {
-        error.textContent = 'The passwords do not match.';
-        return;
-      }
-      if (button) { button.disabled = true; button.textContent = 'CREATING YOUR ACCOUNT…'; }
-      error.textContent = '';
-      const result = await apiRegister({ name: values.name, email: values.email, password, telegramIdentity: values.telegramIdentity });
-      if (result.state === 'granted') { await unlock(); return; }
-      if (button) { button.disabled = false; button.innerHTML = 'CREATE ACCOUNT &amp; OPEN COURSE <span aria-hidden="true">↗</span>'; }
-      error.textContent = result.state === 'unsupported'
-        ? 'The secure registration service is temporarily unavailable. Please try again shortly.'
-        : (result.error || 'Your account could not be created. Please check the details and try again.');
-      form.classList.remove('shake');
-      void form.offsetWidth;
-      form.classList.add('shake');
-    }
   });
 
   /* --- boot --------------------------------------------------------------- */
@@ -397,10 +294,10 @@
     }
     const [status, site, tribute] = await Promise.all([apiStatus(), fetchSiteCopy(), fetchTributeInfo()]);
     siteCopy = site;
-    tributeInfo = tribute;
+    window.__chsTributeInfo = tribute;
     if (status.state === 'granted') { await unlock(true); return; }
     renderGate(status.state === 'unsupported'
       ? 'THE SECURE ACCESS SERVICE IS UNAVAILABLE. PLEASE TRY AGAIN SHORTLY.'
-      : '', registrationMode ? 'register' : 'login');
+      : '', 'login');
   })();
 })();
