@@ -25,7 +25,7 @@ The deck deliberately uses subject-led hospitality imagery rather than photograp
 
 ## Project photography (author's own practice)
 
-The `project-*.jpg|png` files document the author's own venues, identities and design work. The app uses photographs from this archive for the access-page visual, course landing hero, selected module covers, Projects of the Author, and matching case files. Joi and Pacific are visual references for the black-and-white macro direction: close tactile details, a narrow plane of focus and the tonal character of professional analogue film.
+The `project-*.jpg|png` files document the author's own venues, identities and design work. The app uses photographs from this archive for the access-page visual, course landing hero, selected module covers, Projects of the Author, and matching case files. Joi and Pacific are visual references for the film-inspired macro direction: close tactile details, a narrow plane of focus and the tonal character of professional analogue film.
 
 | Prefix | Project | Photographs |
 | --- | --- | --- |

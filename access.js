@@ -232,7 +232,7 @@
     <main class="gate-page">
       <div class="gate-stage">
         <div class="gate-visual">
-          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Black-and-white close-up of paper cups and the espresso bar at Joi, softly focused and drawn from the author's own project archive">
+          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Close-up of paper cups and the espresso bar at Joi in full color, softly focused and drawn from the author's own project archive">
           <div class="gate-visual-copy">
             <span class="eyebrow">${escG(g.eyebrow)}</span>
             <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
@@ -284,7 +284,7 @@
             </div>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
             <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>
-            <p class="gate-note-line">Author photographs from Joi and Pacific are shown in a black-and-white, close-detail film-inspired treatment. Other editorial photographs are sourced from public websites and press materials. Each image is credited; full source links and rights notes are published inside the course.</p>
+            <p class="gate-note-line">Author photographs from Joi and Pacific are shown in full color with a close-detail, film-inspired treatment. Other editorial photographs are sourced from public websites and press materials. Each image is credited; full source links and rights notes are published inside the course.</p>
           </article>
         </div>
       </section>
