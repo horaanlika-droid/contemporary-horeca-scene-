@@ -27,6 +27,37 @@ Grading weights (see syllabus):
 
 ---
 
+## Assignment 01 — Weeks 2–3 · The awards map & the 2027 jury
+
+**Goal:** learn to read the award circuit as industry infrastructure — who judges, what they measure, which doors are open — and turn that reading into a point of view about your own concept.
+**Format:** one A4 page (Parts A–B) plus a one-page memo (Part C); peer review in pairs before submission.
+**Feeds:** Field Notes and the W3 trend memo; not a separate grade beyond participation.
+
+### Part A — Signal & benchmark
+- Choose one real shift in guest behaviour and one benchmark venue that rides it.
+- Analyse the venue through the four course lenses: trend, atmosphere, sensory memory, ranking potential.
+- Compare how Jiro Ono's precision model or Igor Zernov's community model applies to your own future concept.
+- State which award method would recognise this venue — and which would miss it.
+
+### Part B — Method comparison
+- Study the bar and restaurant award landscape of the last three years and identify two or three trends: open calls and self-entry, sustainability and community categories, no/low parity, new regional lists, menu and design awards.
+- Then compare two awards with different logics: a guide/ranking, a jury prize or a competition. Use examples from the course or your own.
+- For each, record: who judges, published criteria, evidence accepted, number and type of visits, and blind spots.
+- Answer the question: **which award evaluates participants most objectively, and why?** Defend your definition of objectivity.
+- Recommended pairs: MICHELIN vs The Pinnacle Guide; The 50 Best Bars vs the Spirited Awards; World Class vs a national bar award; GreatList vs a design jury.
+
+### Part C — What will impress a jury in 2027?
+Write a one-page memo:
+1. Three signals you expect juries to reward in 2027, each supported by a 2026 example.
+2. One trap you expect award-chasing venues to fall into.
+3. One change you would make in your own concept to deserve that jury's attention.
+4. The application or nomination deadline you will put in your calendar — with the exact entry rule.
+
+**Rubric:** accuracy of award mechanics (30%) · quality and specificity of evidence (30%) · argument on objectivity (20%) · 2027 foresight and relevance to your own concept (20%).
+**Submission:** attach your notes and memo inside the app (or send to egor.tarasenko@him-mail.ch).
+
+---
+
 ## The through-line project "My Venue"
 
 Each student chooses their own concept in week 2 (restaurant, bar, hotel F&B, pop-up). Every week adds one page/section to the concept. Format: one A4 page or 2 slides per milestone; peer review in pairs every week.

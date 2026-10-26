@@ -34,6 +34,8 @@ window.bootCourse = () => {
   let activeChatStudentId = '';
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  /* Lesson bodies may use blank lines to separate paragraphs; each part is escaped independently. */
+  const prose = value => String(value ?? '').split(/\n{2,}/).map(part => `<p>${esc(part)}</p>`).join('');
   const user = () => { try { return JSON.parse(sessionStorage.getItem('chs-user')); } catch { return null; } };
   const key = () => `${user()?.email || 'guest'}:${C.id}:${C.edition}`;
   const progressFor = () => state.progress[key()] || [];
@@ -322,7 +324,7 @@ window.bootCourse = () => {
       <section class="section">
         <div class="section-head">
           <div><span class="eyebrow">06 — COURSE STRUCTURE</span><h2>${C.modules.length} modules.<br>One connected <em>journey</em>.</h2></div>
-          <p>Move from the signals shaping the industry to a final concept grounded in your own point of view — and a mockup you can hold.</p>
+          <p>Move from the signals, rankings and awards shaping the industry to a final concept grounded in your own point of view — and a mockup you can hold.</p>
         </div>
         <div class="module-preview">${C.modules.map(m => `<a class="module-row" href="#/module/${m.id}"><span class="module-num">${m.number}</span><div><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div><span class="meta module-meta">${word(m.lessons.length)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>
       </section>
@@ -509,7 +511,7 @@ window.bootCourse = () => {
         <section>
           <span class="eyebrow">THE IDEA</span>
           <h2>Look beyond the surface.</h2>
-          <p>${esc(l.body)}</p>
+          ${prose(l.body)}
           <div class="case-inline"><span class="meta">CASE STUDY · ${esc(l.case)}</span><h3>Why this case matters</h3><p>Consider the relationship between a clear point of view and the details that make it tangible for guests and teams.</p><a class="button text" href="#/cases">EXPLORE CASE STUDIES →</a></div>
         </section>
         <aside>
@@ -519,7 +521,7 @@ window.bootCourse = () => {
         </aside>
       </div>
       <section class="challenge-panel">
-        <div><span class="eyebrow">YOUR CHALLENGE</span><p>${esc(l.challenge)}</p></div>
+        <div><span class="eyebrow">YOUR CHALLENGE</span>${prose(l.challenge)}</div>
         <a href="#/assignment/${m.id}/${l.id}" class="button light">OPEN THE BRIEF <span aria-hidden="true">↗</span></a>
       </section>
       <div class="lesson-footer">
@@ -655,7 +657,7 @@ window.bootCourse = () => {
     const revising = sessionStorage.getItem('chs-revising') === '1';
     return layout(`<main class="app-main">
       <div class="page-head">
-        <div><span class="eyebrow">PRACTICAL ASSIGNMENT · ${esc(current.title)}</span><h1 class="page-title">Apply the<br>lesson to your<br><em>own concept</em>.</h1><p>${esc(current.challenge)}</p></div>
+        <div><span class="eyebrow">PRACTICAL ASSIGNMENT · ${esc(current.title)}</span><h1 class="page-title">Apply the<br>lesson to your<br><em>own concept</em>.</h1>${prose(current.challenge)}</div>
         <span class="edition-tag meta">SUBMISSION · ${mine && revising ? 'REVISION IN PROGRESS' : mine ? esc(mine.status) : 'OPEN'}</span>
       </div>
       <div class="assignment-layout" style="margin-top:38px">

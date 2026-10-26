@@ -2,7 +2,7 @@
 
 **Contemporary Horeca Scene** — a living digital elective for Hotel Institute Montreux, created by **Egor Tarasenko**, HIM alumnus and Master in Business Management.
 
-> A digital elective that reads the contemporary horeca scene through rankings, design, neurogastronomy, technology and entrepreneurship — and ends with a live found-object mockup assembled from antique tableware, candles, vintage glassware, found props and a physical menu concept.
+> A digital elective that reads the contemporary horeca scene through rankings and awards, design, neurogastronomy, technology and entrepreneurship — and ends with a live found-object mockup assembled from antique tableware, candles, vintage glassware, found props and a physical menu concept.
 
 ## Access and payment flow
 
@@ -70,7 +70,7 @@ Ten modules / thirteen learning units:
 
 | # | Module | Focus |
 |---|---|---|
-| 01 | The Future of Hospitality | Reading the signals reshaping the industry |
+| 01 | The Future of Hospitality | Reading the signals reshaping the industry — rankings, awards and juries |
 | 02 | Experience Design | Atmosphere, service choreography — and the “sweet fairy tale” principle |
 | 03 | Neurogastronomy | Perception, gastrophysics, multisensory serves |
 | 04 | Restaurant & Bar Concepts | Positioning, storytelling, business logic |
@@ -120,7 +120,7 @@ The author dialog contains the author’s own career and projects. Perfect Bars 
 ## Content, architecture and boundaries
 
 - `access.js` owns the sign-in / shared-registration gate and boots `app.js` (`window.bootCourse`) only after `course-data.js` has been unlocked and loaded.
-- `course-data.js` holds portable content seed data: course identity, edition, modules, lessons, case files, the `projects` archive (seven files with captioned photography) and updates. Renderers in `app.js` consume this structure; UI markup is not the source of truth for lesson text.
+- `course-data.js` holds portable content seed data: course identity, edition, modules, lessons, case files, the `projects` archive (seven files with captioned photography) and updates. Renderers in `app.js` consume this structure; UI markup is not the source of truth for lesson text. Lesson `body` fields may use blank lines to separate paragraphs; `prose()` in `app.js` escapes and renders each paragraph, so course copy never injects raw HTML.
 - The original photographs live in the repository root (`IMG_*.jpeg`, `IMG_8809.png`) and are never referenced directly by the app. `presentation/build/build_project_assets.py` derives the optimised, metadata-free web set (`presentation/assets/project-*.jpg|png`, max edge 1400 px) from them, so the camera files stay untouched and the shipped assets stay small and stably named. Re-run it after adding photographs: `python3 presentation/build/build_project_assets.py`.
 - The initial generic domain is: **Institution → User / Enrollment → Course → Edition → Module → Lesson**; learning and operations entities include **Video, CaseStudy, ReadingMaterial, Assignment, Submission, Feedback, Quiz, Question, Answer, Progress, Certificate, License, CourseUpdate, Notification**.
 - Progress and quiz records are scoped to user and edition. Submissions record the student and edition context; an institution-scoped instructor review view is the intended authorization boundary.
