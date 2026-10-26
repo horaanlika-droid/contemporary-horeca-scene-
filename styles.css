@@ -444,6 +444,7 @@ a.simple-row:hover strong{color:var(--red)}
 .case-inline p{margin:0;color:#3d3d3a;font-size:14px}
 .challenge-panel{margin-top:clamp(30px,4vw,48px);padding:clamp(22px,2.6vw,32px);border:1px solid var(--line-strong);display:grid;grid-template-columns:1fr 190px;gap:28px;align-items:center;background:var(--paper-soft)}
 .challenge-panel p{margin:0;color:#3d3d3a}
+.challenge-panel p+p{margin-top:10px}
 .lesson-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px;margin-top:clamp(28px,3.6vw,40px);position:relative;z-index:5}
 
 /* --- forms ---------------------------------------------------------------- */

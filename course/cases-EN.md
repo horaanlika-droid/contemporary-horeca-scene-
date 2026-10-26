@@ -2,11 +2,19 @@
 
 One-page profiles for seminar work. Fields: format, city, why it matters, teaching angle.
 
-## Rankings & competitions
+## Rankings, awards & competitions
 
-**MICHELIN Guide.** Anonymous inspectors; stars (★ outstanding in its category / ★★ worth a detour / ★★★ worth a special journey), Bib Gourmand, Green Star (in transition to the "Mindful Voices" initiative in 2026), special awards (Service, Sommelier, Young Chef). 2026 reveals used in class: Tokyo (Myojaku → three stars; 18 new stars), California (Californios — first Mexican restaurant worldwide with three stars), Toronto (Restaurant Pearl Morissette two stars). History angle: MICHELIN Guide Moscow debuted in 2021 (first stars in Russia/CIS) and was suspended in 2022 — a governance & geopolitics case.
+**MICHELIN Guide.** Anonymous inspectors; stars (★ outstanding in its category / ★★ worth a detour / ★★★ worth a special journey), Bib Gourmand, Green Star (phased out through 2026 and replaced by the editorial "Mindful Voices" platform), special awards (Service, Sommelier, Young Chef, Exceptional Cocktails, Opening of the Year). There is no application: inspectors visit anonymously and repeatedly. 2026 reveals used in class: Tokyo (Myojaku → three stars; 18 new stars), California (Californios — first Mexican restaurant worldwide with three stars), Toronto (Restaurant Pearl Morissette two stars). History angle: MICHELIN Guide Moscow debuted in 2021 (first stars in Russia/CIS) and was suspended in 2022 — a governance & geopolitics case.
 
-**The 50 Best (the50.com, formerly "50 Best").** Global academy of anonymous experts; restaurants' voters name their 8 best experiences; bars academy 600+ experts, 7 votes each. Restaurant ceremony 2026 — Lima, 4 Nov (Teatro Municipal); pre-announced 2026 Art of Hospitality Award: Tuju (São Paulo). Bars 2025 revealed in Hong Kong; 2026 extended list 51–100 already published (Sept 2026). Teaching angle: voting design, list economics, city-branding effects (~$2M projected spend in Lima).
+**The 50 Best (the50.com, rebranded as The 50 in 2026).** Global academy of anonymous experts; restaurants' voters name their 8 best experiences; the bars academy numbers 800+ experts, each voting for 8 bars visited in the previous 18 months. The main lists cannot be entered and no venue can apply. Restaurant ceremony 2026 — Lima, 4 Nov (Teatro Municipal); pre-announced 2026 Art of Hospitality Award: Tuju (São Paulo). Bars 2026 revealed in Milan, 7 Oct (Palazzo del Ghiaccio): Bar Leone №1 for the second year, Moebius Milano №2, Alquímico №3, Bar Us №4, Line №5; 26 cities, 14 new entries. Open special awards: Best Bar Design (six published criteria; self-entry), Best Cocktail Menu (design and layout, storytelling, innovation, range, identity; judged by the 29 Academy Chairs), Sustainable Bar, One to Watch, Best New Opening, Highest New Entry, Highest Climber. Teaching angle: voting design, list economics, city-branding effects (~$2M projected spend in Lima), and the difference between a closed ranking and open-call awards.
+
+**Tales of the Cocktail Spirited Awards.** The bar world's best-known jury prize, founded 2007; 20th edition in New Orleans on 23 July 2026. Free public nominations, self-nomination accepted and encouraged, one nomination is enough; 250+ bartenders, owners, writers and industry leaders judge across international, U.S. and global categories. 2026: FURA (Singapore) World's Best Bar and Best International Restaurant Bar; Yayo Nava (Bar Mauro, Mexico City) International Bartender of the Year; Allegory at the Eaton Hotel (Washington, D.C.) World's Best Cocktail Menu; Tlecān (Mexico City) World's Best Spirits Selection. Teaching angle: open call vs academy ranking; how a nomination becomes a shortlist.
+
+**The Pinnacle Guide.** Independent 1-, 2- and 3-pin recognition system for cocktail bars, founded 2022. Self-nomination is the only route: a detailed written application is assessed, followed by spot-check interviews and at least two anonymous visits by trained local reviewers. Modules and weights: front of house 20%, drinks programme 25%, look and feel 20%, staff management 20%, operations 10%, community 5%; environmental practice runs through all modules. Pins last up to two years. 2026: 46 bars added; the 33 bars pinned in 2024 were reappraised — 7 upgraded, 26 retained, none downgraded. Teaching angle: the most audit-like model; rewards systems, staff practice and consistency, not one photogenic evening.
+
+**Europe's 50 Best Bars (now The 50 Best Bars Europe).** Inaugural edition in Amsterdam on 30 June 2026 — the first pan-European bar ranking. 300+ anonymous, gender-balanced voters across 11 sub-regions; each names seven best bar experiences of the previous 18 months (up to five at home plus two abroad); no entry fee and no criteria. Line (Athens) №1, The Bar in Front of the Bar №2, Sips №3, Himkok №4, Bar Nouveau №5. Teaching angle: a regional layer that turns local reputations into international shortlists — and a stepping stone the main list cannot offer.
+
+**Restaurant & Bar Design Awards.** Global design competition with open entry; entrants submit written criteria, at least six specified products and up to ten photographs; judged by a design panel. Teaching angle: design jury logic — intention, materials, plans and photography — versus a hospitality ranking that judges the lived room.
 
 **GreatList (greatlist.ru).** International guide founded 2022; 100+ experts; anonymous, self-paid, repeated visits; criteria: food & chef imagination; service across the full CJM; design & ergonomics; atmosphere from scent to music. Cities: Moscow, St. Petersburg, Yekaterinburg, Kazan, Nizhny Novgorod, Russian Far East; Dubai; Doha; Bangkok; Hong Kong; Shanghai; Singapore & Seoul soon. GreatList Sessions 2025 — guest dinners in Moscow by world chefs. Teaching angle: an alternative, city-expert rating model; how to audit atmosphere.
 
@@ -38,11 +46,19 @@ One-page profiles for seminar work. Fields: format, city, why it matters, teachi
 
 ## Bars
 
-**Bar Leone — Hong Kong, №1 World's 50 Best Bars 2025.** "Cocktail popolari"; №1 two years after opening; first Asian №1. Angle: simplicity, warmth, hospitality-first design.
+*Unless a year is stated otherwise, positions in this section refer to The 50 Best Bars 2025; the 2026 top ten is summarised in the rankings entry above.*
+
+**Bar Leone — Hong Kong, №1 The 50 Best Bars 2025 & 2026.** "Cocktail popolari"; №1 two years after opening; first Asian №1; the mortadella sandwich became part of the story. Angle: simplicity, warmth, hospitality-first design; neighbourhood roots at global scale.
+
+**Line — Athens, №5 The 50 Best Bars 2026; №1 Europe's 50 Best Bars 2026; Ketel One Sustainable Bar Award 2026.** Fermentation-driven, circular production and zero-waste principles shape the menu and the guest experience. Angle: sustainability as a top-five competitive strategy, not a side category.
+
+**FURA — Singapore, World's Best Bar and Best International Restaurant Bar, Spirited Awards 2026.** Amoy Street shophouse opened in 2023 by Christina Rasmussen (former Noma forager) and Sasha Wijidessa; "Journal of Future Food" with invasive species (Jellyfish Martini), insect protein, cell-cultured milk, surplus-produce ferments, an upcycled interior and a dedicated low-/no-alcohol section. Two Pinnacle pins. Angle: a planet-forward concept that wins on flavour and storytelling, not worthiness.
+
+**Panda & Sons — Edinburgh, Siete Misterios Best Cocktail Menu 2026 (Europe and world) for Transcend.** Sub-zero techniques and a menu designed as an artefact that carries the bar's identity. Angle: the menu as the most portable piece of the concept — and the one a jury can read without visiting.
 
 **Handshake Speakeasy — Mexico City, №2 (№1 in 2024).** Eric Van Beek; hidden-door dramaturgy, flawless execution. Angle: speakeasy as theatre.
 
-**Sips / Paradiso — Barcelona, №3/№4.** Barcelona as cocktail capital; Sips = Best Bar in Europe, three years running. Angle: city cluster effects.
+**Sips / Paradiso — Barcelona, №3/№4 (2025); Sips №3 on Europe's 50 Best Bars 2026, Paradiso №17 and Legend of the List 2026.** Barcelona as cocktail capital; Sips = counterless island and bespoke vessels; Paradiso = hidden-world entrance. Angle: city cluster effects and the difference between a global ranking and a new regional one.
 
 **Tayēr + Elementary — London, №5 (Monica Berg).** Innovation + sustainability leadership. Angle: R&D culture in a bar.
 

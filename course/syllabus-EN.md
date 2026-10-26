@@ -14,13 +14,13 @@ Contemporary Horeca Scene is a business-perspective tour of the global restauran
 
 Its operating principle: **a bar or a restaurant is a sweet fairy tale.** For two hours the guest agrees to believe in a world the team has built — and any small detail (a harsh light, a plastic tray, a visible printer, a dirty door handle) can instantly wake them from that dream. The course therefore treats atmosphere, sourcing and scenography as one discipline: keeping the guest inside the story.
 
-The course is updated every year: the 2026–27 edition works with the 50 Best lists revealed in Turin (2025), the World's 50 Best Bars 2025 ceremony in Hong Kong, the World Class Global Finals 2025 in Toronto, the 2026 MICHELIN reveals (Tokyo, California, Toronto) and — live, in week 10 — the 2026 restaurant ceremony in Lima (4 November 2026).
+The course is updated every year: the 2026–27 edition works with the 50 Best lists revealed in Turin (2025), The 50 Best Bars 2026 ceremony in Milan (7 October, Bar Leone №1 again), the Spirited Awards 2026 in New Orleans, the inaugural Europe's 50 Best Bars in Amsterdam, the World Class Global Finals 2025 in Toronto, the 2026 MICHELIN reveals (Tokyo, California, Toronto) and — live, in week 10 — the 2026 restaurant ceremony in Lima (4 November 2026).
 
 ## 2. Learning outcomes
 
 After the course, students will be able to:
 
-1. Navigate the global ranking ecosystem (MICHELIN, The 50 Best, GreatList, World Class) and use it in marketing, strategy and employer branding.
+1. Navigate the global ranking and awards ecosystem (MICHELIN, The 50 Best, GreatList, The Pinnacle Guide, Spirited Awards, World Class) — read its criteria and entry rules, and use them in marketing, strategy and employer branding.
 2. Analyse Horeca macro-trends and translate them into concrete business decisions.
 3. Design a venue concept: interior, ergonomics, atmosphere (light, sound, scent), guest journey (CJM).
 4. Apply neurogastronomy and multisensory design to menus, serves and service.
@@ -32,7 +32,7 @@ After the course, students will be able to:
 
 | Wk | Session | Core reading / prep |
 |----|---------|---------------------|
-| 1 | Introduction. Anatomy of contemporary Horeca. Rankings as industry infrastructure. | GreatList "About"; the50.com/about-the-50 |
+| 1 | Introduction. Anatomy of contemporary Horeca. Rankings and awards as industry infrastructure. | GreatList "About"; the50.com/about-the-50; The 50 Best Bars voting and entry rules; Spirited Awards nomination FAQ; The Pinnacle Guide criteria |
 | 2 | Macro-trends I: experience economy; anti-luxury & casualization. | Guidara, ch. 1–3; Bar Leone / Forbes case |
 | 3 | Macro-trends II: mindfulness & sustainability; regional cuisines go global; gastro-tourism. | MICHELIN "Mindful Voices"; Tuju case |
 | 4 | Venue design: concept, architecture, interior, ergonomics. | Prix Versailles; GreatList criteria; Himkok |
@@ -48,8 +48,8 @@ After the course, students will be able to:
 ## 4. Module detail
 
 ### Module 1 — Contemporary Horeca Trends (weeks 1–3)
-Topics: experience economy (chef's tables, counters, storytelling formats); anti-luxury & "cocktail popolari"; sustainability → mindfulness (Green Star → "Mindful Voices"); regional cuisines going global (Californios — first three-star Mexican restaurant, California 2026); gastro-tourism & city branding (50 Best week in Lima, projected ~$2M local spend); new gravity centres (Asia, Middle East, Latin America); hotel F&B renaissance.
-Signature cases: Maido (№1, 2025); Tuju (Art of Hospitality 2026); Gerbou, Dubai (Prix Versailles 2025, Emirati fine dining).
+Topics: experience economy (chef's tables, counters, storytelling formats); anti-luxury & "cocktail popolari"; sustainability → mindfulness (Green Star phased out through 2026 → "Mindful Voices"); regional cuisines going global (Californios — first three-star Mexican restaurant, California 2026); gastro-tourism & city branding (50 Best week in Lima, projected ~$2M local spend); new gravity centres (Asia, Middle East, Latin America); hotel F&B renaissance; **the awards circuit** — guides vs jury prizes vs competitions, open calls and entry criteria, what juries reward (2026 evidence → 2027 expectations), and the ethics of award-chasing.
+Signature cases: Maido (№1, 2025); Tuju (Art of Hospitality 2026); Gerbou, Dubai (Prix Versailles 2025, Emirati fine dining); Bar Leone (The 50 Best Bars №1, 2025 & 2026); Line, Athens (Sustainable Bar Award 2026); FURA, Singapore (World's Best Bar, Spirited Awards 2026); Panda & Sons (Best Cocktail Menu 2026); Kato, Los Angeles (James Beard beverage programme 2026).
 
 ### Module 2 — Venue Design & Atmosphere (weeks 4–5)
 Topics: concept & narrative; space & ergonomics; light, acoustics, scent; tableware & tactile design; service choreography; design awards as signals (Prix Versailles, Best Bar Design); practice — atmosphere audits of Montreux venues.
@@ -80,6 +80,7 @@ Signature cases: **Joi Espresso Bar** — the course author's own project, assem
 ## 6. Practical layer — "My Venue" (full brief: `practical-assignments-EN.md`)
 
 - **Assignment 0 (week 1):** each student presents their favourite bar or restaurant (5 min) through the four course lenses; sets the observation bar for the semester.
+- **Assignment 01 (weeks 2–3, formative):** the awards map — signal & benchmark, a comparison of two awards with different methods, and a one-page memo on what will impress a jury in 2027 (full brief in `practical-assignments-EN.md`).
 - **Through-project:** every student builds their own venue (restaurant / bar / hotel F&B / pop-up) all semester — one A4 page or two slides added per week, peer-reviewed in pairs. Milestones: W2 concept & USP → W3 trend memo → W4 design & narrative → W5 atmosphere spec + field audit → W6 signature sensory serves → W7 menu & pricing → W8 operations & tech → W9 AI & ethics → **W10 marketing I (guest shifts & residencies, alcohol-brand partnerships in World Class formats, 90-day launch)** → **W11 marketing II (3-year roadmap to a chosen guide/list) + sourcing & budget plan** → W12 physical mockup of the venue + final pitch "Open & Operate".
 
 ## 7. Assessment
