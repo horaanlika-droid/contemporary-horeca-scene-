@@ -216,7 +216,7 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          ${image(SL.heroImage || 'project-joi-cups.jpg', 'Black-and-white close-up of paper cups at Joi Espresso Bar, from the course author\'s own project archive', '', { eager: true })}
+          ${image(SL.heroImage || 'project-joi-cups.jpg', 'Close-up of paper cups at Joi Espresso Bar in full color, from the course author\'s own project archive', '', { eager: true })}
           <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>

@@ -494,8 +494,10 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.doesNotMatch(app + gate + course, /studio-/);
   assert.match(gate, /project-joi-bar\.jpg/);
   assert.match(app, /project-joi-cups\.jpg/);
-  assert.match(styles, /\.film-photo\{filter:grayscale\(1\)/);
-  assert.match(course, /black-and-white, film-inspired display treatment/);
+  assert.doesNotMatch(styles, /grayscale\(1\)/, 'images are shown in color, not black-and-white');
+  assert.match(styles, /\.film-photo\{filter:/);
+  assert.match(course, /close-detail, film-inspired display treatment in full color/);
+  assert.doesNotMatch(course + gate, /black-and-white/i);
   assert.match(course, /not the image files/);
   // no unidentified stock photography left in the app-facing content
   assert.ok(!/image: 'horeca-/.test(course), 'module and case images must come from the credited archive');

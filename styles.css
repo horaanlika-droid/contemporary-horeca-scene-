@@ -145,8 +145,8 @@ h1,.page-title{line-height:.94}
 /* the photograph is hung on the dark ground at its own proportions — it is never cropped to fit */
 .hero-media{position:relative;margin:0;display:grid;align-content:center;justify-items:center;gap:clamp(14px,2vh,22px);padding:clamp(26px,4vh,54px) clamp(18px,2.4vw,42px)}
 .hero-media img{display:block;width:auto;height:auto;max-width:100%;max-height:min(66vh,600px);filter:saturate(.94) contrast(1.03);box-shadow:0 34px 80px rgba(0,0,0,.5)}
-.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.hero-media img.film-photo{filter:grayscale(1) contrast(1.1) brightness(1.02)}
+.film-photo{filter:contrast(1.08) brightness(.97)}
+.hero-media img.film-photo{filter:contrast(1.1) brightness(1.02)}
 .hero-media figcaption{display:flex;align-items:baseline;gap:14px;max-width:44ch;color:rgba(255,255,255,.6);font-size:12.5px;line-height:1.55}
 .hero-media figcaption .meta{flex:none;color:rgba(255,255,255,.72)}
 .hero-copy .eyebrow{color:rgba(255,255,255,.78)}
@@ -889,20 +889,20 @@ body.author-open{overflow:hidden}
   .author-nav-link::before{content:'ABOUT';font-size:8px;letter-spacing:.05em}
 }
 
-/* Black-and-white, film-inspired archive treatment for all supporting photographs */
-.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.hero-media img.film-photo{filter:grayscale(1) contrast(1.1) brightness(1.02)}
-.case-feature img.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.case-feature:hover img.film-photo{filter:grayscale(1) contrast(1.08) brightness(1.02)}
-.case-item img.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.case-item:hover img.film-photo{filter:grayscale(1) contrast(1.08) brightness(1.02)}
-.resume-image.film-photo{filter:grayscale(1) brightness(.82) contrast(1.1)}
-.video-frame img.film-photo{filter:grayscale(1) brightness(.78) contrast(1.12);transform:scale(1.035)}
-.login-visual img.film-photo,.gate-visual img.film-photo{filter:grayscale(1) brightness(.62) contrast(1.12)}
-.project-shot img.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.project-card:hover .project-shot img.film-photo{filter:grayscale(1) contrast(1.08) brightness(1.02)}
-.gallery-item img.film-photo{filter:grayscale(1) contrast(1.08) brightness(.97)}
-.author-project-link:hover img.film-photo{filter:grayscale(1) contrast(1.08) brightness(1.02)}
+/* Film-inspired archive treatment for all supporting photographs — shown in full color, tone only */
+.film-photo{filter:contrast(1.08) brightness(.97)}
+.hero-media img.film-photo{filter:contrast(1.1) brightness(1.02)}
+.case-feature img.film-photo{filter:contrast(1.08) brightness(.97)}
+.case-feature:hover img.film-photo{filter:contrast(1.08) brightness(1.02)}
+.case-item img.film-photo{filter:contrast(1.08) brightness(.97)}
+.case-item:hover img.film-photo{filter:contrast(1.08) brightness(1.02)}
+.resume-image.film-photo{filter:brightness(.82) contrast(1.1)}
+.video-frame img.film-photo{filter:brightness(.78) contrast(1.12);transform:scale(1.035)}
+.login-visual img.film-photo,.gate-visual img.film-photo{filter:brightness(.62) contrast(1.12)}
+.project-shot img.film-photo{filter:contrast(1.08) brightness(.97)}
+.project-card:hover .project-shot img.film-photo{filter:contrast(1.08) brightness(1.02)}
+.gallery-item img.film-photo{filter:contrast(1.08) brightness(.97)}
+.author-project-link:hover img.film-photo{filter:contrast(1.08) brightness(1.02)}
 
 /* Private real-time Project Q&A */
 .chat-page .page-head{align-items:end}
