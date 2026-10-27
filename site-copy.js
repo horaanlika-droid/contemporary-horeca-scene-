@@ -7,7 +7,7 @@
 window.SITE = {
   gate: {
     eyebrow: 'DIGITAL PRODUCT · 2026 EDITION',
-    heroImage: 'project-joi-bar.jpg',
+    heroImage: 'illo-gate-still-life.jpg',
     titleTop: 'Contemporary',
     titleAccent: 'Horeca',
     titleBottom: 'Scene',
@@ -26,7 +26,7 @@ window.SITE = {
   },
   landing: {
     heroEyebrow: 'A LIVING DIGITAL ELECTIVE · 2026 EDITION',
-    heroImage: 'project-joi-cups.jpg',
+    heroImage: 'illo-hero-scene.jpg',
     mockupImage: 'project-detail-chess.jpg',
     budgetImage1: 'project-joi-machine.jpg',
     budgetImage2: 'project-detail-street-press.jpg',

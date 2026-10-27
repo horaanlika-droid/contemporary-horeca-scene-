@@ -1,5 +1,7 @@
 # CONTEMPORARY HORECA SCENE — LECTURE NOTES (EN)
 
+Working notes for the lecturer. The student-facing text of all **twelve learning units** — lessons 01–12, with the final unit numbered 12 — is authored in `lessons.txt` (repository root) and published in the app; these pages are the lecturer's companion, organised by teaching block rather than by unit number.
+
 Working notes for the lecturer. Each module: core theses (with facts from primary sources), audience questions, and in-class exercises. **Discussion rhythm:** 5 minutes of individual thinking and notes, then 8–12 minutes in pairs or small groups, followed by plenary discussion. Gather student arguments first; then connect them to the case.
 
 ---

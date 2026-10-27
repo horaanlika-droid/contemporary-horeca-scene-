@@ -155,7 +155,7 @@ test('industry figures and cases reflect curatorial updates', () => {
 test('English-only conversion preserves the complete course and photographic archive', () => {
   const course = courseData();
   assert.equal(course.modules.length, 10);
-  assert.equal(course.modules.flatMap(module => module.lessons).length, 13);
+  assert.equal(course.modules.flatMap(module => module.lessons).length, 12);
   assert.equal(course.figures.length, 13);
   assert.equal(course.cases.length, 14);
   assert.equal(course.projects.items.length, 7);
@@ -524,7 +524,11 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.match(app, /SL\.mockupImage/);
   assert.match(read('access.js'), /const siteAssetSrc = value =>/);
   assert.match(read('access.js'), /g\.heroImage/);
-  assert.match(read('site-copy.js'), /heroImage: 'project-joi-bar\.jpg'/);
+  assert.match(read('site-copy.js'), /heroImage: 'illo-gate-still-life\.jpg'/);
+  // the polychrome cartoon illustrations are credited as illustrations, never as venue photographs
+  assert.match(course, /prefix: \['illo-'\]/);
+  assert.match(course, /ILLUSTRATION · ORIGINAL COURSE GRAPHIC/);
+  assert.match(course, /not a photograph of the venue/);
   assert.match(read('site-copy.js'), /mockupImage: 'project-detail-chess\.jpg'/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);

@@ -79,17 +79,32 @@ Signature cases: **Joi Espresso Bar** — the course author's own project, assem
 
 ## 6. Practical layer — "My Venue" (full brief: `practical-assignments-EN.md`)
 
-- **Assignment 0 (week 1):** each student presents their favourite bar or restaurant (5 min) through the four course lenses; sets the observation bar for the semester.
-- **Assignment 01 (weeks 2–3, formative):** the awards map — signal & benchmark, a comparison of two awards with different methods, and a one-page memo on what will impress a jury in 2027 (full brief in `practical-assignments-EN.md`).
-- **Through-project:** every student builds their own venue (restaurant / bar / hotel F&B / pop-up) all semester — one A4 page or two slides added per week, peer-reviewed in pairs. Milestones: W2 concept & USP → W3 trend memo → W4 design & narrative → W5 atmosphere spec + field audit → W6 signature sensory serves → W7 menu & pricing → W8 operations & tech → W9 AI & ethics → **W10 marketing I (guest shifts & residencies, alcohol-brand partnerships in World Class formats, 90-day launch)** → **W11 marketing II (3-year roadmap to a chosen guide/list) + sourcing & budget plan** → W12 physical mockup of the venue + final pitch "Open & Operate".
+The elective runs **twelve learning units**. Every unit ends with one deliverable on the student's own venue, and the numbered assignments (03–12) are published in full in `practical-assignments-EN.md` and in the app. Units 01–02 open the sequence with two short challenges: the awards map and the three-scene atmosphere map.
+
+| Unit | Session focus | Deliverable on the student's venue |
+|----|---------------|-----------------------------------|
+| 01 | Rankings, awards and the recognition ecosystem | Award map + 2027 jury memo (challenge) |
+| 02 | Atmosphere and the "sweet fairy tale" | Three scenes: arrival, defining moment, farewell (challenge) |
+| 03 | The senses at the table | **Assignment 03 — The Sensory Serve** |
+| 04 | Concept manifestos and 50 Best menus | **Assignment 04 — The Menu Manifesto** |
+| 05 | Concept objects: menu, merchandise, furniture | **Assignment 05 — The Object Family** |
+| 06 | Automation, ergonomics, The Horeca Code | **Assignment 06 — The Invisible Operating System** |
+| 07 | AI as a creative and operational tool | **Assignment 07 — The Human–AI Development Brief** |
+| 08 | Farm-to-glass apothecary and ingredient-led menus | **Assignment 08 — From Origin to Memory** |
+| 09 | From idea to operating model and talent | **Assignment 09 — The First Operating Model** |
+| 10 | Soul before budget: salvage and sourcing | **Assignment 10 — The Salvage & Sourcing Plan** |
+| 11 | Theatrical techniques and the live mockup | **Assignment 11 — The Live Found-Object Mockup** |
+| 12 | Open & Operate | **Assignment 12 — The Final Open & Operate Pitch** + physical mockup |
+
+The work accumulates: by unit 12 the student holds a complete concept, menu, guest journey, operating model, sourcing plan and photographed mockup, defended together at Final Pitch Day.
 
 ## 7. Assessment
 
 | Component | Weight | Description |
 |-----------|--------|-------------|
-| Assignment 0 & participation | 10% | Week-1 "favourite venue" talk; case discussions, war-room sessions |
+| Warm-up challenge & participation | 10% | Unit-01 awards map, case discussions, "rankings war room" sessions |
 | Field Notes (weekly) | 15% | One-page weekly review: venue visit, ranking change, industry article |
-| "My Venue" weekly milestones | 35% | Eleven weekly pages of the student's own concept; peer-reviewed |
+| "My Venue" milestones | 35% | The ten numbered assignments (03–12) building the student's own concept; peer-reviewed |
 | Final pitch "Open & Operate" | 40% | Full concept deck **plus a physical mockup of the venue** (found objects (antique tableware, candles, vintage glassware, textures and a physical menu concept), staged like scenery and photographed at guest height), defended before an expert panel |
 
 ## 8. Reading & resources

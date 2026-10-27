@@ -1248,7 +1248,7 @@ window.bootCourse = () => {
         <div class="simple-list">${rows}</div>
       </section>
       <section class="institution-panel" style="margin-top:22px">
-        <span class="eyebrow">ILLUSTRATIVE PHOTOGRAPHS</span>
+        <span class="eyebrow">ILLUSTRATIVE PHOTOGRAPHS &amp; ILLUSTRATIONS</span>
         <div class="simple-list">${(ic.illustrative || []).map(x => `<div class="simple-row"><span><strong>${esc(x.file)}</strong><br>${esc(x.note)}</span></div>`).join('')}</div>
       </section>
       <section class="institution-panel" style="margin-top:22px">
