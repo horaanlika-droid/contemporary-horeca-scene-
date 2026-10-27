@@ -10,7 +10,23 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 
 ## Polychrome cartoon illustrations
 
-The `illo-*.jpg` files are original illustrations made for the course interface — a modern polychrome cartoon style with flat vector shapes, a cream outline, confetti and polka-dot patterns and the SEG palette (maroon `#410c0c`, signal red `#e42313`, cream, mustard gold, teal, cobalt). They illustrate concepts, not specific venues, and are credited in the app as *illustration · original course graphic*.
+The `illo-*.jpg` files are original hand-drawn illustrations made for the course interface — a loose ink doodle: a thin, wobbly black fineliner line with visible hand tremor, flat matte pastel fills (pale ice blue, sage, warm sand) left slightly off-register on white paper, wide empty margins around a small centred subject, and exactly one small signal-red `#e42313` accent per drawing. They illustrate concepts, not specific venues, and are credited in the app as *illustration · original course graphic*.
+
+| Surface | Size | Files |
+| --- | --- | --- |
+| Access page (vertical) | 1080 × 1620 | `illo-gate-still-life.jpg` |
+| Landing hero (vertical) | 1080 × 1620 | `illo-hero-scene.jpg` |
+| Module covers (3:2) | 1536 × 1024 | `illo-m01-signals.jpg` … `illo-m10-mockup.jpg` |
+| Case-card covers (3:2) | 1264 × 848 | `illo-case-*.jpg` |
+
+The masters (PNG, drawn at 768 × 1376 and 1264 × 848) live outside the repository in `tmp/illustrations/`, which is git-ignored. `presentation/build/build_illustrations.py` trims the empty paper around each drawing, restores a 7% margin, fits it to the surface the interface needs and writes a progressive JPEG. Re-run it after replacing a master:
+
+```bash
+python3 presentation/build/build_illustrations.py            # the whole set
+python3 presentation/build/build_illustrations.py --only m06 # one asset
+```
+
+Do not edit the JPEGs by hand. The app marks every `illo-` file with the `illo-photo` class, so drawn covers are shown whole on white paper instead of being cropped like a camera frame, and the access panel switches to a light sheet with ink-coloured type (`.gate-visual.is-illustration`).
 
 | File | Use |
 | --- | --- |

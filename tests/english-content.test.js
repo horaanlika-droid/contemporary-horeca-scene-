@@ -525,7 +525,13 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.match(read('access.js'), /const siteAssetSrc = value =>/);
   assert.match(read('access.js'), /g\.heroImage/);
   assert.match(read('site-copy.js'), /heroImage: 'illo-gate-still-life\.jpg'/);
-  // the polychrome cartoon illustrations are credited as illustrations, never as venue photographs
+  // the hand-drawn illustrations are credited as illustrations, never as venue photographs,
+  // and are shown whole on paper instead of being cropped like a camera frame
+  assert.match(app, /const isDrawn = name => \/\^illo-\//);
+  assert.match(app, /'illo-photo'/);
+  assert.match(styles, /\.illo-photo\{filter:none/);
+  assert.match(gate, /is-illustration/);
+  assert.match(styles, /\.gate-visual\.is-illustration/);
   assert.match(course, /prefix: \['illo-'\]/);
   assert.match(course, /ILLUSTRATION · ORIGINAL COURSE GRAPHIC/);
   assert.match(course, /not a photograph of the venue/);

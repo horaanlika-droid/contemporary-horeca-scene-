@@ -126,10 +126,13 @@ window.bootCourse = () => {
     if (/^https?:\/\//i.test(value) || value.startsWith('/') || value.startsWith('data:')) return value;
     return `${ASSET}${value || IMAGE_FALLBACK}`;
   };
+  /* Drawn covers are paper, not photographs: they keep every line of the drawing,
+     so the interface shows them whole instead of cropping them like a camera frame. */
+  const isDrawn = name => /^illo-/.test(String(name || '').trim());
   const image = (name, alt = '', cls = '', opts = {}) => {
     const src = esc(assetSrc(name));
     const fallback = `${ASSET}${IMAGE_FALLBACK}`;
-    const classes = ['film-photo', cls].filter(Boolean).join(' ');
+    const classes = ['film-photo', isDrawn(name) ? 'illo-photo' : '', cls].filter(Boolean).join(' ');
     return `<img class="${classes}" src="${src}" alt="${esc(alt)}"${opts.eager ? '' : ' loading="lazy"'} decoding="async" onerror="this.onerror=null;this.src='${fallback}';this.classList.add('image-fallback')">`;
   };
   const isUploadedPhoto = name => /^(\/|https?:\/\/)/i.test(String(name || ''));
