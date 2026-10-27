@@ -66,28 +66,39 @@ Navigation no longer depends on a single browser event either. Every click on an
 
 ## Course structure (2026 edition)
 
-Ten modules / thirteen learning units:
+Ten modules / twelve learning units, authored in `lessons.txt` and published from `course-data.js`:
 
-| # | Module | Focus |
-|---|---|---|
-| 01 | The Future of Hospitality | Reading the signals reshaping the industry — rankings, awards and juries |
-| 02 | Experience Design | Atmosphere, service choreography — and the “sweet fairy tale” principle |
-| 03 | Neurogastronomy | Perception, gastrophysics, multisensory serves |
-| 04 | Restaurant & Bar Concepts | Positioning, storytelling, business logic |
-| 05 | Technology & Automation | Where to automate, where to stay human |
-| 06 | AI in Hospitality | AI workflows, limits and responsibility |
-| 07 | Food & Beverage Futures | New formats, ingredients, beverage culture |
-| 08 | Entrepreneurship | From idea to operating model |
-| **09** | **Budget Realisation & Scenography** | **Found objects and flea markets, theatrical decorative techniques, the live found-object mockup** |
-| 10 | Final Challenge | Concept of tomorrow, defended together with the mockup |
+| # | Module | Lessons | Focus |
+|---|---|---|---|
+| 01 | Hospitality Futures | 01 | Reading the signals reshaping the industry — rankings, awards and juries |
+| 02 | Experience Design | 02 | Atmosphere, service choreography — and the “sweet fairy tale” principle |
+| 03 | Neurogastronomy | 03 | Perception, gastrophysics, vessel weight, multisensory serves |
+| 04 | Restaurant & Bar Concepts & 50 Best Menu Breakdown | 04–05 | Concept manifestos, 50 Best menus, concept objects |
+| 05 | Technology & Automation | 06 | Automation, ergonomics and The Horeca Code |
+| 06 | AI in Hospitality | 07 | AI workflows, the R&D matrix and an ethics charter |
+| 07 | Food & Beverage Futures | 08 | Ingredient-led menus, the farm-to-glass apothecary |
+| 08 | Entrepreneurship | 09 | From idea to operating model and a talent ecosystem |
+| **09** | **Budget Realisation, Scenography & Found-Object Mockup** | **10–11** | **Found objects and flea markets, theatrical techniques, the live mockup** |
+| 10 | Final Challenge | 12 | “Open & Operate”, defended together with the mockup |
+
+The lesson text in `course-data.js` is generated from the authored source rather than typed twice:
+
+```bash
+node tools/build-course-lessons.js --dry   # preview the parsed lessons
+node tools/build-course-lessons.js         # rewrite the modules array in course-data.js
+```
+
+Module metadata (ids, covers, key ideas, cases, challenges) is curated inside the tool, so re-running it after an edit to `lessons.txt` keeps the published course in sync.
 
 ### Module 09 — Budget Realisation & Scenography
 
-Three learning units:
+### Module 09 — Budget Realisation & Scenography
+
+Two learning units (10–11):
 
 1. **Soul before budget** — a venue does not need a large budget to feel alive; it needs a point of view and the patience to hunt for objects that carry one. Sourcing discipline (flea markets, auctions, demolition yards, liquidations, the street), repair / reuse / re-upholstery, and the case of **Joi Espresso Bar** — the author's own project, assembled almost entirely from the street and flea markets. *Money buys speed and finish; intention buys soul.*
 2. **Theatrical techniques & the live found-object mockup** — scenography borrowed from the stage: painted flats, forced perspective, backdrops, scrim and gauze, trompe-l'œil, glazing, patina, distressing, stencil and gold leaf, faux bois / faux marbre, drapery, haze and one tight beam of light. A theatrical trick must support the story and never announce itself.
-3. **Small venues, real budgets: the author's project archive** — the photographic evidence behind the method: **Joi Espresso Bar** (2025 · OGONEK TEAM), **Passie Cakes Co.**, **CooCoo Coffee**, **Chicken Connection** (Moscow, filmed with Dmitry Konnikov), **Pacific** and the **TAM / TYT** object line, plus a collecting file of found details (chessboards, resin ashtrays, pasted posters, a lemon press on the pavement). Students read the archive and write down what was bought, what was found and what was made.
+The photographic archive behind the method — **Joi Espresso Bar** (2025 · OGONEK TEAM), **Passie Cakes Co.**, **CooCoo Coffee**, **Chicken Connection** (Moscow, filmed with Dmitry Konnikov), **Pacific** and the **TAM / TYT** object line, plus the collecting file of found details — stays in the Projects section of the app, where students can still read what was bought, what was found and what was made.
 
 Module 04 also gained a learning unit, **Concept objects: the menu, the merchandise, the furniture**, reading the same archive through the takeaway object: a menu that leaves the venue, flavour cubes that teach a drinks list, and bar stations drawn for the workshop.
 
@@ -152,7 +163,7 @@ The deck generator prefers Inter when available through `HIM_FONT_DIR`, with Dej
 
 ## Access, lessons, submissions and administration
 
-A learner account is created only when `/api/register` receives a Telegram username or ID matching a manually approved admission. Registration collects a name and unique email address, then stores a scrypt hash of the learner-created password. `/api/access` signs in registered learners using email and password; the configured master password opens the admin account only. All 13 learning units and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Forgotten-password recovery is handled only by email at `egor.tarasenko@him-mail.ch`.
+A learner account is created only when `/api/register` receives a Telegram username or ID matching a manually approved admission. Registration collects a name and unique email address, then stores a scrypt hash of the learner-created password. `/api/access` signs in registered learners using email and password; the configured master password opens the admin account only. All 12 learning units and all modules are available at once; assignment review never gates lesson access. Students can submit the practical assignment from each lesson, add text, a link and files in the app, and receive feedback. Forgotten-password recovery is handled only by email at `egor.tarasenko@him-mail.ch`.
 
 The Tribute integration is event-driven, not a checkout embedded in the course app. A signed `new_digital_product` event grants lasting access; `new_subscription` issues access through its verified `expires_at`, `renewed_subscription` extends that date, and `cancelled_subscription` stops renewal while preserving access only through Tribute’s reported expiry. In the Tribute creator dashboard, set the webhook URL to `https://YOUR-DOMAIN/api/tribute/webhook`, set `TRIBUTE_API_KEY`, and configure the relevant `TRIBUTE_PRODUCT_ID` and/or `TRIBUTE_SUBSCRIPTION_ID`. The public start page links to external checkout using `TRIBUTE_PRODUCT_URL`; checkout is not embedded in the app.
 
@@ -174,8 +185,10 @@ The block editor (the "Course blocks" menu, shown in Russian inside the bot) rew
 
 Every image block can be replaced with a photograph sent in the Telegram chat — no redeploy and no file paths to remember. The 🖼 **Photo & backgrounds** section collects the gate background, the landing hero, the budget and mockup photographs, module covers, lesson frames, case photos, figure portraits and project covers / lead photos; the 📷 buttons inside any block do the same for that block. After tapping an image field the bot waits for the next message: a photo or an image file becomes the new picture, while an https link or an archive file name (for example `project-joi-bar.jpg`) still works as text. Uploads are validated (JPEG / PNG / WebP, up to 8 MB, magic-byte checked), stored in `data/uploads/`, registered in 🖼 **Media library** (`editor.media` in `data/store.json`) and served publicly from `/media/<file>` with immutable caching. The bot answers with a preview of the saved photo plus "replace again" and "revert" buttons; deleting a photo from the media library also clears every block that pointed at it, restoring the published image. Uploaded photographs are credited in the app as `PHOTO · UPDATED BY THE COURSE TEAM` and are never listed in the *Image sources & rights* archive credits.
 
-### Photographs & image credits
+### Illustrations, photographs & image credits
 
-The access-page and course-cover imagery uses existing author-archive photographs from **Joi** and **Pacific**, with food and beverage details from the author's project files. The direction is close-detail macro photography in full color with high contrast, a narrow plane of focus and the tactile character of professional analogue film. The display treatment leaves the source files untouched; the rejected generic generated series is not used. Other editorial photographs are taken from publicly available websites and press materials, and the in-app *Image sources & rights* page lists source links, credits and rights notes. Public availability does not transfer copyright; rights remain with the respective photographers and venues.
+The access page, the landing hero and the ten module covers now use **original polychrome cartoon illustrations** made for this course — flat vector-style shapes, a cream outline, confetti and polka-dot patterns, drawn from the SEG palette of maroon, signal red, cream, mustard gold, teal and cobalt. They are art-directed for the course, labelled `ILLUSTRATION · ORIGINAL COURSE GRAPHIC` in the in-app *Image sources & rights* page, and illustrate an idea rather than a specific venue; the generator of record is the course team, not a photograph.
+
+Case files, practitioner portraits and the project archive keep their photographs, so the drawn covers always sit next to real documentary material. The direction is close-detail macro photography in full color with high contrast, a narrow plane of focus and the tactile character of professional analogue film. The display treatment leaves the source files untouched; the rejected generic generated series is not used. Other editorial photographs are taken from publicly available websites and press materials, and the in-app *Image sources & rights* page lists source links, credits and rights notes. Public availability does not transfer copyright; rights remain with the respective photographers and venues.
 
 The public course preview is deliberately compact: positioning, format facts and author contacts only. Lesson ideas, cases, techniques and the mockup brief stay inside the password-protected course so the preview does not spoil the content.

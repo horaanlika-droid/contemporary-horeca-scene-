@@ -8,6 +8,17 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 | --- | --- |
 | `him-logo-white.png` | Official HIM logo asset linked from the [Swiss Education Group HIM Business School page](https://www.swisseducation.com/en/him-business-school/). |
 
+## Polychrome cartoon illustrations
+
+The `illo-*.jpg` files are original illustrations made for the course interface — a modern polychrome cartoon style with flat vector shapes, a cream outline, confetti and polka-dot patterns and the SEG palette (maroon `#410c0c`, signal red `#e42313`, cream, mustard gold, teal, cobalt). They illustrate concepts, not specific venues, and are credited in the app as *illustration · original course graphic*.
+
+| File | Use |
+| --- | --- |
+| `illo-gate-still-life.jpg` | Access page still life (vertical) |
+| `illo-hero-scene.jpg` | Course landing hero — the bar as a stage set (vertical) |
+| `illo-m01-signals.jpg` … `illo-m08-venture.jpg` | Module covers 01–08 (3:2) |
+| `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) — in production; modules 09–10 still use archive photographs |
+
 ## Thematic Horeca photography
 
 The deck deliberately uses subject-led hospitality imagery rather than photographs of the institute, campus, classrooms, or students.
