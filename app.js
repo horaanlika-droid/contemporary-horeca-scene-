@@ -144,6 +144,10 @@ window.bootCourse = () => {
       || (C.imageCredits?.groups || []).find(g => (g.prefix || []).some(p => (typeof p === 'string' && p.endsWith('-') ? key.startsWith(p) : key === p)));
   };
   const isIllustrative = name => { const key = creditKey(name); return Boolean(key) && (C.imageCredits?.illustrative || []).some(x => x.file === key); };
+  /* A case card shows the original cover illustration; the full case file on the
+     Cases page keeps the documentary photograph of the venue. Cases without a
+     cover fall back to that photograph. */
+  const caseCover = x => x?.cover || x?.image;
   const creditFor = name => {
     if (isUploadedPhoto(name)) return '<span class="img-credit">PHOTO · UPDATED BY THE COURSE TEAM</span>';
     const base = creditGroup(name)?.short || 'PHOTO · SOURCE LISTED IN IMAGE SOURCES';
@@ -271,8 +275,8 @@ window.bootCourse = () => {
           <div><span class="eyebrow">04 — REAL INDUSTRY CASES</span><h2>Look closer.<br>Learn from <em>practice</em>.</h2></div>
           <p>Editorial case files turn current hospitality practice into material for discussion, analysis and action.</p>
         </div>
-        <div class="case-feature">${image(C.cases[0].image, 'A considered bar interior with a warm, tactile atmosphere')}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(C.cases[0].image)}</div></div>
-        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(x.image, x.title)}</div>${creditFor(x.image)}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
+        <div class="case-feature">${image(caseCover(C.cases[0]), `${C.cases[0].title} — illustrated case cover`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(caseCover(C.cases[0]))}</div></div>
+        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(caseCover(x), x.cover ? `${x.title} — illustrated case cover` : x.title)}</div>${creditFor(caseCover(x))}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
       </section>
 
       <div class="quote-band">
@@ -1224,6 +1228,7 @@ window.bootCourse = () => {
     /* Photos uploaded by the administrator in the bot have no archive credit line. */
     const collect = name => { if (!name || isUploadedPhoto(name)) return; used.add(name); };
     C.cases.forEach(x => { collect(x.image); (x.photos || []).forEach(photo => collect(photo.file || photo.image)); });
+    C.cases.forEach(x => collect(x.cover));
     (C.figures || []).forEach(f => collect(f.image));
     C.modules.forEach(m => collect(m.image));
     (projectList() || []).forEach(p => { collect(p.image); (p.photos || []).forEach(photo => collect(photo.file || photo.image)); });

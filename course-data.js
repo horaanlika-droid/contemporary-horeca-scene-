@@ -499,6 +499,7 @@ window.COURSE = {
   cases: [
     {
       title: 'Bar Benfiddich · Hiroyasu Kayama',
+      cover: 'illo-case-benfiddich-kayama.jpg',
       location: 'Tokyo, Japan',
       year: '№18 World’s 50 Best Bars / №9 Asia’s 50 Best Bars',
       industry: 'Farm-to-Glass Mixology · Botanical Apothecary Craft',
@@ -510,6 +511,7 @@ window.COURSE = {
     },
     {
       title: 'Black Swan & Bambule · Denis Bobkov',
+      cover: 'illo-case-black-swan-bobkov.jpg',
       location: 'Moscow · Pub Life Group',
       year: 'Salvage Architecture & Theatrical Pubs',
       industry: 'Pub Life Group · Theatrical Scenography & Found Objects',
@@ -521,6 +523,7 @@ window.COURSE = {
     },
     {
       title: 'A Bar with Shapes for a Name · Rémy Savage',
+      cover: 'illo-case-shapes-savage.jpg',
       location: 'London & Paris',
       year: 'World’s 50 Best Bars',
       industry: '50 Best Conceptual Menus · Bauhaus Architecture & Art Manifestos',
@@ -532,6 +535,7 @@ window.COURSE = {
     },
     {
       title: 'Sips Drinkery House · Simone Caporale',
+      cover: 'illo-case-sips-caporale.jpg',
       location: 'Barcelona, Spain',
       year: '№1 World’s 50 Best Bars 2023',
       industry: 'Modern Cocktail Lab · The Counterless Drinkery House & Bespoke Vessels',
@@ -543,6 +547,7 @@ window.COURSE = {
     },
     {
       title: 'El Copitas & #FollowTheRabbits · Igor Zernov',
+      cover: 'illo-case-el-copitas-zernov.jpg',
       location: 'St. Petersburg',
       year: '№8 World’s 50 Best Bars',
       industry: '#FollowTheRabbits · Speakeasy Rituals & Hospitality Ecosystem',
@@ -554,6 +559,7 @@ window.COURSE = {
     },
     {
       title: 'City Space & The Horeca Code · Bek Narzi',
+      cover: 'illo-case-city-space-narzi.jpg',
       location: 'Moscow & London',
       year: 'World’s 50 Best Bars Pioneer',
       industry: 'Bar Management, Standards & Unit Economics',
@@ -565,6 +571,7 @@ window.COURSE = {
     },
     {
       title: 'Sensory Mixology · Artem Talalay',
+      cover: 'illo-case-sensory-talalay.jpg',
       location: 'Sochi & Moscow',
       year: 'World Class Russia Winner · Palm Branch Hall of Fame',
       industry: 'Multisensory Mixology · Speed Ergonomics & Gastrophysics',
@@ -576,6 +583,7 @@ window.COURSE = {
     },
     {
       title: 'Sukiyabashi Jiro · Jiro Ono',
+      cover: 'illo-case-jiro-ono.jpg',
       location: 'Ginza, Tokyo',
       year: '3★ MICHELIN Legend',
       industry: 'Shokunin Mastery · Counter Precision & Pacing',
@@ -587,6 +595,7 @@ window.COURSE = {
     },
     {
       title: 'Krasota Gastro-Theatre · Boris Zarkov',
+      cover: 'illo-case-krasota-zarkov.jpg',
       location: 'Moscow & Dubai · White Rabbit Family',
       year: 'Immersive Dining & Gastro-Theatre',
       industry: 'Gastro-Theatre · 360° Scenography, Digital Art & Multisensory Dining',
@@ -598,6 +607,7 @@ window.COURSE = {
     },
     {
       title: 'Liquid Intelligence · Dave Arnold',
+      cover: 'illo-case-dave-arnold.jpg',
       location: 'New York City',
       year: 'Beverage Science Pioneer',
       industry: 'Beverage Science & Laboratory Cocktail Technique',
@@ -884,7 +894,7 @@ window.COURSE = {
     }
   ],
   imageCredits: {
-    statement: 'Every photograph in the elective is listed with its source and rights status. Images of the author’s own venues, objects and portraits are © Egor Tarasenko and come from his personal archive. The access-page visual, landing hero and selected module covers use Joi and Pacific archive photographs in a close-detail, film-inspired display treatment in full color. Supporting photos, including editorial references, are shown in full color and may receive a light CSS tone adjustment; this changes only their on-screen appearance, not the image files. The film-inspired look is a visual treatment, not a claim about the camera or film stock used for the original photographs. Other editorial photographs are sourced from publicly available websites and press materials; their respective photographers and venues retain copyright, and source links are listed here wherever available. Where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. A few author-archive photographs carry subtle AI exposure and shadow-detail recovery; composition remains unchanged, and each processed file is labelled “AI-processed” under the image and in this list. Module covers, the access page and the landing hero use original polychrome cartoon illustrations made for this course — a deliberate editorial style, not documentary photography: they illustrate an idea, never a specific venue, and are labelled as illustrations in this list. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    statement: 'Every photograph in the elective is listed with its source and rights status. Images of the author’s own venues, objects and portraits are © Egor Tarasenko and come from his personal archive. The access-page visual, landing hero and selected module covers use Joi and Pacific archive photographs in a close-detail, film-inspired display treatment in full color. Supporting photos, including editorial references, are shown in full color and may receive a light CSS tone adjustment; this changes only their on-screen appearance, not the image files. The film-inspired look is a visual treatment, not a claim about the camera or film stock used for the original photographs. Other editorial photographs are sourced from publicly available websites and press materials; their respective photographers and venues retain copyright, and source links are listed here wherever available. Where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. A few author-archive photographs carry subtle AI exposure and shadow-detail recovery; composition remains unchanged, and each processed file is labelled “AI-processed” under the image and in this list. Module covers, case-card covers, the access page and the landing hero use original polychrome cartoon illustrations made for this course — a deliberate editorial style, not documentary photography: they illustrate an idea, never a specific venue, and are labelled as illustrations in this list. Each illustrated case card opens onto the full case file, where the documentary photograph of the venue is shown with its own credit line. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
     contact: 'egor.tarasenko@him-mail.ch',
     files: [
       { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
