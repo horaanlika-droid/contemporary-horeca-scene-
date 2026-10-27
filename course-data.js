@@ -426,7 +426,7 @@ window.COURSE = {
       number: '09',
       title: 'Budget Realisation, Scenography & Found-Object Mockup',
       description: 'Soul before budget: Joi Espresso Bar and Denis Bobkov’s salvage worlds, the real cost of found objects, and theatrical techniques that turn a tabletop into a venue.',
-      image: 'project-joi-bar.jpg',
+      image: 'illo-m09-found.jpg',
       practitioners: ['Egor Tarasenko (Joi Espresso Bar)', 'Denis Bobkov (Black Swan / Bambule)'],
       lessons: [
         {
@@ -472,7 +472,7 @@ window.COURSE = {
       number: '10',
       title: 'Final Challenge',
       description: 'Open & Operate: bring the concept, menu, guest journey, operating model, sourcing plan and live mockup together into one credible hospitality proposition.',
-      image: 'project-detail-chess.jpg',
+      image: 'illo-m10-mockup.jpg',
       practitioners: ['Jiro Ono', 'René Redzepi', 'Hiroyasu Kayama', 'Egor Tarasenko'],
       lessons: [
         {

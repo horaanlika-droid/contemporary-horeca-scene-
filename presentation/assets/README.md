@@ -17,7 +17,7 @@ The `illo-*.jpg` files are original illustrations made for the course interface 
 | `illo-gate-still-life.jpg` | Access page still life (vertical) |
 | `illo-hero-scene.jpg` | Course landing hero — the bar as a stage set (vertical) |
 | `illo-m01-signals.jpg` … `illo-m08-venture.jpg` | Module covers 01–08 (3:2) |
-| `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) — in production; modules 09–10 still use archive photographs |
+| `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) |
 
 ## Thematic Horeca photography
 
