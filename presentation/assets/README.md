@@ -18,6 +18,7 @@ The `illo-*.jpg` files are original illustrations made for the course interface 
 | `illo-hero-scene.jpg` | Course landing hero — the bar as a stage set (vertical) |
 | `illo-m01-signals.jpg` … `illo-m08-venture.jpg` | Module covers 01–08 (3:2) |
 | `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) |
+| `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg`, `illo-case-jiro-ono.jpg`, `illo-case-krasota-zarkov.jpg`, `illo-case-dave-arnold.jpg` | Case-card covers, drawn per case (3:2). The card is a cover; the case file keeps the documentary photograph |
 
 ## Thematic Horeca photography
 

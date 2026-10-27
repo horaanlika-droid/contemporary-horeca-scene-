@@ -530,6 +530,18 @@ test('images carry provenance credits, fallbacks and an email submission channel
   assert.match(course, /ILLUSTRATION · ORIGINAL COURSE GRAPHIC/);
   assert.match(course, /not a photograph of the venue/);
   assert.match(read('site-copy.js'), /mockupImage: 'project-detail-chess\.jpg'/);
+  // every case cover is an original illustration that exists on disk and is credited as one
+  const caseCovers = courseData().cases.filter(item => item.cover);
+  assert.ok(caseCovers.length >= 10, 'the drawn case covers are published');
+  for (const item of caseCovers) {
+    assert.match(item.cover, /^illo-case-/, `${item.title} cover is an illustration`);
+    assert.equal(fs.existsSync(path.join(ROOT, 'presentation/assets', item.cover)), true, item.cover);
+    assert.ok(!('cover' in item) || item.image, `${item.title} keeps its documentary photograph`);
+    assert.notEqual(item.cover, item.image, `${item.title} cover is not the case photograph`);
+  }
+  // the card renders the cover while the case file keeps the photograph
+  assert.match(app, /const caseCover = x => x\?\.cover \|\| x\?\.image;/);
+  assert.match(app, /creditFor\(caseCover\(/);
   // homework reaches the instructor in-app or by email
   assert.match(app, /PREFER EMAIL\? BOTH CHANNELS ARE EQUAL/);
   assert.match(app, /mailto:egor\.tarasenko@him-mail\.ch\?subject=/);
