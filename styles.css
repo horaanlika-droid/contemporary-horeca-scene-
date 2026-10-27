@@ -1014,3 +1014,35 @@ body.tribute-popup-open{overflow:hidden}
 .gate-bot-link{display:inline-block;margin-bottom:16px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--red)}
 .gate-purchase .gate-purchase-note{margin:14px 0 0;font-size:12px}
 .gate-purchase-unavailable a{color:var(--ink);text-decoration:underline}
+
+/* --- hand-drawn illustrations ------------------------------------------------
+   Original ink-and-pastel drawings are paper, not photographs: they are shown
+   whole on a white sheet, never cropped, never graded by the film filter. */
+.illo-photo{filter:none;background:var(--white)}
+.hero-media img.illo-photo{filter:none;max-height:min(72vh,660px);box-shadow:0 34px 80px rgba(0,0,0,.46)}
+.case-feature img.illo-photo{object-fit:contain;object-position:center;padding:clamp(12px,1.8vw,24px);background:var(--paper-warm);filter:none}
+.case-feature:hover img.illo-photo{transform:none;filter:none}
+.case-item .shot img.illo-photo{object-fit:contain;object-position:center;filter:none;background:var(--white)}
+.case-item:hover .shot img.illo-photo{transform:none;filter:none}
+.figure-grid .case-item .shot img.illo-photo{object-position:center}
+.lesson-layout img.illo-photo,.mockup-card img.illo-photo{object-fit:contain;background:var(--white)}
+/* the access panel becomes a paper sheet when the visual is a drawing */
+.gate-visual.is-illustration{background:var(--paper-soft);border-right:1px solid var(--line)}
+.gate-visual.is-illustration img,.gate-visual.is-illustration img.film-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 46%;
+  padding:clamp(22px,5vh,64px) clamp(18px,3vw,48px) clamp(140px,18vh,200px);filter:none;
+}
+.gate-visual.is-illustration:after{background:none}
+.gate-visual.is-illustration .gate-visual-copy{color:var(--ink)}
+.gate-visual.is-illustration .gate-visual-copy .eyebrow{color:var(--muted)}
+.gate-visual.is-illustration .gate-visual-copy .eyebrow:before{background:var(--red)}
+.gate-visual.is-illustration .gate-visual-copy .eyebrow:after{background:var(--line)}
+.gate-visual.is-illustration .gate-visual-copy h1 em{color:var(--red)}
+.gate-visual.is-illustration .gate-visual-copy p{color:#3d3d3a}
+.gate-visual.is-illustration .gate-more{color:var(--ink);border-bottom-color:var(--line-strong)}
+.gate-visual.is-illustration .gate-more:hover{color:var(--red);border-bottom-color:var(--red)}
+@media (max-width:760px){
+  .gate-visual.is-illustration img,.gate-visual.is-illustration img.film-photo{
+    position:relative;height:42vh;padding:18px var(--gut) 0;object-position:50% 40%;
+  }
+}

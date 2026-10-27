@@ -231,8 +231,8 @@
     root.innerHTML = `
     <main class="gate-page">
       <div class="gate-stage">
-        <div class="gate-visual">
-          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Close-up of paper cups and the espresso bar at Joi in full color, softly focused and drawn from the author's own project archive">
+        <div class="gate-visual${/^illo-/.test(String(g.heroImage || '')) ? ' is-illustration' : ''}">
+          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Hand-drawn ink and pastel illustration of a cafe table still life — a coffee cup, a cocktail, a candle and a leafy branch">
           <div class="gate-visual-copy">
             <span class="eyebrow">${escG(g.eyebrow)}</span>
             <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
