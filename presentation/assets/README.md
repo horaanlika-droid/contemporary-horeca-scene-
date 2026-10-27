@@ -8,9 +8,11 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 | --- | --- |
 | `him-logo-white.png` | Official HIM logo asset linked from the [Swiss Education Group HIM Business School page](https://www.swisseducation.com/en/him-business-school/). |
 
-## Polychrome cartoon illustrations
+## Navy-ink illustrations
 
-The `illo-*.jpg` files are original illustrations made for the course interface — a modern polychrome cartoon style with flat vector shapes, a cream outline, confetti and polka-dot patterns and the SEG palette (maroon `#410c0c`, signal red `#e42313`, cream, mustard gold, teal, cobalt). They illustrate concepts, not specific venues, and are credited in the app as *illustration · original course graphic*.
+The `illo-*.jpg` files are original illustrations made for the course interface. The **case cards** are drawn in a single-colour ink style — one deep navy (`#153c8c`) on white paper, bold pen outlines, hand-hatched shadows, slightly exaggerated comic faces — modelled on mid-century Japanese poster and woodblock caricature. Every case-card drawing is a **caricature of the real practitioner documented in the case**, set inside the venue described in the case file: the faces are taken from the practitioner's own editorial portrait (`figure-*.jpg`) and the room from the venue photograph (`case-*.jpg`) already archived in this folder. The drawings are interpretive, not documentary: they are credited in the app as *illustration · original course graphic* and are never presented as photographs of the venue. The reference-to-drawing mapping is recorded in `INK-SERIES.md`.
+
+Module covers, the access page and the landing hero keep their earlier multi-colour cartoon illustrations — flat vector shapes, a cream outline, confetti and polka-dot patterns, the SEG palette (maroon `#410c0c`, signal red `#e42313`, cream, mustard gold, teal, cobalt). Those illustrate ideas, not specific venues.
 
 | File | Use |
 | --- | --- |
