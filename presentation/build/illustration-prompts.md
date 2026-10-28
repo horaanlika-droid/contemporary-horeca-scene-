@@ -72,6 +72,11 @@ an extra gallery frame shown beside its source photograph rather than a card tha
 | `illo-project-joi-brand.jpg` | `project-joi-brand.jpg` | One blank takeaway cup in the foreground on a folk carpet, an arcade cabinet with a blank marquee behind it | the marquee rectangle |
 | `illo-project-joi-machine.jpg` | `project-joi-machine.jpg` | The oxblood lever machine: round red button, dial gauge, two group heads, steam wands, drip tray with a red cloth and two jugs, blank cup stacks above | the round button |
 | `illo-project-joi-grinder.jpg` | `project-joi-grinder.jpg` | A red grinder with a chrome collar and a bean-filled hopper, a blank round sticker, a dark steel container and a blank menu card behind | the grinder body |
+| `illo-project-passie-cake.jpg` | `project-passie-cake.jpg` | A mint-iced birthday cake in a glass display fridge: rubber ducks on blue puddles, pastel sprinkles, three abstract pink icing ribbons, blank photo prints on the glass | the red heart on the door |
+| `illo-project-passie-cheesecake.jpg` | `project-passie-cheesecake.jpg` | A mango cheesecake wedge on a painted china plate with piped cream and pink petals, the ribbed vase and single blossom behind | one piped petal centre |
+| `illo-project-passie-counter.jpg` | `project-passie-counter.jpg` | White lever machine, red grinder, gingham-lidded dispenser, straw box, carnations, garlanded counter, chandelier and pink television on a shelf, two blank menu boards | the grinder body |
+| `illo-project-passie-window.jpg` | `project-passie-window.jpg` | The whole room framed by the shop window: a reader at a round table, chandelier, counter and machines, banquette, blank menu boards, a ghosted third chair in front | a small detail on the counter |
+| `illo-project-passie-sakura.jpg` | `project-passie-sakura.jpg` | A pink cake with an abstract yellow squiggle on a painted plate, pink tray, fork, ribbed vase with one blossom, sage tray and blush cup, coral curtain | the red leaves on the plate rim |
 
 ## Practitioner and author portrait illustrations
 
