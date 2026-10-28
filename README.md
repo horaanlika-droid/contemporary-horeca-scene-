@@ -251,8 +251,12 @@ Reviewed every published illustration against its own reference photograph and a
 Items are ordered by how much they cost the reader: likeness that should be obvious but is not, then frames
 that cannot exist, then series inconsistencies, then the bookkeeping that the last two batches left behind.
 
-**Status — 29 October 2026.** Eleven assets were redrawn or recoloured from their photographs in this pass
-and are marked `done` below; everything still marked `open` is the remaining task list. The checklist used
+**Status — 29 October 2026.** Fifteen assets were redrawn or recoloured from their photographs in this pass
+and are marked `done` below; everything still marked `open` is the remaining task list. The second review in
+`presentation/build/illustration-audit.md` §10 is the current one: it adds the two tests the drawings are now
+judged by (obvious resemblance, one hand across the series) and names the four files drawn in the wrong hand —
+`illo-figure-narzi.jpg`, `illo-figure-dave-arnold.jpg`, `illo-lesson-scenography.jpg` and
+`illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set. The checklist used
 for every redraw, and the reasoning behind each verdict, are in
 `presentation/build/illustration-audit.md`.
 
