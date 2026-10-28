@@ -84,6 +84,42 @@ room's palette, the counter material, the signature object and the subject's gar
 picture against the list in `illustration-audit.md` §9 — support, hands, liquids, one horizon,
 palette, no foreground left in outline — before it is published.
 
+## Lesson headers — the diorama set (October 2026)
+
+The twelve lesson headers are one diorama, drawn as twelve isometric cards on a shared grid. When drawing
+or redrawing any of them, hold every rule below: a card that breaks one of them cannot be assembled with
+the rest.
+
+**Grid.** Isometric, same block thickness, same floor-to-ceiling height, same camera angle for all twelve.
+The block floats on white paper — no ground plane, no horizon, no sky, no drop shadow outside the block.
+
+**Two sides.** Left: the designed interior in the pale palette (cream, sage, dusty blue, warm clay,
+off-white), furnished like architecture — fluted timber, bouclé, brass, plaster, stone inlays, one
+statement light. Never generic café equipment. Right: the tools of that lesson in strict black and white,
+thin outline only, no fill and no tinted shadow, four objects in a loose column with white space between.
+
+**One line.** Median ink stroke 2 px at 1264 × 843; no line anywhere thicker than another; flat gouache
+fills; no gradients, no texture, no lettering, no numerals, no logos.
+
+**One red.** A single `#e42313` dot; on these cards it sits on the tool that is the lesson's control.
+
+| Card | Lesson | Left — the room | Right — the tools (black and white) |
+| --- | --- | --- | --- |
+| `illo-lesson-signals.jpg` | 01 Look Beyond the Surface | espresso bar: fluted counter, bouclé banquette, brass shelves, dome pendant | phone, folded plan, loupe, spirit level |
+| `illo-lesson-atmosphere.jpg` | 02 Designing atmosphere | dining room at dusk: clay plaster, stepped floor, water channel, bouclé bench | colour fan, fabric swatch, light meter, 1:20 model |
+| `illo-lesson-perception.jpg` | 03 The senses at the table | tasting room: one stone disc on an off-axis column, rim trough | pipette, precision scale, three glasses, weighed spoons |
+| `illo-lesson-point-of-view.jpg` | 04 Concept manifestos | concept bar: cast concrete block, dry-stone wall, three unlike stools | menu book, loose sheet, rubber stamp, ring of cards |
+| `illo-lesson-concept-objects.jpg` | 05 Concept objects | object gallery: pale plinth, shadow gap, hairline callouts | object maquettes on a tray |
+| `illo-lesson-automation.jpg` | 06 Automation | service station: floating monolith, hidden lift, ribbed pillar, thin arm | calipers, torque driver, sealed capsule, stopwatch |
+| `illo-lesson-human-ai.jpg` | 07 AI as a tool | back-of-house prep room: stainless bench, pass hatch, cool room door | tablet, stylus, printed brief, small robot arm |
+| `illo-lesson-new-formats.jpg` | 08 The next table | origin table: growing wall, prep bench, finished serve | secateurs, cutting board, glass cloche, tasting spoon |
+| `illo-lesson-from-idea.jpg` | 09 From idea to operating model | plan block: zones as furniture, capacity implied by the seats | rolled plan, ring binder, calculator, site rule |
+| `illo-lesson-budget-builds.jpg` | 10 Soul before budget | salvage corner: three anchor objects, raw material language | tape measure, chalk, invoice book, key ring |
+| `illo-lesson-scenography.jpg` | 11 Theatrical techniques | table vignette: found objects lit from one side | candle, napkin ring, small bell, blank menu card |
+| `illo-lesson-final-brief.jpg` | 12 The final brief | **the assembled diorama** — the twelve blocks joined | the twelve tools gathered at small scale |
+
+Card 12 is the diagram of the whole set: it is drawn last and must literally show the joined blocks.
+
 ## Lesson headers
 
 Every lesson file opens with its own header image instead of borrowing the module cover, so two lessons in

@@ -245,6 +245,31 @@ Every published illustration follows the art direction above; the asset index an
 - Revised earlier: eight of the ten case-card covers — `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg` and `illo-case-jiro-ono.jpg` — were redrawn again, this time from each case's own documentary photograph rather than from the earlier cover art, so every drawn card carries the real room, counter and objects of that venue: Kayama's apothecary counter under its brick arch, the pub hall of Black Swan, the minimal shelf-and-bench corner of Shapes, the island workstation of Sips, the candlelit vault of El Copitas, the panoramic lounge of City Space, the sensory still life of the Talalay serve and the two chefs behind Jiro's counter. Published dimensions stay 1264 × 848, the case-file photographs are unchanged, their untouched originals are kept in `presentation/assets/originals/case-*.jpg` and each cover has an exact-file credit linking its source photograph.
 - Done earlier: the practitioner portrait set is complete — eleven `illo-figure-*.jpg` portraits (Redzepi, Caporale, Kratena, Talalay, Dave Arnold, Savage, Narzi, Kayama, Zernov, Zarkov, Bobkov), each redrawn from its own editorial photograph at 848 × 1264, wired into the course with the editorial original retained beside it and linked as its source; and the five author project illustrations `illo-author-passie-2022.jpg`, `illo-author-coocoo-2024.jpg`, `illo-author-pacific-2024.jpg`, `illo-author-joi-2025.jpg` and `illo-author-chc-2024.jpg`, redrawn at the published dimensions of their archive photographs (600 × 900, 900 × 900, 675 × 900, 675 × 900, 900 × 466) and shown in the About-the-author dialog and on the author figure card, with the archive photographs retained as sources and the dialog noting that its project images are illustrations.
 
+### The lesson diorama — October 2026
+
+The twelve lesson headers are being rebuilt as **one diorama**: one isometric card per lesson, all drawn
+on a shared grid, so the twelve cards assemble into a single cutaway model of the student's venue at Final
+Pitch Day. The art direction changed with it:
+
+- **One block per lesson.** Each card is an isometric cutaway block — the same grid, the same block
+  thickness, the same pale palette — showing the one part of the venue that lesson is about: façade plate,
+  lit room, tasting table, bar and menu wall, object plinth, service station, back-of-house prep room,
+  origin table, plan block, salvage corner, table vignette, and finally the assembled model.
+- **Two sides to a card.** Left: the designed interior in pale colour — sculptural furniture, real
+  materials, lighting designed the way an architect would (fluted timber, bouclé, brass, plaster, stone
+  inlays), never generic café equipment. Right: the tools of that lesson in **strict black and white** —
+  thin outline, no fill, no tinted shadow — so the reading is immediate: this is the room, these are the
+  instruments.
+- **One red dot.** The single `#e42313` accent stays, and on the tool side it marks the one control that
+  matters for that lesson.
+- **Same hand as the series.** Median ink stroke 2 px at 1264 px wide, flat gouache fills, white paper,
+  no lettering anywhere on either side.
+
+The **tasks follow the cards, lightly**: every challenge keeps its existing content and its assignment
+number, and gains one sentence naming the card it produces. Assignment 12 then assembles the twelve cards
+into the diorama and the pitch is read from it. Nothing was rewritten, and no lesson gained work it did not
+already have — the cards are a second view of the deliverables the course already asks for.
+
 ### Image audit — October 2026
 
 Reviewed every published illustration against its own reference photograph and against the laws of physics.

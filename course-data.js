@@ -204,7 +204,7 @@ window.COURSE = {
           ],
           case: 'Sukiyabashi Jiro (Tokyo) · El Copitas (St Petersburg) · Bar Leone (Hong Kong) · Line (Athens)',
           practitioners: ['Jiro Ono', 'Igor Zernov'],
-          challenge: 'Challenge — build a one-page award map for your own concept: one primary and one secondary award, the entry rule (self-entry, nomination or inspection only), the deadline and the five pieces of evidence a jury would need. Submit it in the app for feedback; the numbered assignment sequence begins with Assignment 03.'
+          challenge: 'Challenge — build a one-page award map for your own concept: one primary and one secondary award, the entry rule (self-entry, nomination or inspection only), the deadline and the five pieces of evidence a jury would need. Keep the result as one isometric card for your diorama: the façade plate, showing how the venue announces itself from the street. Submit it in the app for feedback; the numbered assignment sequence begins with Assignment 03.'
         }
       ]
     },
@@ -233,7 +233,7 @@ window.COURSE = {
           ],
           case: 'Sips (Simone Caporale, Barcelona) · Black Swan & Bambule (Denis Bobkov) · Tayēr + Elementary (Alex Kratena)',
           practitioners: ['Simone Caporale', 'Denis Bobkov', 'Alex Kratena'],
-          challenge: 'Challenge — map three scenes for your venue (arrival, defining moment, farewell) with light, sound, scent, tableware and service choreography, then list three “fairy-tale breakers” you will eliminate. Submit your scene map in the app for feedback.'
+          challenge: 'Challenge — map three scenes for your venue (arrival, defining moment, farewell) with light, sound, scent, tableware and service choreography, then list three “fairy-tale breakers” you will eliminate. Keep the scene map as one isometric card: the room at its defining moment, with its light and materials legible at a glance. Submit your scene map in the app for feedback.'
         }
       ]
     },
@@ -262,7 +262,7 @@ window.COURSE = {
           ],
           case: 'Bar Benfiddich (Hiroyasu Kayama) · Sukiyabashi Jiro · Liquid Intelligence (Dave Arnold) · Artem Talalay',
           practitioners: ['Artem Talalay', 'Dave Arnold', 'Hiroyasu Kayama', 'Jiro Ono'],
-          challenge: 'Practical Assignment 03 — The Sensory Serve: define one signature serve, map its sensory characteristics, compare two or three vessels and prototype it. Submit the one-page sensory sheet, the sensory map and your photographs in the app for feedback.'
+          challenge: 'Practical Assignment 03 — The Sensory Serve: define one signature serve, map its sensory characteristics, compare two or three vessels and prototype it. Keep the serve as one isometric card: the tasting table with the vessel, the plate and the light that flatters them. Submit the one-page sensory sheet, the sensory map and your photographs in the app for feedback.'
         }
       ]
     },
@@ -291,7 +291,7 @@ window.COURSE = {
           ],
           case: 'Little Red Door / A Bar with Shapes for a Name (Rémy Savage) · Bar Leone · El Copitas · Tuju · Tayēr + Elementary · White Rabbit Family',
           practitioners: ['Rémy Savage', 'Igor Zernov', 'Boris Zarkov', 'Alex Kratena'],
-          challenge: 'Practical Assignment 04 — The Menu Manifesto: write your concept manifesto, analyse three menus, propose a menu architecture and a visual reference board. Submit the manifesto and the three case analyses in the app for feedback.'
+          challenge: 'Practical Assignment 04 — The Menu Manifesto: write your concept manifesto, analyse three menus, propose a menu architecture and a visual reference board. Keep it as one isometric card: the bar and its menu wall, where the manifesto is legible before a single word is read. Submit the manifesto and the three case analyses in the app for feedback.'
         },
         {
           id: 'concept-objects',
@@ -310,7 +310,7 @@ window.COURSE = {
           ],
           case: 'CooCoo Coffee · Pacific · TAM · Joi Espresso Bar',
           practitioners: ['Egor Tarasenko'],
-          challenge: 'Practical Assignment 05 — The Object Family: choose a menu, a service object and a furniture or merchandise element; define materials, dimensions, durability and a realistic unit cost. Submit three object concept sheets and a material board in the app for feedback.'
+          challenge: 'Practical Assignment 05 — The Object Family: choose a menu, a service object and a furniture or merchandise element; define materials, dimensions, durability and a realistic unit cost. Keep the family as one isometric card: the object plinth, with the menu, the service object and the furniture at the same scale. Submit three object concept sheets and a material board in the app for feedback.'
         }
       ]
     },
@@ -339,7 +339,7 @@ window.COURSE = {
           ],
           case: 'City Space Bar & The Horeca Code (Bek Narzi)',
           practitioners: ['Bek Narzi'],
-          challenge: 'Practical Assignment 06 — The Invisible Operating System: map the preparation and service sequence of one signature item, mark what to automate and what to protect, and sketch the workstation. Submit the workflow diagram and the human/machine matrix in the app for feedback.'
+          challenge: 'Practical Assignment 06 — The Invisible Operating System: map the preparation and service sequence of one signature item, mark what to automate and what to protect, and sketch the workstation. Keep the workstation as one isometric card: the service station drawn as one piece of furniture rather than a machine. Submit the workflow diagram and the human/machine matrix in the app for feedback.'
         }
       ]
     },
@@ -368,7 +368,7 @@ window.COURSE = {
           ],
           case: 'Diageo World Class AI brief · Sips (Simone Caporale) · Rémy Savage · Sesto Senso Academy (Felice Capasso)',
           practitioners: ['Simone Caporale', 'Rémy Savage'],
-          challenge: 'Practical Assignment 07 — The Human–AI Development Brief: take one real task, write the brief, document the AI output and your decisions, and add a short AI-use policy. Submit the brief, the decision log and the ethics charter in the app for feedback.'
+          challenge: 'Practical Assignment 07 — The Human–AI Development Brief: take one real task, write the brief, document the AI output and your decisions, and add a short AI-use policy. Keep the result as one isometric card: the back-of-house prep room, where the task you handed to the machine actually happens. Submit the brief, the decision log and the ethics charter in the app for feedback.'
         }
       ]
     },
@@ -397,7 +397,7 @@ window.COURSE = {
           ],
           case: 'Bar Benfiddich (Hiroyasu Kayama) · Tuju · Noma · Dave Arnold · Artender',
           practitioners: ['Hiroyasu Kayama', 'René Redzepi', 'Dave Arnold'],
-          challenge: 'Practical Assignment 08 — From Origin to Memory: choose one ingredient with a real connection to a place or producer, compare two preparation methods and develop a signature serve around the stronger one. Submit the origin sheet, comparison notes and concept in the app for feedback.'
+          challenge: 'Practical Assignment 08 — From Origin to Memory: choose one ingredient with a real connection to a place or producer, compare two preparation methods and develop a signature serve around the stronger one. Keep it as one isometric card: the origin table — the growing wall, the prep bench and the finished serve in one frame. Submit the origin sheet, comparison notes and concept in the app for feedback.'
         }
       ]
     },
@@ -426,7 +426,7 @@ window.COURSE = {
           ],
           case: 'City Space Bar (Bek Narzi) · El Copitas & #FollowTheRabbits (Igor Zernov) · White Rabbit Family (Boris Zarkov)',
           practitioners: ['Bek Narzi', 'Igor Zernov', 'Boris Zarkov'],
-          challenge: 'Practical Assignment 09 — The First Operating Model: define format, capacity and revenue streams, estimate costs and break-even, chart the team, and outline the first 90 days. Submit the one-page model and the launch outline in the app for feedback.'
+          challenge: 'Practical Assignment 09 — The First Operating Model: define format, capacity and revenue streams, estimate costs and break-even, chart the team, and outline the first 90 days. Keep the model as one isometric card: the plan cut as a block, with capacity and revenue visible in the furniture itself. Submit the one-page model and the launch outline in the app for feedback.'
         }
       ]
     },
@@ -455,7 +455,7 @@ window.COURSE = {
           ],
           case: 'Joi Espresso Bar (Egor Tarasenko) · Black Swan & Bambule (Denis Bobkov)',
           practitioners: ['Egor Tarasenko', 'Denis Bobkov'],
-          challenge: 'Practical Assignment 10 — The Salvage & Sourcing Plan: define the material language, name three anchor objects, research sourcing routes and calculate the real acquisition cost. Submit the moodboard, the annotated object list and the budget table in the app for feedback.'
+          challenge: 'Practical Assignment 10 — The Salvage & Sourcing Plan: define the material language, name three anchor objects, research sourcing routes and calculate the real acquisition cost. Keep the plan as one isometric card: the salvage corner, where the three anchor objects and the material language meet. Submit the moodboard, the annotated object list and the budget table in the app for feedback.'
         },
         {
           id: 'scenography',
@@ -473,7 +473,7 @@ window.COURSE = {
           ],
           case: 'Joi Espresso Bar (Egor Tarasenko) · Abbey Players & Black Swan (Denis Bobkov)',
           practitioners: ['Egor Tarasenko', 'Denis Bobkov'],
-          challenge: 'Practical Assignment 11 — The Live Found-Object Mockup: assemble a real tabletop scene with a physical menu prototype, light it, photograph it from guest height and reflect on what it revealed. Submit the photographs, the object list and the reflection in the app for feedback.'
+          challenge: 'Practical Assignment 11 — The Live Found-Object Mockup: assemble a real tabletop scene with a physical menu prototype, light it, photograph it from guest height and reflect on what it revealed. Keep the mockup as one isometric card: the table vignette, with its light and its found objects. Submit the photographs, the object list and the reflection in the app for feedback.'
         }
       ]
     },
@@ -501,7 +501,7 @@ window.COURSE = {
           ],
           case: 'Jiro Ono · Noma · Bar Leone · Joi Espresso Bar',
           practitioners: ['Jiro Ono', 'René Redzepi', 'Hiroyasu Kayama', 'Simone Caporale', 'Egor Tarasenko'],
-          challenge: 'Practical Assignment 12 — The Final Open & Operate Pitch: assemble the pitch deck, the physical menu concept, the sourcing and budget plan, the mockup photographs and the operating materials, and defend them together at Final Pitch Day.'
+          challenge: 'Practical Assignment 12 — The Final Open & Operate Pitch: assemble the pitch deck, the physical menu concept, the sourcing and budget plan, the mockup photographs and the operating materials, and defend them together at Final Pitch Day. Then assemble the twelve cards: they build one isometric diorama of your venue — one block per lesson, on a shared grid — and the pitch is read from it.'
         }
       ]
     }
