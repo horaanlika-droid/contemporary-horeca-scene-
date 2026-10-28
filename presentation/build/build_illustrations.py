@@ -63,6 +63,18 @@ PLAN: list[tuple[str, str, tuple[int, int]]] = [
     ("case-jiro-ono.png", "illo-case-jiro-ono.jpg", (1264, 848)),
     ("case-krasota-zarkov.png", "illo-case-krasota-zarkov.jpg", (1264, 848)),
     ("case-dave-arnold.png", "illo-case-dave-arnold.jpg", (1264, 848)),
+    # --- industry-figure portraits (each keeps its published dimensions) ----------
+    ("figure-redzepi.png", "figure-redzepi.jpg", (1200, 1500)),
+    ("figure-caporale.png", "figure-caporale.jpg", (1200, 1799)),
+    ("figure-kratena.png", "figure-kratena.jpg", (1200, 1500)),
+    ("figure-talalay.png", "figure-talalay.jpg", (1005, 1791)),
+    ("figure-dave-arnold.png", "figure-dave-arnold.jpg", (1200, 1800)),
+    ("figure-savage.png", "figure-savage.jpg", (1200, 1802)),
+    ("figure-narzi.png", "figure-narzi.jpg", (1020, 1530)),
+    ("figure-kayama.png", "figure-kayama.jpg", (1200, 1800)),
+    ("figure-zernov.png", "figure-zernov.jpg", (1200, 1500)),
+    ("figure-zarkov.png", "figure-zarkov.jpg", (1200, 1804)),
+    ("figure-bobkov.png", "figure-bobkov.jpg", (1200, 1800)),
 ]
 
 

@@ -40,3 +40,24 @@ singular so the series stays coherent and the brand colour remains meaningful.
 | `case-jiro-ono.png` | `illo-case-jiro-ono.jpg` | 1264 × 848 | Diagonal sushi counter with one nigiri, rice tub, bamboo mats, knife, dipping dish and brush | the fish on the nigiri |
 | `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | Gastro-theatre stage, curtains, dining table, hand lifting a cloche, abstract projection and audience | one curtain tie |
 | `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | Beverage-science bench with centrifuge, distillation apparatus, beakers, siphon, scale and ice bucket | the siphon |
+
+## Industry-figure portraits
+
+The eleven `figure-*.jpg` portraits keep their own published dimensions and are
+redrawn from their own reference photograph, preserving the person's recognisable
+features, clothing and pose. The original photograph is preserved in
+`presentation/assets/originals/` and linked from the in-app credits.
+
+| Master | Asset | Scene | Red accent |
+| --- | --- | --- | --- |
+| `figure-redzepi.png` | `figure-redzepi.jpg` | Chef in a navy tee and grey work apron, hands on hips, wide smile; a plain doorway line behind him | one stitch mark on the apron pocket |
+| `figure-caporale.png` | `figure-caporale.jpg` | Bartender with swept-back hair and beard, seated behind crossed forearms on a bar, grey tee under a dark zip waistcoat, tattoos simplified to ink motifs, two pendant lamps | one red motif in the forearm tattoo |
+| `figure-kratena.png` | `figure-kratena.jpg` | Man in a low navy cap and aviator glasses with a phone in hand, grey tee under a black utility vest, one wall panel behind | a dash on the cap front |
+| `figure-talalay.png` | `figure-talalay.jpg` | Bald bartender with glasses dripping bitters from a dropper into a coupe, cream jacket over a white tee, outlined bottles on a shelf | the cherry in the coupe |
+| `figure-dave-arnold.png` | `figure-dave-arnold.jpg` | Bartender in a dark green crewneck over a plaid collar, shaker raised high, chilled coupe low, dry-ice vapour curls | one plaid line at the neck |
+| `figure-savage.png` | `figure-savage.jpg` | Smiling man in a sage jacket with embroidered collar and pockets, white tank top and jeans, two cacti behind | a flower bud on the tallest cactus |
+| `figure-narzi.png` | `figure-narzi.jpg` | Man in a striped white shirt leaning on a bar in profile, bitters bottles, a tumbler and stacked coupes in front, bottle shelf behind | one bottle cap |
+| `figure-kayama.png` | `figure-kayama.jpg` | Bartender with a side-swept fringe pointing at the viewer, cream blazer, white shirt and red tie, shelf with bottles and speakers | the necktie |
+| `figure-zernov.png` | `figure-zernov.jpg` | Man with a red-streaked fringe and round glasses holding a takeaway coffee, black tee and trousers, brick wall, hanging lamp, bamboo steamers | the blank sign's flame icon |
+| `figure-zarkov.png` | `figure-zarkov.jpg` | Restaurateur relaxed in a white boxy armchair, white sweatshirt, navy trousers, lavalier mic, water bottle on the floor, blue light screen | the mic's light dot |
+| `figure-bobkov.png` | `figure-bobkov.jpg` | *not yet redrawn* — man with bleached hair, round glasses and moustache at a cafe table, white tee under a brown kimono robe, slatted bench behind | a ring's enamel heart |

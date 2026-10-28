@@ -1336,7 +1336,7 @@ test('admin can grant course access manually without requiring Tribute payment',
   assert.equal(colleagueSignIn.body.unlocked, true);
 });
 
-test('restyled case covers retain their published JPEG dimensions', () => {
+test('restyled portraits and case covers retain their published JPEG dimensions', () => {
   // Read SOF dimensions without an image-library dependency.
   const dimensions = buffer => {
     assert.equal(buffer.readUInt16BE(0), 0xffd8, 'asset is a JPEG');
@@ -1366,7 +1366,25 @@ test('restyled case covers retain their published JPEG dimensions', () => {
     const buffer = fs.readFileSync(path.join(ROOT, 'presentation/assets', filename));
     assert.deepEqual(dimensions(buffer), [1264, 848], filename);
   }
-  for (const file of ['figure-jiro.jpg', 'project-passie-room.jpg']) {
+  // the redrawn industry-figure portraits keep their published portrait dimensions
+  const portraits = {
+    'figure-jiro.jpg': [1200, 1612],
+    'figure-redzepi.jpg': [1200, 1500],
+    'figure-caporale.jpg': [1200, 1799],
+    'figure-kratena.jpg': [1200, 1500],
+    'figure-talalay.jpg': [1005, 1791],
+    'figure-dave-arnold.jpg': [1200, 1800],
+    'figure-savage.jpg': [1200, 1802],
+    'figure-narzi.jpg': [1020, 1530],
+    'figure-kayama.jpg': [1200, 1800],
+    'figure-zernov.jpg': [1200, 1500],
+    'figure-zarkov.jpg': [1200, 1804],
+  };
+  for (const [filename, size] of Object.entries(portraits)) {
+    const buffer = fs.readFileSync(path.join(ROOT, 'presentation/assets', filename));
+    assert.deepEqual(dimensions(buffer), size, filename);
+  }
+  for (const file of ['figure-jiro.jpg', 'project-passie-room.jpg', ...Object.keys(portraits)]) {
     const entry = courseData().imageCredits.files.find(item => item.file === file);
     assert.equal(entry?.generated, true, `${file} is disclosed as generated`);
     assert.match(entry.short, /^ILLUSTRATION · AI-GENERATED/);
