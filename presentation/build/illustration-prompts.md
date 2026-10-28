@@ -77,6 +77,10 @@ an extra gallery frame shown beside its source photograph rather than a card tha
 | `illo-project-passie-counter.jpg` | `project-passie-counter.jpg` | White lever machine, red grinder, gingham-lidded dispenser, straw box, carnations, garlanded counter, chandelier and pink television on a shelf, two blank menu boards | the grinder body |
 | `illo-project-passie-window.jpg` | `project-passie-window.jpg` | The whole room framed by the shop window: a reader at a round table, chandelier, counter and machines, banquette, blank menu boards, a ghosted third chair in front | a small detail on the counter |
 | `illo-project-passie-sakura.jpg` | `project-passie-sakura.jpg` | A pink cake with an abstract yellow squiggle on a painted plate, pink tray, fork, ribbed vase with one blossom, sage tray and blush cup, coral curtain | the red leaves on the plate rim |
+| `illo-project-coocoo-room.jpg` | `project-coocoo-room.jpg` | Cloud ceiling, tiled counter with fairy lights, grinder, blank cards, pink television, two blank hung menu boards, daisy-framed mirror, croffle on a cloud plate | the heart on the tiles |
+| `illo-project-coocoo-bulbs.jpg` | `project-coocoo-bulbs.jpg` | The counter head-on: fairy lights, red grinder, blank card stack, two blank standing menus, pink screen, jar shelf, scale-tiled sink unit, clear chairs | the grinder body |
+| `illo-project-coocoo-team.jpg` | `project-coocoo-team.jpg` | Three staff behind a pastry counter: black shirt, two tan aprons, a paper-wrapped bouquet, blank wall menu boards, oven, display fridge, rubber duck, sink | a magnet on the tile wall |
+| `illo-project-coocoo-menu.jpg` | `project-coocoo-menu.jpg` | The red grinder close up with a rubber duck on its lid, blank hopper sticker, blank badge, postcards taped to the tiles, steel container beside | the grinder body |
 
 ## Practitioner and author portrait illustrations
 
