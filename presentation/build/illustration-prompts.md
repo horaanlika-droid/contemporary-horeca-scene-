@@ -49,6 +49,24 @@ photograph — the venue stays recognisable — and simplify rather than invent.
 | `case-rene-redzepi.png` | `illo-case-rene-redzepi.jpg` | 1264 × 848 | The chef laughing with both hands on his hips, navy tee and grey canvas apron, herbs rising from the chest pocket, warm wall panel and a shelf of plain bowls behind him | the apron tie |
 | `case-alex-kratena.png` | `illo-case-alex-kratena.jpg` | 1264 × 848 | The bar owner in a black cap, clear glasses and a black utility gilet over a grey tee, phone in hand, tattooed left forearm, the second figure drawn in pale outline behind him, a sage-green bar front with a wooden top at the left | the stirrer standing in the glass on the counter |
 
+## Project-file covers
+
+Each project file keeps its photographs and gains a drawn card. Draw the card from the file's own lead
+photograph — the pour, the room, the machine, the object — at that photograph's published dimensions, and
+leave brand lettering blank rather than retyping it. `illo-project-joi-facade.jpg` is the exception: it is
+an extra gallery frame shown beside its source photograph rather than a card that stands in for it.
+
+| Asset | Source | Scene | Red accent |
+| --- | --- | --- | --- |
+| `illo-project-joi-bar.jpg` | `project-joi-bar.jpg` | Six stacks of blank paper cups on a night espresso machine, a bare tungsten lamp, an orange tile wall, a forearm reaching in | the clock rim |
+| `illo-project-passie-wall.jpg` | `project-passie-wall.jpg` | Pink fluted banquette, white lever machine with three mugs, gingham-lidded dispenser, pastel card stack and a rose-and-lisianthus vase | one fallen petal |
+| `illo-project-coocoo-pour.jpg` | `project-coocoo-pour.jpg` | A glass kettle pouring into a cobalt cup with two googly eyes, a blue wall band and a tiled tray | the tray sticker |
+| `illo-project-chicken-connection-kitchen.jpg` | `project-chicken-connection-kitchen.jpg` | A bearded cook mid-gesture beside a chicken-mascot head, subway tiles, a blue cone lamp, a stock pot and a cutting board | the mascot comb |
+| `illo-project-pacific-station.jpg` | `project-pacific-station.jpg` | Two-view sheet of the Mirain station: ice wells, four pumps, drip tray, five hanging bottles, dimension lines without numerals | one pump button |
+| `illo-project-tam-cubes.jpg` | `project-tam-cubes.jpg` | Three blank steel cubes leaning in a stack on white paper | the top cube's edge |
+| `illo-project-detail-nine-lives.jpg` | `project-detail-nine-lives.jpg` | Brick column with a blank taped poster, a typewriter and two old televisions on shelves, a pink monitor, a lava lamp and straws | the lava lamp glow |
+| `illo-project-joi-facade.jpg` | `project-joi-facade.jpg` | The Joi facade: blank sign panel, dark glass doors, two taped tattoo posters, a geometric door emblem, a cream pilaster, a chain on the pavement | the door sticker |
+
 ## Practitioner and author portrait illustrations
 
 The portrait series redraws each person or project from its own retained source
