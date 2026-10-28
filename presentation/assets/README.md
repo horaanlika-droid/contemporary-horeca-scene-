@@ -30,11 +30,6 @@ The app marks every `illo-` file with the `illo-photo` class, so drawn covers ar
 | `illo-m01-signals.jpg` … `illo-m08-venture.jpg` | Module covers 01–08 (3:2) |
 | `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) |
 | `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg`, `illo-case-jiro-ono.jpg`, `illo-case-krasota-zarkov.jpg`, `illo-case-dave-arnold.jpg`, `illo-case-rene-redzepi.jpg`, `illo-case-alex-kratena.jpg` | Case-card covers, drawn per case (3:2). Each case file keeps its separately credited source image |
-| `illo-project-joi-bar.jpg`, `illo-project-passie-wall.jpg`, `illo-project-coocoo-pour.jpg`, `illo-project-chicken-connection-kitchen.jpg`, `illo-project-pacific-station.jpg`, `illo-project-tam-cubes.jpg`, `illo-project-detail-nine-lives.jpg` | Project-file cards, drawn from the lead photograph of each file at that photograph's published dimensions. The card uses the drawing; the project page keeps every archive photograph, so the drawing never replaces the evidence |
-| `illo-project-joi-facade.jpg` | A ninth frame inside the Joi file, shown beside the facade photograph it was drawn from (960 × 1280) |
-| `illo-project-joi-arcade.jpg`, `illo-project-joi-arcade-lights.jpg`, `illo-project-joi-cups.jpg`, `illo-project-joi-brand.jpg`, `illo-project-joi-machine.jpg`, `illo-project-joi-grinder.jpg` | The rest of the Joi file, each drawn from the photograph immediately after it in the gallery and printed at that photograph's pixel dimensions. The Joi file is now a paired archive: every drawing is followed by its own photograph |
-| `illo-project-passie-cake.jpg`, `illo-project-passie-cheesecake.jpg`, `illo-project-passie-counter.jpg`, `illo-project-passie-window.jpg`, `illo-project-passie-sakura.jpg` | The rest of the Passie Cakes file, each drawn from the photograph that follows it in the gallery at that photograph's pixel dimensions |
-| `illo-project-coocoo-room.jpg`, `illo-project-coocoo-bulbs.jpg`, `illo-project-coocoo-team.jpg`, `illo-project-coocoo-menu.jpg` | The rest of the CooCoo Coffee file, drawn from the photograph that follows each one; the hung menu boards stay blank because their printed price lists are not ours to reproduce |
 
 ## Thematic Horeca photography
 
@@ -53,7 +48,9 @@ The deck deliberately uses subject-led hospitality imagery rather than photograp
 
 ## Project photography (author's own practice)
 
-The `project-*.jpg|png` files primarily document the author's own venues, identities and design work. `project-passie-room.jpg` is an AI-generated illustration based on an author-archive photograph, not a documentary photograph. The `illo-project-*` files are drawn covers printed at the pixel dimensions of the photograph they twin, and they are labelled as illustrations wherever they appear. The app uses this archive for Projects of the Author and matching case files; the About-the-author dialog thumbnails use the `illo-author-*` illustration series, and the access page, landing hero and module covers use the `illo-*` illustration series.
+The project files are photographic only — no `illo-project-*` assets exist in this folder, and none are to be added.
+
+The `project-*.jpg|png` files primarily document the author's own venues, identities and design work. `project-passie-room.jpg` is an AI-generated illustration based on an author-archive photograph, not a documentary photograph. There are **no drawn twins** of these files: the 23 `illo-project-*` covers and gallery frames were withdrawn on 28 October 2026 at the author's instruction, so every project file is photographs, captions and credits only and opens with its own lead photograph. The app uses this archive for Projects of the Author and matching case files; the About-the-author dialog thumbnails use the `illo-author-*` illustration series, and the access page, landing hero and module covers use the `illo-*` illustration series.
 
 | Prefix | Project | Images |
 | --- | --- | --- |

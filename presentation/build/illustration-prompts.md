@@ -49,38 +49,14 @@ photograph — the venue stays recognisable — and simplify rather than invent.
 | `case-rene-redzepi.png` | `illo-case-rene-redzepi.jpg` | 1264 × 848 | The chef laughing with both hands on his hips, navy tee and grey canvas apron, herbs rising from the chest pocket, warm wall panel and a shelf of plain bowls behind him | the apron tie |
 | `case-alex-kratena.png` | `illo-case-alex-kratena.jpg` | 1264 × 848 | The bar owner in a black cap, clear glasses and a black utility gilet over a grey tee, phone in hand, tattooed left forearm, the second figure drawn in pale outline behind him, a sage-green bar front with a wooden top at the left | the stirrer standing in the glass on the counter |
 
-## Project-file covers
+## Project files — no drawn twins
 
-Each project file keeps its photographs and gains a drawn card. Draw the card from the file's own lead
-photograph — the pour, the room, the machine, the object — at that photograph's published dimensions, and
-leave brand lettering blank rather than retyping it. `illo-project-joi-facade.jpg` is the exception: it is
-an extra gallery frame shown beside its source photograph rather than a card that stands in for it.
-
-| Asset | Source | Scene | Red accent |
-| --- | --- | --- | --- |
-| `illo-project-joi-bar.jpg` | `project-joi-bar.jpg` | Six stacks of blank paper cups on a night espresso machine, a bare tungsten lamp, an orange tile wall, a forearm reaching in | the clock rim |
-| `illo-project-passie-wall.jpg` | `project-passie-wall.jpg` | Pink fluted banquette, white lever machine with three mugs, gingham-lidded dispenser, pastel card stack and a rose-and-lisianthus vase | one fallen petal |
-| `illo-project-coocoo-pour.jpg` | `project-coocoo-pour.jpg` | A glass kettle pouring into a cobalt cup with two googly eyes, a blue wall band and a tiled tray | the tray sticker |
-| `illo-project-chicken-connection-kitchen.jpg` | `project-chicken-connection-kitchen.jpg` | A bearded cook mid-gesture beside a chicken-mascot head, subway tiles, a blue cone lamp, a stock pot and a cutting board | the mascot comb |
-| `illo-project-pacific-station.jpg` | `project-pacific-station.jpg` | Two-view sheet of the Mirain station: ice wells, four pumps, drip tray, five hanging bottles, dimension lines without numerals | one pump button |
-| `illo-project-tam-cubes.jpg` | `project-tam-cubes.jpg` | Three blank steel cubes leaning in a stack on white paper | the top cube's edge |
-| `illo-project-detail-nine-lives.jpg` | `project-detail-nine-lives.jpg` | Brick column with a blank taped poster, a typewriter and two old televisions on shelves, a pink monitor, a lava lamp and straws | the lava lamp glow |
-| `illo-project-joi-facade.jpg` | `project-joi-facade.jpg` | The Joi facade: blank sign panel, dark glass doors, two taped tattoo posters, a geometric door emblem, a cream pilaster, a chain on the pavement | the door sticker |
-| `illo-project-joi-arcade.jpg` | `project-joi-arcade.jpg` | The vaulted arcade in one-point perspective: repeating vaults, pendant lanterns, ochre pillars, crates along the bar wall, guests on crates with phones, the bar door glowing red | the red panel inside the door |
-| `illo-project-joi-arcade-lights.jpg` | `project-joi-arcade-lights.jpg` | Festoon strings crossing the vaults, the timber bar front with its open door, a plant in the doorway, a sunlit street on the right, crate seats and a red barrel bin | the barrel |
-| `illo-project-joi-cups.jpg` | `project-joi-cups.jpg` | Four stacks of blank paper cups in rose light on a tiled counter, a steel jug, folded napkins and a portafilter | the red rim along the machine edge |
-| `illo-project-joi-brand.jpg` | `project-joi-brand.jpg` | One blank takeaway cup in the foreground on a folk carpet, an arcade cabinet with a blank marquee behind it | the marquee rectangle |
-| `illo-project-joi-machine.jpg` | `project-joi-machine.jpg` | The oxblood lever machine: round red button, dial gauge, two group heads, steam wands, drip tray with a red cloth and two jugs, blank cup stacks above | the round button |
-| `illo-project-joi-grinder.jpg` | `project-joi-grinder.jpg` | A red grinder with a chrome collar and a bean-filled hopper, a blank round sticker, a dark steel container and a blank menu card behind | the grinder body |
-| `illo-project-passie-cake.jpg` | `project-passie-cake.jpg` | A mint-iced birthday cake in a glass display fridge: rubber ducks on blue puddles, pastel sprinkles, three abstract pink icing ribbons, blank photo prints on the glass | the red heart on the door |
-| `illo-project-passie-cheesecake.jpg` | `project-passie-cheesecake.jpg` | A mango cheesecake wedge on a painted china plate with piped cream and pink petals, the ribbed vase and single blossom behind | one piped petal centre |
-| `illo-project-passie-counter.jpg` | `project-passie-counter.jpg` | White lever machine, red grinder, gingham-lidded dispenser, straw box, carnations, garlanded counter, chandelier and pink television on a shelf, two blank menu boards | the grinder body |
-| `illo-project-passie-window.jpg` | `project-passie-window.jpg` | The whole room framed by the shop window: a reader at a round table, chandelier, counter and machines, banquette, blank menu boards, a ghosted third chair in front | a small detail on the counter |
-| `illo-project-passie-sakura.jpg` | `project-passie-sakura.jpg` | A pink cake with an abstract yellow squiggle on a painted plate, pink tray, fork, ribbed vase with one blossom, sage tray and blush cup, coral curtain | the red leaves on the plate rim |
-| `illo-project-coocoo-room.jpg` | `project-coocoo-room.jpg` | Cloud ceiling, tiled counter with fairy lights, grinder, blank cards, pink television, two blank hung menu boards, daisy-framed mirror, croffle on a cloud plate | the heart on the tiles |
-| `illo-project-coocoo-bulbs.jpg` | `project-coocoo-bulbs.jpg` | The counter head-on: fairy lights, red grinder, blank card stack, two blank standing menus, pink screen, jar shelf, scale-tiled sink unit, clear chairs | the grinder body |
-| `illo-project-coocoo-team.jpg` | `project-coocoo-team.jpg` | Three staff behind a pastry counter: black shirt, two tan aprons, a paper-wrapped bouquet, blank wall menu boards, oven, display fridge, rubber duck, sink | a magnet on the tile wall |
-| `illo-project-coocoo-menu.jpg` | `project-coocoo-menu.jpg` | The red grinder close up with a rubber duck on its lid, blank hopper sticker, blank badge, postcards taped to the tiles, steel container beside | the grinder body |
+The author's own project files are photographed evidence and carry **no** illustrations. The 23
+`illo-project-*` covers and gallery frames described in earlier revisions of this file were withdrawn on
+28 October 2026 at the author's instruction: every `project-*` file opens with its own lead photograph and
+contains only photographs, captions and credits. Do not draft a project cover or a project gallery frame
+again, and do not reuse the retired prompt rows; the case covers, module covers, hero, gate, practitioner
+portraits and author-dialog illustrations are unaffected.
 
 ## Practitioner and author portrait illustrations
 
