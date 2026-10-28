@@ -18,12 +18,14 @@
     ['2022', 'St Petersburg', 'Senior bartender at Crowne Plaza.']
   ];
 
+  /* Drawn portraits of the author's projects, each redrawn from its own archive
+     photograph (retained beside it and linked from the credits page). */
   const projects = [
-    ['author-passie-2022.jpg', 'Passie Cakes Co.', '2022', 'passie'],
-    ['author-coocoo-2024.jpg', 'CooCoo', '2024', 'coocoo'],
-    ['author-pacific-2024.jpg', 'Pacific', '2024', 'pacific'],
-    ['author-joi-2025.jpg', 'Joi', '2025', 'joi'],
-    ['author-chc-2024.jpg', 'Chicken Connection', '2024', 'chicken']
+    ['illo-author-passie-2022.jpg', 'Passie Cakes Co.', '2022', 'passie'],
+    ['illo-author-coocoo-2024.jpg', 'CooCoo', '2024', 'coocoo'],
+    ['illo-author-pacific-2024.jpg', 'Pacific', '2024', 'pacific'],
+    ['illo-author-joi-2025.jpg', 'Joi', '2025', 'joi'],
+    ['illo-author-chc-2024.jpg', 'Chicken Connection', '2024', 'chicken']
   ];
 
   const markup = () => `
@@ -46,9 +48,10 @@
         <h3 class="author-label">Own projects</h3>
         <div class="author-frames">
           ${projects.map(([file, name, year, id]) => `<figure>${window.COURSE
-            ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img class="film-photo" src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
-            : `<img class="film-photo" src="${ASSET}${file}" alt="${name} ${year}" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
+            ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img class="film-photo${file.startsWith('illo-') ? ' illo-photo' : ''}" src="${ASSET}${file}" alt="${name} ${year} — illustration" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
+            : `<img class="film-photo${file.startsWith('illo-') ? ' illo-photo' : ''}" src="${ASSET}${file}" alt="${name} ${year} — illustration" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
         </div>
+        <p class="author-frames-note">Illustrations · drawn from the author’s archive photographs · sources listed in Image sources &amp; rights</p>
         ${window.COURSE ? '<a class="author-archive-link" href="#/projects" data-author-route>OPEN THE FULL PROJECT ARCHIVE <span aria-hidden="true">→</span></a>' : ''}
       </section>
       <p class="author-mail">Course, licensing and programme enquiries: <a href="mailto:${EMAIL}">${EMAIL}</a></p>

@@ -48,7 +48,7 @@ The deck deliberately uses subject-led hospitality imagery rather than photograp
 
 ## Project photography (author's own practice)
 
-The `project-*.jpg|png` files primarily document the author's own venues, identities and design work. `project-passie-room.jpg` is an AI-generated illustration based on an author-archive photograph, not a documentary photograph. The app uses this archive for Projects of the Author and matching case files; the access page, landing hero and module covers use the `illo-*` illustration series.
+The `project-*.jpg|png` files primarily document the author's own venues, identities and design work. `project-passie-room.jpg` is an AI-generated illustration based on an author-archive photograph, not a documentary photograph. The app uses this archive for Projects of the Author and matching case files; the About-the-author dialog thumbnails use the `illo-author-*` illustration series, and the access page, landing hero and module covers use the `illo-*` illustration series.
 
 | Prefix | Project | Images |
 | --- | --- | --- |
@@ -68,7 +68,9 @@ The presentation set combines the author's project archive, curated editorial re
 
 | Files | Provenance | App usage |
 | --- | --- | --- |
-| `project-*`, `author-*` except `project-passie-room.jpg` | © Egor Tarasenko — author’s personal archive (derived from the camera files in the repository root) | Project and course photographs |
+| `project-*` except `project-passie-room.jpg` | © Egor Tarasenko — author’s personal archive (derived from the camera files in the repository root) | Project and course photographs |
+| `author-*` | © Egor Tarasenko — author’s personal archive | Retained as the credited sources of the `illo-author-*` illustrations; no longer rendered directly |
+| `illo-author-*` | AI-generated illustrations based on the `author-*.jpg` archive photographs © Egor Tarasenko | About-the-author dialog and author figure card, labelled as illustrations with sources linked |
 | `project-passie-room.jpg` | AI-generated illustration based on `passiecakes_7625.jpeg` © Egor Tarasenko | Labelled as an illustration in the project gallery and image credits |
 | `illo-*` | AI-generated course graphics based on existing course illustrations | Labelled as illustrations, never as venue photographs |
 | `case-*`, `figure-*` except `figure-jiro.jpg` | Editorial reference photographs of industry figures and venues, © the respective photographers and venues, curated from public press materials | Person cards and case files only; each rendered image carries a micro-credit and appears on the in-app `#/credits` page with a takedown contact |
@@ -84,4 +86,8 @@ Asset set reviewed on 30 September 2026; provenance policy revised on 4 October 
 
 ## Practitioner portrait illustrations
 
-Ten `illo-figure-*.jpg` portraits are AI-generated interpretations of the corresponding `figure-*.jpg` editorial photographs retained in this directory. They follow the hand-inked, pastel city-life direction supplied by the course author. The app labels each as an illustration and links its source photograph in image credits; they are not documentary photographs. Jiro’s existing illustrated portrait remains in place; Igor Zernov’s original editorial portrait remains a photograph until its illustration is completed.
+Eleven `illo-figure-*.jpg` portraits are AI-generated interpretations of the corresponding `figure-*.jpg` editorial photographs retained in this directory. They follow the hand-inked, pastel city-life direction supplied by the course author. The app labels each as an illustration and links its source photograph in image credits; they are not documentary photographs. Jiro’s existing illustrated portrait remains in place; with Igor Zernov’s portrait the set is complete, and every `figure-*.jpg` editorial photograph is now retained as a credited source rather than rendered directly.
+
+## Author project illustrations
+
+Five `illo-author-*.jpg` images are AI-generated interpretations of the corresponding `author-*.jpg` archive photographs of the author’s own projects, kept at the published dimensions of their sources: `illo-author-passie-2022.jpg` (600 × 900), `illo-author-coocoo-2024.jpg` (900 × 900), `illo-author-pacific-2024.jpg` (675 × 900), `illo-author-joi-2025.jpg` (675 × 900) and `illo-author-chc-2024.jpg` (900 × 466). They are shown in the About-the-author dialog and on the author figure card, where a note states that the project images are illustrations; brand lettering present in the sources (machine badges, posters, crate prints, wordmarks) is omitted or replaced with blank panels, and each carries one small signal-red accent. The archive photographs remain in this directory as the credited sources.

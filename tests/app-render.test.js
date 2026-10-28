@@ -280,9 +280,13 @@ test('generated illustrations are identified without relabelling documentary pho
   const redzepi = html.indexOf('presentation/assets/illo-figure-redzepi.jpg');
   assert.ok(redzepi >= 0, 'the illustrated portrait is displayed');
   assert.match(html.slice(redzepi, redzepi + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
-  const zernov = html.indexOf('presentation/assets/figure-zernov.jpg');
-  assert.ok(zernov >= 0, 'the unchanged editorial portrait is displayed');
-  assert.match(html.slice(zernov, zernov + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
+  const zernov = html.indexOf('presentation/assets/illo-figure-zernov.jpg');
+  assert.ok(zernov >= 0, 'the illustrated Zernov portrait is displayed');
+  assert.match(html.slice(zernov - 100, zernov + 500), /illo-photo/, 'the portrait uses illustration styling');
+  assert.match(html.slice(zernov, zernov + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/, 'the illustrated portrait is disclosed');
+  const copitas = html.indexOf('presentation/assets/case-el-copitas-zernov.jpg');
+  assert.ok(copitas >= 0, 'the El Copitas case photograph is displayed');
+  assert.match(html.slice(copitas, copitas + 4000), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
 
   location.hash = '#/project/passie';
   await settle();
