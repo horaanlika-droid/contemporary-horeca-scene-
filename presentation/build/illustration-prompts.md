@@ -66,6 +66,12 @@ an extra gallery frame shown beside its source photograph rather than a card tha
 | `illo-project-tam-cubes.jpg` | `project-tam-cubes.jpg` | Three blank steel cubes leaning in a stack on white paper | the top cube's edge |
 | `illo-project-detail-nine-lives.jpg` | `project-detail-nine-lives.jpg` | Brick column with a blank taped poster, a typewriter and two old televisions on shelves, a pink monitor, a lava lamp and straws | the lava lamp glow |
 | `illo-project-joi-facade.jpg` | `project-joi-facade.jpg` | The Joi facade: blank sign panel, dark glass doors, two taped tattoo posters, a geometric door emblem, a cream pilaster, a chain on the pavement | the door sticker |
+| `illo-project-joi-arcade.jpg` | `project-joi-arcade.jpg` | The vaulted arcade in one-point perspective: repeating vaults, pendant lanterns, ochre pillars, crates along the bar wall, guests on crates with phones, the bar door glowing red | the red panel inside the door |
+| `illo-project-joi-arcade-lights.jpg` | `project-joi-arcade-lights.jpg` | Festoon strings crossing the vaults, the timber bar front with its open door, a plant in the doorway, a sunlit street on the right, crate seats and a red barrel bin | the barrel |
+| `illo-project-joi-cups.jpg` | `project-joi-cups.jpg` | Four stacks of blank paper cups in rose light on a tiled counter, a steel jug, folded napkins and a portafilter | the red rim along the machine edge |
+| `illo-project-joi-brand.jpg` | `project-joi-brand.jpg` | One blank takeaway cup in the foreground on a folk carpet, an arcade cabinet with a blank marquee behind it | the marquee rectangle |
+| `illo-project-joi-machine.jpg` | `project-joi-machine.jpg` | The oxblood lever machine: round red button, dial gauge, two group heads, steam wands, drip tray with a red cloth and two jugs, blank cup stacks above | the round button |
+| `illo-project-joi-grinder.jpg` | `project-joi-grinder.jpg` | A red grinder with a chrome collar and a bean-filled hopper, a blank round sticker, a dark steel container and a blank menu card behind | the grinder body |
 
 ## Practitioner and author portrait illustrations
 

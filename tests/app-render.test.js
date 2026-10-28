@@ -300,6 +300,22 @@ test('generated illustrations are identified without relabelling documentary pho
     assert.match(html.slice(at, at + 700), /ILLUSTRATION · AI-GENERATED/, `${cover} is disclosed`);
   }
 
+  location.hash = '#/project/joi';
+  await settle();
+  html = app.innerHTML;
+  const joiLead = html.indexOf('presentation/assets/illo-project-joi-bar.jpg');
+  assert.ok(joiLead >= 0, 'the Joi file leads with its drawn card');
+  const leadFigures = html.split('data-src="presentation/assets/illo-project-joi-bar.jpg"').length - 1;
+  assert.equal(leadFigures, 1, 'the lead drawing is not repeated in the gallery');
+  for (const pair of ['arcade', 'facade', 'brand', 'cups', 'machine', 'grinder', 'arcade-lights']) {
+    const drawing = html.indexOf(`presentation/assets/illo-project-joi-${pair}.jpg`);
+    const photo = html.indexOf(`presentation/assets/project-joi-${pair}.jpg`);
+    assert.ok(drawing >= 0, `the ${pair} drawing is in the Joi gallery`);
+    assert.ok(photo >= 0, `the ${pair} photograph stays beside its drawing`);
+    assert.match(html.slice(drawing - 200, drawing + 600), /ILLUSTRATION · AI-GENERATED/, `the ${pair} drawing is disclosed`);
+  }
+  assert.match(html, /THE FILE · 17 IMAGES/, 'the file counts its drawings and photographs together');
+
   location.hash = '#/project/passie';
   await settle();
   html = app.innerHTML;
@@ -312,7 +328,7 @@ test('generated illustrations are identified without relabelling documentary pho
   assert.match(html.slice(room - 250, room + 1000), /AI-GENERATED FROM AUTHOR’S ARCHIVE/, 'gallery and lightbox disclose the illustration');
   assert.match(html.slice(room - 250, room + 1000), /illo-photo/, 'the illustration is not graded as a photograph');
   assert.match(html, /Passie Cakes Co\. — AI-generated illustration 5/);
-  assert.match(html, /THE FILE · 7 IMAGES/, 'mixed media are not all called photographs');
+  assert.match(html, /THE FILE · 8 IMAGES/, 'the file counts its drawn cover with the photographs');
 
   location.hash = '#/credits';
   await settle();
