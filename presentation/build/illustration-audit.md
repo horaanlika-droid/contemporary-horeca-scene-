@@ -413,12 +413,22 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
   photograph: one floor line, four stools at one scale with four legs each reaching the floor, every dish
   resting on the counter, both chefs with hands, ceiling panels in a shared perspective.
 - `illo-case-city-space-narzi` — the mirrored wall repeats the bar rather than reflecting it.
-- `illo-m03-senses` — the tasting glass floats unsupported beside the drinker's face.
-- `illo-m07-fnb` — the mortars, carafe and cloche sit on no drawn surface.
-- `illo-m08-venture` — the tray of cups overhangs the table into empty air.
-- `illo-m09-found` — every tag is tied with a string that ends in nothing.
-- `illo-m10-mockup` — the model's roof passes through the assembler's fingers.
-- `illo-m06-ai` — the bowl sits a hand's width above the robot's tray.
+- ~~`illo-m03-senses` — the tasting plate and its sensor base float on blank paper.~~ Fixed 29 October
+  2026: the tabletop runs on behind and under the disc, with one flat shadow.
+- ~~`illo-m07-fnb` — the mortar, cylinder, petri dish, glass and cloche sit on a bare line.~~ Fixed 29
+  October 2026: the line becomes the back edge of a narrow shelf with a front edge, so every object stands
+  on a surface.
+- ~~`illo-m08-venture` — the tray of cups sits at the table edge with the cup handle over nothing.~~ Fixed
+  29 October 2026: the tray moved inside the table, shadow with it.
+- `illo-m03-senses` — still open, and a different fault from the one recorded: the rim of the tasting glass
+  overlaps the drinker's nose instead of stopping at the mouth. One line to move.
+- `illo-m09-found` — **not confirmed on inspection.** The strings end on the crate, the plate's foot, the
+  bell's rim, the bottle's neck, the napkin's fold and the cup's handle. They are attached; the entry was
+  wrong.
+- `illo-m10-mockup` — **not confirmed on inspection.** Both hands rest with the fingers on the top edges of
+  the model's wall panels, above the roofline, not through it.
+- `illo-m06-ai` — **not confirmed on inspection.** The bowl sits in the robot's gripper, on the small plate
+  the arm is holding.
 - `illo-lesson-concept-objects` and `illo-lesson-signals` — panels and objects hang from lines that end
   in mid-air (accepted as a series convention, recorded so it is a decision and not an accident).
 
@@ -437,3 +447,61 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
    a blank white block.
 4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
    `illo-m10` need only a support line, a table edge or one hand redrawn.
+
+### 10.6 The line-weight question, measured instead of guessed
+
+The README carried an instruction to "make one unifying pass over the line weight of the whole series"
+at the end. Before doing it, the stroke was measured across the library — median run length of ink
+pixels along a scanline, capped at 24 px so a black wall is not read as a fat pen:
+
+| File | Median stroke | Mean |
+| --- | --- | --- |
+| `illo-lesson-signals.jpg` | 2 px | 2.3 px |
+| `illo-m01-signals.jpg` | 2 px | 3.1 px |
+| `illo-lesson-scenography.jpg` | 2 px | 4.3 px |
+| `illo-figure-savage.jpg` | 2 px | 2.0 px |
+| `illo-figure-zarkov.jpg` | 2 px | 2.7 px |
+| `illo-figure-kratena.jpg` | 3 px | 3.2 px |
+| `illo-figure-narzi.jpg` | 3 px | 4.5 px |
+| `illo-figure-dave-arnold.jpg` | 3 px | 3.6 px |
+| `illo-case-black-swan-bobkov.jpg` | 2 px | 3.2 px |
+| `illo-case-benfiddich-kayama.jpg` | 3 px | 5.3 px |
+| `illo-case-krasota-zarkov.jpg` | 3 px | 4.9 px |
+| `illo-case-jiro-ono.jpg` | 3 px | 3.9 px |
+
+**Conclusion: there is no line-weight drift.** Median stroke is 2 px in the thin documents and 3 px in
+the dense ones — one pixel apart at 1264 px wide, which is what the eye reads as "same hand". The
+impression that newer drawings are thinner was a misreading of one measurement: ink *area*. Its first
+pass ranked `illo-case-el-copitas-zernov` at 91.9 and `illo-case-sips-caporale` at 94.3 on a
+"line thickness" scale, purely because those two pictures are black rooms. Ink area measures darkness,
+not the pen.
+
+So the planned re-render of all 52 files is **cancelled as unnecessary**, and the instruction is removed
+from the README. What did look like drift, once the files were laid side by side, was two different
+things:
+
+1. **The portraits have no outer contour.** Figures were drawn with an interior line only, so they have
+   no edge against the paper and read softer than the case cards, which outline every shape. Fix: close
+   the outer silhouette.
+2. **Float.** Several portraits cut the figure at mid-thigh with no ground and no shadow, so the person
+   hangs in the page. Fix: one flat shadow or one floor line under the cut.
+
+Both applied on 29 October 2026 to the two portraits that were drawn last and showed the fault most
+clearly — `illo-figure-kratena.jpg` and `illo-figure-narzi.jpg` are now full-length figures with a closed
+contour and one flat shadow under the shoes. The other ten portraits are close crops where the crop itself
+is the edge, so they do not need the shadow; they were checked and left alone.
+
+### 10.7 Pastel grounds removed from two portraits
+
+§2.9 of this audit recorded pale washes behind several portraits and asked for them to return to white
+paper. Two of them were still washed after the redraws, and both were fixed on 29 October 2026:
+
+- `illo-figure-redzepi.jpg` — the pale green and pale blue wash behind the chef is gone. Redrawing it
+  also dropped the single red accent (the apron knot came back grey), so the knot is redrawn in the
+  signal red the series requires; it is now the only saturated colour in the file besides his tee.
+- `illo-figure-savage.jpg` — the desert backdrop (pale blue sky, green cacti, pale ground) is gone. The
+  figure, his jacket and his pose are untouched.
+
+This matters beyond tidiness: the app multiplies every drawing into the page, so a wash does not read as
+"a soft background" in the product — it reads as a pale halo around the person. White paper is the only
+background that disappears.

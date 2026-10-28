@@ -258,17 +258,28 @@ judged by (obvious resemblance, one hand across the series) and names the four f
 `illo-figure-narzi.jpg`, `illo-figure-dave-arnold.jpg`, `illo-lesson-scenography.jpg` and
 `illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set.
 
+**Two portraits lost their pastel grounds, 29 October 2026.** `illo-figure-redzepi.jpg` and
+`illo-figure-savage.jpg` were the last two portraits still carrying a coloured wash behind the figure; both
+are white paper now, and the Redzepi apron knot was redrawn in the signal red the redraw had dropped.
+
 **Still open after this pass.** In order: (1) ~~the four wrong-hand files above~~ — done 29 October 2026, all
 four redrawn thin and light in the hand of their own set, and `illo-figure-kratena.jpg` re-framed from
 768 × 1376 to the series' 848 × 1264; (2) ~~the two case cards that still read as the wrong place — `illo-case-sensory-talalay.jpg` and
 `illo-case-dave-arnold.jpg`~~ — done 29 October 2026, both redrawn from their photographs in the case-card
 hand; (3) ~~the two portraits that are still another person — `illo-figure-zarkov.jpg` and
 `illo-figure-talalay.jpg`~~ — done 29 October 2026, both redrawn from their photographs; (4) the physics
-list in `presentation/build/illustration-audit.md` §10.4 — a support line or a hand each for
-`illo-m03-senses`, `illo-m07-fnb`, `illo-m08-venture`, `illo-m09-found`, `illo-m10-mockup`, the Sips foreground
-(the Jiro card was redrawn on 29 October 2026 — one floor line, four stools at one scale, dishes resting on
-the counter, both chefs with hands); (5) one unifying pass over the line weight of the whole series once the list is
-closed. The checklist used
+list in `presentation/build/illustration-audit.md` §10.4 — fixed on 29 October 2026 for
+`illo-m03-senses` (the plate now stands on the table), `illo-m07-fnb` (a shelf with a front edge) and
+`illo-m08-venture` (the cup tray moved inside the table); three further entries were checked at full size and
+were **wrong** — `illo-m09-found` ties every tag to its object, `illo-m06-ai` holds the bowl in the gripper,
+`illo-m10-mockup` rests both hands on the panel edges — and the Sips foreground has been fully painted since
+its redraw. What genuinely remains there is one line: the tasting glass in `illo-m03-senses` overlaps the
+drinker's nose; (5) ~~one unifying pass over the line weight of the whole series once the list is closed~~ —
+**cancelled after measurement**, 29 October 2026: the median ink stroke is 2 px in the light documents and
+3 px in the dense ones across the whole library, so there is no drift to repair and re-rendering 52 files
+would only have introduced one. What read as drift was ink *area* (dark rooms score high on any area metric)
+and two real faults in the portrait set, now recorded in `illustration-audit.md` §10.6: portraits drawn
+without an outer contour, and figures cut at mid-thigh with no shadow. The checklist used
 for every redraw, and the reasoning behind each verdict, are in
 `presentation/build/illustration-audit.md`.
 
