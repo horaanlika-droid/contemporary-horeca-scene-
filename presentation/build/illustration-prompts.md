@@ -14,6 +14,12 @@ The `illo-*.jpg` series consists of AI-generated course illustrations. Use the e
 Use the target aspect ratio and existing dimensions for the file. The red accent is
 singular so the series stays coherent and the brand colour remains meaningful.
 
+The case cards follow the source hierarchy in `course-data.js`: draw each one from that case's own
+documentary photograph (`presentation/assets/originals/case-<slug>.jpg`, retained there as the credited
+source), not from another illustration. Redraw the room, counter and objects that are actually in the
+photograph — the venue stays recognisable — and simplify rather than invent. Published files stay at
+1264 × 848 with white paper edges, and each cover carries an exact-file credit that links its photograph.
+
 ## Surface plan
 
 | Master | Asset | Surface | Scene | Red accent |
