@@ -40,3 +40,24 @@ singular so the series stays coherent and the brand colour remains meaningful.
 | `case-jiro-ono.png` | `illo-case-jiro-ono.jpg` | 1264 × 848 | Diagonal sushi counter with one nigiri, rice tub, bamboo mats, knife, dipping dish and brush | the fish on the nigiri |
 | `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | Gastro-theatre stage, curtains, dining table, hand lifting a cloche, abstract projection and audience | one curtain tie |
 | `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | Beverage-science bench with centrifuge, distillation apparatus, beakers, siphon, scale and ice bucket | the siphon |
+
+## Practitioner and author portrait illustrations
+
+The portrait series redraws each person or project from its own retained source
+image instead of inventing a scene. Practitioner portraits are published at
+848 × 1264; the author project illustrations keep the pixel dimensions of their
+archive sources. The shared art direction applies; the single red accent is a
+small element already present in the source (Zernov's LED tally board, the
+Pacific pump button, the Joi arcade door glass, the chicken mascot's comb, the
+Passie rose bouquet, the CooCoo wall stripe). Brand lettering in the sources —
+machine badges, menu boards, posters, crate prints, wordmarks — is omitted or
+replaced with blank panels, never retyped.
+
+| Asset | Source | Scene | Red accent |
+| --- | --- | --- | --- |
+| `illo-figure-zernov.jpg` | `figure-zernov.jpg` | Smiling man with round amber glasses and short beard, oversized black tee, takeaway cup with straw, brick basement pass with bamboo steamers, rice cooker and pendant lamp | the blank LED tally board |
+| `illo-author-passie-2022.jpg` | `author-passie-2022.jpg` | Blush-pink cake room: garlanded L-counter, white vintage espresso machine, crystal chandelier, pink retro TV, blank menu panels, folding chairs, round table | the rose bouquet in the vase |
+| `illo-author-coocoo-2024.jpg` | `author-coocoo-2024.jpg` | Hand pouring a glass coffee pot into a cobalt cup with two googly eyes on a tray, blue patterned tabletop, blue wall with cream band | the wall stripe at the top |
+| `illo-author-pacific-2024.jpg` | `author-pacific-2024.jpg` | Two-view sheet of the wedge-shaped blackened-steel Mirain station: ice wells, four built-in pumps, drip tray, hanging glasses, casters | one pump button |
+| `illo-author-joi-2025.jpg` | `author-joi-2025.jpg` | Vaulted arcade queue: cream pillars, hanging lanterns, guests on black crates, standing host in a beige jacket, potted plant, bicycle wheel | the translucent door glass |
+| `illo-author-chc-2024.jpg` | `author-chc-2024.jpg` | Wide tiny-kitchen episode frame: chicken mascot head at left, bearded cook at an induction hob with a steel pot, subway tiles, blank poster, blue pendant | the mascot comb and wattle |

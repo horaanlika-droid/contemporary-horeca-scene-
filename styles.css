@@ -921,6 +921,8 @@ body.author-open{overflow:hidden}
 .author-frames img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
 .author-frames figcaption{padding:9px 1px 10px;font-family:var(--ui);font-size:9.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.5;color:var(--ink)}
 .author-frames figcaption b{display:block;color:var(--red);font-weight:500}
+.author-frames img.illo-photo{object-fit:contain;object-position:center;background:var(--white)}
+.author-frames-note{margin:12px 0 0;font-family:var(--ui);font-size:9.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.6;color:var(--muted)}
 .author-project-link{display:block;color:inherit;text-decoration:none}
 .author-project-link:hover img{filter:saturate(1.08)}
 .author-project-link:focus-visible,.author-archive-link:focus-visible{outline:2px solid var(--red);outline-offset:3px}
