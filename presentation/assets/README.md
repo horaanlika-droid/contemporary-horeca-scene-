@@ -10,7 +10,7 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 
 ## Polychrome cartoon illustrations
 
-The `illo-*.jpg` files are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. They illustrate concepts rather than document specific venues, and are labelled *illustration · original course graphic · AI-generated* in the app. Eight of the ten case-card covers (`illo-case-benfiddich-kayama.jpg`, `-black-swan-bobkov.jpg`, `-shapes-savage.jpg`, `-sips-caporale.jpg`, `-el-copitas-zernov.jpg`, `-city-space-narzi.jpg`, `-sensory-talalay.jpg`, `-jiro-ono.jpg`) are redrawn from each case's own documentary photograph; the two remaining covers (`-krasota-zarkov.jpg`, `-dave-arnold.jpg`) still come from the earlier cover art. The case-file photographs themselves remain unchanged, their untouched originals are retained as `originals/case-*.jpg` and every redrawn cover links that source in the in-app credits.
+The `illo-*.jpg` files are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. They illustrate concepts rather than document specific venues, and are labelled *illustration · original course graphic · AI-generated* in the app. All twelve case-card covers (`illo-case-benfiddich-kayama.jpg`, `-black-swan-bobkov.jpg`, `-shapes-savage.jpg`, `-sips-caporale.jpg`, `-el-copitas-zernov.jpg`, `-city-space-narzi.jpg`, `-sensory-talalay.jpg`, `-jiro-ono.jpg`, `-krasota-zarkov.jpg`, `-dave-arnold.jpg`, `-rene-redzepi.jpg`, `-alex-kratena.jpg`) are redrawn from each case's own reference photograph. The case-file photographs themselves remain unchanged, their untouched originals are retained as `originals/case-*.jpg` and every redrawn cover links that source in the in-app credits.
 
 | Surface | Size | Files |
 | --- | --- | --- |
@@ -29,7 +29,7 @@ The app marks every `illo-` file with the `illo-photo` class, so drawn covers ar
 | `illo-hero-scene.jpg` | Course landing hero — the bar as a stage set (vertical) |
 | `illo-m01-signals.jpg` … `illo-m08-venture.jpg` | Module covers 01–08 (3:2) |
 | `illo-m09-found.jpg`, `illo-m10-mockup.jpg` | Module covers 09–10 (3:2) |
-| `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg`, `illo-case-jiro-ono.jpg`, `illo-case-krasota-zarkov.jpg`, `illo-case-dave-arnold.jpg` | Case-card covers, drawn per case (3:2). Each case file keeps its separately credited source image |
+| `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg`, `illo-case-jiro-ono.jpg`, `illo-case-krasota-zarkov.jpg`, `illo-case-dave-arnold.jpg`, `illo-case-rene-redzepi.jpg`, `illo-case-alex-kratena.jpg` | Case-card covers, drawn per case (3:2). Each case file keeps its separately credited source image |
 
 ## Thematic Horeca photography
 

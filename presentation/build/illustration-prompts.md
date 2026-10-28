@@ -44,8 +44,10 @@ photograph — the venue stays recognisable — and simplify rather than invent.
 | `case-city-space-narzi.png` | `illo-case-city-space-narzi.jpg` | 1264 × 848 | Top-down L-shaped bar plan with stools, ice well, workflow arrows, bar tools and a stopwatch | a stopwatch button |
 | `case-sensory-talalay.png` | `illo-case-sensory-talalay.jpg` | 1264 × 848 | Pipette bottles and tasting glasses, an aroma glass with scent swirls, a hand with a test tube and a scale | one pipette cap |
 | `case-jiro-ono.png` | `illo-case-jiro-ono.jpg` | 1264 × 848 | Diagonal sushi counter with one nigiri, rice tub, bamboo mats, knife, dipping dish and brush | the fish on the nigiri |
-| `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | Gastro-theatre stage, curtains, dining table, hand lifting a cloche, abstract projection and audience | one curtain tie |
-| `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | Beverage-science bench with centrifuge, distillation apparatus, beakers, siphon, scale and ice bucket | the siphon |
+| `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | The circular projection table of Krasota seen from a raised angle: seascape and shoreline spread across the tabletop, a burning ship, a black central void, plates and glasses, the ring of guests, the curved screen of sea and blossom, two waiters standing at the far edge | the cushion beside the right-hand guest |
+| `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | The bartender behind a plain white counter, shaker raised overhead, coupe glass in the lower hand with a curl of vapour, a jigger, fine strainer, stacked coupes and a mixing pitcher laid out along the counter | the ring on his finger |
+| `case-rene-redzepi.png` | `illo-case-rene-redzepi.jpg` | 1264 × 848 | The chef laughing with both hands on his hips, navy tee and grey canvas apron, herbs rising from the chest pocket, warm wall panel and a shelf of plain bowls behind him | the apron tie |
+| `case-alex-kratena.png` | `illo-case-alex-kratena.jpg` | 1264 × 848 | The bar owner in a black cap, clear glasses and a black utility gilet over a grey tee, phone in hand, tattooed left forearm, the second figure drawn in pale outline behind him, a sage-green bar front with a wooden top at the left | the stirrer standing in the glass on the counter |
 
 ## Practitioner and author portrait illustrations
 
