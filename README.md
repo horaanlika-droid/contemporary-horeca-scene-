@@ -258,8 +258,9 @@ judged by (obvious resemblance, one hand across the series) and names the four f
 `illo-figure-narzi.jpg`, `illo-figure-dave-arnold.jpg`, `illo-lesson-scenography.jpg` and
 `illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set.
 
-**Still open after this pass.** In order: (1) the four wrong-hand files above, redrawn thin and light;
-(2) the two case cards that still read as the wrong place — `illo-case-sensory-talalay.jpg` and
+**Still open after this pass.** In order: (1) ~~the four wrong-hand files above~~ — done 29 October 2026, all
+four redrawn thin and light in the hand of their own set, and `illo-figure-kratena.jpg` re-framed from
+768 × 1376 to the series' 848 × 1264; (2) the two case cards that still read as the wrong place — `illo-case-sensory-talalay.jpg` and
 `illo-case-dave-arnold.jpg`, redrawn from their photographs in the case-card hand; (3) the two portraits
 that are still another person — `illo-figure-zarkov.jpg` and `illo-figure-talalay.jpg`; (4) the physics
 list in `presentation/build/illustration-audit.md` §10.4 — a support line or a hand each for

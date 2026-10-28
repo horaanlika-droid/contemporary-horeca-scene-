@@ -352,18 +352,21 @@ Both hands are good. The fault is mixing them: seven of the twelve portraits are
 friendly poster portraits; the two portraits redrawn on 29 October are Hand B and read as a different
 artist's work next to them. The same is true of the lesson headers.
 
-### 10.2 Files in the wrong hand
+### 10.2 Files in the wrong hand — fixed 29 October 2026
 
-| File | Belongs with | Problem |
-| --- | --- | --- |
-| `illo-figure-narzi.jpg` | Hand A | redrawn with a 6 px contour and saturated fills; the neighbours are thin-line |
-| `illo-figure-dave-arnold.jpg` | Hand A | same, plus the hair is a single black mass with no interior line |
-| `illo-lesson-scenography.jpg` | Hand A | heavy ink, a grey wall and a hard white light wedge; the other headers are pale line drawings with no dark field |
-| `illo-lesson-final-brief.jpg` | Hand A | a solid brown table filling two thirds of the frame; the other headers keep the page white |
+| File | Belongs with | Problem | Now |
+| --- | --- | --- | --- |
+| `illo-figure-narzi.jpg` | Hand A | redrawn with a 6 px contour and saturated fills; the neighbours are thin-line | redrawn thin: 3 px contour, pale sage and cream, dark hair as a mid-brown shape with interior lines, arms resting on a pale bar top |
+| `illo-figure-dave-arnold.jpg` | Hand A | same, plus the hair is a single black mass with no interior line | redrawn thin: dusty-grey sweater instead of black, mid grey-brown hair with the receding hairline visible, checked collar and cuffs |
+| `illo-lesson-scenography.jpg` | Hand A | heavy ink, a grey wall and a hard white light wedge; the other headers are pale line drawings | redrawn thin: pale table corner, five objects, white page, the candle flame as the only red |
+| `illo-lesson-final-brief.jpg` | Hand A | a solid brown table filling two thirds of the frame | redrawn thin: a pale card model on a pale plinth, white page, the block in the hand as the only red |
 
-Fix: redraw these four in Hand A — thin contour, pale fills, white page, no dark fields — keeping the
-content that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hair, Dave's long
-face).
+One more file was outside its own set for a different reason: `illo-figure-kratena.jpg` was published at
+768 × 1376 while every other portrait is 848 × 1264, so it sat taller and narrower than its neighbours in
+the grid. It is re-framed to 848 × 1264 with the drawing untouched.
+
+Fix applied: redrawn in Hand A — thin contour, pale fills, white page, no dark fields — keeping the content
+that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hair, Dave's long face).
 
 ### 10.3 Resemblance, file by file
 
