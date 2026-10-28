@@ -422,9 +422,11 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
 
 ### 10.5 Order of work
 
-1. Redraw the four wrong-hand files in Hand A (§10.2) — this is the drift the author sees first.
-2. Fix the two ○ case cards (Sensory, Dave Arnold) from their photographs, keeping the Hand B case
-   style.
+1. ~~Redraw the four wrong-hand files in Hand A (§10.2)~~ — done 29 October 2026.
+2. ~~Fix the two ○ case cards (Sensory, Dave Arnold)~~ — done 29 October 2026: Sensory is the dark room
+   again (near-black teal ground, the neon-traced board on its pedestal, the glass with ice under the
+   waterline, the three boards receding behind) and Dave Arnold has a real pour, a counter with an edge,
+   hands that close round the tin and the coupe, and the long face and receding hairline of the photograph.
 3. Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A.
 4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
    `illo-m10` need only a support line, a table edge or one hand redrawn.
