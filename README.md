@@ -265,8 +265,9 @@ four redrawn thin and light in the hand of their own set, and `illo-figure-krate
 hand; (3) ~~the two portraits that are still another person — `illo-figure-zarkov.jpg` and
 `illo-figure-talalay.jpg`~~ — done 29 October 2026, both redrawn from their photographs; (4) the physics
 list in `presentation/build/illustration-audit.md` §10.4 — a support line or a hand each for
-`illo-m03-senses`, `illo-m07-fnb`, `illo-m08-venture`, `illo-m09-found`, `illo-m10-mockup`, the Jiro card
-and the Sips foreground; (5) one unifying pass over the line weight of the whole series once the list is
+`illo-m03-senses`, `illo-m07-fnb`, `illo-m08-venture`, `illo-m09-found`, `illo-m10-mockup`, the Sips foreground
+(the Jiro card was redrawn on 29 October 2026 — one floor line, four stools at one scale, dishes resting on
+the counter, both chefs with hands); (5) one unifying pass over the line weight of the whole series once the list is
 closed. The checklist used
 for every redraw, and the reasoning behind each verdict, are in
 `presentation/build/illustration-audit.md`.

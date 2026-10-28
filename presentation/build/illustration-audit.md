@@ -408,8 +408,10 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
   blue-green confetti outside the palette.
 - `illo-case-dave-arnold` — the lower hand's fingers pass through the coupe instead of round its foot;
   tools stand on nothing.
-- `illo-case-jiro-ono` — three stool legs cross in an X; the nearest stool is twice the scale of the
-  others; dishes hover above the counter; neither chef has a visible hand.
+- ~~`illo-case-jiro-ono` — three stool legs cross in an X; the nearest stool is twice the scale of the
+  others; dishes hover above the counter; neither chef has a visible hand.~~ Redrawn 29 October 2026 from the
+  photograph: one floor line, four stools at one scale with four legs each reaching the floor, every dish
+  resting on the counter, both chefs with hands, ceiling panels in a shared perspective.
 - `illo-case-city-space-narzi` — the mirrored wall repeats the bar rather than reflecting it.
 - `illo-m03-senses` — the tasting glass floats unsupported beside the drinker's face.
 - `illo-m07-fnb` — the mortars, carafe and cloche sit on no drawn surface.
