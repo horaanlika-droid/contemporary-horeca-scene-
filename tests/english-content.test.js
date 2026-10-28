@@ -544,6 +544,10 @@ test('images carry provenance credits, fallbacks and an email submission channel
     assert.equal(fs.existsSync(path.join(ROOT, 'presentation/assets', item.cover)), true, item.cover);
     assert.ok(!('cover' in item) || item.image, `${item.title} keeps its documentary photograph`);
     assert.notEqual(item.cover, item.image, `${item.title} cover is not the case photograph`);
+    const credit = courseData().imageCredits.files.find(entry => entry.file === item.cover);
+    assert.equal(credit?.generated, true, `${item.title} cover is disclosed as generated`);
+    assert.match(credit.short, /^ILLUSTRATION · AI-GENERATED/, `${item.title} cover carries the illustration label`);
+    assert.ok(fs.existsSync(path.join(ROOT, credit.source.slice(1))), `${item.title} keeps its credited original`);
   }
   // the card renders the cover while the case file keeps the photograph
   assert.match(app, /const caseCover = x => x\?\.cover \|\| x\?\.image;/);
@@ -1359,7 +1363,7 @@ test('restyled case covers retain their published JPEG dimensions', () => {
   const covers = [
     'benfiddich-kayama', 'black-swan-bobkov', 'shapes-savage', 'sips-caporale',
     'el-copitas-zernov', 'city-space-narzi', 'sensory-talalay', 'jiro-ono',
-    'krasota-zarkov', 'dave-arnold',
+    'krasota-zarkov', 'dave-arnold', 'rene-redzepi', 'alex-kratena',
   ];
   for (const cover of covers) {
     const filename = `illo-case-${cover}.jpg`;
