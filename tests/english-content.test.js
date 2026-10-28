@@ -1442,6 +1442,43 @@ test('the illustration series is closed at forty files and no excluded asset gai
   assert.doesNotMatch(read('README.md'), /\*\*Next batch:\*\*/, 'no batch is queued after closure');
   assert.match(read('README.md'), /the series is closed/);
 });
+test('module covers keep their published dimensions and the revised subject set', () => {
+  const modules = [['signals'], ['atmosphere'], ['senses'], ['menu'], ['automation'], ['ai'], ['fnb'], ['venture'], ['found'], ['mockup']];
+  const names = ['signals', 'atmosphere', 'senses', 'menu', 'automation', 'ai', 'fnb', 'venture', 'found', 'mockup'];
+  const buffer = name => fs.readFileSync(path.join(ROOT, 'presentation/assets', `illo-m${String(names.indexOf(name) + 1).padStart(2, '0')}-${name}.jpg`));
+  const dimensions = buf => {
+    let offset = 2;
+    while (offset + 4 < buf.length) {
+      offset++;
+      while (buf[offset] === 0xff) offset++;
+      const marker = buf[offset++];
+      if (marker === 0xd9 || marker === 0xda) break;
+      if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) continue;
+      const length = buf.readUInt16BE(offset);
+      if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
+        return [buf.readUInt16BE(offset + 5), buf.readUInt16BE(offset + 3)];
+      }
+      offset += length;
+    }
+    assert.fail('JPEG dimensions not found');
+  };
+  for (const name of names) {
+    assert.deepEqual(dimensions(buffer(name)), [1264, 843], `illo-m-${name} keeps its published dimensions`);
+  }
+  // the pre-revision edition is kept as the reference for the series
+  for (const name of names) {
+    const index = String(names.indexOf(name) + 1).padStart(2, '0');
+    const kept = path.join(ROOT, `presentation/assets/originals/illo-m/illo-m${index}-${name}.jpg`);
+    assert.ok(fs.existsSync(kept), `illo-m${index}-${name} keeps its previous edition`);
+  }
+  // the prompt sheet documents the revised direction and no retired scene
+  const prompts = read('presentation/build/illustration-prompts.md');
+  assert.match(prompts, /Direction note — module covers, October 2026/);
+  assert.match(prompts, /Ergonomics is drawn as futuristic|futuristic ergonomics/i);
+  assert.doesNotMatch(prompts, /scalloped striped awning/);
+  assert.doesNotMatch(prompts, /musical notes, a sound-wave squiggle/);
+});
+
 test('no drawn project frame or project illustration asset is published', () => {
   const course = courseData();
   const assets = fs.readdirSync(path.join(ROOT, 'presentation/assets'));
