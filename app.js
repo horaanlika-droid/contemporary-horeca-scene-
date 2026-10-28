@@ -578,7 +578,7 @@ window.bootCourse = () => {
       <div class="content-columns">
         <section class="lesson-reading">
           <span class="eyebrow">THE IDEA</span>
-          <h2 class="lesson-lede">Look beyond the surface.</h2>
+          <h2>Look beyond the surface.</h2>
           <div class="lesson-prose">${prose(l.body)}</div>
           <div class="case-inline"><span class="meta">CASE STUDY · ${esc(l.case)}</span><h3>Why this case matters</h3><p>Consider the relationship between a clear point of view and the details that make it tangible for guests and teams.</p><a class="button text" href="#/cases">EXPLORE CASE STUDIES →</a></div>
         </section>

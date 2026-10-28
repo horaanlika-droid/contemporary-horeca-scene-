@@ -441,7 +441,6 @@ a.simple-row:hover strong{color:var(--red)}
 
 /* --- lesson reading: editorial typography for the authored copy ----------- */
 .lesson-reading{min-width:0}
-.lesson-lede{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(26px,3vw,38px);line-height:1.16;letter-spacing:-.015em;margin:0 0 22px;color:var(--ink)}
 .lesson-prose{font-size:16px;line-height:1.74;color:#3a3a37;max-width:66ch}
 .lesson-prose p{margin:0 0 17px;font-size:16px;line-height:1.74;color:#3a3a37}
 .lesson-prose p:last-child{margin-bottom:0}
@@ -812,7 +811,6 @@ body.lightbox-open{overflow:hidden}
   .lesson-prose,.lesson-prose p{font-size:15.5px;line-height:1.72}
   .lesson-prose h2{font-size:18px;margin-top:38px;padding-top:20px}
   .lesson-prose .lesson-highlight{font-size:22px;padding:22px 22px 22px 22px;margin:28px 0}
-  .lesson-lede{font-size:26px}
   .lesson-aside{position:static}
   .submission-row{grid-template-columns:1fr auto;gap:8px}
   .submission-row>*:nth-child(3){display:none}
