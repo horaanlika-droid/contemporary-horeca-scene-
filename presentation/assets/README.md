@@ -10,7 +10,7 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 
 ## Polychrome cartoon illustrations
 
-The `illo-*.jpg` files are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. They illustrate concepts rather than document specific venues, and are labelled *illustration · original course graphic · AI-generated* in the app. The ten case-card covers were redrawn from their own earlier case illustrations; the separate case-file photographs remain unchanged.
+The `illo-*.jpg` files are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. They illustrate concepts rather than document specific venues, and are labelled *illustration · original course graphic · AI-generated* in the app. Eight of the ten case-card covers (`illo-case-benfiddich-kayama.jpg`, `-black-swan-bobkov.jpg`, `-shapes-savage.jpg`, `-sips-caporale.jpg`, `-el-copitas-zernov.jpg`, `-city-space-narzi.jpg`, `-sensory-talalay.jpg`, `-jiro-ono.jpg`) are redrawn from each case's own documentary photograph; the two remaining covers (`-krasota-zarkov.jpg`, `-dave-arnold.jpg`) still come from the earlier cover art. The case-file photographs themselves remain unchanged, their untouched originals are retained as `originals/case-*.jpg` and every redrawn cover links that source in the in-app credits.
 
 | Surface | Size | Files |
 | --- | --- | --- |
@@ -72,7 +72,8 @@ The presentation set combines the author's project archive, curated editorial re
 | `author-*` | © Egor Tarasenko — author’s personal archive | Retained as the credited sources of the `illo-author-*` illustrations; no longer rendered directly |
 | `illo-author-*` | AI-generated illustrations based on the `author-*.jpg` archive photographs © Egor Tarasenko | About-the-author dialog and author figure card, labelled as illustrations with sources linked |
 | `project-passie-room.jpg` | AI-generated illustration based on `passiecakes_7625.jpeg` © Egor Tarasenko | Labelled as an illustration in the project gallery and image credits |
-| `illo-*` | AI-generated course graphics based on existing course illustrations | Labelled as illustrations, never as venue photographs |
+| `illo-*` | AI-generated course graphics | Labelled as illustrations, never as venue photographs |
+| `originals/case-*.jpg` | The credited case-file photographs, kept as the reference sources of the redrawn case cards | Not rendered; linked from each `illo-case-*.jpg` credit |
 | `case-*`, `figure-*` except `figure-jiro.jpg` | Editorial reference photographs of industry figures and venues, © the respective photographers and venues, curated from public press materials | Person cards and case files only; each rendered image carries a micro-credit and appears on the in-app `#/credits` page with a takedown contact |
 | `figure-jiro.jpg` | AI-generated illustration based on the editorial reference portrait preserved at `originals/figure-jiro.jpg`; © respective photographer | Labelled as an illustration in the person card and image credits |
 | `him-logo-white.png` | © Swiss Education Group / HIM Business School | Identification only |
