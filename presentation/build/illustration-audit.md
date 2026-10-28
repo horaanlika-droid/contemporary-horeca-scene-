@@ -427,6 +427,11 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
    again (near-black teal ground, the neon-traced board on its pedestal, the glass with ice under the
    waterline, the three boards receding behind) and Dave Arnold has a real pour, a counter with an edge,
    hands that close round the tin and the coupe, and the long face and receding hairline of the photograph.
-3. Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A.
+3. ~~Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A~~ — done 29 October
+   2026. Zarkov: long dark hair to the shoulder, trimmed beard, white sweatshirt and baggy navy trousers in
+   the boxy white armchair, the screen panel pale blue, the bottle with its red cap on the floor. Talalay:
+   close-shaved head, grey beard, thin spectacles, open overshirt over the tee with the orange coupe print,
+   the raised arm holding the measure, the counter given a dark top and a pale front so it stops reading as
+   a blank white block.
 4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
    `illo-m10` need only a support line, a table edge or one hand redrawn.

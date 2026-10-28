@@ -40,6 +40,14 @@ const MAX_GAIN = 1.16;
  *  second run reports nothing to do. Real off-white paper (208 to 250) is still
  *  lifted. */
 const MIN_GAIN = 1.012;
+/** A file only counts as papered if its brightest cluster is genuinely
+ *  near-white and neutral. A dark drawing — the El Copitas room, the Sensory
+ *  card — has no paper at all, and its brightest area is an amber niche or a
+ *  lit board: lifting that would bleach the picture and never converge, because
+ *  the gain needed is past MAX_GAIN. Both tests are what keep the tool a no-op
+ *  on dark art. */
+const PAPER_MIN_LUMA = 220;
+const PAPER_MAX_SPREAD = 18;
 
 function luminanceHistogram(data, channels) {
   const hist = new Uint32Array(256);
@@ -87,6 +95,13 @@ async function normaliseFile(sharp, file) {
   const hist = luminanceHistogram(data, channels);
   const floor = percentileLevel(hist, pixels, PAPER_PERCENTILE);
   const paper = paperColour(data, channels, floor);
+
+  const darkest = Math.min(...paper);
+  const spread = Math.max(...paper) - darkest;
+  if (darkest < PAPER_MIN_LUMA || spread > PAPER_MAX_SPREAD) {
+    // no paper in this drawing: leave the colours the artist chose alone
+    return { file, changed: false, paper, gains: [1, 1, 1], noPaper: true };
+  }
 
   const gains = paper.map(value => Math.min(MAX_GAIN, 255 / Math.max(value, 1)));
   const worst = Math.max(...gains);
