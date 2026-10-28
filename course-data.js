@@ -692,6 +692,8 @@ window.COURSE = {
         cover: 'project-joi-bar.jpg',
         image: 'project-joi-bar.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
+        thumbnail: 'illo-lesson-scenography.jpg',
+        thumbnail: 'illo-lesson-final-brief.jpg',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
         facts: [
           ['ROLE', 'Author’s own project · the case behind Module 09'],

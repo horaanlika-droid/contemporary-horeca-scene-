@@ -203,11 +203,33 @@ Every image block can be replaced with a photograph sent in the Telegram chat �
 
 **Current art direction:** the latest cafe-poster series supersedes the earlier cobalt engraving direction. Redraw each image from its own existing course image, keeping the person, venue, objects and main composition recognisable. Match `style-ref-1.jpeg`, `style-ref-2.jpeg` and the completed `illo-m01-signals.jpg`: cheerful, slightly irregular black ink outlines, flat gouache-like colour, a white background and one small signal-red accent. Do not introduce invented text or logos, replace a specific subject with a generic one, or apply a blanket filter. Keep the published filenames and pixel dimensions stable.
 
-**Lesson headers — October 2026.** Each of the twelve lessons now opens with its own header image (`illo-lesson-<lesson-id>.jpg`, 1264 × 843) instead of falling back to the module cover, so the two lessons inside Module 04 and Module 09 no longer share one picture. The headers follow the same direction as the module covers: present-day subjects and futuristic ergonomics (`illo-lesson-automation.jpg` pairs a translucent study figure with a wafer-thin cantilevered console and unnumbered dimension lines), one thin ink contour, flat gouache fills, white paper, one signal-red accent, and no lettering, numerals, logos or interface copy — screens, plans, tags and panels stay blank or ruled only.
+**Two tests before any drawing is published — October 2026.** Both failures below have now happened
+once, so they are written down as rules rather than warnings.
+
+*Resemblance must be obvious, not arguable.* Put the drawing and its own photograph side by side at the
+same size and ask someone who has not read the caption to name the venue or the person. If they need the
+caption, the drawing is not finished. The anchors to check, in this order: the person's hair, beard, age
+and clothes; the room's dominant pair of colours; the counter or table material; the one object that
+identifies the venue; the light logic — a black room stays black, a neon room keeps its neon, a bright
+room stays bright. A drawing that swaps a white jacket for a waistcoat, or a blue night for beige, has
+lost the resemblance even if every other line is right.
+
+*One hand drew the whole series.* Before publishing, put the new file beside `illo-m01-signals.jpg` and
+`illo-case-black-swan-bobkov.jpg`: it has to look like the same artist on the same day. One even ink
+contour of the same weight across the frame, flat gouache fills with no rendering, no gradients, no
+airbrush, no photographic shading, no coloured backdrop, no drop shadow, white paper, one small
+signal-red accent, no lettering. A new drawing that is more photographic, smoother or thinner than the
+series is drift, not an improvement — and it is drift even when the individual picture is good.
+
+*Drift is repaired once, at the end.* When several new files come in thinner than the rest, do not
+re-render them one at a time; leave them as they are and make a single unifying pass over the whole
+series when the batch is closed, so the correction is the same everywhere.
+
+**Lesson headers — October 2026.** Each of the twelve lessons now opens with its own header image (`illo-lesson-<lesson-id>.jpg`, 1264 × 843); the last two, `illo-lesson-scenography.jpg` and `illo-lesson-final-brief.jpg`, were drawn on 29 October 2026 and the pinned count in `tests/english-content.test.js` moved from fifty to fifty-two with them instead of falling back to the module cover, so the two lessons inside Module 04 and Module 09 no longer share one picture. The headers follow the same direction as the module covers: present-day subjects and futuristic ergonomics (`illo-lesson-automation.jpg` pairs a translucent study figure with a wafer-thin cantilevered console and unnumbered dimension lines), one thin ink contour, flat gouache fills, white paper, one signal-red accent, and no lettering, numerals, logos or interface copy — screens, plans, tags and panels stay blank or ruled only.
 
 **Revised subjects — October 2026.** The ten module covers keep exactly this drawing style but their subjects are brought up to date: the warm book-illustration scenes (striped awning, chalkboards, craft clutter, a friendly robot with an antenna) were replaced with present-day equivalents — glass-front cafe pavilions, blank touchscreen kiosks, floating blank panels, sensor bases, a wheeled service robot with a blank visor, a farm-to-glass testing bench and a designer's bench with a cut-card model. **Ergonomics is drawn as futuristic**, not vintage: `illo-m05-automation.jpg` puts a translucent anatomical study doll with joint rings and unnumbered dimension lines beside a wafer-thin cantilevered console with a glass end panel, a recessed well, hanging bottles and a slim three-joint service arm. Screens, notes, tags, rulers and panels stay blank or carry ruled lines only; no frame in this series contains lettering, numerals, logos or interface copy. The previous ten covers are kept at `presentation/assets/originals/illo-m/` as the reference for the series.
 
-**Progress — the series is closed: 50 of 50 publishable targets drawn.** A target was any asset in `presentation/assets` that could responsibly carry a drawn twin. Fifty `illo-*` files are published — hero, gate, ten module covers, **ten lesson headers**, twelve case covers, eleven practitioner portraits and five author-dialog illustrations — and everything else is excluded by decision rather than left undone:
+**Progress — the series is closed: 52 of 52 publishable targets drawn.** A target was any asset in `presentation/assets` that could responsibly carry a drawn twin. Fifty-two `illo-*` files are published — hero, gate, ten module covers, **twelve lesson headers**, twelve case covers, eleven practitioner portraits and five author-dialog illustrations — and everything else is excluded by decision rather than left undone:
 
 - The author's own project archive (`project-*`, 43 photographs): photographs only, at the author's instruction. The seventeen gallery drawings and six drawn covers that had been published were withdrawn on 28 October 2026 (see below).
 - The three `web-insider-*` files: documentary photographs of another venue, Insider Bar Lab, credited to © Insider Bar / @insider.bar.lab with a takedown contact. They are someone else's room, photographed by someone else; redrawing them would put an interpretation of a third-party venue into the course, so they stay as credited photographs.
