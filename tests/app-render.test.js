@@ -24,27 +24,6 @@ const STUDENT = {
   institutionId: 'him-001', unlockedLessons: [],
 };
 
-const JOI_LIKE = {
-  joi: {
-    cover: 'illo-project-joi-bar.jpg',
-    frames: 17,
-    pairs: ['illo-project-joi-arcade', 'illo-project-joi-facade', 'illo-project-joi-brand', 'illo-project-joi-cups',
-      'illo-project-joi-machine', 'illo-project-joi-grinder', 'illo-project-joi-arcade-lights'],
-  },
-  coocoo: {
-    cover: 'illo-project-coocoo-pour.jpg',
-    // the cover redraws the pour photograph, which stays in the gallery, so the page shows ten frames
-    frames: 10,
-    pairs: ['illo-project-coocoo-room', 'illo-project-coocoo-bulbs', 'illo-project-coocoo-team', 'illo-project-coocoo-menu'],
-  },
-  passie: {
-    cover: 'illo-project-passie-wall.jpg',
-    frames: 13,
-    pairs: ['illo-project-passie-cake', 'illo-project-passie-cheesecake', 'illo-project-passie-counter',
-      'illo-project-passie-window', 'illo-project-passie-sakura'],
-  },
-};
-
 function fakeElement() {
   const classes = new Set();
   return {
@@ -312,46 +291,35 @@ test('generated illustrations are identified without relabelling documentary pho
   location.hash = '#/projects';
   await settle();
   html = app.innerHTML;
-  for (const cover of ['illo-project-joi-bar.jpg', 'illo-project-passie-wall.jpg', 'illo-project-coocoo-pour.jpg',
-    'illo-project-chicken-connection-kitchen.jpg', 'illo-project-pacific-station.jpg', 'illo-project-tam-cubes.jpg',
-    'illo-project-detail-nine-lives.jpg']) {
+  for (const cover of ['project-joi-bar.jpg', 'project-passie-wall.jpg', 'project-coocoo-pour.jpg',
+    'project-chicken-connection-kitchen.jpg', 'project-pacific-station.jpg', 'project-tam-cubes.jpg',
+    'project-detail-nine-lives.jpg']) {
     const at = html.indexOf(`presentation/assets/${cover}`);
-    assert.ok(at >= 0, `${cover} is the drawn project card`);
-    assert.match(html.slice(at - 300, at + 700), /illo-photo/, `${cover} is not graded as a photograph`);
-    assert.match(html.slice(at, at + 700), /ILLUSTRATION · AI-GENERATED/, `${cover} is disclosed`);
+    assert.ok(at >= 0, `${cover} is the project card photograph`);
+    assert.doesNotMatch(html.slice(at - 300, at + 700), /ILLUSTRATION · AI-GENERATED/, `${cover} is not a drawing`);
   }
 
-  // every drawn frame in a project file paints beside its own photograph
-  for (const id of ['joi', 'passie', 'coocoo']) {
-    location.hash = `#/project/${id}`;
+  // the project files are photographs only and count exactly what they hold
+  for (const project of [{ id: 'joi', frames: 9 }, { id: 'passie', frames: 7 }, { id: 'coocoo', frames: 5 }]) {
+    location.hash = `#/project/${project.id}`;
     await settle();
     html = app.innerHTML;
-    const project = JOI_LIKE[id];
-    assert.ok(html.includes(`presentation/assets/${project.cover}`), `${id} leads with its drawn card`);
-    assert.equal(html.split(`data-src="presentation/assets/${project.cover}"`).length - 1, 1, `${id} does not repeat its lead drawing`);
-    for (const pair of project.pairs) {
-      const drawing = html.indexOf(`presentation/assets/${pair}.jpg`);
-      const photo = html.indexOf(`presentation/assets/${pair.replace('illo-', '')}.jpg`);
-      assert.ok(drawing >= 0, `${pair} is in the ${id} gallery`);
-      assert.ok(photo >= 0, `${pair} keeps its photograph beside it`);
-      assert.match(html.slice(drawing - 200, drawing + 600), /ILLUSTRATION · AI-GENERATED/, `${pair} is disclosed`);
-    }
-    assert.match(html, new RegExp(`THE FILE · ${project.frames} IMAGES`), `${id} counts its drawings and photographs together`);
+    assert.doesNotMatch(html, /presentation\/assets\/illo-project-/, `${project.id} carries no drawn frames`);
+    assert.match(html, new RegExp(`THE FILE · ${project.frames} IMAGES`), `${project.id} counts its photographs`);
   }
 
   location.hash = '#/project/passie';
   await settle();
   html = app.innerHTML;
-  const lead = html.indexOf('presentation/assets/illo-project-passie-wall.jpg');
-  assert.ok(lead >= 0, 'the project file leads with its drawn cover');
   const wall = html.indexOf('presentation/assets/project-passie-wall.jpg');
-  assert.ok(wall >= 0, 'the archive photograph stays in the file beneath the drawing');
+  assert.ok(wall >= 0, 'the project file leads with its archive photograph');
+  assert.equal(html.split('data-src="presentation/assets/project-passie-wall.jpg"').length - 1, 1, 'the lead photograph is not repeated');
   const room = html.indexOf('presentation/assets/project-passie-room.jpg');
   assert.ok(room >= 0, 'the Passie room illustration is in the gallery');
   assert.match(html.slice(room - 250, room + 1000), /AI-GENERATED FROM AUTHOR’S ARCHIVE/, 'gallery and lightbox disclose the illustration');
   assert.match(html.slice(room - 250, room + 1000), /illo-photo/, 'the illustration is not graded as a photograph');
-  assert.match(html, /Passie Cakes Co\. — AI-generated illustration \d+/, 'a drawn gallery frame is announced as an illustration');
-  assert.match(html, /THE FILE · 13 IMAGES/, 'the file counts its drawings and photographs together');
+  assert.match(html, /Passie Cakes Co\. — AI-generated illustration \d+/, 'the retained gallery illustration is announced as one');
+  assert.match(html, /THE FILE · 7 IMAGES/, 'the file counts its photographs only');
 
   location.hash = '#/credits';
   await settle();
