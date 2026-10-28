@@ -270,8 +270,12 @@ list in `presentation/build/illustration-audit.md` §10.4 — fixed on 29 Octobe
 were **wrong** — `illo-m09-found` ties every tag to its object, `illo-m06-ai` holds the bowl in the gripper,
 `illo-m10-mockup` rests both hands on the panel edges — and the Sips foreground has been fully painted since
 its redraw. What genuinely remains there is one line: the tasting glass in `illo-m03-senses` overlaps the
-drinker's nose; (5) one unifying pass over the line weight of the whole series once the list is
-closed. The checklist used
+drinker's nose; (5) ~~one unifying pass over the line weight of the whole series once the list is closed~~ —
+**cancelled after measurement**, 29 October 2026: the median ink stroke is 2 px in the light documents and
+3 px in the dense ones across the whole library, so there is no drift to repair and re-rendering 52 files
+would only have introduced one. What read as drift was ink *area* (dark rooms score high on any area metric)
+and two real faults in the portrait set, now recorded in `illustration-audit.md` §10.6: portraits drawn
+without an outer contour, and figures cut at mid-thigh with no shadow. The checklist used
 for every redraw, and the reasoning behind each verdict, are in
 `presentation/build/illustration-audit.md`.
 

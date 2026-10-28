@@ -447,3 +447,46 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
    a blank white block.
 4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
    `illo-m10` need only a support line, a table edge or one hand redrawn.
+
+### 10.6 The line-weight question, measured instead of guessed
+
+The README carried an instruction to "make one unifying pass over the line weight of the whole series"
+at the end. Before doing it, the stroke was measured across the library — median run length of ink
+pixels along a scanline, capped at 24 px so a black wall is not read as a fat pen:
+
+| File | Median stroke | Mean |
+| --- | --- | --- |
+| `illo-lesson-signals.jpg` | 2 px | 2.3 px |
+| `illo-m01-signals.jpg` | 2 px | 3.1 px |
+| `illo-lesson-scenography.jpg` | 2 px | 4.3 px |
+| `illo-figure-savage.jpg` | 2 px | 2.0 px |
+| `illo-figure-zarkov.jpg` | 2 px | 2.7 px |
+| `illo-figure-kratena.jpg` | 3 px | 3.2 px |
+| `illo-figure-narzi.jpg` | 3 px | 4.5 px |
+| `illo-figure-dave-arnold.jpg` | 3 px | 3.6 px |
+| `illo-case-black-swan-bobkov.jpg` | 2 px | 3.2 px |
+| `illo-case-benfiddich-kayama.jpg` | 3 px | 5.3 px |
+| `illo-case-krasota-zarkov.jpg` | 3 px | 4.9 px |
+| `illo-case-jiro-ono.jpg` | 3 px | 3.9 px |
+
+**Conclusion: there is no line-weight drift.** Median stroke is 2 px in the thin documents and 3 px in
+the dense ones — one pixel apart at 1264 px wide, which is what the eye reads as "same hand". The
+impression that newer drawings are thinner was a misreading of one measurement: ink *area*. Its first
+pass ranked `illo-case-el-copitas-zernov` at 91.9 and `illo-case-sips-caporale` at 94.3 on a
+"line thickness" scale, purely because those two pictures are black rooms. Ink area measures darkness,
+not the pen.
+
+So the planned re-render of all 52 files is **cancelled as unnecessary**, and the instruction is removed
+from the README. What did look like drift, once the files were laid side by side, was two different
+things:
+
+1. **The portraits have no outer contour.** Figures were drawn with an interior line only, so they have
+   no edge against the paper and read softer than the case cards, which outline every shape. Fix: close
+   the outer silhouette.
+2. **Float.** Several portraits cut the figure at mid-thigh with no ground and no shadow, so the person
+   hangs in the page. Fix: one flat shadow or one floor line under the cut.
+
+Both applied on 29 October 2026 to the two portraits that were drawn last and showed the fault most
+clearly — `illo-figure-kratena.jpg` and `illo-figure-narzi.jpg` are now full-length figures with a closed
+contour and one flat shadow under the shoes. The other ten portraits are close crops where the crop itself
+is the edge, so they do not need the shadow; they were checked and left alone.
