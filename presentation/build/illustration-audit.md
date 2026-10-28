@@ -327,3 +327,101 @@ dark rectangle; `illo-case-benfiddich-kayama` is the one file here that wants a 
 6. **Perspective test.** One floor line, one horizon, one vanishing direction per wall plane.
 7. **Palette test.** White, ink, one red accent — plus only the colours that exist in the photograph.
 8. **Finish test.** No foreground object in outline; no fragment of the background floating in white.
+
+---
+
+## 10. Second review — 29 October 2026
+
+The first review asked whether a drawing showed the right place. This one asks the two questions the
+author actually judges by: **is the resemblance obvious at a glance**, and **is it the same hand as the
+rest of the series**. The honest answer to both is "not everywhere", and the reason is the same in both
+cases: the library contains two different drawing hands, and recent work has been landing in the wrong
+one.
+
+### 10.1 Two hands in one library
+
+| | **Hand A — thin and light** | **Hand B — heavy and saturated** |
+| --- | --- | --- |
+| Contour | 2–3 px, even, gently wobbly | 5–6 px, even, bolder |
+| Fills | pale, chalky, often left as paper | deep gouache, full strength |
+| Paper | the picture floats on white, no floor lines | the picture often fills the frame |
+| Palette | sage, cream, apricot, dusty blue, one red | maroon, amber, black, one red |
+| Where it is used | the 12 practitioner portraits, the 10 module covers, the 12 lesson headers | the 12 case cards, hero, gate |
+
+Both hands are good. The fault is mixing them: seven of the twelve portraits are Hand A and read as
+friendly poster portraits; the two portraits redrawn on 29 October are Hand B and read as a different
+artist's work next to them. The same is true of the lesson headers.
+
+### 10.2 Files in the wrong hand
+
+| File | Belongs with | Problem |
+| --- | --- | --- |
+| `illo-figure-narzi.jpg` | Hand A | redrawn with a 6 px contour and saturated fills; the neighbours are thin-line |
+| `illo-figure-dave-arnold.jpg` | Hand A | same, plus the hair is a single black mass with no interior line |
+| `illo-lesson-scenography.jpg` | Hand A | heavy ink, a grey wall and a hard white light wedge; the other headers are pale line drawings with no dark field |
+| `illo-lesson-final-brief.jpg` | Hand A | a solid brown table filling two thirds of the frame; the other headers keep the page white |
+
+Fix: redraw these four in Hand A — thin contour, pale fills, white page, no dark fields — keeping the
+content that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hair, Dave's long
+face).
+
+### 10.3 Resemblance, file by file
+
+● obvious at a glance · ◐ needs the caption · ○ reads as another place or person
+
+| Case card | | Why |
+| --- | --- | --- |
+| Black Swan | ● | the lantern ceiling and the ornate bar are unmistakable |
+| Sips | ◐ | right room, but a third of the foreground is still pencil outline |
+| Shapes | ◐ | the shelving is right; the green table and red stools that identify the shop are missing |
+| Kayama | ● | white jacket, red tie, mahogany, amber bottles |
+| El Copitas | ● | black vault, sconces, two lit niches |
+| City Space | ● | red ceiling sweep, magenta-and-blue floor, blue night |
+| Jiro | ◐ | the noren and the counter read; the stool legs and the missing hands do not |
+| Krasota | ◐ | the table reads; the projection is a flat blue disc instead of a seascape |
+| Tayēr | ● | gilet, cap, glasses, sleeve |
+| Noma | ● | the man, hands on hips, is now the portrait's man |
+| Sensory | ○ | a white-room still life where the photograph is a dark neon room |
+| Dave Arnold | ○ | no pour, impossible grip, no counter, black studio turned white |
+
+| Portrait | | Why |
+| --- | --- | --- |
+| Zernov | ● | outfit, drink, brick pass, steamers |
+| Redzepi | ● | face, beard, hands on hips, herb pocket |
+| Kratena | ◐ | tray and glass are invented; he holds a phone in the photograph |
+| Kayama | ◐ | the cocktail at his chest is invented |
+| Caporale | ◐ | a martini added to an empty hand |
+| Savage | ◐ | a martini added; the reference has both hands in his pockets |
+| Bobkov | ◐ | a tie added, jacket black → brown |
+| Zarkov | ○ | drawn as a blonde man without a beard, in a café, reading a menu |
+| Talalay | ○ | drawn seated with a coupe; the reference is him standing in a dark bar with his arm raised |
+| Narzi | ● | dark hair, clean shaven, striped shirt — but drawn in the wrong hand |
+| Dave Arnold | ◐ | long face and straight hair now, but the black hair mass reads as a helmet |
+| Jiro | ● | likeness good (drawn file, published as `figure-jiro.jpg`) |
+
+### 10.4 Physics and logic still open
+
+- `illo-case-sensory-talalay` — no table surface under the board; the straw stops above the waterline;
+  blue-green confetti outside the palette.
+- `illo-case-dave-arnold` — the lower hand's fingers pass through the coupe instead of round its foot;
+  tools stand on nothing.
+- `illo-case-jiro-ono` — three stool legs cross in an X; the nearest stool is twice the scale of the
+  others; dishes hover above the counter; neither chef has a visible hand.
+- `illo-case-city-space-narzi` — the mirrored wall repeats the bar rather than reflecting it.
+- `illo-m03-senses` — the tasting glass floats unsupported beside the drinker's face.
+- `illo-m07-fnb` — the mortars, carafe and cloche sit on no drawn surface.
+- `illo-m08-venture` — the tray of cups overhangs the table into empty air.
+- `illo-m09-found` — every tag is tied with a string that ends in nothing.
+- `illo-m10-mockup` — the model's roof passes through the assembler's fingers.
+- `illo-m06-ai` — the bowl sits a hand's width above the robot's tray.
+- `illo-lesson-concept-objects` and `illo-lesson-signals` — panels and objects hang from lines that end
+  in mid-air (accepted as a series convention, recorded so it is a decision and not an accident).
+
+### 10.5 Order of work
+
+1. Redraw the four wrong-hand files in Hand A (§10.2) — this is the drift the author sees first.
+2. Fix the two ○ case cards (Sensory, Dave Arnold) from their photographs, keeping the Hand B case
+   style.
+3. Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A.
+4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
+   `illo-m10` need only a support line, a table edge or one hand redrawn.
