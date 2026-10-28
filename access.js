@@ -219,6 +219,8 @@
     document.documentElement.classList.remove('telegram-webapp');
     const escG = escapeHtml;
     const g = { ...(window.SITE?.gate || {}), ...((siteCopy && siteCopy.gate) || {}) };
+    const gateImage = g.heroImage || 'project-joi-bar.jpg';
+    const gateIsIllustration = /^illo-/.test(String(gateImage));
     const tribute = window.__chsTributeInfo || {};
     const safeHttps = value => {
       try { const url = new URL(value); return url.protocol === 'https:' ? url.href : ''; }
@@ -231,8 +233,8 @@
     root.innerHTML = `
     <main class="gate-page">
       <div class="gate-stage">
-        <div class="gate-visual${/^illo-/.test(String(g.heroImage || '')) ? ' is-illustration' : ''}">
-          <img class="film-photo" src="${escG(siteAssetSrc(g.heroImage || 'project-joi-bar.jpg'))}" alt="Hand-drawn ink and pastel illustration of a cafe table still life — a coffee cup, a cocktail, a candle and a leafy branch">
+        <div class="gate-visual${gateIsIllustration ? ' is-illustration' : ''}">
+          <img class="film-photo" src="${escG(siteAssetSrc(gateImage))}" alt="${gateIsIllustration ? 'AI-generated illustration of a cafe table still life' : 'Course access page visual'}">
           <div class="gate-visual-copy">
             <span class="eyebrow">${escG(g.eyebrow)}</span>
             <h1>${escG(g.titleTop)}<br><em>${escG(g.titleAccent)}</em> ${escG(g.titleBottom)}</h1>
@@ -284,7 +286,7 @@
             </div>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>
             <p class="gate-note-line gate-note-mail">Course, licensing and programme enquiries: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>
-            <p class="gate-note-line">Author photographs from Joi and Pacific are shown in full color with a close-detail, film-inspired treatment. Other editorial photographs are sourced from public websites and press materials. Each image is credited; full source links and rights notes are published inside the course.</p>
+            <p class="gate-note-line">${gateIsIllustration ? 'The access illustration and selected course graphics are AI-generated.' : 'Selected course graphics are AI-generated.'} Author photographs from Joi and Pacific are shown in full color with a close-detail, film-inspired treatment. Other editorial photographs are sourced from public websites and press materials. Each image is credited; full source links and rights notes are published inside the course.</p>
           </article>
         </div>
       </section>

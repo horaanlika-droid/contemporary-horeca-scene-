@@ -262,3 +262,38 @@ test('a screen that throws still navigates: the learner sees a display error, no
   await settle();
   assert.match(app.innerHTML, /app-module-list/, 'navigation recovers after a failed screen');
 });
+
+test('generated illustrations are identified without relabelling documentary photos', async () => {
+  const { app, location, settle } = bootCourse();
+  await settle();
+
+  assert.match(app.innerHTML, /AI-GENERATED ILLUSTRATION/, 'the landing hero is not presented as a photograph');
+  assert.match(app.innerHTML, /alt="AI-generated illustration of a hospitality scene"/);
+
+  location.hash = '#/cases';
+  await settle();
+  let html = app.innerHTML;
+  const jiro = html.indexOf('presentation/assets/figure-jiro.jpg');
+  assert.ok(jiro >= 0, 'the Jiro portrait is displayed');
+  assert.match(html.slice(jiro - 100, jiro + 500), /illo-photo/, 'the portrait uses illustration styling');
+  assert.match(html.slice(jiro, jiro + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
+  const redzepi = html.indexOf('presentation/assets/figure-redzepi.jpg');
+  assert.ok(redzepi >= 0, 'the unchanged editorial portrait is displayed');
+  assert.match(html.slice(redzepi, redzepi + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
+
+  location.hash = '#/project/passie';
+  await settle();
+  html = app.innerHTML;
+  const room = html.indexOf('presentation/assets/project-passie-room.jpg');
+  assert.ok(room >= 0, 'the Passie room illustration is in the gallery');
+  assert.match(html.slice(room - 250, room + 1000), /AI-GENERATED FROM AUTHOR’S ARCHIVE/, 'gallery and lightbox disclose the illustration');
+  assert.match(html.slice(room - 250, room + 1000), /illo-photo/, 'the illustration is not graded as a photograph');
+  assert.match(html, /Passie Cakes Co\. — AI-generated illustration 5/);
+  assert.match(html, /THE FILE · 7 IMAGES/, 'mixed media are not all called photographs');
+
+  location.hash = '#/credits';
+  await settle();
+  assert.match(app.innerHTML, /href="\/presentation\/assets\/originals\/figure-jiro\.jpg"/, 'original reference portrait is linked');
+  assert.match(app.innerHTML, /href="\/passiecakes_7625\.jpeg"/, 'original project photograph is linked');
+  assert.doesNotMatch(app.innerHTML, /href="Generated from existing course artwork/, 'descriptive provenance is not a broken hyperlink');
+});
