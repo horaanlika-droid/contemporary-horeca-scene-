@@ -47,7 +47,7 @@
       <section class="author-work">
         <h3 class="author-label">Own projects</h3>
         <div class="author-frames">
-          ${projects.map(([file, name, year, id]) => `<figure>${window.COURSE
+          ${projects.map(([file, name, year, id]) => `<figure${file.startsWith('illo-') ? ' class="is-art"' : ''}>${window.COURSE
             ? `<a class="author-project-link" href="#/project/${id}" data-author-route><img class="film-photo${file.startsWith('illo-') ? ' illo-photo' : ''}" src="${ASSET}${file}" alt="${name} ${year} — illustration" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption></a>`
             : `<img class="film-photo${file.startsWith('illo-') ? ' illo-photo' : ''}" src="${ASSET}${file}" alt="${name} ${year} — illustration" loading="lazy"><figcaption>${name} <b>${year}</b></figcaption>`}</figure>`).join('')}
         </div>
