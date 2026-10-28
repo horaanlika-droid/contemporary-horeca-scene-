@@ -352,18 +352,21 @@ Both hands are good. The fault is mixing them: seven of the twelve portraits are
 friendly poster portraits; the two portraits redrawn on 29 October are Hand B and read as a different
 artist's work next to them. The same is true of the lesson headers.
 
-### 10.2 Files in the wrong hand
+### 10.2 Files in the wrong hand — fixed 29 October 2026
 
-| File | Belongs with | Problem |
-| --- | --- | --- |
-| `illo-figure-narzi.jpg` | Hand A | redrawn with a 6 px contour and saturated fills; the neighbours are thin-line |
-| `illo-figure-dave-arnold.jpg` | Hand A | same, plus the hair is a single black mass with no interior line |
-| `illo-lesson-scenography.jpg` | Hand A | heavy ink, a grey wall and a hard white light wedge; the other headers are pale line drawings with no dark field |
-| `illo-lesson-final-brief.jpg` | Hand A | a solid brown table filling two thirds of the frame; the other headers keep the page white |
+| File | Belongs with | Problem | Now |
+| --- | --- | --- | --- |
+| `illo-figure-narzi.jpg` | Hand A | redrawn with a 6 px contour and saturated fills; the neighbours are thin-line | redrawn thin: 3 px contour, pale sage and cream, dark hair as a mid-brown shape with interior lines, arms resting on a pale bar top |
+| `illo-figure-dave-arnold.jpg` | Hand A | same, plus the hair is a single black mass with no interior line | redrawn thin: dusty-grey sweater instead of black, mid grey-brown hair with the receding hairline visible, checked collar and cuffs |
+| `illo-lesson-scenography.jpg` | Hand A | heavy ink, a grey wall and a hard white light wedge; the other headers are pale line drawings | redrawn thin: pale table corner, five objects, white page, the candle flame as the only red |
+| `illo-lesson-final-brief.jpg` | Hand A | a solid brown table filling two thirds of the frame | redrawn thin: a pale card model on a pale plinth, white page, the block in the hand as the only red |
 
-Fix: redraw these four in Hand A — thin contour, pale fills, white page, no dark fields — keeping the
-content that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hair, Dave's long
-face).
+One more file was outside its own set for a different reason: `illo-figure-kratena.jpg` was published at
+768 × 1376 while every other portrait is 848 × 1264, so it sat taller and narrower than its neighbours in
+the grid. It is re-framed to 848 × 1264 with the drawing untouched.
+
+Fix applied: redrawn in Hand A — thin contour, pale fills, white page, no dark fields — keeping the content
+that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hair, Dave's long face).
 
 ### 10.3 Resemblance, file by file
 
@@ -405,8 +408,10 @@ face).
   blue-green confetti outside the palette.
 - `illo-case-dave-arnold` — the lower hand's fingers pass through the coupe instead of round its foot;
   tools stand on nothing.
-- `illo-case-jiro-ono` — three stool legs cross in an X; the nearest stool is twice the scale of the
-  others; dishes hover above the counter; neither chef has a visible hand.
+- ~~`illo-case-jiro-ono` — three stool legs cross in an X; the nearest stool is twice the scale of the
+  others; dishes hover above the counter; neither chef has a visible hand.~~ Redrawn 29 October 2026 from the
+  photograph: one floor line, four stools at one scale with four legs each reaching the floor, every dish
+  resting on the counter, both chefs with hands, ceiling panels in a shared perspective.
 - `illo-case-city-space-narzi` — the mirrored wall repeats the bar rather than reflecting it.
 - `illo-m03-senses` — the tasting glass floats unsupported beside the drinker's face.
 - `illo-m07-fnb` — the mortars, carafe and cloche sit on no drawn surface.
@@ -419,9 +424,16 @@ face).
 
 ### 10.5 Order of work
 
-1. Redraw the four wrong-hand files in Hand A (§10.2) — this is the drift the author sees first.
-2. Fix the two ○ case cards (Sensory, Dave Arnold) from their photographs, keeping the Hand B case
-   style.
-3. Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A.
+1. ~~Redraw the four wrong-hand files in Hand A (§10.2)~~ — done 29 October 2026.
+2. ~~Fix the two ○ case cards (Sensory, Dave Arnold)~~ — done 29 October 2026: Sensory is the dark room
+   again (near-black teal ground, the neon-traced board on its pedestal, the glass with ice under the
+   waterline, the three boards receding behind) and Dave Arnold has a real pour, a counter with an edge,
+   hands that close round the tin and the coupe, and the long face and receding hairline of the photograph.
+3. ~~Redraw the two ○ portraits (Zarkov, Talalay) from their photographs in Hand A~~ — done 29 October
+   2026. Zarkov: long dark hair to the shoulder, trimmed beard, white sweatshirt and baggy navy trousers in
+   the boxy white armchair, the screen panel pale blue, the bottle with its red cap on the floor. Talalay:
+   close-shaved head, grey beard, thin spectacles, open overshirt over the tee with the orange coupe print,
+   the raised arm holding the measure, the counter given a dark top and a pale front so it stops reading as
+   a blank white block.
 4. Repair the physics list in §10.4 file by file; `illo-m03`, `illo-m07`, `illo-m08`, `illo-m09` and
    `illo-m10` need only a support line, a table edge or one hand redrawn.
