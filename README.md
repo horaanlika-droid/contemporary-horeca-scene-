@@ -256,7 +256,16 @@ and are marked `done` below; everything still marked `open` is the remaining tas
 `presentation/build/illustration-audit.md` §10 is the current one: it adds the two tests the drawings are now
 judged by (obvious resemblance, one hand across the series) and names the four files drawn in the wrong hand —
 `illo-figure-narzi.jpg`, `illo-figure-dave-arnold.jpg`, `illo-lesson-scenography.jpg` and
-`illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set. The checklist used
+`illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set.
+
+**Still open after this pass.** In order: (1) the four wrong-hand files above, redrawn thin and light;
+(2) the two case cards that still read as the wrong place — `illo-case-sensory-talalay.jpg` and
+`illo-case-dave-arnold.jpg`, redrawn from their photographs in the case-card hand; (3) the two portraits
+that are still another person — `illo-figure-zarkov.jpg` and `illo-figure-talalay.jpg`; (4) the physics
+list in `presentation/build/illustration-audit.md` §10.4 — a support line or a hand each for
+`illo-m03-senses`, `illo-m07-fnb`, `illo-m08-venture`, `illo-m09-found`, `illo-m10-mockup`, the Jiro card
+and the Sips foreground; (5) one unifying pass over the line weight of the whole series once the list is
+closed. The checklist used
 for every redraw, and the reasoning behind each verdict, are in
 `presentation/build/illustration-audit.md`.
 
