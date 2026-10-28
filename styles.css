@@ -420,7 +420,7 @@ a.simple-row:hover strong{color:var(--red)}
 .lesson-heading{display:grid;grid-template-columns:1fr 190px;gap:26px;align-items:end}
 .lesson-heading h1{font-size:clamp(38px,5.6vw,76px);line-height:.94;letter-spacing:-.04em;margin:14px 0 16px;font-weight:200;text-transform:uppercase}
 .lesson-heading h1 em{text-transform:none;color:var(--red)}
-.lesson-heading p{max-width:62ch;color:var(--muted)}
+.lesson-heading p{max-width:60ch;font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(17px,1.75vw,21px);line-height:1.5;color:#3d3d3a;margin:0}
 .lesson-number{align-self:start;text-align:right;color:var(--muted)}
 .video-frame{margin:clamp(26px,3.4vw,40px) 0;position:relative;background:var(--ink);color:#fff;min-height:380px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
 .video-frame img,.video-frame video{width:100%;height:100%;min-height:380px;object-fit:cover}
@@ -436,8 +436,55 @@ a.simple-row:hover strong{color:var(--red)}
 .content-columns h2{font-family:var(--sans);font-weight:300;font-size:clamp(24px,2.5vw,32px);letter-spacing:-.025em;margin:0 0 18px}
 .content-columns p{color:#3d3d3a}
 .key-ideas{padding:0;list-style:none;margin:0}
-.key-ideas li{padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;gap:14px}
+.key-ideas li{padding:15px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.55;display:flex;gap:14px}
 .key-ideas li:before{content:'';flex:none;width:6px;height:6px;background:var(--red);border-radius:50%;margin-top:8px}
+
+/* --- lesson reading: editorial typography for the authored copy ----------- */
+.lesson-reading{min-width:0}
+.lesson-lede{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(26px,3vw,38px);line-height:1.16;letter-spacing:-.015em;margin:0 0 22px;color:var(--ink)}
+.lesson-prose{font-size:16px;line-height:1.74;color:#3a3a37;max-width:66ch}
+.lesson-prose p{margin:0 0 17px;font-size:16px;line-height:1.74;color:#3a3a37}
+.lesson-prose p:last-child{margin-bottom:0}
+.lesson-prose h2{
+  font-family:var(--sans);font-weight:300;text-transform:uppercase;
+  font-size:clamp(19px,1.85vw,24px);line-height:1.16;letter-spacing:.012em;
+  color:var(--ink);margin:46px 0 16px;padding-top:24px;border-top:1px solid var(--line);
+}
+.lesson-prose h2:first-child{margin-top:0;padding-top:0;border-top:0}
+.lesson-prose h3{
+  font-family:var(--ui);font-weight:500;font-size:10.5px;line-height:1.5;
+  letter-spacing:var(--track);text-transform:uppercase;color:var(--red);
+  margin:30px 0 10px;
+}
+.lesson-prose h3:first-child{margin-top:0}
+.lesson-prose strong{font-weight:500;color:var(--ink)}
+.lesson-prose em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.04em}
+.lesson-prose code{font-family:var(--mono);font-size:.88em;background:var(--paper-warm);padding:2px 5px}
+.lesson-prose ul,.lesson-prose ol{list-style:none;margin:4px 0 22px;padding:0;counter-reset:lesson-step}
+.lesson-prose li{position:relative;padding-left:26px;margin:0 0 11px;font-size:15.5px;line-height:1.6;color:#3a3a37}
+.lesson-prose li:last-child{margin-bottom:0}
+.lesson-prose ul>li:before{content:'';position:absolute;left:3px;top:.62em;width:6px;height:6px;background:var(--red);border-radius:50%}
+.lesson-prose ol>li{counter-increment:lesson-step;padding-left:30px}
+.lesson-prose ol>li:before{
+  content:counter(lesson-step);position:absolute;left:0;top:.06em;
+  font-family:var(--ui);font-weight:500;font-size:10.5px;letter-spacing:.06em;color:var(--red);
+}
+.lesson-prose .lesson-highlight{
+  margin:34px 0;padding:26px 28px 26px 30px;border-left:3px solid var(--red);
+  background:var(--paper-warm);font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(22px,2.35vw,31px);line-height:1.26;letter-spacing:-.012em;color:var(--ink);
+}
+.lesson-prose .lesson-highlight p{
+  margin:0;font-family:inherit;font-style:inherit;font-weight:inherit;
+  font-size:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;
+}
+.lesson-prose .lesson-highlight+.lesson-highlight{margin-top:-22px}
+.lesson-prose .lesson-note{
+  margin:0 0 22px;font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:15px;line-height:1.5;color:var(--muted);
+}
+.lesson-prose .lesson-note em{font-size:1em}
+.lesson-aside{position:sticky;top:96px;align-self:start}
 .case-inline{background:var(--paper-warm);padding:24px 26px;margin-top:26px;border-left:2px solid var(--red)}
 .case-inline .meta{color:var(--muted)}
 .case-inline h3{font-family:var(--sans);font-weight:300;font-size:clamp(19px,1.9vw,24px);letter-spacing:-.02em;margin:10px 0 6px}
@@ -671,6 +718,7 @@ body.lightbox-open{overflow:hidden}
   .stat-panel{margin:0}
   .lesson-heading{grid-template-columns:1fr}
   .lesson-number{text-align:left}
+  .lesson-aside{position:static}
   .video-frame{grid-template-columns:1fr}
   .video-frame img,.video-frame video{min-height:260px;height:260px}
   .project-grid{grid-template-columns:1fr 1fr}
@@ -761,6 +809,11 @@ body.lightbox-open{overflow:hidden}
     justify-content:center;
   }
   .challenge-panel{grid-template-columns:1fr;gap:18px}
+  .lesson-prose,.lesson-prose p{font-size:15.5px;line-height:1.72}
+  .lesson-prose h2{font-size:18px;margin-top:38px;padding-top:20px}
+  .lesson-prose .lesson-highlight{font-size:22px;padding:22px 22px 22px 22px;margin:28px 0}
+  .lesson-lede{font-size:26px}
+  .lesson-aside{position:static}
   .submission-row{grid-template-columns:1fr auto;gap:8px}
   .submission-row>*:nth-child(3){display:none}
   .login-page,.gate-stage{grid-template-columns:1fr}

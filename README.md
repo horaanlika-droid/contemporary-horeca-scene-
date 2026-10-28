@@ -90,6 +90,20 @@ node tools/build-course-lessons.js         # rewrite the modules array in course
 
 Module metadata (ids, covers, key ideas, cases, challenges) is curated inside the tool, so re-running it after an edit to `lessons.txt` keeps the published course in sync.
 
+Lesson bodies keep a deliberately small Markdown subset so students read a structured page rather than an undifferentiated wall of prose. The build tool preserves the structure from `lessons.txt` and the app renders it:
+
+| Source | Rendered as |
+|---|---|
+| `## Section` / `### Sub-heading` | Section heading / red micro-label |
+| `**bold**`, `*italic*` | Inline emphasis inside a paragraph |
+| `- item`, `1. item` | Bulleted or numbered list |
+| A paragraph written entirely in bold | Large serif pull-quote highlight |
+| `*Single italic line*` | Note or figure caption |
+| `<text>` / `<ins>` blocks | Figure caption / labelled principle |
+| Table rows | Definition-style bullet list |
+
+The page also prints the lesson standfirst in serif italic and keeps the key ideas beside the reading. Image placeholders (`<AsyncImage…>`) are dropped from the published body. Administrators can still override `body` in the Telegram console with plain prose; unmarked text renders as ordinary paragraphs.
+
 ### Module 09 — Budget Realisation & Scenography
 
 ### Module 09 — Budget Realisation & Scenography
