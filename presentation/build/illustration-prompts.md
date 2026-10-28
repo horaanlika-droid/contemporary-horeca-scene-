@@ -46,18 +46,43 @@ blank or carry ruled lines only.
 | `m08-venture.png` | `illo-m08-venture.jpg` | 1264 × 843 | Three people at a long pale table: one standing and pointing at an unrolled blank technical sheet, two seated with a cup and folded hands; in the centre a white cut-card model of a bar counter with two stools and a thin screen, a rolled plan, a tray of three cups, an upright blank tablet, three blank panels above | the flag on the model |
 | `m09-found.png` | `illo-m09-found.jpg` | 1264 × 843 | Found objects archived like a museum sheet on a white bench: a pale wooden crate, a floral plate standing on edge, a brass bell, a green bottle with a candle stub, a folded linen napkin and a stoneware cup, each with a blank paper tag on a thread and hairline connectors | a tiny berry beside the bell |
 | `m10-mockup.png` | `illo-m10-mockup.jpg` | 1264 × 843 | A designer's bench: a person in a hoodie placing the last wall panel onto a cut-card model of a bar on a slim round turntable; a cutting mat with a plain ruler, a scalpel, a steel rule, a glue stick, a blank tablet with an empty plan outline, a clip-on task light and a plant — every surface blank, no lettering | the tiny pendant lamp in the model |
-| `case-benfiddich-kayama.png` | `illo-case-benfiddich-kayama.jpg` | 1264 × 848 | Hanging herbs, botanical jars and shelves, a mortar and a hand pouring a green drink into a glass | one small bottle cap |
+| `case-benfiddich-kayama.png` | `illo-case-benfiddich-kayama.jpg` | 1264 × 848 | The barkeep at work behind a dark mahogany counter: white jacket over a white shirt with a dark red tie, a red serving mat carrying a glass mixing glass, glass jars of dried botanicals and two small bowls along the counter; dark timber shelving full of amber bottles on both sides, a framed painting and a bundle of dried herbs behind him | the red tie and mat | one small bottle cap |
 | `case-black-swan-bobkov.png` | `illo-case-black-swan-bobkov.jpg` | 1264 × 848 | Ornate door at left, framed art, an armchair, beer taps and a table with a teapot and candelabrum | the armchair cushion |
-| `case-shapes-savage.png` | `illo-case-shapes-savage.jpg` | 1264 × 848 | Three cocktails, a geometric menu and a hand with pencil; circle, square and triangle on the bar front | one cocktail garnish |
-| `case-sips-caporale.png` | `illo-case-sips-caporale.jpg` | 1264 × 848 | Bartender shaking a drink inside an open round counter, guests’ hands and sculptural cocktail vessels | one cocktail garnish |
+| `case-shapes-savage.png` | `illo-case-shapes-savage.jpg` | 1264 × 848 | The room from the source photograph: black steel bottle shelving standing on a green laminate table, bottles carrying colour-coded bands; a framed poster with a blue circle and a yellow triangle standing on the table; two red stools on the floor in front; the rust-brown wall panel at the right | the two red stools |
+| `case-sips-caporale.png` | `illo-case-sips-caporale.jpg` | 1264 × 848 | The room from the photograph: a black ceiling band over bottle-green walls, two long lit back-bar shelves of bottles with an espresso machine beneath them, the black island bar with a pale stone top standing in the middle of the room, two green-seated stools with gold legs in front of it, a tall street window with trees at the right, dark plank floor | the red light on the espresso machine | one cocktail garnish |
 | `case-el-copitas-zernov.png` | `illo-case-el-copitas-zernov.jpg` | 1264 × 848 | Courtyard with central arched doorway and curtain, paper bunting, potted plants, clay cups and cactus | one bunting flag |
-| `case-city-space-narzi.png` | `illo-case-city-space-narzi.jpg` | 1264 × 848 | Top-down L-shaped bar plan with stools, ice well, workflow arrows, bar tools and a stopwatch | a stopwatch button |
-| `case-sensory-talalay.png` | `illo-case-sensory-talalay.jpg` | 1264 × 848 | Pipette bottles and tasting glasses, an aroma glass with scent swirls, a hand with a test tube and a scale | one pipette cap |
-| `case-jiro-ono.png` | `illo-case-jiro-ono.jpg` | 1264 × 848 | Diagonal sushi counter with one nigiri, rice tub, bamboo mats, knife, dipping dish and brush | the fish on the nigiri |
-| `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | The circular projection table of Krasota seen from a raised angle: seascape and shoreline spread across the tabletop, a burning ship, a black central void, plates and glasses, the ring of guests, the curved screen of sea and blossom, two waiters standing at the far edge | the cushion beside the right-hand guest |
-| `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | The bartender behind a plain white counter, shaker raised overhead, coupe glass in the lower hand with a curl of vapour, a jigger, fine strainer, stacked coupes and a mixing pitcher laid out along the counter | the ring on his finger |
+| `case-city-space-narzi.png` | `illo-case-city-space-narzi.jpg` | 1264 × 848 | The lounge from the photograph: the curved wall of slanted glazing over a deep blue night band, the red ceiling sweep, the magenta-and-blue striped floor, brown armchairs with cream cushions and round tables carrying a candle and a coupe, the long bar with tall stools and a bartender at work, the slim gold guardrail passing in front of the chairs | the nearest candle | a stopwatch button |
+| `case-sensory-talalay.png` | `illo-case-sensory-talalay.jpg` | 1264 × 848 | The source photograph's board: a thick wooden serving board with a carved rim on a low foot, its rim traced by one thin pale-cyan neon line; a tall tumbler of iced water with a straw standing on it, a dark canapé at the left and a leaf-wrapped canapé at the right; one smaller paler board behind, both on the same surface | the red band at the top of the straw |
+| `case-jiro-ono.png` | `illo-case-jiro-ono.jpg` | 1264 × 848 | The room from the photograph: the long counter running diagonally under a hanging beam, dark navy noren panels across it, a shelf of bowls and a wall cabinet behind, the two chefs in white on the far side, leather-topped stools along the near side, the ceiling of square light fittings | the tray on the counter | the fish on the nigiri |
+| `case-krasota-zarkov.png` | `illo-case-krasota-zarkov.jpg` | 1264 × 848 | The circular projection table seen from a raised angle: a dark seascape with a pale shoreline spread over the tabletop, a solid black void at its centre, plates, glasses and cutlery round the rim, the ring of guests seen from behind, the curved screen of sea and blossom behind them, two waiters in pale outline at the far edge | the cushion beside the right-hand guest | the cushion beside the right-hand guest |
+| `case-dave-arnold.png` | `illo-case-dave-arnold.jpg` | 1264 × 848 | The bartender in a charcoal sweater over a checked collar, pouring from a raised shaker tin through a julep strainer into a coupe held low in the other hand, a thin stream joining the two, one curl of vapour rising off the glass; a counter with a real front edge carrying a jigger, a fine strainer, two stacked coupes and a mixing pitcher, each group with one flat shadow | the ring on his finger |
 | `case-rene-redzepi.png` | `illo-case-rene-redzepi.jpg` | 1264 × 848 | The chef laughing with both hands on his hips, navy tee and grey canvas apron, herbs rising from the chest pocket, warm wall panel and a shelf of plain bowls behind him | the apron tie |
-| `case-alex-kratena.png` | `illo-case-alex-kratena.jpg` | 1264 × 848 | The bar owner in a black cap, clear glasses and a black utility gilet over a grey tee, phone in hand, tattooed left forearm, the second figure drawn in pale outline behind him, a sage-green bar front with a wooden top at the left | the stirrer standing in the glass on the counter |
+| `case-alex-kratena.png` | `illo-case-alex-kratena.jpg` | 1264 × 848 | The owner in a black cap with a thin red brim, clear glasses and a short beard, a black utility gilet over a grey tee, a phone in his right hand, a dense ornamental tattoo over his right forearm, the second man in a black beanie drawn in pale outline behind him, a plain warm-grey wall and one doorway outline | the red brim of the cap | the stirrer standing in the glass on the counter |
+
+## Redraw pass — October 2026
+
+The case-card rows above were brought back in line with the published files. Three cards and two
+portraits were redrawn from their photographs because the resemblance had stopped being obvious; the
+review that produced the list, and the reasons for each call, are in `illustration-audit.md`.
+
+Redrawn from the photograph: `illo-case-sensory-talalay.jpg` (the board, the iced glass and the lit
+rim, instead of an invented pipette still life), `illo-case-shapes-savage.jpg` (the green table,
+colour-coded bottle shelf and red stools), `illo-case-dave-arnold.jpg` (a real pour joined by a
+stream, a counter with an edge), `illo-figure-zarkov.jpg` and `illo-figure-talalay.jpg` (both were
+drawn as different men in different rooms than their sources).
+
+Second pass, same rule: `illo-case-benfiddich-kayama.jpg` (white jacket, red tie, mahogany counter,
+amber bottles), `illo-case-sips-caporale.jpg` (black ceiling, green walls, black island, espresso
+machine), `illo-case-city-space-narzi.jpg` (red ceiling, magenta-and-blue floor, blue night band),
+`illo-case-krasota-zarkov.jpg` (the dark projection and its black centre, no fire on the table),
+`illo-case-alex-kratena.jpg` (ornamental sleeve with no lettering in it, phone in the right hand)
+and `illo-case-jiro-ono.jpg`, which keeps its drawing and only takes the noren from pale blue to
+dark navy.
+
+When redrawing from a photograph, keep the four anchors the reader uses to recognise a place: the
+room's palette, the counter material, the signature object and the subject's garment. Then check the
+picture against the list in `illustration-audit.md` §9 — support, hands, liquids, one horizon,
+palette, no foreground left in outline — before it is published.
 
 ## Lesson headers
 
@@ -105,6 +130,8 @@ replaced with blank panels, never retyped.
 | Asset | Source | Scene | Red accent |
 | --- | --- | --- | --- |
 | `illo-figure-zernov.jpg` | `figure-zernov.jpg` | Smiling man with round amber glasses and short beard, oversized black tee, takeaway cup with straw, brick basement pass with bamboo steamers, rice cooker and pendant lamp | the blank LED tally board |
+| `illo-figure-zarkov.jpg` | `figure-zarkov.jpg` | Long dark-brown hair and beard, white crew-neck tee, dark trousers, sitting relaxed in a white armchair with one ankle over the opposite knee, a clear water bottle on the paper floor beside the chair | the bottle cap |
+| `illo-figure-talalay.jpg` | `figure-talalay.jpg` | Bald man with round glasses and a short grey beard standing behind a bar counter, stone linen overshirt over a white tee, one arm raised with a small tumbler, the other hand flat on the counter; two arches, a bottle shelf and a pendant lamp behind | the round orange-red graphic on the tee |
 | `illo-author-passie-2022.jpg` | `author-passie-2022.jpg` | Blush-pink cake room: garlanded L-counter, white vintage espresso machine, crystal chandelier, pink retro TV, blank menu panels, folding chairs, round table | the rose bouquet in the vase |
 | `illo-author-coocoo-2024.jpg` | `author-coocoo-2024.jpg` | Hand pouring a glass coffee pot into a cobalt cup with two googly eyes on a tray, blue patterned tabletop, blue wall with cream band | the wall stripe at the top |
 | `illo-author-pacific-2024.jpg` | `author-pacific-2024.jpg` | Two-view sheet of the wedge-shaped blackened-steel Mirain station: ice wells, four built-in pumps, drip tray, hanging glasses, casters | one pump button |

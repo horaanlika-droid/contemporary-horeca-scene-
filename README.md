@@ -207,7 +207,7 @@ Every image block can be replaced with a photograph sent in the Telegram chat �
 
 **Revised subjects — October 2026.** The ten module covers keep exactly this drawing style but their subjects are brought up to date: the warm book-illustration scenes (striped awning, chalkboards, craft clutter, a friendly robot with an antenna) were replaced with present-day equivalents — glass-front cafe pavilions, blank touchscreen kiosks, floating blank panels, sensor bases, a wheeled service robot with a blank visor, a farm-to-glass testing bench and a designer's bench with a cut-card model. **Ergonomics is drawn as futuristic**, not vintage: `illo-m05-automation.jpg` puts a translucent anatomical study doll with joint rings and unnumbered dimension lines beside a wafer-thin cantilevered console with a glass end panel, a recessed well, hanging bottles and a slim three-joint service arm. Screens, notes, tags, rulers and panels stay blank or carry ruled lines only; no frame in this series contains lettering, numerals, logos or interface copy. The previous ten covers are kept at `presentation/assets/originals/illo-m/` as the reference for the series.
 
-**Progress — the series is closed: 40 of 40 publishable targets drawn.** A target was any asset in `presentation/assets` that could responsibly carry a drawn twin. Forty `illo-*` files are published — hero, gate, ten module covers, twelve case covers, eleven practitioner portraits and five author-dialog illustrations — and everything else is excluded by decision rather than left undone:
+**Progress — the series is closed: 50 of 50 publishable targets drawn.** A target was any asset in `presentation/assets` that could responsibly carry a drawn twin. Fifty `illo-*` files are published — hero, gate, ten module covers, **ten lesson headers**, twelve case covers, eleven practitioner portraits and five author-dialog illustrations — and everything else is excluded by decision rather than left undone:
 
 - The author's own project archive (`project-*`, 43 photographs): photographs only, at the author's instruction. The seventeen gallery drawings and six drawn covers that had been published were withdrawn on 28 October 2026 (see below).
 - The three `web-insider-*` files: documentary photographs of another venue, Insider Bar Lab, credited to © Insider Bar / @insider.bar.lab with a takedown contact. They are someone else's room, photographed by someone else; redrawing them would put an interpretation of a third-party venue into the course, so they stay as credited photographs.
@@ -228,17 +228,39 @@ Every published illustration follows the art direction above; the asset index an
 Reviewed every published illustration against its own reference photograph and against the laws of physics.
 Items are ordered by how much they cost the reader: likeness that should be obvious but is not, then frames
 that cannot exist, then series inconsistencies, then the bookkeeping that the last two batches left behind.
-All of these are to be fixed in follow-up batches; nothing below has been changed yet.
+
+**Status — 29 October 2026.** Eleven assets were redrawn or recoloured from their photographs in this pass
+and are marked `done` below; everything still marked `open` is the remaining task list. The checklist used
+for every redraw, and the reasoning behind each verdict, are in
+`presentation/build/illustration-audit.md`.
+
+| Done | File | What changed |
+| --- | --- | --- |
+| A1 | `illo-case-shapes-savage.jpg` | Rebuilt to the photograph: black steel bottle shelf on the green laminate table, colour-banded bottles, two red stools on the floor, the framed blue-circle / yellow-triangle poster standing on the table, rust-brown wall panel. Stray frame lines, the diagonal strut and the floating card are gone. |
+| A2 | `illo-case-sensory-talalay.jpg` | The board, the iced tumbler and the lit rim of the photograph, two canapés, a second board behind on the same surface; waterline horizontal, ice below it, straw ending under the water. The pastel confetti is gone. |
+| A3 | `illo-case-dave-arnold.jpg` | The pour now exists: tin raised, julep strainer over its mouth, a thin stream falling into the coupe held low, one curl of vapour on the glass. The counter has a real front edge and the tools stand on it. |
+| A4 | `illo-figure-zarkov.jpg` | Redrawn from the photograph: long dark hair, beard, white tee, dark trousers, a single white armchair, the water bottle on the paper floor. The man and the room are finally the ones in the source. |
+| A5 | `illo-figure-talalay.jpg` | Redrawn from the photograph: he stands behind the counter with one arm raised holding a small tumbler, stone linen overshirt over the white tee with its red-orange circle, arches, bottle shelf and pendant lamp behind. |
+| A6 | `illo-case-benfiddich-kayama.jpg` | Redrawn from the photograph: white jacket over a white shirt with a dark red tie, the red serving mat and mixing glass on a dark mahogany counter, jars of botanicals, dark timber shelving of amber bottles, the framed painting and the dried herbs. The invented brick arch is gone. |
+| A7 | `illo-case-sips-caporale.jpg` | The room's own colours: black ceiling band, bottle-green walls, the black island with its pale stone top, the lit back-bar shelves and the espresso machine, two green stools on the plank floor, the street window. Nothing left in outline. |
+| A8 | `illo-case-city-space-narzi.jpg` | The red ceiling sweep, the magenta-and-blue striped floor and the deep blue night band are back; the guardrail runs in front of the armchairs instead of through them, and the bartender is drawn at stool scale. |
+| A9 | `illo-case-jiro-ono.jpg` | The drawing is kept; the noren is recoloured from pale blue to dark navy, masked to the curtain band so no other part of the frame moves. |
+| A10 | `illo-case-alex-kratena.jpg` | Redrawn from the photograph: the ornamental sleeve with no lettering in it, the phone in his right hand rather than the mirror, the second man in a black beanie in pale outline, the invented bar at the left edge removed. |
+| A11 | `illo-case-krasota-zarkov.jpg` | The projected seascape is dark again, with the black void at the centre of the table and no fire on it; the guests, their plates and the curving screen behind them follow the photograph. |
+
+Every new file keeps its published dimensions (1264 × 848 covers, 848 × 1264 portraits) and was run
+through `tools/normalize-artwork-paper.js` so its paper is true white and the drawing still blends into
+the page.
 
 **A. Likeness — the reference is not recognisable enough**
 
-1. `illo-case-shapes-savage.jpg` — the photo is a black open steel shelf with a *green* table and small bottles lined along it, red-ochre chairs and a pink table edge under a black-framed window. The drawing replaces that with a brown upholstered bench, a dark mat and a hanging card, drops the green and pink surfaces and flattens the shelf to two tiers. Redraw to the photo's own composition.
-2. `illo-case-benfiddich-kayama.jpg` — the photo: white jacket, dark tie, red counter mat, dark timber back bar, a large framed painting behind, warm lantern light, glass jars of botanicals in front of him. The drawing gives a brown waistcoat, no jacket or tie, no red mat, and invents a brick arch that is the strongest shape in the frame. The arch must go and the white jacket, tie and red mat must return.
-3. `illo-case-sips-caporale.jpg` — the room is black and green; the drawing is uniformly pale blue, so the venue reads as a generic cafe. The green bottle wall is the identity of the place and is currently washed out. Also the shop glass carries mirrored lettering that must be blanked (see C1).
-4. `illo-case-city-space-narzi.jpg` — the ceiling is a red-lit sweep and the floor runs magenta and blue; the drawing has a beige ceiling and brown armchairs, losing the only unforgettable feature. The guardrail also cuts through the armchairs (see B2).
-5. `illo-case-jiro-ono.jpg` — the noren is dark navy in the photo and pale blue in the drawing. Restore the dark curtain; it is the frame's anchor.
-6. `illo-case-alex-kratena.jpg` — the second figure in the photo is a tattooed man in a black beanie; the drawing gives a man in a cap and a scarf with no tattoos. The invented bar with straws at the left edge is not in the photo and should go.
-7. `illo-case-krasota-zarkov.jpg` — the table projection is the point of the room: a dark seascape with aircraft and ships around a black void. The drawing puts pale water and toy sailboats on it, which turns a specific artwork into decoration. Keep the dark projected image and the void.
+1. `done` — `illo-case-shapes-savage.jpg`: the photo is a black open steel shelf with a *green* table and small bottles lined along it, red-ochre chairs and a pink table edge under a black-framed window. The drawing replaced that with a brown upholstered bench, a dark mat and a hanging card. Redrawn to the photo's own composition and colour.
+2. `done` — `illo-case-benfiddich-kayama.jpg` — the photo: white jacket, dark tie, red counter mat, dark timber back bar, a large framed painting behind, warm lantern light, glass jars of botanicals in front of him. The drawing gives a brown waistcoat, no jacket or tie, no red mat, and invents a brick arch that is the strongest shape in the frame. The arch must go and the white jacket, tie and red mat must return.
+3. `done` — `illo-case-sips-caporale.jpg` — the room is black and green; the drawing is uniformly pale blue, so the venue reads as a generic cafe. The green bottle wall is the identity of the place and is currently washed out. Also the shop glass carries mirrored lettering that must be blanked (see C1).
+4. `done` — `illo-case-city-space-narzi.jpg` — the ceiling is a red-lit sweep and the floor runs magenta and blue; the drawing has a beige ceiling and brown armchairs, losing the only unforgettable feature. The guardrail also cuts through the armchairs (see B2).
+5. `done` — `illo-case-jiro-ono.jpg` — the noren is dark navy in the photo and pale blue in the drawing. Restore the dark curtain; it is the frame's anchor.
+6. `done` — `illo-case-alex-kratena.jpg` — the second figure in the photo is a tattooed man in a black beanie; the drawing gives a man in a cap and a scarf with no tattoos. The invented bar with straws at the left edge is not in the photo and should go.
+7. `done` — `illo-case-krasota-zarkov.jpg` — the table projection is the point of the room: a dark seascape with aircraft and ships around a black void. The drawing puts pale water and toy sailboats on it, which turns a specific artwork into decoration. Keep the dark projected image and the void.
 8. `illo-figure-redzepi.jpg` and `illo-case-rene-redzepi.jpg` — same person drawn twice with different T-shirts (light blue vs navy) and two different greys for the same apron. One likeness, one wardrobe.
 
 **B. Physics and logic — frames that cannot exist**
@@ -269,9 +291,9 @@ All of these are to be fixed in follow-up batches; nothing below has been change
 
 **E. Bookkeeping left by the last two batches**
 
-1. Ten of the twelve lesson headers are published; `scenography` and `final-brief` still fall back to the module cover and must be drawn.
-2. The progress line still says the series is closed at forty files while ten lesson headers now exist — recompute the count when the last two land.
-3. `presentation/build/illustration-prompts.md` describes the intended scene for each case card; after the redraws it must describe what is actually on the card, including the colours called out above.
+1. `open` — Ten of the twelve lesson headers are published; `scenography` and `final-brief` still fall back to the module cover. Drawing them means two new `illo-lesson-*` files, so the pinned count in `tests/english-content.test.js` (fifty `illo-*` files) and the progress line above have to move with them.
+2. `done` — the progress line counted forty files while ten lesson headers were already published; it now reads fifty and names the lesson headers.
+3. `done` — `presentation/build/illustration-prompts.md` now describes what is actually on the three redrawn cards (Shapes, Sensory, Dave Arnold) and carries a redraw-pass note with the four recognition anchors.
 
 **No further batch is planned.** The series ends at forty published illustrations, and a new drawing is only commissioned for a genuinely new asset. The `project-*` archive stays photographic, the three `web-insider-*` files stay credited documentary photographs of another venue, the twelve `studio-*` plates stay as studio photography, and the two logos stay unchanged. Anything added later keeps the rule below: a generated file is disclosed per exact filename and never stands in for evidence of a real venue.
 

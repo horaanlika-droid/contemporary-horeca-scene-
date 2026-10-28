@@ -33,8 +33,13 @@ const DRY = process.argv.includes('--dry');
 const PAPER_PERCENTILE = 0.985;
 /** Never brighten a channel by more than this factor. */
 const MAX_GAIN = 1.16;
-/** Below this much lift the file is already white enough; leave it alone. */
-const MIN_GAIN = 1.004;
+/** Below this much lift the file is already white enough; leave it alone.
+ *  A paper of 252 to 254 needs a gain of 1.004 to 1.012 and is invisible once
+ *  the drawing is multiplied into the page, so lifting it would only rewrite
+ *  the file on every run. 1.012 keeps the tool idempotent: run it twice, the
+ *  second run reports nothing to do. Real off-white paper (208 to 250) is still
+ *  lifted. */
+const MIN_GAIN = 1.012;
 
 function luminanceHistogram(data, channels) {
   const hist = new Uint32Array(256);
