@@ -252,6 +252,14 @@ room's palette — and mark the two cards above for a redraw from the photograph
 
 ## 8. Fix plan
 
+**Progress, 28 October 2026.** The five P0 assets below were redrawn from their photographs and
+published: `illo-case-sensory-talalay.jpg`, `illo-case-shapes-savage.jpg`,
+`illo-case-dave-arnold.jpg`, `illo-figure-zarkov.jpg`, `illo-figure-talalay.jpg`. Each was checked
+against the §9 list before publishing. What is still wrong in them, honestly: the ink contour sits
+slightly thinner than the older drawings, the pour hand in the Dave Arnold card still closes over the
+tin rather than round its body, and the Sensory card keeps a single invented second board for depth.
+The remaining P1 and P2 items are carried in the README under *Image audit — October 2026*.
+
 **P0 — reads as the wrong place, redraw from the photograph**
 
 1. `illo-case-sensory-talalay` — dark room, neon rim-lit board, two canapés, one tall tumbler with
