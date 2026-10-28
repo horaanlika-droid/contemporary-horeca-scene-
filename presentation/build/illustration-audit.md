@@ -413,12 +413,22 @@ that is now right (El Copitas in the cases, Redzepi's wardrobe, Narzi's dark hai
   photograph: one floor line, four stools at one scale with four legs each reaching the floor, every dish
   resting on the counter, both chefs with hands, ceiling panels in a shared perspective.
 - `illo-case-city-space-narzi` — the mirrored wall repeats the bar rather than reflecting it.
-- `illo-m03-senses` — the tasting glass floats unsupported beside the drinker's face.
-- `illo-m07-fnb` — the mortars, carafe and cloche sit on no drawn surface.
-- `illo-m08-venture` — the tray of cups overhangs the table into empty air.
-- `illo-m09-found` — every tag is tied with a string that ends in nothing.
-- `illo-m10-mockup` — the model's roof passes through the assembler's fingers.
-- `illo-m06-ai` — the bowl sits a hand's width above the robot's tray.
+- ~~`illo-m03-senses` — the tasting plate and its sensor base float on blank paper.~~ Fixed 29 October
+  2026: the tabletop runs on behind and under the disc, with one flat shadow.
+- ~~`illo-m07-fnb` — the mortar, cylinder, petri dish, glass and cloche sit on a bare line.~~ Fixed 29
+  October 2026: the line becomes the back edge of a narrow shelf with a front edge, so every object stands
+  on a surface.
+- ~~`illo-m08-venture` — the tray of cups sits at the table edge with the cup handle over nothing.~~ Fixed
+  29 October 2026: the tray moved inside the table, shadow with it.
+- `illo-m03-senses` — still open, and a different fault from the one recorded: the rim of the tasting glass
+  overlaps the drinker's nose instead of stopping at the mouth. One line to move.
+- `illo-m09-found` — **not confirmed on inspection.** The strings end on the crate, the plate's foot, the
+  bell's rim, the bottle's neck, the napkin's fold and the cup's handle. They are attached; the entry was
+  wrong.
+- `illo-m10-mockup` — **not confirmed on inspection.** Both hands rest with the fingers on the top edges of
+  the model's wall panels, above the roofline, not through it.
+- `illo-m06-ai` — **not confirmed on inspection.** The bowl sits in the robot's gripper, on the small plate
+  the arm is holding.
 - `illo-lesson-concept-objects` and `illo-lesson-signals` — panels and objects hang from lines that end
   in mid-air (accepted as a series convention, recorded so it is a decision and not an accident).
 
