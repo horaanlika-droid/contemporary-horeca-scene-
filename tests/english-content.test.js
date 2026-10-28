@@ -162,8 +162,8 @@ test('English-only conversion preserves the complete course and photographic arc
   // 43 archive photographs stay in the files; drawn frames sit beside their sources
   const projectFrames = course.projects.items.flatMap(project => project.photos);
   assert.equal(projectFrames.filter(photo => !/^illo-/.test(photo.file)).length, 43);
-  assert.equal(projectFrames.filter(photo => /^illo-/.test(photo.file)).length, 13);
-  assert.equal(projectFrames.length, 56);
+  assert.equal(projectFrames.filter(photo => /^illo-/.test(photo.file)).length, 17);
+  assert.equal(projectFrames.length, 60);
   for (const project of course.projects.items) {
     assert.equal(Object.hasOwn(project, 'ru'), false);
     for (const photo of project.photos) {
@@ -1469,7 +1469,7 @@ test('every drawn project frame sits beside the photograph it was drawn from', (
       assert.ok(project.photos.find(entry => entry.file === file).caption.length > 40, `${file} is captioned`);
     }
   }
-  assert.ok(drawn >= 13, 'the drawn project frames are published');
+  assert.ok(drawn >= 17, 'the drawn project frames are published');
   // the card leads with the drawing, but the gallery must not repeat it
   assert.equal(course.projects.items.find(project => project.id === 'joi').cover, 'illo-project-joi-bar.jpg');
   assert.match(read('app.js'), /photos\.filter\(photo => photo\.file !== pr\.cover\)/);

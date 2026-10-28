@@ -31,6 +31,12 @@ const JOI_LIKE = {
     pairs: ['illo-project-joi-arcade', 'illo-project-joi-facade', 'illo-project-joi-brand', 'illo-project-joi-cups',
       'illo-project-joi-machine', 'illo-project-joi-grinder', 'illo-project-joi-arcade-lights'],
   },
+  coocoo: {
+    cover: 'illo-project-coocoo-pour.jpg',
+    // the cover redraws the pour photograph, which stays in the gallery, so the page shows ten frames
+    frames: 10,
+    pairs: ['illo-project-coocoo-room', 'illo-project-coocoo-bulbs', 'illo-project-coocoo-team', 'illo-project-coocoo-menu'],
+  },
   passie: {
     cover: 'illo-project-passie-wall.jpg',
     frames: 13,
@@ -316,7 +322,7 @@ test('generated illustrations are identified without relabelling documentary pho
   }
 
   // every drawn frame in a project file paints beside its own photograph
-  for (const id of ['joi', 'passie']) {
+  for (const id of ['joi', 'passie', 'coocoo']) {
     location.hash = `#/project/${id}`;
     await settle();
     html = app.innerHTML;
