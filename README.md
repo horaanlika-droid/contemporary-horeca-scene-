@@ -258,6 +258,10 @@ judged by (obvious resemblance, one hand across the series) and names the four f
 `illo-figure-narzi.jpg`, `illo-figure-dave-arnold.jpg`, `illo-lesson-scenography.jpg` and
 `illo-lesson-final-brief.jpg` — which are redrawn next, in the thin-line hand of their own set.
 
+**Two portraits lost their pastel grounds, 29 October 2026.** `illo-figure-redzepi.jpg` and
+`illo-figure-savage.jpg` were the last two portraits still carrying a coloured wash behind the figure; both
+are white paper now, and the Redzepi apron knot was redrawn in the signal red the redraw had dropped.
+
 **Still open after this pass.** In order: (1) ~~the four wrong-hand files above~~ — done 29 October 2026, all
 four redrawn thin and light in the hand of their own set, and `illo-figure-kratena.jpg` re-framed from
 768 × 1376 to the series' 848 × 1264; (2) ~~the two case cards that still read as the wrong place — `illo-case-sensory-talalay.jpg` and

@@ -490,3 +490,18 @@ Both applied on 29 October 2026 to the two portraits that were drawn last and sh
 clearly — `illo-figure-kratena.jpg` and `illo-figure-narzi.jpg` are now full-length figures with a closed
 contour and one flat shadow under the shoes. The other ten portraits are close crops where the crop itself
 is the edge, so they do not need the shadow; they were checked and left alone.
+
+### 10.7 Pastel grounds removed from two portraits
+
+§2.9 of this audit recorded pale washes behind several portraits and asked for them to return to white
+paper. Two of them were still washed after the redraws, and both were fixed on 29 October 2026:
+
+- `illo-figure-redzepi.jpg` — the pale green and pale blue wash behind the chef is gone. Redrawing it
+  also dropped the single red accent (the apron knot came back grey), so the knot is redrawn in the
+  signal red the series requires; it is now the only saturated colour in the file besides his tee.
+- `illo-figure-savage.jpg` — the desert backdrop (pale blue sky, green cacti, pale ground) is gone. The
+  figure, his jacket and his pose are untouched.
+
+This matters beyond tidiness: the app multiplies every drawing into the page, so a wash does not read as
+"a soft background" in the product — it reads as a pale halo around the person. White paper is the only
+background that disappears.
