@@ -191,6 +191,9 @@ window.bootCourse = () => {
      them like camera frames. Exact-file credits also mark generated portraits and
      project images whose filenames retain their original photo prefixes. */
   const isDrawn = name => /^illo-/.test(String(name || '').trim()) || Boolean(creditGroup(name)?.generated);
+  /* Every surface that holds a drawing carries `is-art`, so the stylesheet can
+     dissolve the picture into the page instead of framing it as a photo. */
+  const artClass = name => (isDrawn(name) ? ' is-art' : '');
   const image = (name, alt = '', cls = '', opts = {}) => {
     const src = esc(assetSrc(name));
     const fallback = `${ASSET}${IMAGE_FALLBACK}`;
@@ -230,7 +233,7 @@ window.bootCourse = () => {
     const generated = Boolean(creditGroup(file)?.generated);
     const label = generated ? creditGroup(file).short : '';
     const lightboxCaption = [caption, label].filter(Boolean).join(' · ');
-    return `<figure class="gallery-item" data-action="lightbox" data-src="${esc(assetSrc(file))}" data-caption="${esc(lightboxCaption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
+    return `<figure class="gallery-item${isDrawn(file) ? ' is-art' : ''}" data-action="lightbox" data-src="${esc(assetSrc(file))}" data-caption="${esc(lightboxCaption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
         <img class="film-photo${isDrawn(file) ? ' illo-photo' : ''}" src="${esc(assetSrc(file))}" alt="${esc(alt)}" loading="lazy">
         ${caption || label ? `<figcaption>${caption ? `<span>${esc(caption)}</span>` : ''}${label ? creditFor(file) : ''}</figcaption>` : ''}
       </figure>`;
@@ -280,7 +283,7 @@ window.bootCourse = () => {
     const whyParts = String(SL.whyBig || '').split(SL.whyBigAccent || '§');
     const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific Mirain · prep in seconds', 'Sips · Barcelona', 'Himkok · Oslo', 'Krasota · gastro-theatre', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
-      <section class="hero">
+      <section class="hero${heroIsIllustration ? ' has-art' : ''}">
         <span class="hero-index">${C.edition} EDITION · 01 / ${String(C.modules.length).padStart(2, '0')}</span>
         <div class="hero-copy">
           <span class="eyebrow">${esc(SL.heroEyebrow)}</span>
@@ -293,8 +296,8 @@ window.bootCourse = () => {
           </div>
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
-        <figure class="hero-media">
-          ${image(heroImage, heroIsIllustration ? 'AI-generated illustration of a hospitality scene' : 'Hospitality scene from the course image archive', '', { eager: true })}
+        <figure class="hero-media${heroIsIllustration ? ' is-art' : ''}">
+          <div class="art-hold">${image(heroImage, heroIsIllustration ? 'AI-generated illustration of a hospitality scene' : 'Hospitality scene from the course image archive', '', { eager: true })}</div>
           <figcaption><span class="meta">${heroIsIllustration ? 'AI-GENERATED ILLUSTRATION' : 'ON THE SCENE'}</span><span>Light, glass and the room around it — the subject of the elective, at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
@@ -347,8 +350,8 @@ window.bootCourse = () => {
           <div><span class="eyebrow">04 — REAL INDUSTRY CASES</span><h2>Look closer.<br>Learn from <em>practice</em>.</h2></div>
           <p>Editorial case files turn current hospitality practice into material for discussion, analysis and action.</p>
         </div>
-        <div class="case-feature">${image(caseCover(C.cases[0]), `${C.cases[0].title} — illustrated case cover`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(caseCover(C.cases[0]))}</div></div>
-        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item"><div class="shot">${image(caseCover(x), x.cover ? `${x.title} — illustrated case cover` : x.title)}</div>${creditFor(caseCover(x))}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
+        <div class="case-feature${artClass(caseCover(C.cases[0]))}"><div class="case-plate">${image(caseCover(C.cases[0]), `${C.cases[0].title} — illustrated case cover`)}</div><div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(C.cases[0].location)}</span><h3>${esc(C.cases[0].title)}</h3><p>${esc(C.cases[0].why)}</p><a href="#/cases" class="button text">EXPLORE THE CASES <span aria-hidden="true">→</span></a>${creditFor(caseCover(C.cases[0]))}</div></div>
+        <div class="case-list">${C.cases.slice(1).map(x => `<article class="case-item${artClass(caseCover(x))}"><div class="shot">${image(caseCover(x), x.cover ? `${x.title} — illustrated case cover` : x.title)}</div>${creditFor(caseCover(x))}<span class="meta">${esc(x.location)} · ${esc(x.industry)}</span><h3>${esc(x.title)}</h3><p>${esc(x.takeaway)}</p></article>`).join('')}</div>
       </section>
 
       <div class="quote-band">
@@ -389,7 +392,7 @@ window.bootCourse = () => {
           <div class="mockup-card">
             <span class="stamp">Final exercise</span>
             <span class="eyebrow">THE LIVE FOUND-OBJECT MOCKUP</span>
-            <div class="shot">${image(SL.mockupImage || 'project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor(SL.mockupImage || 'project-detail-chess.jpg')}</div>
+            <div class="shot${artClass(SL.mockupImage || 'project-detail-chess.jpg')}">${image(SL.mockupImage || 'project-detail-chess.jpg', 'A found-object study table with textures and props')}${creditFor(SL.mockupImage || 'project-detail-chess.jpg')}</div>
             <h4>Build your venue as a set, not a plan.</h4>
             <p>Assemble it directly from what you find: antique tableware, candles, vintage glassware, fabric, wood, bottles, found textures and props, plus a physical menu concept. Work at 1:20 or 1:50; arrange the objects to show the entrance, first sightline, light and three details that carry the atmosphere. Photograph it at guest height.</p>
             <span class="meta">EVERY STUDENT · MODULE ${C.modules.find(m => m.id === 'budget')?.number || '09'} → FINAL CHALLENGE</span>
@@ -452,7 +455,7 @@ window.bootCourse = () => {
         <span class="edition-tag meta">${esc(C.institution)} · ${C.edition}</span>
       </div>
       <div class="dashboard-grid">
-        <section class="resume-panel">
+        <section class="resume-panel${artClass(next.module.image)}">
           <div class="resume-copy">
             <span class="eyebrow">CONTINUE YOUR ELECTIVE</span>
             <h2>${esc(next.module.title)}</h2>
@@ -460,7 +463,7 @@ window.bootCourse = () => {
             <div class="progress-ring" aria-label="${pct()} percent course progress"><span>${pct()}%<small>COMPLETE</small></span></div>
             ${button(progressFor().includes(next.id) ? 'REVISIT LESSON' : 'CONTINUE LEARNING', `lesson/${next.module.id}/${next.id}`, 'small')}
           </div>
-          ${image(next.module.image, next.module.title, 'resume-image')}
+          <div class="resume-stage">${image(next.module.image, next.module.title, 'resume-image')}</div>
         </section>
         <aside class="side-stats">
           <div class="stat-panel"><span class="meta">COURSE PROGRESS</span><strong>${pct()}%</strong><div class="bar"><span style="width:${pct()}%"></span></div></div>
@@ -574,7 +577,7 @@ window.bootCourse = () => {
         <div><span class="eyebrow">MODULE ${m.number} · ${esc(m.title)}</span><h1>${esc(l.title)}</h1><p>${esc(l.intro)}</p></div>
         <div class="lesson-number"><span class="meta">LESSON ${String(i + 1).padStart(2, '0')}</span><br><span class="meta">${l.duration.toUpperCase()}</span></div>
       </div>
-      <section class="video-frame" aria-label="Lesson media">
+      <section class="video-frame${artClass(l.thumbnail)}" aria-label="Lesson media">
         <div>${l.videoUrl ? `<video controls playsinline preload="metadata" poster="${esc(assetSrc(l.thumbnail))}" src="${esc(l.videoUrl)}" data-video-lesson="${esc(l.id)}" aria-label="${esc(l.title)} lesson film"></video>` : image(l.thumbnail, `${l.title} visual`)}${creditFor(l.thumbnail)}</div>
         <div class="video-info">
           <span class="eyebrow">${l.videoUrl ? 'LESSON FILM' : 'EDITORIAL LESSON'} · ${l.duration.toUpperCase()}</span>
@@ -620,7 +623,7 @@ window.bootCourse = () => {
       <section class="section" id="industry-figures" style="padding:30px 0 10px">
         <span class="eyebrow">LEADING INDUSTRY FIGURES · MAPPED TO THE COURSE BLOCKS</span>
         <div class="figure-grid">${(C.figures || []).map(f => `
-          <article class="case-item">
+          <article class="case-item${artClass(f.image)}">
             ${f.image ? `<div class="shot">${image(f.image, f.name)}</div>${creditFor(f.image)}` : ''}
             <span class="meta">${esc(f.block)} · MODULE ${esc(f.moduleNumber)}</span>
             <h3>${esc(f.name)}</h3>
@@ -632,9 +635,9 @@ window.bootCourse = () => {
         </div>
       </section>
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Sips Drinkery House · Simone Caporale</h3><p>Drinkery House counterless bar: bespoke tactile vessels and 360-degree guest connection.</p></article><article class="case-item"><h3>Krasota Gastro-Theatre · Boris Zarkov</h3><p>Multisensory immersion: 360-degree projections and synchronized sound matching the culinary narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
-      <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
-        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>${image(x.image, `${x.title} case image`)}`
-        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — ${creditGroup(f)?.generated ? 'AI-generated illustration' : 'photograph'} ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
+      <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature${artClass(x.image)}" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
+        ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div><div class="case-plate">${image(x.image, `${x.title} case image`)}</div>`
+        : `<div class="case-plate">${image(x.image, `${x.title} case image`)}</div><div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — ${creditGroup(f)?.generated ? 'AI-generated illustration' : 'photograph'} ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
     </main>`);
   }
 
@@ -1469,9 +1472,14 @@ window.bootCourse = () => {
 
   function openLightbox(src, alt, caption) {
     const el = lightboxEl();
+    /* A drawing opens on a paper plate, not as a photograph on black: the file
+       name is enough to know which of the two it is. */
+    const file = String(src || '').split('?')[0].split('/').pop();
+    const drawn = isDrawn(file) || Boolean(creditGroup(file)?.generated);
+    el.classList.toggle('is-art', drawn);
     el.querySelector('img').src = src;
     el.querySelector('img').alt = alt || '';
-    el.querySelector('img').classList.add('film-photo');
+    el.querySelector('img').className = drawn ? 'film-photo illo-photo' : 'film-photo';
     el.querySelector('figcaption').textContent = caption || '';
     el.classList.add('show');
     document.body.classList.add('lightbox-open');
