@@ -1426,15 +1426,38 @@ test('project cards lead with their archive photograph, not a drawing', () => {
   assert.match(read('app.js'), /const filePhotos = pr\.cover \? photos\.filter\(photo => photo\.file !== pr\.cover\) : photos\.slice\(1\);/);
 });
 
+test('every lesson opens with its own header image, not a shared module cover', () => {
+  const course = courseData();
+  const lessons = course.modules.flatMap(module => module.lessons.map(lesson => ({ ...lesson, module })));
+  assert.equal(lessons.length, 12);
+  const used = new Set();
+  for (const lesson of lessons) {
+    if (!lesson.thumbnail) continue; // lessons still awaiting their own header fall back to the module image
+    assert.match(lesson.thumbnail, /^illo-lesson-/, `${lesson.id} uses a lesson header`);
+    assert.ok(!used.has(lesson.thumbnail), `${lesson.thumbnail} is used once`);
+    used.add(lesson.thumbnail);
+    assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', lesson.thumbnail)), `${lesson.thumbnail} exists`);
+  }
+  // no module repeats one picture across the lessons it contains
+  for (const module of course.modules) {
+    const headers = module.lessons.map(lesson => lesson.thumbnail || module.image);
+    assert.equal(new Set(headers).size, headers.length, `${module.id} teaches each lesson with its own picture`);
+  }
+  const prompts = read('presentation/build/illustration-prompts.md');
+  assert.match(prompts, /## Lesson headers/);
+  assert.match(prompts, /illo-lesson-automation\.jpg/);
+});
+
 test('the illustration series is closed at forty files and no excluded asset gains a twin', () => {
   const assets = fs.readdirSync(path.join(ROOT, 'presentation/assets'));
   const drawn = assets.filter(name => /^illo-/.test(name)).sort();
-  assert.equal(drawn.length, 40, 'the published illustration set is exactly forty files');
+  assert.equal(drawn.length, 50, 'the published illustration set is exactly fifty files');
   assert.equal(drawn.filter(name => /^illo-case-/.test(name)).length, 12, 'twelve case cards');
   assert.equal(drawn.filter(name => /^illo-figure-/.test(name)).length, 11, 'eleven practitioner portraits');
   assert.equal(drawn.filter(name => /^illo-author-/.test(name)).length, 5, 'five author-dialog illustrations');
   assert.equal(drawn.filter(name => /^illo-m\d\d-/.test(name)).length, 10, 'ten module covers');
   assert.deepEqual(drawn.filter(name => /^illo-(hero|gate)-/.test(name)), ['illo-gate-still-life.jpg', 'illo-hero-scene.jpg'], 'gate and hero');
+  assert.equal(drawn.filter(name => /^illo-lesson-/.test(name)).length, 10, 'ten lesson headers published so far');
   // excluded sources never gain a drawn twin
   for (const source of assets.filter(name => /^(studio-|web-insider-|horeca-)/.test(name))) {
     assert.ok(!drawn.includes(`illo-${source.replace(/\.(jpg|png|webp)$/, '.jpg')}`), `${source} keeps no drawn twin`);

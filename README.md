@@ -203,6 +203,8 @@ Every image block can be replaced with a photograph sent in the Telegram chat �
 
 **Current art direction:** the latest cafe-poster series supersedes the earlier cobalt engraving direction. Redraw each image from its own existing course image, keeping the person, venue, objects and main composition recognisable. Match `style-ref-1.jpeg`, `style-ref-2.jpeg` and the completed `illo-m01-signals.jpg`: cheerful, slightly irregular black ink outlines, flat gouache-like colour, a white background and one small signal-red accent. Do not introduce invented text or logos, replace a specific subject with a generic one, or apply a blanket filter. Keep the published filenames and pixel dimensions stable.
 
+**Lesson headers — October 2026.** Each of the twelve lessons now opens with its own header image (`illo-lesson-<lesson-id>.jpg`, 1264 × 843) instead of falling back to the module cover, so the two lessons inside Module 04 and Module 09 no longer share one picture. The headers follow the same direction as the module covers: present-day subjects and futuristic ergonomics (`illo-lesson-automation.jpg` pairs a translucent study figure with a wafer-thin cantilevered console and unnumbered dimension lines), one thin ink contour, flat gouache fills, white paper, one signal-red accent, and no lettering, numerals, logos or interface copy — screens, plans, tags and panels stay blank or ruled only.
+
 **Revised subjects — October 2026.** The ten module covers keep exactly this drawing style but their subjects are brought up to date: the warm book-illustration scenes (striped awning, chalkboards, craft clutter, a friendly robot with an antenna) were replaced with present-day equivalents — glass-front cafe pavilions, blank touchscreen kiosks, floating blank panels, sensor bases, a wheeled service robot with a blank visor, a farm-to-glass testing bench and a designer's bench with a cut-card model. **Ergonomics is drawn as futuristic**, not vintage: `illo-m05-automation.jpg` puts a translucent anatomical study doll with joint rings and unnumbered dimension lines beside a wafer-thin cantilevered console with a glass end panel, a recessed well, hanging bottles and a slim three-joint service arm. Screens, notes, tags, rulers and panels stay blank or carry ruled lines only; no frame in this series contains lettering, numerals, logos or interface copy. The previous ten covers are kept at `presentation/assets/originals/illo-m/` as the reference for the series.
 
 **Progress — the series is closed: 40 of 40 publishable targets drawn.** A target was any asset in `presentation/assets` that could responsibly carry a drawn twin. Forty `illo-*` files are published — hero, gate, ten module covers, twelve case covers, eleven practitioner portraits and five author-dialog illustrations — and everything else is excluded by decision rather than left undone:
@@ -220,6 +222,56 @@ Every published illustration follows the art direction above; the asset index an
 - Reverted on 28 October 2026 — the project archive is photographs only. At the author's instruction the drawn project set was withdrawn: the seventeen framed drawings and six drawn project covers (23 `illo-project-*` files) were deleted, every `project-*` file opens again with its own lead photograph, and each file carries only its photographs, captions and credits. Nothing about the photographs, captions or the archive credit rows changed, and no drawn twin of a `project-*` image is to be commissioned again. The case covers, practitioner portraits, module covers, hero, gate and author-dialog illustrations are unaffected and stay in the series.
 - Revised earlier: eight of the ten case-card covers — `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg` and `illo-case-jiro-ono.jpg` — were redrawn again, this time from each case's own documentary photograph rather than from the earlier cover art, so every drawn card carries the real room, counter and objects of that venue: Kayama's apothecary counter under its brick arch, the pub hall of Black Swan, the minimal shelf-and-bench corner of Shapes, the island workstation of Sips, the candlelit vault of El Copitas, the panoramic lounge of City Space, the sensory still life of the Talalay serve and the two chefs behind Jiro's counter. Published dimensions stay 1264 × 848, the case-file photographs are unchanged, their untouched originals are kept in `presentation/assets/originals/case-*.jpg` and each cover has an exact-file credit linking its source photograph.
 - Done earlier: the practitioner portrait set is complete — eleven `illo-figure-*.jpg` portraits (Redzepi, Caporale, Kratena, Talalay, Dave Arnold, Savage, Narzi, Kayama, Zernov, Zarkov, Bobkov), each redrawn from its own editorial photograph at 848 × 1264, wired into the course with the editorial original retained beside it and linked as its source; and the five author project illustrations `illo-author-passie-2022.jpg`, `illo-author-coocoo-2024.jpg`, `illo-author-pacific-2024.jpg`, `illo-author-joi-2025.jpg` and `illo-author-chc-2024.jpg`, redrawn at the published dimensions of their archive photographs (600 × 900, 900 × 900, 675 × 900, 675 × 900, 900 × 466) and shown in the About-the-author dialog and on the author figure card, with the archive photographs retained as sources and the dialog noting that its project images are illustrations.
+
+### Image audit — October 2026
+
+Reviewed every published illustration against its own reference photograph and against the laws of physics.
+Items are ordered by how much they cost the reader: likeness that should be obvious but is not, then frames
+that cannot exist, then series inconsistencies, then the bookkeeping that the last two batches left behind.
+All of these are to be fixed in follow-up batches; nothing below has been changed yet.
+
+**A. Likeness — the reference is not recognisable enough**
+
+1. `illo-case-shapes-savage.jpg` — the photo is a black open steel shelf with a *green* table and small bottles lined along it, red-ochre chairs and a pink table edge under a black-framed window. The drawing replaces that with a brown upholstered bench, a dark mat and a hanging card, drops the green and pink surfaces and flattens the shelf to two tiers. Redraw to the photo's own composition.
+2. `illo-case-benfiddich-kayama.jpg` — the photo: white jacket, dark tie, red counter mat, dark timber back bar, a large framed painting behind, warm lantern light, glass jars of botanicals in front of him. The drawing gives a brown waistcoat, no jacket or tie, no red mat, and invents a brick arch that is the strongest shape in the frame. The arch must go and the white jacket, tie and red mat must return.
+3. `illo-case-sips-caporale.jpg` — the room is black and green; the drawing is uniformly pale blue, so the venue reads as a generic cafe. The green bottle wall is the identity of the place and is currently washed out. Also the shop glass carries mirrored lettering that must be blanked (see C1).
+4. `illo-case-city-space-narzi.jpg` — the ceiling is a red-lit sweep and the floor runs magenta and blue; the drawing has a beige ceiling and brown armchairs, losing the only unforgettable feature. The guardrail also cuts through the armchairs (see B2).
+5. `illo-case-jiro-ono.jpg` — the noren is dark navy in the photo and pale blue in the drawing. Restore the dark curtain; it is the frame's anchor.
+6. `illo-case-alex-kratena.jpg` — the second figure in the photo is a tattooed man in a black beanie; the drawing gives a man in a cap and a scarf with no tattoos. The invented bar with straws at the left edge is not in the photo and should go.
+7. `illo-case-krasota-zarkov.jpg` — the table projection is the point of the room: a dark seascape with aircraft and ships around a black void. The drawing puts pale water and toy sailboats on it, which turns a specific artwork into decoration. Keep the dark projected image and the void.
+8. `illo-figure-redzepi.jpg` and `illo-case-rene-redzepi.jpg` — same person drawn twice with different T-shirts (light blue vs navy) and two different greys for the same apron. One likeness, one wardrobe.
+
+**B. Physics and logic — frames that cannot exist**
+
+1. `illo-case-el-copitas-zernov.jpg` — the ceiling is left as white void, so the ceiling candles float unsupported in mid-air. Draw the dark vaulted ceiling; it is the room's whole character.
+2. `illo-case-city-space-narzi.jpg` — the guardrail passes through the backs of the armchairs; two bar stools overlap the bar front; one stool's seat overlaps the countertop.
+3. `illo-case-shapes-savage.jpg` — the glass stands on the floor mat, and the hanging card and the dark mat do not exist in the photograph, so the left half of the frame tells a different story from the right.
+4. `illo-hero-scene.jpg` — the seated guest's crossed leg passes into the counter apron, and the bartender's second arm vanishes behind the counter with no shoulder line.
+5. `illo-gate-still-life.jpg` — the pedestal stops in mid-air above its shadow; the spoon and napkin cross the table edge and hover.
+6. `illo-lesson-concept-objects.jpg` — the bar blade's shadow falls beyond the bench edge while the blade stays on it; the sock is folded so it reads as a rolled towel rather than a sock.
+7. `illo-m05-automation.jpg` — the hanging bottles have their necks cut by the shelf, the "wafer-thin" worktop runs into the glass panel with no joint, and the service arm's gripper holds nothing while a glass floats beside it.
+8. `illo-lesson-automation.jpg` — the study figure's forearm passes through the reach arc, and the glass end panel stops above the floor so the console has nothing to stand on.
+9. `illo-lesson-signals.jpg` — the phone is held with no hand, and the scan line runs in front of the glass but behind the column at the same time.
+10. `illo-m10-mockup.jpg` — the model's back wall cuts through the counter, the steel rule floats without a shadow, and the right hand shows two fingers and a thumb.
+11. Hands in general: check every drawn hand at 100 %. Known offender: `illo-m10-mockup.jpg` (two fingers and a thumb on the right hand). The Kratena phone hand reads correctly on close inspection and is not on the list.
+
+**C. The lettering rule — violations still visible**
+
+1. `illo-case-sips-caporale.jpg` — mirrored shop lettering in the window. Must be blank, like every other sign in the series.
+2. `illo-m10-mockup.jpg` — the three sticky notes and the glue-stick label were painted over with flat patches, and the patches still read as rectangles. Repaint inside the drawing instead of patching over it.
+3. `illo-case-kratena`/`illo-m10` numbered rulers: any tick that reads as a numeral goes.
+
+**D. Series consistency**
+
+1. `illo-figure-*.jpg` carry a soft watercolour halo behind the sitter; the module and lesson covers sit on plain white paper. Decide one treatment for the portraits and apply it to all eleven.
+2. Case covers set in dark rooms (Sips, City Space, El Copitas, Benfiddich, Krasota) were all lightened to the same pale palette, which erases the venue's own identity. Keep the poster style but hold each room's own light: dark rooms stay dark, with the ink contour doing the describing.
+3. The two author-dialog sets overlap: `illo-author-joi-2025.jpg` and the Joi case cover tell the same story in two different idioms.
+
+**E. Bookkeeping left by the last two batches**
+
+1. Ten of the twelve lesson headers are published; `scenography` and `final-brief` still fall back to the module cover and must be drawn.
+2. The progress line still says the series is closed at forty files while ten lesson headers now exist — recompute the count when the last two land.
+3. `presentation/build/illustration-prompts.md` describes the intended scene for each case card; after the redraws it must describe what is actually on the card, including the colours called out above.
 
 **No further batch is planned.** The series ends at forty published illustrations, and a new drawing is only commissioned for a genuinely new asset. The `project-*` archive stays photographic, the three `web-insider-*` files stay credited documentary photographs of another venue, the twelve `studio-*` plates stay as studio photography, and the two logos stay unchanged. Anything added later keeps the rule below: a generated file is disclosed per exact filename and never stands in for evidence of a real venue.
 
