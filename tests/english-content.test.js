@@ -162,8 +162,8 @@ test('English-only conversion preserves the complete course and photographic arc
   // 43 archive photographs stay in the files; drawn frames sit beside their sources
   const projectFrames = course.projects.items.flatMap(project => project.photos);
   assert.equal(projectFrames.filter(photo => !/^illo-/.test(photo.file)).length, 43);
-  assert.equal(projectFrames.filter(photo => /^illo-/.test(photo.file)).length, 8);
-  assert.equal(projectFrames.length, 51);
+  assert.equal(projectFrames.filter(photo => /^illo-/.test(photo.file)).length, 13);
+  assert.equal(projectFrames.length, 56);
   for (const project of course.projects.items) {
     assert.equal(Object.hasOwn(project, 'ru'), false);
     for (const photo of project.photos) {
@@ -1453,21 +1453,24 @@ test('drawn project covers keep their archive source, dimensions and disclosure'
   assert.match(read('app.js'), /const filePhotos = pr\.cover \? photos\.filter\(photo => photo\.file !== pr\.cover\) : photos\.slice\(1\);/);
 });
 
-test('the Joi file shows every drawing beside its own photograph', () => {
+test('every drawn project frame sits beside the photograph it was drawn from', () => {
   const course = courseData();
-  const joi = course.projects.items.find(project => project.id === 'joi');
-  const drawn = joi.photos.filter(photo => /^illo-/.test(photo.file)).map(photo => photo.file);
-  assert.equal(drawn.length, 8, 'the whole Joi file is drawn');
-  for (const file of drawn) {
-    const photo = file.replace(/^illo-/, '');
-    assert.ok(joi.photos.some(entry => entry.file === photo), `${file} keeps ${photo} in the same file`);
-    const credit = course.imageCredits.files.find(entry => entry.file === file);
-    assert.equal(credit?.generated, true, `${file} is disclosed as generated`);
-    assert.equal(credit.source, `/presentation/assets/${photo}`, `${file} links its own photograph`);
-    assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', file)), `${file} exists`);
-    assert.ok(joi.photos.find(entry => entry.file === file).caption.length > 40, `${file} is captioned`);
+  let drawn = 0;
+  for (const project of course.projects.items) {
+    const files = project.photos.map(photo => photo.file);
+    for (const file of files.filter(name => /^illo-project-/.test(name))) {
+      drawn++;
+      const photo = file.replace(/^illo-/, '');
+      assert.ok(files.includes(photo), `${file} keeps ${photo} in the same file`);
+      const credit = course.imageCredits.files.find(entry => entry.file === file);
+      assert.equal(credit?.generated, true, `${file} is disclosed as generated`);
+      assert.equal(credit.source, `/presentation/assets/${photo}`, `${file} links its own photograph`);
+      assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', file)), `${file} exists`);
+      assert.ok(project.photos.find(entry => entry.file === file).caption.length > 40, `${file} is captioned`);
+    }
   }
+  assert.ok(drawn >= 13, 'the drawn project frames are published');
   // the card leads with the drawing, but the gallery must not repeat it
-  assert.equal(joi.cover, 'illo-project-joi-bar.jpg');
+  assert.equal(course.projects.items.find(project => project.id === 'joi').cover, 'illo-project-joi-bar.jpg');
   assert.match(read('app.js'), /photos\.filter\(photo => photo\.file !== pr\.cover\)/);
 });

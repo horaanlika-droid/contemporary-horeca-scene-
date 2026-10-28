@@ -33,6 +33,7 @@ The app marks every `illo-` file with the `illo-photo` class, so drawn covers ar
 | `illo-project-joi-bar.jpg`, `illo-project-passie-wall.jpg`, `illo-project-coocoo-pour.jpg`, `illo-project-chicken-connection-kitchen.jpg`, `illo-project-pacific-station.jpg`, `illo-project-tam-cubes.jpg`, `illo-project-detail-nine-lives.jpg` | Project-file cards, drawn from the lead photograph of each file at that photograph's published dimensions. The card uses the drawing; the project page keeps every archive photograph, so the drawing never replaces the evidence |
 | `illo-project-joi-facade.jpg` | A ninth frame inside the Joi file, shown beside the facade photograph it was drawn from (960 × 1280) |
 | `illo-project-joi-arcade.jpg`, `illo-project-joi-arcade-lights.jpg`, `illo-project-joi-cups.jpg`, `illo-project-joi-brand.jpg`, `illo-project-joi-machine.jpg`, `illo-project-joi-grinder.jpg` | The rest of the Joi file, each drawn from the photograph immediately after it in the gallery and printed at that photograph's pixel dimensions. The Joi file is now a paired archive: every drawing is followed by its own photograph |
+| `illo-project-passie-cake.jpg`, `illo-project-passie-cheesecake.jpg`, `illo-project-passie-counter.jpg`, `illo-project-passie-window.jpg`, `illo-project-passie-sakura.jpg` | The rest of the Passie Cakes file, each drawn from the photograph that follows it in the gallery at that photograph's pixel dimensions |
 
 ## Thematic Horeca photography
 
