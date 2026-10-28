@@ -1373,3 +1373,17 @@ test('restyled case covers retain their published JPEG dimensions', () => {
     assert.ok(fs.existsSync(path.join(ROOT, entry.source.slice(1))), `${file} retains its source`);
   }
 });
+
+test('illustrated practitioner portraits retain their editorial sources and disclosure', () => {
+  const course = courseData();
+  for (const name of ['redzepi', 'caporale', 'kratena', 'talalay', 'dave-arnold', 'savage', 'narzi', 'kayama', 'zarkov', 'bobkov']) {
+    const file = `illo-figure-${name}.jpg`;
+    assert.ok(course.figures.some(figure => figure.image === file), `${file} is used`);
+    assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', file)), `${file} exists`);
+    const credit = course.imageCredits.files.find(item => item.file === file);
+    assert.equal(credit?.generated, true);
+    assert.match(credit.short, /^ILLUSTRATION · AI-GENERATED/);
+    assert.equal(credit.source, `/presentation/assets/figure-${name}.jpg`);
+    assert.ok(fs.existsSync(path.join(ROOT, credit.source.slice(1))));
+  }
+});

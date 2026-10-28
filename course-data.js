@@ -30,7 +30,7 @@ window.COURSE = {
       moduleId: 'fnb',
       moduleNumber: '07 & 10',
       block: 'Food & Beverage Futures · Local Ingredients, Fermentation & Responsible Leadership',
-      image: 'figure-redzepi.jpg',
+      image: 'illo-figure-redzepi.jpg',
       summary: 'Co-founded Noma and helped make Nordic ingredients, foraging, hyper-seasonality and fermentation central to contemporary gastronomy. In 2026, following public abuse allegations from former employees, Redzepi acknowledged harmful past leadership, apologised and stepped away from Noma. The case pairs culinary influence with questions of workplace culture and accountability.',
       lessonAngle: 'Read Noma’s ingredient research alongside questions of power, worker dignity, safe conditions and accountability; creative excellence does not remove an employer’s duty of care.',
       takeaway: 'A local culinary point of view can become a global language; exceptional craft never excuses harm to the people doing the work.'
@@ -43,7 +43,7 @@ window.COURSE = {
       moduleId: 'experience',
       moduleNumber: '02 & 06',
       block: 'Experience Design · Counterless Hospitality, Island Ergonomics & Bespoke Vessels',
-      image: 'figure-caporale.jpg',
+      image: 'illo-figure-caporale.jpg',
       summary: 'Co-founder of Barcelona’s Sips with Marc Álvarez, leading it to №1 in The World’s 50 Best Bars 2023. Former creative leader at London’s Artesian (four consecutive years World №1). At Sips, he removed the traditional barrier between guest and bartender with a central open island workstation and museum-grade custom vessels.',
       lessonAngle: 'Shows how removing the physical bar counter transforms guest connection: 360-degree visibility, bespoke tactile glassware (like cast-metal hands) and culinary cocktail techniques turn service into an intimate theatrical craft without five-star stiffness.',
       takeaway: 'Atmosphere is created when you remove the physical and psychological distance between the maker and the guest.'
@@ -56,7 +56,7 @@ window.COURSE = {
       moduleId: 'concepts',
       moduleNumber: '02 & 04',
       block: 'Experience Design & Concepts · Hotel-Bar Reinvention and Dual-Format R&D',
-      image: 'figure-kratena.jpg',
+      image: 'illo-figure-kratena.jpg',
       summary: 'Former head bartender of London’s Artesian, which topped The World’s 50 Best Bars for four consecutive years with his team; in 2019, he co-founded Tayēr + Elementary with Monica Berg, pairing an accessible neighbourhood bar with a produce-led cocktail R&D counter.',
       lessonAngle: 'Tayēr + Elementary shows how a clear idea can hold two complementary offers: an approachable everyday bar and a focused produce-led laboratory, each with a distinct role in the guest journey.',
       takeaway: 'Make innovation legible to guests: one bar can balance an easy everyday offer and a focused R&D counter when each has a clear promise.'
@@ -69,7 +69,7 @@ window.COURSE = {
       moduleId: 'neuro',
       moduleNumber: '03 & 05',
       block: 'Neurogastronomy & R&D · Multisensory Mixology & Speed Ergonomics',
-      image: 'figure-talalay.jpg',
+      image: 'illo-figure-talalay.jpg',
       summary: 'Winner of Diageo Reserve World Class Russia (2020–2021), taking first place in both Signature Drink and Cocktail Against the Clock, and inductee of the Palm Branch "Bartender of the Year" Hall of Fame.',
       lessonAngle: 'Treats every cocktail through four deliberate coordinates — taste, aroma, tactile texture (enveloping mouthfeel) and visual colouristics — while proving in "Against the Clock" that high-concept gastrophysics only works when backed by razor-sharp station ergonomics and speed under pressure.',
       takeaway: 'Mixology is not blind trend-chasing; it is aligning flavour, aroma, texture and colour with the venue’s concept at operational speed.'
@@ -82,7 +82,7 @@ window.COURSE = {
       moduleId: 'neuro',
       moduleNumber: '03 & 07',
       block: 'Neurogastronomy & R&D · Science of the Perfect Cocktail',
-      image: 'figure-dave-arnold.jpg',
+      image: 'illo-figure-dave-arnold.jpg',
       summary: 'Author of Liquid Intelligence: The Art and Science of the Perfect Cocktail, an educator and drinks innovator known for applying controlled experiments to cocktail technique — temperature, dilution, carbonation, sugar-and-acid balance and clarification.',
       lessonAngle: 'Turns cocktail development into testable practice: change one variable at a time, record the result, taste critically and translate the discovery into a repeatable bar workflow.',
       takeaway: 'Measure and control variables to make craft repeatable; let guest pleasure — not equipment — be the point.'
@@ -108,7 +108,7 @@ window.COURSE = {
       moduleId: 'concepts',
       moduleNumber: '04 & 06',
       block: 'Restaurant & Bar Concepts · 50 Best Menu Architecture & Art Manifestos',
-      image: 'figure-savage.jpg',
+      image: 'illo-figure-savage.jpg',
       summary: 'World Class Bartender of the Year (2014) who revolutionised World’s 50 Best Bar menus — from wordless illustrated comic-book and architectural menus at Little Red Door to Bauhaus geometric manifestos at Shapes and Art Nouveau organic lines at Bar Nouveau.',
       lessonAngle: 'Demonstrates how a menu and a bar concept act as a single artistic manifesto: guests do not read a list of ingredients; they choose an emotion, a shape, a painting or a philosophical idea. Every vessel, chair, candle, ice block and uniform obeys that single rulebook.',
       takeaway: 'A great 50 Best menu is not a price list — it is a physical artefact that teaches the guest how to read your world.'
@@ -121,7 +121,7 @@ window.COURSE = {
       moduleId: 'technology',
       moduleNumber: '05 & 08',
       block: 'Operations, Systems & Entrepreneurship · The Horeca Code',
-      image: 'figure-narzi.jpg',
+      image: 'illo-figure-narzi.jpg',
       summary: 'British-Russian entrepreneur who put Moscow’s City Space Bar onto the world cocktail map, built London hospitality projects (Pachamama), mentored a generation of bar leaders, and codified operational discipline in "The Horeca Code".',
       lessonAngle: 'Insists that hospitality romance collapses without iron operational standards, cost control, station ergonomics, sales psychology and team discipline. His City Space school trained future founders (including Igor Zernov) and invented bar staples such as dehydrated fruit-chip garnishes alongside hotel pastry chefs.',
       takeaway: 'Creative charisma opens a venue once; standards, unit economics and a disciplined school of people keep it open for years.'
@@ -134,7 +134,7 @@ window.COURSE = {
       moduleId: 'fnb',
       moduleNumber: '07 & 03',
       block: 'Food & Beverage Futures · Farm-to-Counter Apothecary & Zero-Menu Craft',
-      image: 'figure-kayama.jpg',
+      image: 'illo-figure-kayama.jpg',
       summary: 'Founder of the 16-seat Bar Benfiddich in Tokyo ("Ben" = mountain = Yama, "Fiddich" = deer = Ka → Kayama). Grows wormwood, fennel, juniper, chamomile, mint and yuzu on his family farm in Chichibu and distils his own absinthe and botanical elixirs.',
       lessonAngle: 'Works with no printed cocktail menu: the candlelit apothecary counter of antique jars, mortar and pestle, fresh herbs and vintage glassware IS the menu. Guests converse with Kayama while he crushes botanicals and builds bespoke drinks from soil to glass.',
       takeaway: 'Owning the raw ingredient from soil to glass — and serving it in antique apothecary vessels — creates an irreproducible signature.'
@@ -160,7 +160,7 @@ window.COURSE = {
       moduleId: 'entrepreneurship',
       moduleNumber: '04 & 08',
       block: 'Restaurant Concepts & Entrepreneurship · Portfolio Strategy and Gastro-Theatre',
-      image: 'figure-zarkov.jpg',
+      image: 'illo-figure-zarkov.jpg',
       summary: 'Founder and CVO of White Rabbit Family and creator of Krasota immersive gastro-theatre. He develops groundbreaking restaurant concepts across a portfolio, showing how theatrical scenography, 360-degree projections, culinary R&D and distinct talent can create iconic hospitality.',
       lessonAngle: 'Study how Krasota synthesizes visual arts, spatial projections, sound design and culinary timing around a single 20-seat interactive table — proving that dining can become immersive living theatre.',
       takeaway: 'When scenography, visual arts and technology serve the culinary story, hospitality transcends food to become unforgettable theatre.'
@@ -173,7 +173,7 @@ window.COURSE = {
       moduleId: 'budget',
       moduleNumber: '09 & 02',
       block: 'Budget Realisation & Scenography · Antique Tableware, Candles & Found Worlds',
-      image: 'figure-bobkov.jpg',
+      image: 'illo-figure-bobkov.jpg',
       summary: 'Rose through every hospitality role — from dishwasher, waiter, cook and bartender to co-owner of Pub Life Group — creating some of the most theatrical, immersive multi-room bars and pubs in Europe.',
       lessonAngle: 'At Black Swan, Bambule and Abbey Players, Bobkov builds worlds not from designer catalogues, but from real found objects: antique silverware and porcelain, dripping wax candles, 19th-century church doors, Victorian confessionals, vintage brass taps and flea-market furniture. Every table feels like a living film set.',
       takeaway: 'Real found objects — antique tableware, candles, patina and salvage — create instant soul that no factory furniture can imitate.'
@@ -894,9 +894,19 @@ window.COURSE = {
     }
   ],
   imageCredits: {
-    statement: 'Every image in the elective is listed with its source and rights status. Photographs of the author’s venues, objects and portraits are © Egor Tarasenko and come from his personal archive. Photographs from the author’s own archive are shown in a close-detail, film-inspired display treatment in full color. Supporting photos, including editorial references, are shown in full color and may receive a light CSS tone adjustment; this changes only their on-screen appearance, not the image files. The film-inspired look is a visual treatment, not a claim about the camera or film stock used for the original photographs. Other editorial photographs are sourced from publicly available websites and press materials; their respective photographers and venues retain copyright, and source links are listed here wherever available. Where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. A few author-archive photographs carry subtle AI exposure and shadow-detail recovery; composition remains unchanged, and each processed file is labelled “AI-processed” under the image and in this list. The module and case-card covers, access and landing illustrations, the portrait of Jiro Ono and the Passie Cakes room illustration were generated with AI in a hand-drawn style and are labelled as illustrations, not documentary photographs. The latter two are based on credited reference photographs, with the originals linked below. Each illustrated case card opens onto a case file with its own credited photograph or explicitly labelled illustrative image. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
+    statement: 'Every image in the elective is listed with its source and rights status. Photographs of the author’s venues, objects and portraits are © Egor Tarasenko and come from his personal archive. Photographs from the author’s own archive are shown in a close-detail, film-inspired display treatment in full color. Supporting photos, including editorial references, are shown in full color and may receive a light CSS tone adjustment; this changes only their on-screen appearance, not the image files. The film-inspired look is a visual treatment, not a claim about the camera or film stock used for the original photographs. Other editorial photographs are sourced from publicly available websites and press materials; their respective photographers and venues retain copyright, and source links are listed here wherever available. Where no rights-cleared venue photograph exists, an illustrative photograph from the author’s archive is used and explicitly marked — it does not depict the venue discussed. A few author-archive photographs carry subtle AI exposure and shadow-detail recovery; composition remains unchanged, and each processed file is labelled “AI-processed” under the image and in this list. The module and case-card covers, access and landing illustrations, the practitioner portraits and the Passie Cakes room illustration were generated with AI in a hand-drawn style and are labelled as illustrations, not documentary photographs. The portraits and room illustration are based on credited reference photographs, with the originals linked below. Each illustrated case card opens onto a case file with its own credited photograph or explicitly labelled illustrative image. The HIM Business School logo remains the property of Swiss Education Group. Rights holders may request removal at any time and the image will be taken down promptly.',
     contact: 'egor.tarasenko@him-mail.ch',
     files: [
+      { file: 'illo-figure-redzepi.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-redzepi.jpg', generated: true },
+      { file: 'illo-figure-caporale.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-caporale.jpg', generated: true },
+      { file: 'illo-figure-kratena.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-kratena.jpg', generated: true },
+      { file: 'illo-figure-talalay.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-talalay.jpg', generated: true },
+      { file: 'illo-figure-dave-arnold.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-dave-arnold.jpg', generated: true },
+      { file: 'illo-figure-savage.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-savage.jpg', generated: true },
+      { file: 'illo-figure-narzi.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-narzi.jpg', generated: true },
+      { file: 'illo-figure-kayama.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-kayama.jpg', generated: true },
+      { file: 'illo-figure-zarkov.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-zarkov.jpg', generated: true },
+      { file: 'illo-figure-bobkov.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated portrait based on an editorial reference photograph · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/figure-bobkov.jpg', generated: true },
       { file: 'figure-jiro.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO', credit: 'AI-generated illustration based on an editorial reference portrait of Jiro Ono · © respective photographer', license: 'Generated interpretation · not a documentary photograph · takedown requests honoured', source: '/presentation/assets/originals/figure-jiro.jpg', generated: true },
       { file: 'project-passie-room.jpg', short: 'ILLUSTRATION · AI-GENERATED FROM AUTHOR’S ARCHIVE', credit: 'AI-generated illustration based on a Passie Cakes photograph © Egor Tarasenko', license: 'Generated interpretation · not a documentary photograph', source: '/passiecakes_7625.jpeg', generated: true },
       { file: 'web-insider-hall.jpg', short: 'PHOTO · INSIDER BAR LAB · MOSCOW', credit: 'Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab', license: 'Public venue photograph · educational commentary · takedown on request', source: 'https://www.tripadvisor.com/LocationPhotoDirectLink-g298484-d14015692-i539874042-Insider_Bar-Moscow_Central_Russia.html' },
