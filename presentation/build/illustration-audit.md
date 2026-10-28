@@ -260,6 +260,21 @@ slightly thinner than the older drawings, the pour hand in the Dave Arnold card 
 tin rather than round its body, and the Sensory card keeps a single invented second board for depth.
 The remaining P1 and P2 items are carried in the README under *Image audit — October 2026*.
 
+**Progress, 29 October 2026.** P1 items 6 to 10 were redrawn the same way: `illo-case-benfiddich-kayama`
+(white jacket, red tie, mahogany counter, amber bottles, no arch), `illo-case-sips-caporale` (black ceiling,
+green walls, black island, espresso machine), `illo-case-city-space-narzi` (red ceiling sweep, magenta and
+blue floor, blue night band, bartender at stool scale) and `illo-case-krasota-zarkov` (the dark projected
+seascape and its black centre, no fire on the table). `illo-case-alex-kratena` was redrawn as P2 item 11
+asks: the ornamental sleeve carries no lettering, the phone is in the right hand and the second figure wears
+the black beanie. `illo-case-jiro-ono` keeps its drawing and takes only the noren from pale blue to dark navy,
+which was the one colour claim in the whole set that could be settled without a re-render.
+
+Still open when this was written: the El Copitas ceiling (B1), the two practitioner portraits in P1 item 10,
+the Redzepi wardrobe (A8), the invented room in `illo-case-rene-redzepi`, the module-cover support lines and
+`illo-m10-mockup` (P2 item 12), and the statement pass over the Jiro stools and dishes. One more note from
+this pass: a case card drawn to the edge of its canvas has no paper margin, so on a white plate it reads as a
+dark rectangle; `illo-case-benfiddich-kayama` is the one file here that wants a margin added.
+
 **P0 — reads as the wrong place, redraw from the photograph**
 
 1. `illo-case-sensory-talalay` — dark room, neon rim-lit board, two canapés, one tall tumbler with

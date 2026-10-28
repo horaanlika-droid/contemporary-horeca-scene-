@@ -229,31 +229,38 @@ Reviewed every published illustration against its own reference photograph and a
 Items are ordered by how much they cost the reader: likeness that should be obvious but is not, then frames
 that cannot exist, then series inconsistencies, then the bookkeeping that the last two batches left behind.
 
-**Status — 28 October 2026.** Five assets were redrawn from their photographs in this pass and are marked
-`done` below; everything still marked `open` is the remaining task list. The checklist used for every
-redraw, and the reasoning behind each verdict, are in `presentation/build/illustration-audit.md`.
+**Status — 29 October 2026.** Eleven assets were redrawn or recoloured from their photographs in this pass
+and are marked `done` below; everything still marked `open` is the remaining task list. The checklist used
+for every redraw, and the reasoning behind each verdict, are in
+`presentation/build/illustration-audit.md`.
 
 | Done | File | What changed |
 | --- | --- | --- |
 | A1 | `illo-case-shapes-savage.jpg` | Rebuilt to the photograph: black steel bottle shelf on the green laminate table, colour-banded bottles, two red stools on the floor, the framed blue-circle / yellow-triangle poster standing on the table, rust-brown wall panel. Stray frame lines, the diagonal strut and the floating card are gone. |
-| — | `illo-case-sensory-talalay.jpg` | The board, the iced tumbler and the lit rim of the photograph, two canapés, a second board behind on the same surface; waterline horizontal, ice below it, straw ending under the water. The pastel confetti is gone. |
-| — | `illo-case-dave-arnold.jpg` | The pour now exists: tin raised, julep strainer over its mouth, a thin stream falling into the coupe held low, one curl of vapour on the glass. The counter has a real front edge and the tools stand on it. |
-| — | `illo-figure-zarkov.jpg` | Redrawn from the photograph: long dark hair, beard, white tee, dark trousers, a single white armchair, the water bottle on the paper floor. The man and the room are finally the ones in the source. |
-| — | `illo-figure-talalay.jpg` | Redrawn from the photograph: he stands behind the counter with one arm raised holding a small tumbler, stone linen overshirt over the white tee with its red-orange circle, arches, bottle shelf and pendant lamp behind. |
+| A2 | `illo-case-sensory-talalay.jpg` | The board, the iced tumbler and the lit rim of the photograph, two canapés, a second board behind on the same surface; waterline horizontal, ice below it, straw ending under the water. The pastel confetti is gone. |
+| A3 | `illo-case-dave-arnold.jpg` | The pour now exists: tin raised, julep strainer over its mouth, a thin stream falling into the coupe held low, one curl of vapour on the glass. The counter has a real front edge and the tools stand on it. |
+| A4 | `illo-figure-zarkov.jpg` | Redrawn from the photograph: long dark hair, beard, white tee, dark trousers, a single white armchair, the water bottle on the paper floor. The man and the room are finally the ones in the source. |
+| A5 | `illo-figure-talalay.jpg` | Redrawn from the photograph: he stands behind the counter with one arm raised holding a small tumbler, stone linen overshirt over the white tee with its red-orange circle, arches, bottle shelf and pendant lamp behind. |
+| A6 | `illo-case-benfiddich-kayama.jpg` | Redrawn from the photograph: white jacket over a white shirt with a dark red tie, the red serving mat and mixing glass on a dark mahogany counter, jars of botanicals, dark timber shelving of amber bottles, the framed painting and the dried herbs. The invented brick arch is gone. |
+| A7 | `illo-case-sips-caporale.jpg` | The room's own colours: black ceiling band, bottle-green walls, the black island with its pale stone top, the lit back-bar shelves and the espresso machine, two green stools on the plank floor, the street window. Nothing left in outline. |
+| A8 | `illo-case-city-space-narzi.jpg` | The red ceiling sweep, the magenta-and-blue striped floor and the deep blue night band are back; the guardrail runs in front of the armchairs instead of through them, and the bartender is drawn at stool scale. |
+| A9 | `illo-case-jiro-ono.jpg` | The drawing is kept; the noren is recoloured from pale blue to dark navy, masked to the curtain band so no other part of the frame moves. |
+| A10 | `illo-case-alex-kratena.jpg` | Redrawn from the photograph: the ornamental sleeve with no lettering in it, the phone in his right hand rather than the mirror, the second man in a black beanie in pale outline, the invented bar at the left edge removed. |
+| A11 | `illo-case-krasota-zarkov.jpg` | The projected seascape is dark again, with the black void at the centre of the table and no fire on it; the guests, their plates and the curving screen behind them follow the photograph. |
 
-The five new files keep their published dimensions (1264 × 848 covers, 848 × 1264 portraits) and were run
-through `tools/normalize-artwork-paper.js` so their paper is true white and the drawings still blend into
+Every new file keeps its published dimensions (1264 × 848 covers, 848 × 1264 portraits) and was run
+through `tools/normalize-artwork-paper.js` so its paper is true white and the drawing still blends into
 the page.
 
 **A. Likeness — the reference is not recognisable enough**
 
 1. `done` — `illo-case-shapes-savage.jpg`: the photo is a black open steel shelf with a *green* table and small bottles lined along it, red-ochre chairs and a pink table edge under a black-framed window. The drawing replaced that with a brown upholstered bench, a dark mat and a hanging card. Redrawn to the photo's own composition and colour.
-2. `illo-case-benfiddich-kayama.jpg` — the photo: white jacket, dark tie, red counter mat, dark timber back bar, a large framed painting behind, warm lantern light, glass jars of botanicals in front of him. The drawing gives a brown waistcoat, no jacket or tie, no red mat, and invents a brick arch that is the strongest shape in the frame. The arch must go and the white jacket, tie and red mat must return.
-3. `illo-case-sips-caporale.jpg` — the room is black and green; the drawing is uniformly pale blue, so the venue reads as a generic cafe. The green bottle wall is the identity of the place and is currently washed out. Also the shop glass carries mirrored lettering that must be blanked (see C1).
-4. `illo-case-city-space-narzi.jpg` — the ceiling is a red-lit sweep and the floor runs magenta and blue; the drawing has a beige ceiling and brown armchairs, losing the only unforgettable feature. The guardrail also cuts through the armchairs (see B2).
-5. `illo-case-jiro-ono.jpg` — the noren is dark navy in the photo and pale blue in the drawing. Restore the dark curtain; it is the frame's anchor.
-6. `illo-case-alex-kratena.jpg` — the second figure in the photo is a tattooed man in a black beanie; the drawing gives a man in a cap and a scarf with no tattoos. The invented bar with straws at the left edge is not in the photo and should go.
-7. `illo-case-krasota-zarkov.jpg` — the table projection is the point of the room: a dark seascape with aircraft and ships around a black void. The drawing puts pale water and toy sailboats on it, which turns a specific artwork into decoration. Keep the dark projected image and the void.
+2. `done` — `illo-case-benfiddich-kayama.jpg` — the photo: white jacket, dark tie, red counter mat, dark timber back bar, a large framed painting behind, warm lantern light, glass jars of botanicals in front of him. The drawing gives a brown waistcoat, no jacket or tie, no red mat, and invents a brick arch that is the strongest shape in the frame. The arch must go and the white jacket, tie and red mat must return.
+3. `done` — `illo-case-sips-caporale.jpg` — the room is black and green; the drawing is uniformly pale blue, so the venue reads as a generic cafe. The green bottle wall is the identity of the place and is currently washed out. Also the shop glass carries mirrored lettering that must be blanked (see C1).
+4. `done` — `illo-case-city-space-narzi.jpg` — the ceiling is a red-lit sweep and the floor runs magenta and blue; the drawing has a beige ceiling and brown armchairs, losing the only unforgettable feature. The guardrail also cuts through the armchairs (see B2).
+5. `done` — `illo-case-jiro-ono.jpg` — the noren is dark navy in the photo and pale blue in the drawing. Restore the dark curtain; it is the frame's anchor.
+6. `done` — `illo-case-alex-kratena.jpg` — the second figure in the photo is a tattooed man in a black beanie; the drawing gives a man in a cap and a scarf with no tattoos. The invented bar with straws at the left edge is not in the photo and should go.
+7. `done` — `illo-case-krasota-zarkov.jpg` — the table projection is the point of the room: a dark seascape with aircraft and ships around a black void. The drawing puts pale water and toy sailboats on it, which turns a specific artwork into decoration. Keep the dark projected image and the void.
 8. `illo-figure-redzepi.jpg` and `illo-case-rene-redzepi.jpg` — same person drawn twice with different T-shirts (light blue vs navy) and two different greys for the same apron. One likeness, one wardrobe.
 
 **B. Physics and logic — frames that cannot exist**
