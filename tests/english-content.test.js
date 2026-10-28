@@ -159,7 +159,9 @@ test('English-only conversion preserves the complete course and photographic arc
   assert.equal(course.figures.length, 13);
   assert.equal(course.cases.length, 14);
   assert.equal(course.projects.items.length, 7);
-  assert.equal(course.projects.items.flatMap(project => project.photos).length, 43);
+  // 43 archive photographs plus the drawn Joi facade frame that sits beside its source
+  assert.equal(course.projects.items.flatMap(project => project.photos).filter(photo => !/^illo-/.test(photo.file)).length, 43);
+  assert.equal(course.projects.items.flatMap(project => project.photos).length, 44);
   for (const project of course.projects.items) {
     assert.equal(Object.hasOwn(project, 'ru'), false);
     for (const photo of project.photos) {
@@ -1409,4 +1411,42 @@ test('illustrated author project images retain their archive sources and disclos
   const dialog = authorDialog(true);
   assert.match(dialog, /illo-photo/, 'drawn project images are not graded as photographs');
   assert.match(dialog, /sources listed in Image sources/);
+});
+
+test('drawn project covers keep their archive source, dimensions and disclosure', () => {
+  const course = courseData();
+  const dimensions = buffer => {
+    let offset = 2;
+    while (offset + 4 < buffer.length) {
+      offset++;
+      while (buffer[offset] === 0xff) offset++;
+      const marker = buffer[offset++];
+      if (marker === 0xd9 || marker === 0xda) break;
+      if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) continue;
+      const length = buffer.readUInt16BE(offset);
+      if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
+        return [buffer.readUInt16BE(offset + 5), buffer.readUInt16BE(offset + 3)];
+      }
+      offset += length;
+    }
+    assert.fail('JPEG dimensions not found');
+  };
+  for (const project of course.projects.items) {
+    assert.match(project.cover, /^illo-project-/, `${project.name} card is a drawing`);
+    assert.notEqual(project.cover, project.image, `${project.name} cover is not its photograph`);
+    const coverPath = path.join(ROOT, 'presentation/assets', project.cover);
+    const sourcePath = path.join(ROOT, 'presentation/assets', project.image);
+    assert.ok(fs.existsSync(coverPath), project.cover);
+    assert.ok(fs.existsSync(sourcePath), `${project.name} keeps its archive photograph`);
+    assert.deepEqual(dimensions(fs.readFileSync(coverPath)), dimensions(fs.readFileSync(sourcePath)), `${project.cover} keeps the published dimensions`);
+    const credit = course.imageCredits.files.find(item => item.file === project.cover);
+    assert.equal(credit?.generated, true, `${project.cover} is disclosed as generated`);
+    assert.match(credit.short, /^ILLUSTRATION · AI-GENERATED/);
+    assert.equal(credit.source, `/presentation/assets/${project.image}`, `${project.cover} links its own photograph`);
+    // the archive photograph stays in the file even where the drawing leads the page
+    assert.ok(project.photos.some(photo => photo.file === project.image), `${project.name} keeps its photograph in the gallery`);
+  }
+  assert.match(read('app.js'), /image\(pr\.cover \|\| pr\.image/);
+  assert.match(read('app.js'), /const leadFile = pr\.cover \|\| photos\[0\]\?\.file \|\| pr\.image;/);
+  assert.match(read('app.js'), /const filePhotos = pr\.cover \? photos : photos\.slice\(1\);/);
 });

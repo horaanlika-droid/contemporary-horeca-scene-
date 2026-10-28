@@ -659,7 +659,7 @@ window.bootCourse = () => {
       </div>
       <div class="project-grid">
         ${items.map(pr => `<a class="project-card" href="#/project/${esc(pr.id)}">
-          <div class="project-shot">${image(pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>${creditFor(pr.image)}
+          <div class="project-shot">${image(pr.cover || pr.image, `${pr.name} — ${pr.role}`)}<span class="project-index">${esc(pr.index)}</span></div>${creditFor(pr.cover || pr.image)}
           <div class="project-card-copy">
             <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
             <h2>${esc(pr.name)}</h2>
@@ -684,6 +684,10 @@ window.bootCourse = () => {
     const next = items[(position + 1) % items.length];
     const module = C.modules.find(m => m.id === pr.moduleId);
     const photos = projectPhotos(pr);
+    /* A drawn cover leads the file; the archive photographs stay, starting from the
+       first frame, so a project card never replaces the evidence with the drawing. */
+    const leadFile = pr.cover || photos[0]?.file || pr.image;
+    const filePhotos = pr.cover ? photos : photos.slice(1);
     return layout(`<main class="app-main">
       <a class="crumb" href="#/projects"><span class="meta">PROJECTS OF THE AUTHOR</span> <span aria-hidden="true">→</span> <span class="meta">INDEX</span></a>
       <div class="project-head">
@@ -697,7 +701,7 @@ window.bootCourse = () => {
         </div>
       </div>
       <div class="project-gallery project-gallery-lead">
-        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead ${creditGroup(photos[0]?.file || pr.image)?.generated ? 'AI-generated illustration' : 'photograph'}`, photos[0]?.caption || pr.tagline)}${creditFor(photos[0]?.file || pr.image)}
+        ${zoomable(leadFile, `${pr.name} — lead ${creditGroup(leadFile)?.generated ? 'AI-generated illustration' : 'photograph'}`, pr.cover ? `Drawn from the archive photograph of ${pr.name} kept in this file.` : (photos[0]?.caption || pr.tagline))}${creditFor(leadFile)}
       </div>
       <div class="project-body">
         <p>${esc(pr.summary)}</p>
@@ -705,7 +709,7 @@ window.bootCourse = () => {
       <section style="margin-top:clamp(30px,4vw,52px)">
         <span class="eyebrow tight">THE FILE · ${photos.length} IMAGES ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
         <div class="project-gallery">
-          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — ${creditGroup(ph.file)?.generated ? 'AI-generated illustration' : 'photograph'} ${i + 2}`, ph.caption)).join('')}
+          ${filePhotos.map((ph, i) => zoomable(ph.file, `${pr.name} — ${creditGroup(ph.file)?.generated ? 'AI-generated illustration' : 'photograph'} ${i + (pr.cover ? 1 : 2)}`, ph.caption)).join('')}
         </div>
       </section>
       <div class="project-next">

@@ -1072,6 +1072,7 @@ body.tribute-popup-open{overflow:hidden}
    AI-generated ink-and-gouache graphics are illustrations, not photographs:
    show them whole on white and never grade them with the film filter. */
 .illo-photo{filter:none;background:var(--white)}
+.project-shot img.illo-photo,.project-card:hover .project-shot img.illo-photo{filter:none;background:var(--white)}
 .gallery-item img.illo-photo{filter:none;background:var(--white)}
 .hero-media img.illo-photo{filter:none;max-height:min(72vh,660px);box-shadow:0 34px 80px rgba(0,0,0,.46)}
 .case-feature img.illo-photo{object-fit:contain;object-position:center;padding:clamp(12px,1.8vw,24px);background:var(--paper-warm);filter:none}

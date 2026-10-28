@@ -288,9 +288,25 @@ test('generated illustrations are identified without relabelling documentary pho
   assert.ok(copitas >= 0, 'the El Copitas case photograph is displayed');
   assert.match(html.slice(copitas, copitas + 4000), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
 
+  location.hash = '#/projects';
+  await settle();
+  html = app.innerHTML;
+  for (const cover of ['illo-project-joi-bar.jpg', 'illo-project-passie-wall.jpg', 'illo-project-coocoo-pour.jpg',
+    'illo-project-chicken-connection-kitchen.jpg', 'illo-project-pacific-station.jpg', 'illo-project-tam-cubes.jpg',
+    'illo-project-detail-nine-lives.jpg']) {
+    const at = html.indexOf(`presentation/assets/${cover}`);
+    assert.ok(at >= 0, `${cover} is the drawn project card`);
+    assert.match(html.slice(at - 300, at + 700), /illo-photo/, `${cover} is not graded as a photograph`);
+    assert.match(html.slice(at, at + 700), /ILLUSTRATION · AI-GENERATED/, `${cover} is disclosed`);
+  }
+
   location.hash = '#/project/passie';
   await settle();
   html = app.innerHTML;
+  const lead = html.indexOf('presentation/assets/illo-project-passie-wall.jpg');
+  assert.ok(lead >= 0, 'the project file leads with its drawn cover');
+  const wall = html.indexOf('presentation/assets/project-passie-wall.jpg');
+  assert.ok(wall >= 0, 'the archive photograph stays in the file beneath the drawing');
   const room = html.indexOf('presentation/assets/project-passie-room.jpg');
   assert.ok(room >= 0, 'the Passie room illustration is in the gallery');
   assert.match(html.slice(room - 250, room + 1000), /AI-GENERATED FROM AUTHOR’S ARCHIVE/, 'gallery and lightbox disclose the illustration');
