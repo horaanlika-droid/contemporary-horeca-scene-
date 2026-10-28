@@ -687,7 +687,7 @@ window.bootCourse = () => {
     /* A drawn cover leads the file; the archive photographs stay, starting from the
        first frame, so a project card never replaces the evidence with the drawing. */
     const leadFile = pr.cover || photos[0]?.file || pr.image;
-    const filePhotos = pr.cover ? photos : photos.slice(1);
+    const filePhotos = pr.cover ? photos.filter(photo => photo.file !== pr.cover) : photos.slice(1);
     return layout(`<main class="app-main">
       <a class="crumb" href="#/projects"><span class="meta">PROJECTS OF THE AUTHOR</span> <span aria-hidden="true">→</span> <span class="meta">INDEX</span></a>
       <div class="project-head">
@@ -707,7 +707,7 @@ window.bootCourse = () => {
         <p>${esc(pr.summary)}</p>
       </div>
       <section style="margin-top:clamp(30px,4vw,52px)">
-        <span class="eyebrow tight">THE FILE · ${photos.length} IMAGES ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
+        <span class="eyebrow tight">THE FILE · ${filePhotos.length + 1} IMAGES ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
         <div class="project-gallery">
           ${filePhotos.map((ph, i) => zoomable(ph.file, `${pr.name} — ${creditGroup(ph.file)?.generated ? 'AI-generated illustration' : 'photograph'} ${i + (pr.cover ? 1 : 2)}`, ph.caption)).join('')}
         </div>
