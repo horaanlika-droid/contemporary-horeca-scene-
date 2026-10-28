@@ -1335,3 +1335,41 @@ test('admin can grant course access manually without requiring Tribute payment',
   assert.equal(colleagueSignIn.status, 200);
   assert.equal(colleagueSignIn.body.unlocked, true);
 });
+
+test('restyled case covers retain their published JPEG dimensions', () => {
+  // Read SOF dimensions without an image-library dependency.
+  const dimensions = buffer => {
+    assert.equal(buffer.readUInt16BE(0), 0xffd8, 'asset is a JPEG');
+    let offset = 2;
+    while (offset + 4 < buffer.length) {
+      assert.equal(buffer[offset++], 0xff, 'valid JPEG marker');
+      while (buffer[offset] === 0xff) offset++;
+      const marker = buffer[offset++];
+      if (marker === 0xd9 || marker === 0xda) break;
+      if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) continue;
+      const length = buffer.readUInt16BE(offset);
+      assert.ok(length >= 2 && offset + length <= buffer.length, 'valid JPEG segment');
+      if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
+        return [buffer.readUInt16BE(offset + 5), buffer.readUInt16BE(offset + 3)];
+      }
+      offset += length;
+    }
+    assert.fail('JPEG dimensions not found');
+  };
+  const covers = [
+    'benfiddich-kayama', 'black-swan-bobkov', 'shapes-savage', 'sips-caporale',
+    'el-copitas-zernov', 'city-space-narzi', 'sensory-talalay', 'jiro-ono',
+    'krasota-zarkov', 'dave-arnold',
+  ];
+  for (const cover of covers) {
+    const filename = `illo-case-${cover}.jpg`;
+    const buffer = fs.readFileSync(path.join(ROOT, 'presentation/assets', filename));
+    assert.deepEqual(dimensions(buffer), [1264, 848], filename);
+  }
+  for (const file of ['figure-jiro.jpg', 'project-passie-room.jpg']) {
+    const entry = courseData().imageCredits.files.find(item => item.file === file);
+    assert.equal(entry?.generated, true, `${file} is disclosed as generated`);
+    assert.match(entry.short, /^ILLUSTRATION · AI-GENERATED/);
+    assert.ok(fs.existsSync(path.join(ROOT, entry.source.slice(1))), `${file} retains its source`);
+  }
+});

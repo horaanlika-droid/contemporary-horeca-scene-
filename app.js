@@ -187,9 +187,10 @@ window.bootCourse = () => {
     if (/^https?:\/\//i.test(value) || value.startsWith('/') || value.startsWith('data:')) return value;
     return `${ASSET}${value || IMAGE_FALLBACK}`;
   };
-  /* Drawn covers are paper, not photographs: they keep every line of the drawing,
-     so the interface shows them whole instead of cropping them like a camera frame. */
-  const isDrawn = name => /^illo-/.test(String(name || '').trim());
+  /* Illustrations are paper, not photographs: show them whole instead of cropping
+     them like camera frames. Exact-file credits also mark generated portraits and
+     project images whose filenames retain their original photo prefixes. */
+  const isDrawn = name => /^illo-/.test(String(name || '').trim()) || Boolean(creditGroup(name)?.generated);
   const image = (name, alt = '', cls = '', opts = {}) => {
     const src = esc(assetSrc(name));
     const fallback = `${ASSET}${IMAGE_FALLBACK}`;
@@ -225,10 +226,15 @@ window.bootCourse = () => {
     const photo = projectList().flatMap(p => projectPhotos(p)).find(ph => ph.file === file);
     return photo?.caption || '';
   };
-  const zoomable = (file, alt, caption = '') => `<figure class="gallery-item" data-action="lightbox" data-src="${esc(assetSrc(file))}" data-caption="${esc(caption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
-        <img class="film-photo" src="${esc(assetSrc(file))}" alt="${esc(alt)}" loading="lazy">
-        ${caption ? `<figcaption><span>${esc(caption)}</span></figcaption>` : ''}
+  const zoomable = (file, alt, caption = '') => {
+    const generated = Boolean(creditGroup(file)?.generated);
+    const label = generated ? creditGroup(file).short : '';
+    const lightboxCaption = [caption, label].filter(Boolean).join(' · ');
+    return `<figure class="gallery-item" data-action="lightbox" data-src="${esc(assetSrc(file))}" data-caption="${esc(lightboxCaption)}" tabindex="0" role="button" aria-label="Enlarge: ${esc(alt)}">
+        <img class="film-photo${isDrawn(file) ? ' illo-photo' : ''}" src="${esc(assetSrc(file))}" alt="${esc(alt)}" loading="lazy">
+        ${caption || label ? `<figcaption>${caption ? `<span>${esc(caption)}</span>` : ''}${label ? creditFor(file) : ''}</figcaption>` : ''}
       </figure>`;
+  };
   const moduleProgress = m => Math.round(m.lessons.filter(l => progressFor().includes(l.id)).length / m.lessons.length * 100);
   const nextLesson = () => allLessons.find(x => !progressFor().includes(x.id)) || allLessons[0];
 
@@ -269,6 +275,8 @@ window.bootCourse = () => {
   /* ---------------------------------------------------------------- landing */
   function landing() {
     const SL = (window.SITE && window.SITE.landing) || {};
+    const heroImage = SL.heroImage || 'project-joi-cups.jpg';
+    const heroIsIllustration = isDrawn(heroImage);
     const whyParts = String(SL.whyBig || '').split(SL.whyBigAccent || '§');
     const tickerItems = ['Bar Leone · Hong Kong', 'Joi Espresso Bar · opened 2025', 'Passie Cakes Co. · props as branding', 'CooCoo · coffee, croffles, cookies', 'Chicken Connection · Moscow', 'Pacific Mirain · prep in seconds', 'Sips · Barcelona', 'Himkok · Oslo', 'Krasota · gastro-theatre', '50 Best · Lima 2026', 'MICHELIN · Tokyo 2026', 'World Class · Toronto', 'Neurogastronomy lab', 'Found-object mockups · 1:20'];
     return layout(`<main>
@@ -286,8 +294,8 @@ window.bootCourse = () => {
           <p class="hero-credit"><span class="meta">CREATED BY</span> ${esc(C.author)} · ${esc(C.institution)} <span class="meta">FORMAT</span> ${C.modules.length} modules · ${allLessons.length} learning units · ${C.cases.length} case files</p>
         </div>
         <figure class="hero-media">
-          ${image(SL.heroImage || 'project-joi-cups.jpg', 'Close-up of paper cups at Joi Espresso Bar in full color, from the course author\'s own project archive', '', { eager: true })}
-          <figcaption><span class="meta">ON THE SCENE</span><span>Light, glass and the room around it — the subject of the elective, photographed at the scale a guest actually sees it.</span></figcaption>
+          ${image(heroImage, heroIsIllustration ? 'AI-generated illustration of a hospitality scene' : 'Hospitality scene from the course image archive', '', { eager: true })}
+          <figcaption><span class="meta">${heroIsIllustration ? 'AI-GENERATED ILLUSTRATION' : 'ON THE SCENE'}</span><span>Light, glass and the room around it — the subject of the elective, at the scale a guest actually sees it.</span></figcaption>
         </figure>
       </section>
 
@@ -626,7 +634,7 @@ window.bootCourse = () => {
       <section class="section" style="padding:24px 0"><span class="eyebrow">WORLD’S 50 BEST · MENU CONCEPTS</span><div class="case-list"><article class="case-item"><h3>Rémy Savage · Little Red Door / Shapes / Bar Nouveau</h3><p>Art-manifesto menus: comic-book storytelling, Bauhaus geometry and Art Nouveau craft give guests a visual language for ordering.</p></article><article class="case-item"><h3>El Copitas · Igor Zernov</h3><p>A living chalkboard menu evolves with fresh batches and the intimate candle-lit ritual; menu and hospitality stay local and alive.</p></article><article class="case-item"><h3>Sips Drinkery House · Simone Caporale</h3><p>Drinkery House counterless bar: bespoke tactile vessels and 360-degree guest connection.</p></article><article class="case-item"><h3>Krasota Gastro-Theatre · Boris Zarkov</h3><p>Multisensory immersion: 360-degree projections and synchronized sound matching the culinary narrative.</p></article><article class="case-item"><h3>Bar Benfiddich · Hiroyasu Kayama</h3><p>Zero printed menu: the candle-lit apothecary, botanicals and conversation form a bespoke, guest-led menu.</p></article></div></section>
       <div id="case-files" style="margin-top:32px;display:grid;gap:26px">${C.cases.map((x, i) => `<article class="case-feature" style="grid-template-columns:${i % 2 ? '0.85fr 1.15fr' : '1.15fr .85fr'}">${i % 2
         ? `<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>${image(x.image, `${x.title} case image`)}`
-        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — photograph ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
+        : `${image(x.image, `${x.title} case image`)}<div class="case-feature-copy"><span class="eyebrow">CASE FILE · ${esc(x.location)} · ${esc(x.year)}</span><h3>${esc(x.title)}</h3><span class="meta">${esc(x.industry)}</span><p><strong>Context</strong><br>${esc(x.context)}</p><p><strong>What happened</strong><br>${esc(x.what)}</p><p><strong>Why it matters</strong><br>${esc(x.why)}</p><p><strong>Key takeaway</strong><br>${esc(x.takeaway)}</p>${creditFor(x.image)}</div>`}</article>${(x.gallery || []).length > 1 ? `<div class="case-gallery">${x.gallery.map((f, gi) => zoomable(f, `${x.title} — ${creditGroup(f)?.generated ? 'AI-generated illustration' : 'photograph'} ${gi + 1}`, captionFor(f))).join('')}</div>` : ''}`).join('')}</div>
     </main>`);
   }
 
@@ -656,7 +664,7 @@ window.bootCourse = () => {
             <span class="meta">${esc(pr.role)} · ${esc(pr.year)}</span>
             <h2>${esc(pr.name)}</h2>
             <p>${esc(pr.tagline)}</p>
-            <span class="project-card-foot"><span class="meta">${projectPhotos(pr).length} PHOTOGRAPHS</span><span class="meta">MODULE ${esc(pr.moduleNumber)} ↗</span></span>
+            <span class="project-card-foot"><span class="meta">${projectPhotos(pr).length} IMAGES</span><span class="meta">MODULE ${esc(pr.moduleNumber)} ↗</span></span>
           </div>
         </a>`).join('')}
       </div>
@@ -689,15 +697,15 @@ window.bootCourse = () => {
         </div>
       </div>
       <div class="project-gallery project-gallery-lead">
-        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead photograph`, photos[0]?.caption || pr.tagline)}${creditFor(photos[0]?.file || pr.image)}
+        ${zoomable(photos[0]?.file || pr.image, `${pr.name} — lead ${creditGroup(photos[0]?.file || pr.image)?.generated ? 'AI-generated illustration' : 'photograph'}`, photos[0]?.caption || pr.tagline)}${creditFor(photos[0]?.file || pr.image)}
       </div>
       <div class="project-body">
         <p>${esc(pr.summary)}</p>
       </div>
       <section style="margin-top:clamp(30px,4vw,52px)">
-        <span class="eyebrow tight">THE FILE · ${photos.length} PHOTOGRAPHS ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
+        <span class="eyebrow tight">THE FILE · ${photos.length} IMAGES ${pr.team ? `· ${esc(pr.team)}` : ''}</span>
         <div class="project-gallery">
-          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — photograph ${i + 2}`, ph.caption)).join('')}
+          ${photos.slice(1).map((ph, i) => zoomable(ph.file, `${pr.name} — ${creditGroup(ph.file)?.generated ? 'AI-generated illustration' : 'photograph'} ${i + 2}`, ph.caption)).join('')}
         </div>
       </section>
       <div class="project-next">
@@ -1301,7 +1309,11 @@ window.bootCourse = () => {
     const rows = [...used].sort().map(name => {
       const ill = (ic.illustrative || []).find(x => x.file === name);
       const g = creditGroup(name);
-      const source = g?.source ? `<br><a href="${esc(g.source)}" target="_blank" rel="noopener noreferrer">${esc(g.source.replace(/^https?:\/\//, ''))} ↗</a>` : '';
+      const sourceValue = String(g?.source || '');
+      const sourceIsLink = /^(?:https?:\/\/|\/(?!\/))/i.test(sourceValue);
+      const source = !sourceValue ? '' : sourceIsLink
+        ? `<br><a href="${esc(sourceValue)}" target="_blank" rel="noopener noreferrer">${esc(sourceValue.replace(/^https?:\/\//, ''))} ↗</a>`
+        : `<br>${esc(sourceValue)}`;
       return `<div class="simple-row"><span><strong>${esc(name)}</strong><br><span class="meta">${esc(ill ? 'ILLUSTRATIVE · AUTHOR’S ARCHIVE · NOT THE VENUE PICTURED' : g?.credit || 'SOURCE ON REQUEST')}</span></span><span class="meta">${esc(g?.license || '')}${source}</span></div>`;
     }).join('');
     return layout(`<main class="app-main">

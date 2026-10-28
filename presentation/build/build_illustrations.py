@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-"""Build the hand-drawn illustration set used by the course app.
+"""Export course illustrations from supplied PNG masters.
 
-The illustration masters are loose ink-and-pastel drawings kept as PNG files outside
-the repository (they are heavy and not needed at runtime). This script turns them
-into the compact, portable JPEGs the app references: it trims the empty paper around
+This script does not generate illustrations. When appropriate PNG masters are
+supplied outside the repository, it turns them into the compact JPEGs the app
+references, overwriting the published files: it trims the empty paper around
 the drawing, restores a deliberate margin, places the drawing on the surface the
 interface needs, and writes metadata-free files into presentation/assets/.
 
     python3 presentation/build/build_illustrations.py
     python3 presentation/build/build_illustrations.py --src ~/illustrations --only m06
 
-The art direction is a hand-inked doodle: a thin, wobbly black fineliner line, flat
-pastel fills (pale ice blue, sage, warm sand) on white paper, wide air around the
-subject and exactly one small signal-red accent. Illustrations are declared in
-course-data.js under imageCredits with the prefix `illo-`, and the app labels them
-ILLUSTRATION · ORIGINAL COURSE GRAPHIC rather than showing them as venue photographs.
+The AI-generated series is art-directed as a hand-inked cafe doodle: black outlines,
+flat gouache-like fills on white and one small signal-red accent. Illustrations are
+declared in course-data.js and labelled as AI-generated, never venue photographs.
+Use masters that match the current art direction; this exporter overwrites the JPEGs.
 Scene briefs live next to this script in illustration-prompts.md.
 
 Requirements: Pillow (see presentation/build/requirements.txt).
@@ -43,16 +42,16 @@ PLAN: list[tuple[str, str, tuple[int, int]]] = [
     ("hero.png", "illo-hero-scene.jpg", (1080, 1620)),
     ("gate.png", "illo-gate-still-life.jpg", (1080, 1620)),
     # --- module covers (3:2) ------------------------------------------------------
-    ("m01-signals.png", "illo-m01-signals.jpg", (1536, 1024)),
-    ("m02-atmosphere.png", "illo-m02-atmosphere.jpg", (1536, 1024)),
-    ("m03-senses.png", "illo-m03-senses.jpg", (1536, 1024)),
-    ("m04-menu.png", "illo-m04-menu.jpg", (1536, 1024)),
-    ("m05-automation.png", "illo-m05-automation.jpg", (1536, 1024)),
-    ("m06-ai.png", "illo-m06-ai.jpg", (1536, 1024)),
-    ("m07-fnb.png", "illo-m07-fnb.jpg", (1536, 1024)),
-    ("m08-venture.png", "illo-m08-venture.jpg", (1536, 1024)),
-    ("m09-found.png", "illo-m09-found.jpg", (1536, 1024)),
-    ("m10-mockup.png", "illo-m10-mockup.jpg", (1536, 1024)),
+    ("m01-signals.png", "illo-m01-signals.jpg", (1264, 843)),
+    ("m02-atmosphere.png", "illo-m02-atmosphere.jpg", (1264, 843)),
+    ("m03-senses.png", "illo-m03-senses.jpg", (1264, 843)),
+    ("m04-menu.png", "illo-m04-menu.jpg", (1264, 843)),
+    ("m05-automation.png", "illo-m05-automation.jpg", (1264, 843)),
+    ("m06-ai.png", "illo-m06-ai.jpg", (1264, 843)),
+    ("m07-fnb.png", "illo-m07-fnb.jpg", (1264, 843)),
+    ("m08-venture.png", "illo-m08-venture.jpg", (1264, 843)),
+    ("m09-found.png", "illo-m09-found.jpg", (1264, 843)),
+    ("m10-mockup.png", "illo-m10-mockup.jpg", (1264, 843)),
     # --- case-card covers (3:2) ---------------------------------------------------
     ("case-benfiddich-kayama.png", "illo-case-benfiddich-kayama.jpg", (1264, 848)),
     ("case-black-swan-bobkov.png", "illo-case-black-swan-bobkov.jpg", (1264, 848)),
