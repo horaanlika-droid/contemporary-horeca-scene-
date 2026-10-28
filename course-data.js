@@ -190,6 +190,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'signals',
+          thumbnail: 'illo-lesson-signals.jpg',
           title: 'Look Beyond the Surface',
           duration: '25 min',
           intro: 'How awards shape the future of hospitality — and how to use them to your advantage.',
@@ -217,6 +218,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'atmosphere',
+          thumbnail: 'illo-lesson-atmosphere.jpg',
           title: 'Designing atmosphere & the sweet fairy tale',
           duration: '16 min',
           intro: 'Atmosphere is not decoration. It is the cumulative effect of hundreds of deliberate choices — light, sound, materials, tableware, movement and service — working together to create a world the guest can feel.',
@@ -245,6 +247,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'perception',
+          thumbnail: 'illo-lesson-perception.jpg',
           title: 'The senses at the table, vessel weight & flavour architecture',
           duration: '16 min',
           intro: 'Flavour is more than taste. The weight of antique silver, the clarity of crystal, candlelit shadows, aromatic herbs, texture and sound all influence how we experience food and drink.',
@@ -273,6 +276,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'point-of-view',
+          thumbnail: 'illo-lesson-point-of-view.jpg',
           title: 'Concept manifestos & deconstructing The World’s 50 Best menus',
           duration: '18 min',
           intro: 'In the world’s leading bars and restaurants, a menu is never just a list of products and prices. It is the concept made tangible — a physical object that communicates the identity of a venue, sets expectations and shapes the guest experience.',
@@ -291,6 +295,7 @@ window.COURSE = {
         },
         {
           id: 'concept-objects',
+          thumbnail: 'illo-lesson-concept-objects.jpg',
           title: 'Concept objects: the menu, the merchandise & the furniture',
           duration: '17 min',
           intro: 'A concept becomes real when it leaves the wall and enters the guest’s hands — as a menu, a coaster, a cup, a stool or a bar station designed specifically for the way the venue works.',
@@ -319,6 +324,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'automation',
+          thumbnail: 'illo-lesson-automation.jpg',
           title: 'Automation, ergonomics & the Horeca Code',
           duration: '15 min',
           intro: 'Technology and ergonomics should not simply make hospitality faster. They should free the team to be more present, attentive and human with the guest.',
@@ -347,6 +353,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'human-ai',
+          thumbnail: 'illo-lesson-human-ai.jpg',
           title: 'AI as a creative and operational tool',
           duration: '17 min',
           intro: 'Efficiency is not the same as authorship. AI can widen the creative field and organise complexity — the team still decides which idea deserves to exist.',
@@ -375,6 +382,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'new-formats',
+          thumbnail: 'illo-lesson-new-formats.jpg',
           title: 'The next table & Hiroyasu Kayama’s farm-to-glass apothecary',
           duration: '15 min',
           intro: 'When every bar buys the same bottles from the same distributors, differentiation begins with a relationship to ingredients, places, people and processes.',
@@ -403,6 +411,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'from-idea',
+          thumbnail: 'illo-lesson-from-idea.jpg',
           title: 'From idea to operating model & talent ecosystem',
           duration: '18 min',
           intro: 'A concept becomes a business only when it can be delivered consistently, by a team, within real financial constraints.',
@@ -431,6 +440,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'budget-builds',
+          thumbnail: 'illo-lesson-budget-builds.jpg',
           title: 'Soul before budget: Joi Espresso Bar & Denis Bobkov’s salvage worlds',
           duration: '16 min',
           intro: 'A venue does not need a large budget to feel alive. It needs a point of view, a coherent visual language and the patience to find objects that express it.',
