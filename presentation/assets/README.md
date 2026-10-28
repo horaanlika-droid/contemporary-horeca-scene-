@@ -81,3 +81,7 @@ The presentation set combines the author's project archive, curated editorial re
 Three author-archive photographs (`project-detail-nine-lives-bar.jpg`, `project-chicken-connection-kitchen.jpg`, `project-tam-flatlay.jpg`) are used as **illustrative** images inside third-party case files and are labelled “illustrative · author’s archive · not the venue” both under the image and on the credits page.
 
 Asset set reviewed on 30 September 2026; provenance policy revised on 4 October 2026. The HIM logo remains the property of its respective rights holder. Project photography remains the property of Egor Tarasenko.
+
+## Practitioner portrait illustrations
+
+Ten `illo-figure-*.jpg` portraits are AI-generated interpretations of the corresponding `figure-*.jpg` editorial photographs retained in this directory. They follow the hand-inked, pastel city-life direction supplied by the course author. The app labels each as an illustration and links its source photograph in image credits; they are not documentary photographs. Jiro’s existing illustrated portrait remains in place; Igor Zernov’s original editorial portrait remains a photograph until its illustration is completed.

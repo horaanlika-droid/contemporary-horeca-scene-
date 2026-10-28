@@ -277,9 +277,12 @@ test('generated illustrations are identified without relabelling documentary pho
   assert.ok(jiro >= 0, 'the Jiro portrait is displayed');
   assert.match(html.slice(jiro - 100, jiro + 500), /illo-photo/, 'the portrait uses illustration styling');
   assert.match(html.slice(jiro, jiro + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
-  const redzepi = html.indexOf('presentation/assets/figure-redzepi.jpg');
-  assert.ok(redzepi >= 0, 'the unchanged editorial portrait is displayed');
-  assert.match(html.slice(redzepi, redzepi + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
+  const redzepi = html.indexOf('presentation/assets/illo-figure-redzepi.jpg');
+  assert.ok(redzepi >= 0, 'the illustrated portrait is displayed');
+  assert.match(html.slice(redzepi, redzepi + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
+  const zernov = html.indexOf('presentation/assets/figure-zernov.jpg');
+  assert.ok(zernov >= 0, 'the unchanged editorial portrait is displayed');
+  assert.match(html.slice(zernov, zernov + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
 
   location.hash = '#/project/passie';
   await settle();
