@@ -81,9 +81,36 @@ function headingText(value) {
   return titleCase(bare);
 }
 
-function inlineToPlain(value) {
+/* The renderer reads a deliberately small Markdown subset: `##`/`###` headings,
+   **bold**, *italic*, `- ` bullets, `1. ` steps, `> ` pull-quote highlights and
+   *single italic lines* kept as notes or figure captions. Everything else stays
+   plain prose, so the published course remains readable in the admin console. */
+
+function stripTags(value) {
   return value
     .replace(/<\/?(?:text|ins)>/gi, '')
+    .replace(/<AsyncImage(?:Group)?\b[^>]*\/?>/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function inlineMarkdown(value) {
+  return stripTags(value)
+    .replace(/\*\*\s*(.+?)\s*\*\*/g, '**$1**')
+    .replace(/(^|[\s(])[*_]([^*_\n]+)[*_](?=[\s).,;:!?—]|$)/g, '$1*$2*');
+}
+
+/* Loose comparison used to drop the title and standfirst repeated by the page. */
+function comparable(value) {
+  return plainText(String(value))
+    .toLowerCase()
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function plainText(value) {
+  return stripTags(value)
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
@@ -96,56 +123,95 @@ function convertTable(rows) {
     .map(row => row.split('|').slice(1, -1).map(cell => cell.trim()))
     .filter(row => row.length);
   if (!cells.length) return [];
-  const header = cells[0];
   const body = cells.filter((row, index) => index > 0 && !row.every(cell => /^:?-{2,}:?$/.test(cell)));
-  return body.map(row => `${inlineToPlain(row[0])} — ${inlineToPlain(row[1] || row[2] || '')}`.replace(/\s—\s$/, ''));
+  return body.map(row => {
+    const head = plainText(row[0]);
+    const detail = plainText(row[1] || row[2] || '');
+    return detail ? `- **${head}** — ${detail}` : `- **${head}**`;
+  });
 }
 
-/* Turn one lesson's Markdown into the plain paragraphs the renderer expects. */
+/* Turn one lesson's Markdown into the structured blocks the renderer understands.
+   Consecutive bullets and consecutive highlights are kept together in one block. */
 function toParagraphs(lines) {
-  const paragraphs = [];
+  const blocks = [];
   let table = [];
+  let list = null;
   const flushTable = () => {
     if (!table.length) return;
-    paragraphs.push(...convertTable(table));
+    blocks.push(convertTable(table).join('\n'));
     table = [];
+  };
+  const flushList = () => { list = null; };
+  const appendListItem = (ordered, text) => {
+    if (!list || list.ordered !== ordered) {
+      list = { ordered, items: [] };
+      blocks.push(list);
+    }
+    list.items.push(`${ordered ? '1.' : '-'} ${text}`);
   };
   for (const rawLine of lines) {
     const line = rawLine.replace(/\u00a0/g, ' ').trimEnd();
     const trimmed = line.trim();
-    if (trimmed.startsWith('|')) { table.push(trimmed); continue; }
+    if (trimmed.startsWith('|')) { flushList(); table.push(trimmed); continue; }
     flushTable();
-    if (!trimmed) continue;
+    if (!trimmed) { flushList(); continue; }
     if (/^---+$/.test(trimmed)) continue;
     if (/^#\s+/.test(trimmed)) continue;
     if (/^\*\*(?:LESSON\s+\d+|MODULE\s+\d+|EDITORIAL)/i.test(trimmed)) continue;
     if (/^EDITORIAL LESSON\b/i.test(trimmed)) continue;
     if (/^\*(?:Editorial [Ll]esson|LESSON \d+)/.test(trimmed)) continue;
+    if (/^<AsyncImage(?:Group)?\b/i.test(trimmed)) continue;
     if (/^##\s+/.test(trimmed)) {
       const heading = headingText(trimmed.replace(/^##\s+/, ''));
       if (!heading) continue;
-      paragraphs.push(heading);
+      flushList();
+      blocks.push(`## ${heading}`);
       continue;
     }
     if (/^###\s+/.test(trimmed)) {
       const heading = headingText(trimmed.replace(/^###\s+/, ''));
       if (!heading) continue;
-      paragraphs.push(heading);
+      flushList();
+      blocks.push(`### ${heading}`);
+      continue;
+    }
+    if (/^<ins>.*<\/ins>$/i.test(trimmed)) {
+      const label = plainText(trimmed);
+      if (!label) continue;
+      flushList();
+      blocks.push(`### ${label}`);
+      continue;
+    }
+    if (/^<text>.*<\/text>$/i.test(trimmed)) {
+      const caption = plainText(trimmed);
+      if (!caption) continue;
+      flushList();
+      blocks.push(`*${caption}*`);
       continue;
     }
     if (/^\*\s*\*$/.test(trimmed) || /^-{1,3}\s*-{1,3}$/.test(trimmed)) continue;
     if (/^[*-]\s+/.test(trimmed)) {
-      paragraphs.push(`— ${inlineToPlain(trimmed.replace(/^[*-]\s+/, ''))}`);
+      appendListItem(false, inlineMarkdown(trimmed.replace(/^[*-]\s+/, '')));
       continue;
     }
     if (/^\d+\.\s+/.test(trimmed)) {
-      paragraphs.push(inlineToPlain(trimmed));
+      appendListItem(true, inlineMarkdown(trimmed.replace(/^\d+\.\s+/, '')));
       continue;
     }
-    paragraphs.push(inlineToPlain(trimmed));
+    flushList();
+    /* A paragraph written entirely in bold is the lesson's editorial highlight. */
+    if (/^\*\*[^*](?:[^*]|\*(?!\*))*\*\*$/.test(trimmed)) {
+      blocks.push(`> ${plainText(trimmed)}`);
+      continue;
+    }
+    blocks.push(inlineMarkdown(trimmed));
   }
   flushTable();
-  return paragraphs.filter(Boolean);
+  return blocks
+    .map(block => (typeof block === 'string' ? block : block.items.join('\n')))
+    .map(block => block.trim())
+    .filter(Boolean);
 }
 
 function answerOf(paragraphs, heading) {
@@ -166,7 +232,7 @@ const MODULES = [
   {
     id: 'future', number: '01', title: 'Hospitality Futures',
     description: 'Read the signals reshaping hospitality: the ranking and awards infrastructure of MICHELIN, The 50 Best, GreatList and The Pinnacle Guide, the entry mechanics behind each system, and the evidence 2027 juries will reward.',
-    image: 'studio-m01-signals.jpg',
+    image: 'illo-m01-signals.jpg',
     practitioners: ['Jiro Ono (Sukiyabashi Jiro, Tokyo)', 'Igor Zernov (El Copitas / #FollowTheRabbits)'],
     lessons: [{
       number: '01', id: 'signals', slug: 'look-beyond-the-surface',
@@ -187,7 +253,7 @@ const MODULES = [
   {
     id: 'experience', number: '02', title: 'Experience Design',
     description: 'Atmosphere as a designed state of mind: the sweet fairy tale, service choreography, objects with a history, the back of house, and the evening as a sequence of scenes.',
-    image: 'studio-m02-atmosphere.jpg',
+    image: 'illo-m02-atmosphere.jpg',
     practitioners: ['Simone Caporale (Sips, Barcelona)', 'Denis Bobkov (Black Swan / Bambule)', 'Alex Kratena (Tayēr + Elementary)'],
     lessons: [{
       number: '02', id: 'atmosphere', slug: 'designing-atmosphere',
@@ -209,7 +275,7 @@ const MODULES = [
   {
     id: 'neuro', number: '03', title: 'Neurogastronomy',
     description: 'Flavour as a multisensory construction: gastrophysics, the weight of the vessel, precision before perfection, aroma as performance and the temperature and timing of a signature serve.',
-    image: 'studio-m03-senses.jpg',
+    image: 'illo-m03-senses.jpg',
     practitioners: ['Artem Talalay (World Class Russia Winner)', 'Dave Arnold (Liquid Intelligence)', 'Hiroyasu Kayama (Bar Benfiddich)', 'Jiro Ono (Sukiyabashi Jiro)'],
     lessons: [{
       number: '03', id: 'perception', slug: 'senses-at-the-table',
@@ -231,7 +297,7 @@ const MODULES = [
   {
     id: 'concepts', number: '04', title: 'Restaurant & Bar Concepts & 50 Best Menu Breakdown',
     description: 'The menu as the concept made tangible: manifestos and neighbourhood archives from the world’s best bars, menu psychology, and the object family — menus, merchandise, furniture and stations.',
-    image: 'studio-m04-menu.jpg',
+    image: 'illo-m04-menu.jpg',
     practitioners: ['Rémy Savage (A Bar with Shapes for a Name)', 'Igor Zernov (El Copitas)', 'Boris Zarkov (White Rabbit Family)'],
     lessons: [
       {
@@ -271,7 +337,7 @@ const MODULES = [
   {
     id: 'technology', number: '05', title: 'Technology & Automation',
     description: 'The invisible system behind the guest experience: The Horeca Code, station ergonomics, batching, inventory, cost control and the balance between the machine and the human.',
-    image: 'studio-m05-automation.jpg',
+    image: 'illo-m05-automation.jpg',
     practitioners: ['Bek Narzi (City Space Bar / The Horeca Code)'],
     lessons: [{
       number: '06', id: 'automation', slug: 'automation-ergonomics',
@@ -293,7 +359,7 @@ const MODULES = [
   {
     id: 'ai', number: '06', title: 'AI in Hospitality',
     description: 'AI as a creative catalyst and an operational tool: the World Class AI brief, the R&D matrix, and an ethics charter for privacy, verification, ownership and human oversight.',
-    image: 'studio-m06-ai.jpg',
+    image: 'illo-m06-ai.jpg',
     practitioners: ['Simone Caporale (Sips)', 'Rémy Savage (A Bar with Shapes for a Name)', 'Felice Capasso (Sesto Senso Academy)'],
     lessons: [{
       number: '07', id: 'human-ai', slug: 'ai-creative-operational',
@@ -315,7 +381,7 @@ const MODULES = [
   {
     id: 'fnb', number: '07', title: 'Food & Beverage Futures',
     description: 'Ingredient-led hospitality: Kayama’s farm-to-glass apothecary, the zero-menu consultation, Tuju, Noma’s research and accountability, and experimentation that can be repeated.',
-    image: 'studio-m07-fnb.jpg',
+    image: 'illo-m07-fnb.jpg',
     practitioners: ['Hiroyasu Kayama (Bar Benfiddich)', 'René Redzepi (Noma)', 'Dave Arnold (Liquid Intelligence)'],
     lessons: [{
       number: '08', id: 'new-formats', slug: 'next-table-apothecary',
@@ -337,7 +403,7 @@ const MODULES = [
   {
     id: 'entrepreneurship', number: '08', title: 'Entrepreneurship',
     description: 'From idea to operating model: unit economics, ecosystems built by Narzi, Zernov and Zarkov, a school inside the business, the 90-day launch and the metrics that connect culture to commerce.',
-    image: 'studio-m08-venture.jpg',
+    image: 'illo-m08-venture.jpg',
     practitioners: ['Bek Narzi (City Space Bar)', 'Igor Zernov (El Copitas)', 'Boris Zarkov (White Rabbit Family)'],
     lessons: [{
       number: '09', id: 'from-idea', slug: 'operating-model',
@@ -359,7 +425,7 @@ const MODULES = [
   {
     id: 'budget', number: '09', title: 'Budget Realisation, Scenography & Found-Object Mockup',
     description: 'Soul before budget: Joi Espresso Bar and Denis Bobkov’s salvage worlds, the real cost of found objects, and theatrical techniques that turn a tabletop into a venue.',
-    image: 'studio-m09-found.jpg',
+    image: 'illo-m09-found.jpg',
     practitioners: ['Egor Tarasenko (Joi Espresso Bar)', 'Denis Bobkov (Black Swan / Bambule)'],
     lessons: [
       {
@@ -399,7 +465,7 @@ const MODULES = [
   {
     id: 'final', number: '10', title: 'Final Challenge',
     description: 'Open & Operate: bring the concept, menu, guest journey, operating model, sourcing plan and live mockup together into one credible hospitality proposition.',
-    image: 'studio-m10-mockup.jpg',
+    image: 'illo-m10-mockup.jpg',
     practitioners: ['Jiro Ono', 'René Redzepi', 'Hiroyasu Kayama', 'Egor Tarasenko'],
     lessons: [{
       number: '12', source: '13', id: 'final-brief', slug: 'open-and-operate',
@@ -439,19 +505,23 @@ function build() {
       if (!source) throw new Error(`lessons.txt has no lesson ${meta.source || meta.number} (${meta.title})`);
       seen.add(String(meta.source || meta.number).padStart(2, '0'));
       const all = toParagraphs(source.lines);
+      const same = (a, b) => comparable(a) === comparable(b);
       /* Drop the title, the duration and the intro from the paragraph flow. */
-      while (all.length && all[0].toLowerCase() === meta.title.toLowerCase()) all.shift();
-      const introIndex = all.findIndex(paragraph => paragraph.toLowerCase() === meta.intro.toLowerCase());
+      while (all.length && same(all[0], meta.title)) all.shift();
+      const introIndex = all.findIndex(paragraph => same(paragraph, meta.intro));
       const bodyParagraphs = all.filter((paragraph, index) => {
         if (index === introIndex) return false;
         if (/^LESSON \d+ · \d+ MIN$/i.test(paragraph)) return false;
         if (/^EDITORIAL LESSON · CASE STUDIES · KEY IDEAS$/i.test(paragraph)) return false;
         if (/^MODULE \d+ ·/i.test(paragraph)) return false;
-        if (/^LOOK BEYOND THE SURFACE\.?$/i.test(paragraph) && index < 4) return false;
+        /* The page prints its own “The idea — look beyond the surface” opener. */
+        if (index < 3 && /^#+\s*(?:THE IDEA\b.*|LOOK BEYOND THE SURFACE\.?)$/i.test(paragraph)) return false;
         return true;
       });
       /* The source repeats the lesson title as the first heading of lesson 01. */
-      while (bodyParagraphs.length && bodyParagraphs[0] === meta.title) bodyParagraphs.shift();
+      while (bodyParagraphs.length && same(bodyParagraphs[0], meta.title)) bodyParagraphs.shift();
+      /* The standfirst also opens the reading in the source; the page prints it itself. */
+      while (bodyParagraphs.length && same(bodyParagraphs[0], meta.intro)) bodyParagraphs.shift();
       return {
         id: meta.id,
         title: meta.title,

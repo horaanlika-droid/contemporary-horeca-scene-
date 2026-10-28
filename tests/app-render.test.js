@@ -177,6 +177,28 @@ test('the module start action opens the lesson it points at, including lessons w
   assert.doesNotMatch(app.innerHTML, /src="presentation\/assets\/"/, 'media never points at an empty asset path');
 });
 
+test('a lesson reads as structured editorial copy, not one wall of text', async () => {
+  const { app, location, settle } = bootCourse();
+  await settle();
+
+  location.hash = '#/lesson/future/signals';
+  await settle();
+  const html = app.innerHTML;
+  const body = html.slice(html.indexOf('class="lesson-prose"'), html.indexOf('class="case-inline"'));
+
+  assert.match(html, /class="lesson-reading"/, 'the reading has its own column');
+  assert.match(body, /<h2>1\. Learn to read the industry<\/h2>/, 'section headings survive the build');
+  assert.match(body, /<em>shokunin<\/em>/, 'authored italics reach the page');
+  assert.match(body, /<strong>recognition follows a clear point of view/, 'inline emphasis reaches the page');
+  assert.match(body, /class="lesson-highlight"/, 'fully emphasised statements become highlights');
+  assert.match(body, /<ul><li>/, 'bullet lists render as lists');
+  assert.match(body, /class="lesson-note"/, 'single italic lines read as notes');
+
+  /* Raw Markdown, authoring tags and image placeholders never leak to students. */
+  assert.doesNotMatch(body, /\*\*|(^|>)#{2,}\s/m);
+  assert.doesNotMatch(body, /AsyncImage|<ins>|<text>|&lt;AsyncImage/);
+});
+
 test('a learning unit opens even when the browser never acts on the link itself', async () => {
   const { sandbox, app, location, settle, clickRoute, runTimers } = bootCourse();
   await settle();

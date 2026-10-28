@@ -34,8 +34,69 @@ window.bootCourse = () => {
   let activeChatStudentId = '';
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  /* Lesson bodies may use blank lines to separate paragraphs; each part is escaped independently. */
-  const prose = value => String(value ?? '').split(/\n{2,}/).map(part => `<p>${esc(part)}</p>`).join('');
+  /* Lesson copy is authored in a deliberately small Markdown subset: `##`/`###`
+     headings, **bold** and *italic*, `- ` bullets, `1. ` steps, `> ` highlighted
+     pull-quotes and single *italic lines* used as notes or figure captions.
+     Everything is escaped first, then the surviving markers become markup, so an
+     admin edit typed as plain prose still renders as clean paragraphs. */
+  const inlineText = value => esc(value)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[\s(–—])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  const prose = value => {
+    const text = String(value ?? '').replace(/\r\n?/g, '\n').trim();
+    if (!text) return '';
+    const out = [];
+    let para = [];
+    let list = null;
+    let quote = [];
+    const flushPara = () => { if (para.length) { out.push(`<p>${inlineText(para.join(' '))}</p>`); para = []; } };
+    const flushList = () => {
+      if (!list) return;
+      out.push(`<${list.tag}>${list.items.map(item => `<li>${inlineText(item)}</li>`).join('')}</${list.tag}>`);
+      list = null;
+    };
+    const flushQuote = () => {
+      if (!quote.length) return;
+      out.push(`<aside class="lesson-highlight">${quote.map(line => `<p>${inlineText(line)}</p>`).join('')}</aside>`);
+      quote = [];
+    };
+    const flushAll = () => { flushPara(); flushList(); flushQuote(); };
+    for (const rawLine of text.split('\n')) {
+      const line = rawLine.trim();
+      if (!line) { flushAll(); continue; }
+      if (/^(?:-{3,}|\*\s*\*|—+)$/.test(line)) { flushAll(); continue; }
+      const heading = line.match(/^(#{2,4})\s+(.*)$/);
+      if (heading) {
+        flushAll();
+        const level = heading[1].length;
+        out.push(`<h${level}>${inlineText(heading[2])}</h${level}>`);
+        continue;
+      }
+      if (/^>\s?/.test(line)) { flushPara(); flushList(); quote.push(line.replace(/^>\s?/, '')); continue; }
+      flushQuote();
+      const bullet = line.match(/^[-*]\s+(.*)$/);
+      if (bullet) {
+        flushPara();
+        if (!list || list.tag !== 'ul') { flushList(); list = { tag: 'ul', items: [] }; }
+        list.items.push(bullet[1]);
+        continue;
+      }
+      const step = line.match(/^\d+[.)]\s+(.*)$/);
+      if (step) {
+        flushPara();
+        if (!list || list.tag !== 'ol') { flushList(); list = { tag: 'ol', items: [] }; }
+        list.items.push(step[1]);
+        continue;
+      }
+      flushList();
+      const note = line.match(/^\*([^*]+)\*$/);
+      if (note) { flushPara(); out.push(`<p class="lesson-note">${inlineText(note[0])}</p>`); continue; }
+      para.push(line);
+    }
+    flushAll();
+    return out.join('');
+  };
   const user = () => { try { return JSON.parse(sessionStorage.getItem('chs-user')); } catch { return null; } };
   const key = () => `${user()?.email || 'guest'}:${C.id}:${C.edition}`;
   const progressFor = () => state.progress[key()] || [];
@@ -515,15 +576,15 @@ window.bootCourse = () => {
         </div>
       </section>
       <div class="content-columns">
-        <section>
+        <section class="lesson-reading">
           <span class="eyebrow">THE IDEA</span>
           <h2>Look beyond the surface.</h2>
-          ${prose(l.body)}
+          <div class="lesson-prose">${prose(l.body)}</div>
           <div class="case-inline"><span class="meta">CASE STUDY · ${esc(l.case)}</span><h3>Why this case matters</h3><p>Consider the relationship between a clear point of view and the details that make it tangible for guests and teams.</p><a class="button text" href="#/cases">EXPLORE CASE STUDIES →</a></div>
         </section>
-        <aside>
+        <aside class="lesson-aside">
           <span class="eyebrow">KEY IDEAS</span>
-          <ul class="key-ideas">${l.ideas.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>
+          <ul class="key-ideas">${l.ideas.map(x => `<li><span>${inlineText(x)}</span></li>`).join('')}</ul>
           <div class="case-inline"><span class="meta">READ MORE</span><p>Use the course case files and references as a starting point for your own investigation. Bring a specific observation to your next discussion.</p></div>
         </aside>
       </div>

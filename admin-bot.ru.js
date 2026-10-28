@@ -247,6 +247,16 @@ function createAdminConsole(deps) {
     };
   }
 
+  /* Предпросмотр урока без Markdown-разметки: ## разделы, **жирный**, списки. */
+  const bodyPreview = value => String(value ?? '')
+    .replace(/^#{2,4}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/^\s*[-*]\s+/gm, '• ')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+
   function lessonScreen(id) {
     const D = deps.courseData();
     const module = D?.modules.find(x => x.lessons.some(l => l.id === id));
@@ -256,7 +266,8 @@ function createAdminConsole(deps) {
     rows.push([btn('↩️ Сбросить правки урока', `R:lesson:${id}`)]);
     rows.push([btn(`◀️ Модуль ${module.number}`, `m:${module.id}`), btn('🧱 Блоки', 'B')]);
     const body = currentText('lesson', id, 'body') ?? lesson.body;
-    return { text: `📖 <b>${esc(lesson.title)}</b>\nМодуль ${module.number} · ${esc(module.title)}\n\n${esc(trunc(body, 320))}`, keyboard: kb(rows) };
+    const hint = '✍️ Разметка: <code>## раздел</code> · <code>### подзаголовок</code> · <code>**жирный**</code> · <code>*курсив*</code> · <code>- пункт</code> · <code>&gt; хайлайт</code>';
+    return { text: `📖 <b>${esc(lesson.title)}</b>\nМодуль ${module.number} · ${esc(module.title)}\n\n${esc(trunc(bodyPreview(body), 320))}\n\n${hint}`, keyboard: kb(rows) };
   }
 
   function siteScreen(targetId) {
