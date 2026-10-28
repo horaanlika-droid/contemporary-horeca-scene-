@@ -10,7 +10,7 @@ These assets support the English-language Contemporary Horeca Scene course deck.
 
 ## Polychrome cartoon illustrations
 
-The `illo-*.jpg` files are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. They illustrate concepts rather than document specific venues, and are labelled *illustration · original course graphic · AI-generated* in the app. The ten case-card covers were redrawn from their own earlier case illustrations; the separate case-file photographs remain unchanged.
+The `illo-*.jpg` files and the redrawn `figure-*.jpg` portraits are AI-generated course illustrations art-directed to resemble loose hand-inked cafe doodles: slightly irregular black outlines, flat gouache-like fills on white and one small signal-red `#e42313` accent. The `illo-*` series illustrates concepts rather than documenting specific venues, and is labelled *illustration · original course graphic · AI-generated* in the app; the portraits are labelled *illustration · AI-generated from editorial photo*. The ten case-card covers were redrawn from their own earlier case illustrations; the separate case-file photographs remain unchanged. Ten of the eleven redrawn portraits keep their published dimensions, and each source photograph is preserved under `originals/`.
 
 | Surface | Size | Files |
 | --- | --- | --- |
@@ -18,6 +18,7 @@ The `illo-*.jpg` files are AI-generated course illustrations art-directed to res
 | Landing hero (vertical) | 1080 × 1620 | `illo-hero-scene.jpg` |
 | Module covers (3:2) | 1264 × 843 | `illo-m01-signals.jpg` … `illo-m10-mockup.jpg` |
 | Case-card covers (3:2) | 1264 × 848 | `illo-case-*.jpg` |
+| Industry-figure portraits | each portrait keeps its published size | `figure-redzepi.jpg`, `figure-caporale.jpg`, `figure-kratena.jpg`, `figure-talalay.jpg`, `figure-dave-arnold.jpg`, `figure-savage.jpg`, `figure-narzi.jpg`, `figure-kayama.jpg`, `figure-zernov.jpg`, `figure-zarkov.jpg` (plus the earlier `figure-jiro.jpg`) |
 
 The committed JPEGs are the current published assets; source PNGs and generations in `tmp/` are not retained in the repository. `presentation/build/build_illustrations.py` is an optional layout/export tool, not an image generator. It reads user-supplied PNG masters and **overwrites** the corresponding JPEGs, so use only masters that match the current direction and review the result before publishing. The scene references and art direction are recorded in `presentation/build/illustration-prompts.md`.
 
@@ -71,8 +72,9 @@ The presentation set combines the author's project archive, curated editorial re
 | `project-*`, `author-*` except `project-passie-room.jpg` | © Egor Tarasenko — author’s personal archive (derived from the camera files in the repository root) | Project and course photographs |
 | `project-passie-room.jpg` | AI-generated illustration based on `passiecakes_7625.jpeg` © Egor Tarasenko | Labelled as an illustration in the project gallery and image credits |
 | `illo-*` | AI-generated course graphics based on existing course illustrations | Labelled as illustrations, never as venue photographs |
-| `case-*`, `figure-*` except `figure-jiro.jpg` | Editorial reference photographs of industry figures and venues, © the respective photographers and venues, curated from public press materials | Person cards and case files only; each rendered image carries a micro-credit and appears on the in-app `#/credits` page with a takedown contact |
-| `figure-jiro.jpg` | AI-generated illustration based on the editorial reference portrait preserved at `originals/figure-jiro.jpg`; © respective photographer | Labelled as an illustration in the person card and image credits |
+| `originals/figure-*.jpg` | Source reference photographs replaced by the drawn portraits, kept as provenance evidence for the credits page | Linked from the image-sources archive, never rendered as portraits |
+| `case-*`, `figure-bobkov.jpg` | Editorial reference photographs of industry figures and venues, © the respective photographers and venues, curated from public press materials | Person cards and case files only; each rendered image carries a micro-credit and appears on the in-app `#/credits` page with a takedown contact |
+| `figure-jiro.jpg`, `figure-redzepi.jpg`, `figure-caporale.jpg`, `figure-kratena.jpg`, `figure-talalay.jpg`, `figure-dave-arnold.jpg`, `figure-savage.jpg`, `figure-narzi.jpg`, `figure-kayama.jpg`, `figure-zernov.jpg`, `figure-zarkov.jpg` | AI-generated illustrations based on the editorial reference portraits preserved under `originals/`; © respective photographers | Labelled as illustrations in the person cards, lightbox captions and image credits, with the source photograph linked |
 | `him-logo-white.png` | © Swiss Education Group / HIM Business School | Identification only |
 | `web-insider-hall.jpg`, `web-insider-station.jpg`, `web-insider-lab.webp` | Insider Bar Lab (Sretenka 22/1, Moscow) — © Insider Bar / @insider.bar.lab; publicly available venue photographs via the venue’s TripAdvisor page and the Cocktail Pilgrim feature | Preserved editorial references in the asset archive; each source and takedown contact are recorded in `course-data.js`. They are not used as access-page or module-cover images. |
 | `project-joi-bar-ai.jpg`, `project-detail-nine-lives-bar-ai.jpg` | Subtle AI exposure/shadow-detail recovery from the author’s own originals (`project-joi-bar.jpg`, `project-detail-nine-lives-bar.jpg`); composition, subjects and text unchanged | Rendered in place of the under-exposed originals; disclosed in-app as “AI-processed” under the image and on `#/credits` |

@@ -264,7 +264,7 @@ test('a screen that throws still navigates: the learner sees a display error, no
 });
 
 test('generated illustrations are identified without relabelling documentary photos', async () => {
-  const { app, location, settle } = bootCourse();
+  const { sandbox, app, location, settle } = bootCourse();
   await settle();
 
   assert.match(app.innerHTML, /AI-GENERATED ILLUSTRATION/, 'the landing hero is not presented as a photograph');
@@ -278,8 +278,20 @@ test('generated illustrations are identified without relabelling documentary pho
   assert.match(html.slice(jiro - 100, jiro + 500), /illo-photo/, 'the portrait uses illustration styling');
   assert.match(html.slice(jiro, jiro + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
   const redzepi = html.indexOf('presentation/assets/figure-redzepi.jpg');
-  assert.ok(redzepi >= 0, 'the unchanged editorial portrait is displayed');
-  assert.match(html.slice(redzepi, redzepi + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
+  assert.ok(redzepi >= 0, 'the redrawn Redzepi portrait is displayed');
+  assert.match(html.slice(redzepi - 100, redzepi + 500), /illo-photo/, 'every redrawn portrait uses illustration styling');
+  assert.match(html.slice(redzepi, redzepi + 500), /ILLUSTRATION · AI-GENERATED FROM EDITORIAL PHOTO/);
+
+  // a portrait that has not been redrawn yet keeps its documentary photograph credit
+  const credits = sandbox.window.COURSE.imageCredits;
+  const generated = file => Boolean((credits.files || []).find(item => item.file === file)?.generated);
+  const photograph = sandbox.window.COURSE.figures.find(item => /^figure-/.test(item.image || '')
+    && !generated(item.image)
+    && html.includes(`presentation/assets/${item.image}`));
+  assert.ok(photograph, 'at least one editorial portrait is still a photograph');
+  const photoAt = html.indexOf(`presentation/assets/${photograph.image}`);
+  assert.match(html.slice(photoAt, photoAt + 500), /PHOTO · EDITORIAL REFERENCE/, 'real photographs retain their credit');
+  assert.doesNotMatch(html.slice(photoAt - 100, photoAt + 500), /illo-photo/, 'photographs stay cropped like camera frames');
 
   location.hash = '#/project/passie';
   await settle();
@@ -294,6 +306,7 @@ test('generated illustrations are identified without relabelling documentary pho
   location.hash = '#/credits';
   await settle();
   assert.match(app.innerHTML, /href="\/presentation\/assets\/originals\/figure-jiro\.jpg"/, 'original reference portrait is linked');
+  assert.match(app.innerHTML, /href="\/presentation\/assets\/originals\/figure-redzepi\.jpg"/, 'the redrawn Redzepi portrait links its source photograph');
   assert.match(app.innerHTML, /href="\/passiecakes_7625\.jpeg"/, 'original project photograph is linked');
   assert.doesNotMatch(app.innerHTML, /href="Generated from existing course artwork/, 'descriptive provenance is not a broken hyperlink');
 });
