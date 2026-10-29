@@ -281,7 +281,7 @@
             <p><b>Contemporary Horeca Scene</b> ${escG(g.infoLead)}</p>
             <div class="gate-facts">
               <div class="gate-fact"><strong>10</strong><span>Modules</span></div>
-              <div class="gate-fact"><strong>13</strong><span>Learning units</span></div>
+              <div class="gate-fact"><strong>12</strong><span>Learning units</span></div>
               <div class="gate-fact"><strong>01</strong><span>Personal account</span></div>
             </div>
             <p class="gate-note-line">Course created by <b>Egor Tarasenko</b>. <button class="gate-author-link" type="button" data-author-open>About the author →</button></p>

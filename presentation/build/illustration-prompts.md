@@ -90,6 +90,10 @@ The twelve lesson headers are one sketchbook: each card is a working page from a
 the twelve pages gather into one board at the end. Hold every rule below, or the page will not sit with the
 others.
 
+This set is the one deliberate exception to the shared direction at the top of this file: it is drawn in
+pencil as a working page, not in the poster's gouache hand. Everything else — the white page, the single red
+mark, the ban on lettering — still applies.
+
 **One page, one cloud.** No frame, no sheet, no plan, no room, no left and right halves, no ground line, no
 horizon. The page carries a loose cloud of the objects the lesson is about, at different sizes and slightly
 different angles, none aligned to a grid, none overlapping, with generous air between them.
@@ -123,27 +127,13 @@ drawing only — the app multiplies the artwork into the page, so a tinted paper
 
 Page 12 is drawn last and is the only page that carries the whole course: it is the board the pitch is read from, drawn as one constellation rather than as sheets pinned side by side.
 
-## Lesson headers
+## Lesson headers — the superseded gouache set (until 29 October 2026)
 
-Every lesson file opens with its own header image instead of borrowing the module cover, so two lessons in
-one module no longer show the same picture. Published at 1264 × 843 in the same art direction as the module
-covers: thin wobbly ink contour, flat gouache fills, white paper, one signal-red accent, and no lettering,
-numerals, logos or interface copy — screens, plans, tags and panels stay blank or ruled only.
-
-| Asset | Lesson | Scene | Red accent |
-| --- | --- | --- | --- |
-| `illo-lesson-signals.jpg` | 01 · Look Beyond the Surface | A guest holds a slim phone at a glass-front cafe; three blank overlay panels draw the same room as a plan with square nodes; one thin cyan scan line down the facade | a strip on the counter inside |
-| `illo-lesson-atmosphere.jpg` | 02 · Designing atmosphere | A small dining room, the back wall covered by a projected pattern of large flat shapes from a ceiling projector; a guest at a round table, a server with a tray, a suspended spotlight rail | the projector lens |
-| `illo-lesson-perception.jpg` | 03 · The senses at the table | A guest tasting from a futuristic vessel; three shapes on a sensor base with a cyan ring; a camera on a tripod and a blank slab; an abstract rising bar panel without numbers | one shape on the plate |
-| `illo-lesson-point-of-view.jpg` | 04 · Concept manifestos | A person presenting at a blank two-rule screen with a slim remote; a cut-card bar model, blank cards and a blank tablet on the bench; one listener in a chair | a line on the screen frame |
-| `illo-lesson-concept-objects.jpg` | 05 · Concept objects | Five designed objects in a line-up on a bench — stone menu slab, steel cube, folding stool, bar blade, folded sock — with hairline callout circles | one rivet on the blade |
-| `illo-lesson-automation.jpg` | 06 · Automation, ergonomics & the Horeca Code | **Futuristic ergonomics**: a translucent study figure with joint circles beside a wafer-thin cantilevered console, glass end panel, recessed well, hanging bottles, pump tower, unnumbered dimension lines and a reach arc | the pump button |
-| `illo-lesson-human-ai.jpg` | 07 · AI as a creative tool | A designer with a blank tablet and a three-segment robotic arm placing a component on a cut-card model; a floating abstract grid panel | a light on the arm base |
-| `illo-lesson-new-formats.jpg` | 08 · The next table | A counter with a wall-mounted vertical growing rack under a grow-light, trays of shoots, and a bartender garnishing a highball | one berry in the tray |
-| `illo-lesson-from-idea.jpg` | 09 · From idea to operating model | Three people over a wide table with a cut-card bar model, rolled plan, ring binder, tray of cups and a plant; three blank panels above | a band on the binder |
-| `illo-lesson-budget-builds.jpg` | 10 · Soul before budget | A compact espresso bar in a vaulted brick arcade: machine, red grinder, four stacks of blank cups, crate seats, festoon bulbs, a blank taped sign panel | the grinder body |
-| `illo-lesson-scenography.jpg` | 11 · Theatrical techniques & the live mockup | A found-object set on a cloth-covered table — crate riser, antique plate, candlestick, glass, napkin, bell, dried flower — with a blank backdrop and a hand framing it on a blank tablet | the candle flame |
-| `illo-lesson-final-brief.jpg` | 12 · Design the concept of tomorrow | A finished cut-card bar model on a round plinth under one flat spotlight, plans, folder, tray of cups, blank tablet; two people studying it, one with a blank clipboard | the tiny pendant lamp |
+This was the first lesson-header pass: twelve poster covers in the module-cover hand, each one a scene with a
+guest, a room and a single red accent. All twelve were redrawn as sketch pages on 29 October 2026 and the
+section above is the current brief — the file names are unchanged, so the scenes listed here no longer
+describe what is on disk. It is kept for one reason only: the two tests in the project README (obvious
+subject, one hand across the series) were written against this set and still apply to whatever replaces it.
 
 ## Project files — no drawn twins
 

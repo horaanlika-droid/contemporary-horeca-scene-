@@ -81,7 +81,7 @@ Ten modules / twelve learning units, authored in `lessons.txt` and published fro
 | **09** | **Budget Realisation, Scenography & Found-Object Mockup** | **10–11** | **Found objects and flea markets, theatrical techniques, the live mockup** |
 | 10 | Final Challenge | 12 | “Open & Operate”, defended together with the mockup |
 
-The lesson text in `course-data.js` is generated from the authored source rather than typed twice:
+The lesson text in `course-data.js` is generated from the authored source rather than typed twice. The tool also emits each lesson's header (`illo-lesson-<lesson-id>.jpg`) and the curated challenge text, so a rebuild keeps the published course byte-identical — the check when the file is touched by hand is `node tools/build-course-lessons.js` followed by `git diff --quiet course-data.js`:
 
 ```bash
 node tools/build-course-lessons.js --dry   # preview the parsed lessons
@@ -103,8 +103,6 @@ Lesson bodies keep a deliberately small Markdown subset so students read a struc
 | Table rows | Definition-style bullet list |
 
 The page also prints the lesson standfirst in serif italic and keeps the key ideas beside the reading. Image placeholders (`<AsyncImage…>`) are dropped from the published body. Administrators can still override `body` in the Telegram console with plain prose; unmarked text renders as ordinary paragraphs.
-
-### Module 09 — Budget Realisation & Scenography
 
 ### Module 09 — Budget Realisation & Scenography
 
@@ -164,7 +162,7 @@ The course brings together hospitality futures, experience design, neurogastrono
 
 ## Proposal deck
 
-`presentation/dist/Contemporary-Horeca-Scene-Course-Pitch-EN.pdf` is the English-only proposal deck. Its sources use the SEG palette, keep the author off the cover, and include Module 6 and the mockup in the course map, week plan, assessment and final project slides. Rebuild the deck after changing its sources:
+`presentation/dist/Contemporary-Horeca-Scene-Course-Pitch-EN.pdf` is the English-only proposal deck. It describes the elective as it was proposed — twelve weeks, six modules — and is deliberately not a description of the shipped app, which publishes ten modules and twelve learning units; the deck is the case for the elective, the app is the elective. Its sources use the SEG palette, keep the author off the cover, and include Module 6 and the mockup in the course map, week plan, assessment and final project slides. Rebuild the deck after changing its sources:
 
 ```bash
 python3 -m venv .venv
@@ -225,7 +223,7 @@ series is drift, not an improvement — and it is drift even when the individual
 re-render them one at a time; leave them as they are and make a single unifying pass over the whole
 series when the batch is closed, so the correction is the same everywhere.
 
-**Lesson headers — October 2026.** Each of the twelve lessons now opens with its own header image (`illo-lesson-<lesson-id>.jpg`, 1264 × 843); the last two, `illo-lesson-scenography.jpg` and `illo-lesson-final-brief.jpg`, were drawn on 29 October 2026 and the pinned count in `tests/english-content.test.js` moved from fifty to fifty-two with them instead of falling back to the module cover, so the two lessons inside Module 04 and Module 09 no longer share one picture. The headers follow the same direction as the module covers: present-day subjects and futuristic ergonomics (`illo-lesson-automation.jpg` pairs a translucent study figure with a wafer-thin cantilevered console and unnumbered dimension lines), one thin ink contour, flat gouache fills, white paper, one signal-red accent, and no lettering, numerals, logos or interface copy — screens, plans, tags and panels stay blank or ruled only.
+**Lesson headers — redrawn as sketch pages, 29 October 2026.** Each of the twelve lessons opens with its own header image (`illo-lesson-<lesson-id>.jpg`, 1264 × 843), and the whole set was redrawn in a different hand from the module covers: one loose cloud of the lesson's objects on a pure white page, dense pencil, one small signal-red mark, no lettering. The set is described in *The lesson sketch pages* below and the two tests above still govern it — obvious subject, one hand across the twelve. The pinned count in `tests/english-content.test.js` is fifty-two, and a lesson that loses its own `thumbnail` key now fails the suite instead of quietly borrowing the module cover.
 
 **Revised subjects — October 2026.** The ten module covers keep exactly this drawing style but their subjects are brought up to date: the warm book-illustration scenes (striped awning, chalkboards, craft clutter, a friendly robot with an antenna) were replaced with present-day equivalents — glass-front cafe pavilions, blank touchscreen kiosks, floating blank panels, sensor bases, a wheeled service robot with a blank visor, a farm-to-glass testing bench and a designer's bench with a cut-card model. **Ergonomics is drawn as futuristic**, not vintage: `illo-m05-automation.jpg` puts a translucent anatomical study doll with joint rings and unnumbered dimension lines beside a wafer-thin cantilevered console with a glass end panel, a recessed well, hanging bottles and a slim three-joint service arm. Screens, notes, tags, rulers and panels stay blank or carry ruled lines only; no frame in this series contains lettering, numerals, logos or interface copy. The previous ten covers are kept at `presentation/assets/originals/illo-m/` as the reference for the series.
 
@@ -247,9 +245,9 @@ Every published illustration follows the art direction above; the asset index an
 
 ### The lesson sketch pages — October 2026
 
-The twelve lesson headers are being rebuilt as **sketchbook pages**. Each card is a working page from a
-designer's notebook, not a finished poster, and the twelve pages gather into one board at the end of the
-course.
+The twelve lesson headers are **sketchbook pages**. Each card is a working page from a designer's
+notebook, not a finished poster, and the twelve pages gather into one board at the end of the course. The
+set was drawn on 29 October 2026; it replaced an ink-and-gouache header set that followed the module covers.
 
 - **One page, one lesson.** A loose cloud of the objects that lesson is actually about — the room
   fragment, the tools, the paperwork — scattered across the page at different sizes and angles, as if
@@ -365,11 +363,11 @@ the page.
 
 **E. Bookkeeping left by the last two batches**
 
-1. `open` — Ten of the twelve lesson headers are published; `scenography` and `final-brief` still fall back to the module cover. Drawing them means two new `illo-lesson-*` files, so the pinned count in `tests/english-content.test.js` (fifty `illo-*` files) and the progress line above have to move with them.
+1. `done` — All twelve lesson headers are published and wired into their own lessons, so none falls back to the module cover; the pinned count is fifty-two and the test now requires every lesson to name its own header. The set was redrawn as sketch pages on 29 October 2026, which supersedes the gouache direction recorded for these files in §D and in the measurements of `illustration-audit.md` §10.6.
 2. `done` — the progress line counted forty files while ten lesson headers were already published; it now reads fifty and names the lesson headers.
 3. `done` — `presentation/build/illustration-prompts.md` now describes what is actually on the three redrawn cards (Shapes, Sensory, Dave Arnold) and carries a redraw-pass note with the four recognition anchors.
 
-**No further batch is planned.** The series ends at forty published illustrations, and a new drawing is only commissioned for a genuinely new asset. The `project-*` archive stays photographic, the three `web-insider-*` files stay credited documentary photographs of another venue, the twelve `studio-*` plates stay as studio photography, and the two logos stay unchanged. Anything added later keeps the rule below: a generated file is disclosed per exact filename and never stands in for evidence of a real venue.
+**No further batch is planned.** The series ends at fifty-two published illustrations, and a new drawing is only commissioned for a genuinely new asset. The `project-*` archive stays photographic, the three `web-insider-*` files stay credited documentary photographs of another venue, the twelve `studio-*` plates stay as studio photography, and the two logos stay unchanged. Anything added later keeps the rule below: a generated file is disclosed per exact filename and never stands in for evidence of a real venue.
 
 Generated redraws must not be represented as documentary photographs. Before replacing a photograph, preserve the original and its credit wherever it is needed as evidence; add an exact-file `imageCredits.files` entry with `generated: true`, an illustration label and a link to the original. The previously replaced Jiro reference portrait is retained at `presentation/assets/originals/figure-jiro.jpg`; the Passie Cakes source remains `passiecakes_7625.jpeg`. The app identifies those two illustrations and the `illo-*` series as AI-generated, including in gallery/lightbox captions. Rights remain with the respective photographers and venues. If a source is unavailable or cannot be responsibly redrawn, leave it unchanged and record its exact filename and reason here rather than fabricating a replacement. Verify the files, dimensions and labels at the end of each batch.
 

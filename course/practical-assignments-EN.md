@@ -4,6 +4,8 @@ The course has one through-line: **each student builds their own venue — a bar
 
 `lessons.txt` in the repository root is the authored source for the lessons and for these briefs; the app publishes the same text. Lessons 01 and 02 open the sequence with a short in-app challenge (the award map and the three-scene atmosphere map) before the numbered assignments begin.
 
+Every brief below ends the same way, as it does in the app: keep the work on **one sketch page** — a working page from a designer's notebook rather than a finished sheet — and gather the twelve pages into one board before the final pitch.
+
 | Lesson | Brief | Final-project element |
 |---|---|---|
 | 03 | The Sensory Serve | sensory signature |
@@ -320,6 +322,7 @@ Clearly label estimates and assumptions. Do not present unverified projections a
 
 **Submission**
 
+* The twelve sketch pages gathered into one board — the venue as one spread, and the pitch is read from it.
 * Complete Open & Operate pitch deck.
 * Physical or photographed Menu Concept.
 * Sourcing and budget plan.

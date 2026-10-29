@@ -1432,8 +1432,9 @@ test('every lesson opens with its own header image, not a shared module cover', 
   assert.equal(lessons.length, 12);
   const used = new Set();
   for (const lesson of lessons) {
-    if (!lesson.thumbnail) continue; // lessons still awaiting their own header fall back to the module image
-    assert.match(lesson.thumbnail, /^illo-lesson-/, `${lesson.id} uses a lesson header`);
+    // every lesson owns its header; a missing key silently falls back to the module
+    // cover, which hid the last two headers for a whole batch
+    assert.equal(lesson.thumbnail, `illo-lesson-${lesson.id}.jpg`, `${lesson.id} points at its own header`);
     assert.ok(!used.has(lesson.thumbnail), `${lesson.thumbnail} is used once`);
     used.add(lesson.thumbnail);
     assert.ok(fs.existsSync(path.join(ROOT, 'presentation/assets', lesson.thumbnail)), `${lesson.thumbnail} exists`);
@@ -1446,6 +1447,42 @@ test('every lesson opens with its own header image, not a shared module cover', 
   const prompts = read('presentation/build/illustration-prompts.md');
   assert.match(prompts, /## Lesson headers/);
   assert.match(prompts, /illo-lesson-automation\.jpg/);
+});
+
+test('the published course is exactly what the authored source builds', () => {
+  /* `lessons.txt` is the source of truth and `course-data.js` is generated from it.
+     When the two drift — a renumbered lesson, a challenge edited by hand, a header
+     added in one place only — the app quietly publishes the older text, which is how
+     the final unit kept a "13" that the gate then printed to buyers. The build runs
+     against a copy so the test can fail without rewriting the published file. */
+  const { execFileSync } = require('node:child_process');
+  const os = require('node:os');
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), 'chs-build-'));
+  try {
+    fs.mkdirSync(path.join(work, 'tools'));
+    fs.writeFileSync(path.join(work, 'lessons.txt'), read('lessons.txt'));
+    fs.writeFileSync(path.join(work, 'course-data.js'), read('course-data.js'));
+    fs.copyFileSync(path.join(ROOT, 'tools/build-course-lessons.js'), path.join(work, 'tools/build-course-lessons.js'));
+    execFileSync(process.execPath, [path.join(work, 'tools/build-course-lessons.js')], { stdio: 'pipe' });
+    assert.equal(fs.readFileSync(path.join(work, 'course-data.js'), 'utf8'), read('course-data.js'),
+      'course-data.js is stale: run node tools/build-course-lessons.js');
+  } finally {
+    fs.rmSync(work, { recursive: true, force: true });
+  }
+
+  /* The source never numbers a thirteenth unit, and no unit is numbered twice. */
+  assert.doesNotMatch(read('lessons.txt'), /LESSON\s+13\b|Assignment\s+13\b/, 'the source numbers twelve units and twelve assignments');
+  const ids = courseData().modules.flatMap(module => module.lessons.map(lesson => lesson.id));
+  assert.equal(ids.length, 12);
+  assert.equal(new Set(ids).size, 12, 'no unit is published twice');
+});
+
+test('the gate counts the course it actually sells', () => {
+  const course = courseData();
+  const units = course.modules.flatMap(module => module.lessons).length;
+  const gate = read('access.js');
+  assert.match(gate, new RegExp(`<strong>${course.modules.length}</strong><span>Modules</span>`), 'the gate prints the published module count');
+  assert.match(gate, new RegExp(`<strong>${units}</strong><span>Learning units</span>`), 'the gate prints the published unit count');
 });
 
 test('the illustration series is closed at fifty-two files and no excluded asset gains a twin', () => {
