@@ -247,7 +247,7 @@ const MODULES = [
         'Recognition follows a clear point of view, not the size of a venue or the scale of its budget.',
         'Use shortlists and criteria as a learning tool — and apply only when the evidence is ready.'
       ],
-      challenge: 'Challenge — build a one-page award map for your own concept: one primary and one secondary award, the entry rule (self-entry, nomination or inspection only), the deadline and the five pieces of evidence a jury would need. Submit it in the app for feedback; the numbered assignment sequence begins with Assignment 03.'
+      challenge: 'Challenge — build a one-page award map for your own concept: one primary and one secondary award, the entry rule (self-entry, nomination or inspection only), the deadline and the five pieces of evidence a jury would need. Keep the result as one sketch page: the objects a jury actually looks at — the façade, the evidence, the instruments. Submit it in the app for feedback; the numbered assignment sequence begins with Assignment 03.'
     }]
   },
   {
@@ -269,7 +269,7 @@ const MODULES = [
         'Atmosphere unfolds over time — arrival, the defining moment, the farewell.',
         'Authenticity comes from how naturally objects belong together, not from their quantity.'
       ],
-      challenge: 'Challenge — map three scenes for your venue (arrival, defining moment, farewell) with light, sound, scent, tableware and service choreography, then list three “fairy-tale breakers” you will eliminate. Submit your scene map in the app for feedback.'
+      challenge: 'Challenge — map three scenes for your venue (arrival, defining moment, farewell) with light, sound, scent, tableware and service choreography, then list three “fairy-tale breakers” you will eliminate. Keep the scene map as one sketch page: the room at its defining moment, and the things that make it. Submit your scene map in the app for feedback.'
     }]
   },
   {
@@ -291,7 +291,7 @@ const MODULES = [
         'Kayama grinds botanicals at the counter; the sound and the aroma are part of the drink.',
         'Jiro Ono: 37 °C rice and a paced twenty-piece sequence design the peak and the end.'
       ],
-      challenge: 'Practical Assignment 03 — The Sensory Serve: define one signature serve, map its sensory characteristics, compare two or three vessels and prototype it. Submit the one-page sensory sheet, the sensory map and your photographs in the app for feedback.'
+      challenge: 'Practical Assignment 03 — The Sensory Serve: define one signature serve, map its sensory characteristics, compare two or three vessels and prototype it. Keep the serve as one sketch page: the tasting table, the vessel and the instruments that measure it. Submit the one-page sensory sheet, the sensory map and your photographs in the app for feedback.'
     }]
   },
   {
@@ -314,7 +314,7 @@ const MODULES = [
           'Design for the occasion: Tayēr and Elementary are two formats with two promises.',
           'A menu should feel as though it could belong only to that venue.'
         ],
-        challenge: 'Practical Assignment 04 — The Menu Manifesto: write your concept manifesto, analyse three menus, propose a menu architecture and a visual reference board. Submit the manifesto and the three case analyses in the app for feedback.'
+        challenge: 'Practical Assignment 04 — The Menu Manifesto: write your concept manifesto, analyse three menus, propose a menu architecture and a visual reference board. Keep it as one sketch page: the menu, the stamp and the bar it belongs to. Submit the manifesto and the three case analyses in the app for feedback.'
       },
       {
         number: '05', id: 'concept-objects', slug: 'concept-objects',
@@ -330,7 +330,7 @@ const MODULES = [
           'A prototype and a unit cost turn a beautiful object into a buildable one.',
           'Design an object family, not a collection of unrelated pieces.'
         ],
-        challenge: 'Practical Assignment 05 — The Object Family: choose a menu, a service object and a furniture or merchandise element; define materials, dimensions, durability and a realistic unit cost. Submit three object concept sheets and a material board in the app for feedback.'
+        challenge: 'Practical Assignment 05 — The Object Family: choose a menu, a service object and a furniture or merchandise element; define materials, dimensions, durability and a realistic unit cost. Keep the family as one sketch page: the menu, the service object and the furniture gathered at one scale. Submit three object concept sheets and a material board in the app for feedback.'
       }
     ]
   },
@@ -353,7 +353,7 @@ const MODULES = [
         'Documented preparation protects consistency; clear inventory procedures protect profitability.',
         'The best operational system is the one guests never notice.'
       ],
-      challenge: 'Practical Assignment 06 — The Invisible Operating System: map the preparation and service sequence of one signature item, mark what to automate and what to protect, and sketch the workstation. Submit the workflow diagram and the human/machine matrix in the app for feedback.'
+      challenge: 'Practical Assignment 06 — The Invisible Operating System: map the preparation and service sequence of one signature item, mark what to automate and what to protect, and sketch the workstation. Keep the workstation as one sketch page: the station, and the instruments that serve it. Submit the workflow diagram and the human/machine matrix in the app for feedback.'
     }]
   },
   {
@@ -375,7 +375,7 @@ const MODULES = [
         'Turn an idea into a testable question and document what the test showed.',
         'Write the ethics charter: privacy, verification, ownership and human oversight.'
       ],
-      challenge: 'Practical Assignment 07 — The Human–AI Development Brief: take one real task, write the brief, document the AI output and your decisions, and add a short AI-use policy. Submit the brief, the decision log and the ethics charter in the app for feedback.'
+      challenge: 'Practical Assignment 07 — The Human–AI Development Brief: take one real task, write the brief, document the AI output and your decisions, and add a short AI-use policy. Keep the result as one sketch page: the task, the tool, and the room where it happens. Submit the brief, the decision log and the ethics charter in the app for feedback.'
     }]
   },
   {
@@ -397,7 +397,7 @@ const MODULES = [
         'Dave Arnold: experimentation becomes valuable when it is repeatable.',
         'Provenance, process and responsibility are the three foundations of a credible offer.'
       ],
-      challenge: 'Practical Assignment 08 — From Origin to Memory: choose one ingredient with a real connection to a place or producer, compare two preparation methods and develop a signature serve around the stronger one. Submit the origin sheet, comparison notes and concept in the app for feedback.'
+      challenge: 'Practical Assignment 08 — From Origin to Memory: choose one ingredient with a real connection to a place or producer, compare two preparation methods and develop a signature serve around the stronger one. Keep it as one sketch page: the ingredient, the tools and the finished serve. Submit the origin sheet, comparison notes and concept in the app for feedback.'
     }]
   },
   {
@@ -419,7 +419,7 @@ const MODULES = [
         'Build a school inside the business: training and progression are part of the model.',
         'The 90-day launch turns a plan into evidence.'
       ],
-      challenge: 'Practical Assignment 09 — The First Operating Model: define format, capacity and revenue streams, estimate costs and break-even, chart the team, and outline the first 90 days. Submit the one-page model and the launch outline in the app for feedback.'
+      challenge: 'Practical Assignment 09 — The First Operating Model: define format, capacity and revenue streams, estimate costs and break-even, chart the team, and outline the first 90 days. Keep the model as one sketch page: the plan, the numbers and the objects that carry them. Submit the one-page model and the launch outline in the app for feedback.'
     }]
   },
   {
@@ -442,7 +442,7 @@ const MODULES = [
           'Total acquisition cost = price + transport + repair + adaptation + installation.',
           'Edit with discipline: a coherent collection, not a storage room.'
         ],
-        challenge: 'Practical Assignment 10 — The Salvage & Sourcing Plan: define the material language, name three anchor objects, research sourcing routes and calculate the real acquisition cost. Submit the moodboard, the annotated object list and the budget table in the app for feedback.'
+        challenge: 'Practical Assignment 10 — The Salvage & Sourcing Plan: define the material language, name three anchor objects, research sourcing routes and calculate the real acquisition cost. Keep the plan as one sketch page: the three anchor objects and the material language. Submit the moodboard, the annotated object list and the budget table in the app for feedback.'
       },
       {
         number: '11', id: 'scenography', slug: 'theatrical-mockup',
@@ -458,7 +458,7 @@ const MODULES = [
           'Compose from the guest’s seated perspective, then photograph it there.',
           'When objects, light, menu and atmosphere tell one story, the concept becomes tangible.'
         ],
-        challenge: 'Practical Assignment 11 — The Live Found-Object Mockup: assemble a real tabletop scene with a physical menu prototype, light it, photograph it from guest height and reflect on what it revealed. Submit the photographs, the object list and the reflection in the app for feedback.'
+        challenge: 'Practical Assignment 11 — The Live Found-Object Mockup: assemble a real tabletop scene with a physical menu prototype, light it, photograph it from guest height and reflect on what it revealed. Keep the mockup as one sketch page: the found objects, the light and the table. Submit the photographs, the object list and the reflection in the app for feedback.'
       }
     ]
   },
@@ -468,7 +468,7 @@ const MODULES = [
     image: 'illo-m10-mockup.jpg',
     practitioners: ['Jiro Ono', 'René Redzepi', 'Hiroyasu Kayama', 'Egor Tarasenko'],
     lessons: [{
-      number: '12', source: '13', id: 'final-brief', slug: 'open-and-operate',
+      number: '12', id: 'final-brief', slug: 'open-and-operate',
       title: 'Design the hospitality concept of tomorrow (“Open & Operate”)', duration: '20 min',
       intro: 'A compelling concept is a connected system: the guest you want to attract, the experience you promise, the way the team works and the money that makes it possible.',
       case: 'Jiro Ono · Noma · Bar Leone · Joi Espresso Bar',
@@ -481,7 +481,7 @@ const MODULES = [
         'Clarity is not the enemy of creativity; it gives creativity a direction.',
         'Label estimates and assumptions; never present projections as results.'
       ],
-      challenge: 'Practical Assignment 12 — The Final Open & Operate Pitch: assemble the pitch deck, the physical menu concept, the sourcing and budget plan, the mockup photographs and the operating materials, and defend them together at Final Pitch Day.'
+      challenge: 'Practical Assignment 12 — The Final Open & Operate Pitch: assemble the pitch deck, the physical menu concept, the sourcing and budget plan, the mockup photographs and the operating materials, and defend them together at Final Pitch Day. Then gather the twelve sketch pages into one board: your venue assembled from everything the course asked for, and the pitch is read from it.'
     }]
   }
 ];
@@ -563,6 +563,7 @@ function build() {
       lessons: [
 ${module.lessons.map(lesson => `        {
           id: ${serial(lesson.id)},
+          thumbnail: ${serial(`illo-lesson-${lesson.id}.jpg`)},
           title: ${serial(lesson.title)},
           duration: ${serial(lesson.duration)},
           intro: ${serial(lesson.intro)},

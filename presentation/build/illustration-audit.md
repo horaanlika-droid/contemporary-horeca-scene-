@@ -505,3 +505,26 @@ paper. Two of them were still washed after the redraws, and both were fixed on 2
 This matters beyond tidiness: the app multiplies every drawing into the page, so a wash does not read as
 "a soft background" in the product — it reads as a pale halo around the person. White paper is the only
 background that disappears.
+
+## 11. The lesson headers, redrawn — 29 October 2026
+
+The twelve lesson headers left the poster series. They are now sketchbook pages: one loose cloud of the
+objects a lesson is about, drawn in dense pencil on a pure white page, with one small `#e42313` mark. The
+brief is in `illustration-prompts.md` under *Lesson headers — the sketchbook set*.
+
+What that changes in this document:
+
+- **§6 and the §10.6 line-weight table** measured the twelve headers against the module covers. They are no
+  longer the same hand, so those rows describe files that no longer exist in that form. The measurements do
+  still hold for the forty non-lesson files, and nothing about them is reopened.
+- **§D of the README audit** ("series consistency") asked for one treatment across covers and headers. The
+  answer, decided by the author, is two sets: covers stay gouache posters, headers are sketch pages — one
+  recognisable series, two clearly different jobs.
+- The **resemblance test** does not apply to these twelve in the old sense, because a sketch page has no
+  single room to be faithful to. The rule that replaced it: the page must carry the objects the lesson is
+  actually about, and a reader who knows the lesson must be able to name it from the page.
+
+**One line was re-checked and stands.** The audit asked for the tasting glass in `illo-m03-senses.jpg` to be
+moved off the drinker's nose. At 200 % the rim's left edge meets the upper lip, not the nose: the glass is
+held to the mouth, which is where a glass being raised to taste belongs, and the lip line reads as passing
+behind it. Nothing to fix, and the file is left as published.

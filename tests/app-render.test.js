@@ -171,10 +171,28 @@ test('the module start action opens the lesson it points at, including lessons w
   assert.match(app.innerHTML, new RegExp(`href="#/module/${target.id}"`), 'the lesson screen belongs to the opened module');
   assert.doesNotMatch(app.innerHTML, DISPLAY_ERROR);
 
-  /* Lessons ship no thumbnail of their own: the renderer must fall back to the
-     module image and still print a provenance credit, not crash on a missing name. */
+  /* Lesson media always carries a picture and its credit line; a lesson that
+     loses its own header must still render, not crash on a missing name. */
   assert.match(app.innerHTML, /img-credit/, 'the lesson media keeps its credit line');
   assert.doesNotMatch(app.innerHTML, /src="presentation\/assets\/"/, 'media never points at an empty asset path');
+});
+
+test('every learning unit opens on its own header, never on the module cover', async () => {
+  const { sandbox, app, location, settle } = bootCourse();
+  await settle();
+
+  const lessons = sandbox.window.COURSE.modules.flatMap(module =>
+    module.lessons.map(lesson => ({ module, lesson })));
+  const failures = [];
+  for (const { module, lesson } of lessons) {
+    app.innerHTML = '';
+    location.hash = `#/lesson/${module.id}/${lesson.id}`;
+    await settle();
+    const header = `illo-lesson-${lesson.id}.jpg`;
+    if (!app.innerHTML.includes(header)) failures.push(`${lesson.id}: ${header} is not on the page`);
+    if (module.image && app.innerHTML.includes(module.image)) failures.push(`${lesson.id}: still shows ${module.image}`);
+  }
+  assert.deepEqual(failures, [], `lessons showing the wrong header:\n${failures.join('\n')}`);
 });
 
 test('a lesson reads as structured editorial copy, not one wall of text', async () => {

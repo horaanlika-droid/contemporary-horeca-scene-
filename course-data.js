@@ -459,6 +459,7 @@ window.COURSE = {
         },
         {
           id: 'scenography',
+          thumbnail: 'illo-lesson-scenography.jpg',
           title: 'Theatrical techniques & the live mockup from found objects',
           duration: '19 min',
           intro: 'Atmosphere is constructed through carefully orchestrated details, and the machinery behind the illusion should never be visible.',
@@ -487,6 +488,7 @@ window.COURSE = {
       lessons: [
         {
           id: 'final-brief',
+          thumbnail: 'illo-lesson-final-brief.jpg',
           title: 'Design the hospitality concept of tomorrow (“Open & Operate”)',
           duration: '20 min',
           intro: 'A compelling concept is a connected system: the guest you want to attract, the experience you promise, the way the team works and the money that makes it possible.',
@@ -692,8 +694,6 @@ window.COURSE = {
         cover: 'project-joi-bar.jpg',
         image: 'project-joi-bar.jpg',
         tagline: 'A small espresso bar in an old arcade — assembled almost entirely from what the street and the flea markets offered.',
-        thumbnail: 'illo-lesson-scenography.jpg',
-        thumbnail: 'illo-lesson-final-brief.jpg',
         summary: 'The author’s own venue and the case behind Module 09. Joi opened in 2025: a glass door behind a poster facade, café bulbs strung along the arcade, paper cups stamped with a hand-set logo, a reconditioned brass lever machine and second-hand grinders on a counter that hides more stock than seating. Nothing here came from a single showroom appointment. The room holds together because the story was written first and every object was chosen by the same pair of eyes.',
         facts: [
           ['ROLE', 'Author’s own project · the case behind Module 09'],
