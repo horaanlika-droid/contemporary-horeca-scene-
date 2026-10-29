@@ -245,6 +245,31 @@ Every published illustration follows the art direction above; the asset index an
 - Revised earlier: eight of the ten case-card covers — `illo-case-benfiddich-kayama.jpg`, `illo-case-black-swan-bobkov.jpg`, `illo-case-shapes-savage.jpg`, `illo-case-sips-caporale.jpg`, `illo-case-el-copitas-zernov.jpg`, `illo-case-city-space-narzi.jpg`, `illo-case-sensory-talalay.jpg` and `illo-case-jiro-ono.jpg` — were redrawn again, this time from each case's own documentary photograph rather than from the earlier cover art, so every drawn card carries the real room, counter and objects of that venue: Kayama's apothecary counter under its brick arch, the pub hall of Black Swan, the minimal shelf-and-bench corner of Shapes, the island workstation of Sips, the candlelit vault of El Copitas, the panoramic lounge of City Space, the sensory still life of the Talalay serve and the two chefs behind Jiro's counter. Published dimensions stay 1264 × 848, the case-file photographs are unchanged, their untouched originals are kept in `presentation/assets/originals/case-*.jpg` and each cover has an exact-file credit linking its source photograph.
 - Done earlier: the practitioner portrait set is complete — eleven `illo-figure-*.jpg` portraits (Redzepi, Caporale, Kratena, Talalay, Dave Arnold, Savage, Narzi, Kayama, Zernov, Zarkov, Bobkov), each redrawn from its own editorial photograph at 848 × 1264, wired into the course with the editorial original retained beside it and linked as its source; and the five author project illustrations `illo-author-passie-2022.jpg`, `illo-author-coocoo-2024.jpg`, `illo-author-pacific-2024.jpg`, `illo-author-joi-2025.jpg` and `illo-author-chc-2024.jpg`, redrawn at the published dimensions of their archive photographs (600 × 900, 900 × 900, 675 × 900, 675 × 900, 900 × 466) and shown in the About-the-author dialog and on the author figure card, with the archive photographs retained as sources and the dialog noting that its project images are illustrations.
 
+### The lesson sketch pages — October 2026
+
+The twelve lesson headers are being rebuilt as **sketchbook pages**. Each card is a working page from a
+designer's notebook, not a finished poster, and the twelve pages gather into one board at the end of the
+course.
+
+- **One page, one lesson.** A loose cloud of the objects that lesson is actually about — the room
+  fragment, the tools, the paperwork — scattered across the page at different sizes and angles, as if
+  tipped out of a box. No frame, no sheet, no plan, no left and right halves, no ground line, no horizon.
+- **The hand is a sketch.** Dense pen-and-pencil: uneven line weight, strokes that overshoot their
+  corners, faint construction lines and guide arcs left visible, short hatching and cross-hatching on the
+  studied objects, a few leaves barely started. Colour appears only as loose pale washes that stop short
+  of the outlines, with bare paper showing between.
+- **The page stays white.** The sketch texture lives in the drawing, never in the paper: no grey cast, no
+  beige tint, no grain, no vignette. The app multiplies every drawing into the page, so a tinted paper
+  would arrive as a grey rectangle around the sketch.
+- **One red dot.** The single `#e42313` accent is one small red pencil mark on the object that is the
+  lesson's control.
+- **No lettering.** No text, numerals, logos or interface copy anywhere, including on receipts, menus and
+  panels — those carry ruled lines only.
+
+The **tasks follow the pages, lightly**: every challenge keeps its existing wording and its assignment
+number and gains one sentence naming the page it produces. Assignment 12 gathers the twelve pages into one
+board, and the pitch is read from it.
+
 ### Image audit — October 2026
 
 Reviewed every published illustration against its own reference photograph and against the laws of physics.
