@@ -119,9 +119,9 @@ drawing only — the app multiplies the artwork into the page, so a tinted paper
 | `illo-lesson-from-idea.jpg` | 09 From idea to operating model | plan block, zone fragments, seating groups, service station — plus rolled plan, ring binder, calculator, site rule, marker, break-even sheet |
 | `illo-lesson-budget-builds.jpg` | 10 Soul before budget | three anchor objects, material language, salvage corner — plus tape measure, chalk, invoice book, key ring, label tags, sample tin |
 | `illo-lesson-scenography.jpg` | 11 Theatrical techniques | table vignette, found objects, one light source — plus candle, napkin ring, small bell, blank menu card, swatch, gel sheet |
-| `illo-lesson-final-brief.jpg` | 12 The final brief | **the twelve pages gathered into one board** — the venue read as a single spread |
+| `illo-lesson-final-brief.jpg` | 12 The final brief | **the whole course on one last page** — every lesson's object in a single dense constellation, with the pen, the keys and the rosette at its edge |
 
-Page 12 is drawn last and shows the joined pages.
+Page 12 is drawn last and is the only page that carries the whole course: it is the board the pitch is read from, drawn as one constellation rather than as sheets pinned side by side.
 
 ## Lesson headers
 
